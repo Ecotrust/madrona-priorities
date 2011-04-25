@@ -94,6 +94,9 @@ class WatershedPrioritization(Analysis):
             null=True, blank=True, verbose_name="Buffered Point Geometry")
 
     def run(self):
+        self.output_point_geom = None
+        self.output_poly_geom = None
+        self.output_area = None
         try:
             g = GEOSGeometry('SRID=4326;POINT(%s %s)' % (self.input_lon, self.input_lat))
             g.transform(settings.GEOMETRY_DB_SRID)
@@ -107,16 +110,18 @@ class WatershedPrioritization(Analysis):
     @property 
     def kml_done(self):
         return """
+        %s
+
         <Placemark id="%s">
             <visibility>0</visibility>
-            <name>%s</name>
+            <name>%s results</name>
             <styleUrl>#%s-default</styleUrl>
             <MultiGeometry>
             %s
             %s
             </MultiGeometry>
         </Placemark>
-        """ % (self.uid, self.name, self.model_uid(),
+        """ % (self.kml_style, self.uid, self.name, self.model_uid(),
             asKml(self.output_point_geom.transform(
                     settings.GEOMETRY_CLIENT_SRID, clone=True)),
             asKml(self.output_poly_geom.transform(
@@ -125,16 +130,23 @@ class WatershedPrioritization(Analysis):
     @property 
     def kml_working(self):
         return """
+        %s
+
         <Placemark id="%s">
             <visibility>0</visibility>
-            <name>%s (WORKING)</name>
+            <name>%s (WORKING for %s sec)</name>
             <styleUrl>#%s-default</styleUrl>
             <Point>
               <coordinates>%s,%s</coordinates>
             </Point>
         </Placemark>
-        """ % (self.uid, self.name, self.model_uid(), 
+        """ % (self.kml_style, self.uid, self.name, self.elapsed_time, self.model_uid(), 
                 self.input_lon, self.input_lat)
+
+    @property
+    def elapsed_time(self):
+        import datetime
+        return str(datetime.datetime.now() - self.date_modified)
 
     @property
     def kml_style(self):
@@ -160,4 +172,6 @@ class WatershedPrioritization(Analysis):
         form = 'arp.forms.WatershedPrioritizationForm'
         verbose_name = 'Watershed Prioritization Analysis'
         show_template = 'analysis/show.html'
-        icon_url = 'analysistools/img/buffer-16x16.png'
+        icon_url = 'common/images/watershed.png'
+
+from lingcod.analysistools.examples import *

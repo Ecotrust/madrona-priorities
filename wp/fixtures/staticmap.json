@@ -6,10 +6,10 @@
       "mapfile": "staticmap/pacnw.xml", 
       "mapname": "default",
       "default_x1": -124.5,
-      "default_y1": 43.0,
-      "default_x2": -122.5,
+      "default_y1": 43.2,
+      "default_x2": -122.9,
       "default_y2": 44.0,
-      "default_height": 600,
+      "default_height": 500,
       "default_width": 800,
       "default_srid": 4326
     }

@@ -99,14 +99,13 @@ class Watershed(models.Model):
     @property
     def kml(self):
         return """
-        <Placemark id="watershed_%s">
+        <Placemark id="huc_%s">
             <visibility>1</visibility>
             <name>%s</name>
             <styleUrl>#selected-watersheds</styleUrl>
             %s
         </Placemark>
-        """ % (self.fid, self.name, asKml(self.geometry))
-
+        """ % (self.huc12, self.name, asKml(self.geometry))
 
 @register
 class WatershedPrioritization(Analysis):
@@ -118,6 +117,8 @@ class WatershedPrioritization(Analysis):
     # All output fields should be allowed to be Null/Blank
     output_units = models.TextField(null=True, blank=True,
             verbose_name="Watersheds in Optimal Reserve")
+    output_geometry = models.MultiPolygonField(srid=settings.GEOMETRY_CLIENT_SRID, 
+            null=True, blank=True, verbose_name="Watersheds")
 
     def run(self):
         from random import choice
@@ -127,7 +128,13 @@ class WatershedPrioritization(Analysis):
         for i in range(6):
             chosen.append(choice(hucs))
         self.output_units = ','.join([str(x) for x in chosen])
+        wshds = Watershed.objects.filter(huc12__in=chosen)
+        self.output_geometry = wshds.collect()
         return True
+
+    @classmethod
+    def mapnik_geomfield(self):
+        return "output_geometry"
 
     @property 
     def kml_done(self):

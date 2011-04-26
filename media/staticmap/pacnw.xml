@@ -25,6 +25,15 @@
 </Rule>
 </Style>
 
+<Style name="nhd_style">
+<Rule>
+    <LineSymbolizer>
+        <CssParameter name="stroke">steelblue</CssParameter>
+        <CssParameter name="stroke-width">1</CssParameter>
+    </LineSymbolizer>
+</Rule>
+</Style>
+
 <Style name="port_style">
 <Rule>
     <TextSymbolizer name="MAIN_PORT_" face_name="DejaVu Sans Bold" size="8" 
@@ -47,6 +56,14 @@
     <Datasource>
         <Parameter name="type">shape</Parameter>
         <Parameter name="file">/usr/local/media/watershed/staticmap/data/huc6_4326</Parameter>
+    </Datasource>
+</Layer>
+
+<Layer name="nhd" srs="+proj=latlong +datum=WGS84" status="on">
+    <StyleName>nhd_style</StyleName>
+    <Datasource>
+        <Parameter name="type">shape</Parameter>
+        <Parameter name="file">/usr/local/media/watershed/staticmap/data/NHDFlowline</Parameter>
     </Datasource>
 </Layer>
 

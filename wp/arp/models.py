@@ -121,15 +121,15 @@ class WatershedPrioritization(Analysis):
             null=True, blank=True, verbose_name="Watersheds")
 
     def run(self):
-        from random import choice
-        self.output_units = None
-        hucs = [x.huc12 for x in Watershed.objects.all()]
-        chosen = []
-        for i in range(6):
-            chosen.append(choice(hucs))
-        self.output_units = ','.join([str(x) for x in chosen])
-        wshds = Watershed.objects.filter(huc12__in=chosen)
-        self.output_geometry = wshds.collect()
+        if not self.output_units:
+            from random import choice
+            hucs = [x.huc12 for x in Watershed.objects.all()]
+            chosen = []
+            for i in range(6):
+                chosen.append(choice(hucs))
+            self.output_units = ','.join([str(x) for x in chosen])
+            wshds = Watershed.objects.filter(huc12__in=chosen)
+            self.output_geometry = wshds.collect()
         return True
 
     @classmethod

@@ -34,11 +34,7 @@ KML_ALTITUDEMODE_DEFAULT = 'clampToGround'
 
 #These two variables are used to determine the extent of the zoomed in image in lingcod.staticmap
 #If one or both are set to None or deleted entirely than zoom will default to a dynamic zoom generator
-STATICMAP_WIDTH_BUFFER = .04
-STATICMAP_HEIGHT_BUFFER = .12
-#These two variables are used in conjunction with the above two variables to create a map extent indicator
-#which is basically a rectangle on another map that outlines the extent of the zoomed in area (see oregon.xml)
-STATICMAP_OUTLINE_X_OFFSET = .07
-STATICMAP_OUTLINE_Y_OFFSET = .14
+STATICMAP_WIDTH_BUFFER = None
+STATICMAP_HEIGHT_BUFFER = None
 
 from settings_local import *

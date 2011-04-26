@@ -30,6 +30,8 @@ INSTALLED_APPS += ( 'arp',
 # The following is used to assign a name to the default folder under My Shapes 
 KML_UNATTACHED_NAME = 'Areas of Inquiry'
 
+KML_ALTITUDEMODE_DEFAULT = 'clampToGround'
+
 #These two variables are used to determine the extent of the zoomed in image in lingcod.staticmap
 #If one or both are set to None or deleted entirely than zoom will default to a dynamic zoom generator
 STATICMAP_WIDTH_BUFFER = .04

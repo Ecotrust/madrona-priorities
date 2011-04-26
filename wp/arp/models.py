@@ -59,6 +59,7 @@ class Folder(FeatureCollection):
                 'arp.models.POI', 
                 'arp.models.Folder',
                 'arp.models.UserKml',
+                'arp.models.BufferPoint',
                 'arp.models.WatershedPrioritization',
                 )
         form = 'arp.forms.FolderForm'
@@ -79,8 +80,106 @@ class UserKml(PrivateLayerList):
         verbose_name = "Uploaded KML"
         form = 'arp.forms.UserKmlForm'
 
+class Watershed(models.Model):
+    fid = models.IntegerField()
+    huc12 = models.BigIntegerField()
+    coho = models.FloatField()
+    chinook = models.FloatField()
+    steelhead = models.FloatField()
+    climate_cost = models.FloatField()
+    area = models.FloatField()
+    name = models.CharField(max_length=99)
+    geometry = models.PolygonField(srid=settings.GEOMETRY_CLIENT_SRID, 
+            null=True, blank=True, verbose_name="Watersheds")
+    objects = models.GeoManager()
+
+    def __unicode__(self):
+        return u'%s' % self.name
+
+    @property
+    def kml(self):
+        return """
+        <Placemark id="watershed_%s">
+            <visibility>1</visibility>
+            <name>%s</name>
+            <styleUrl>#selected-watersheds</styleUrl>
+            %s
+        </Placemark>
+        """ % (self.fid, self.name, asKml(self.geometry))
+
+
 @register
 class WatershedPrioritization(Analysis):
+    input_target_coho = models.FloatField(verbose_name='Target Percentage of Coho Habitat')
+    input_target_chinook = models.FloatField(verbose_name='Target Percentage of Chinook Habitat') 
+    input_target_steelhead = models.FloatField(verbose_name='Target Percentage of Steelhead Habitat')
+    input_cost_climate = models.FloatField(verbose_name='Relative cost of Climate Change')
+
+    # All output fields should be allowed to be Null/Blank
+    output_units = models.TextField(null=True, blank=True,
+            verbose_name="Watersheds in Optimal Reserve")
+
+    def run(self):
+        from random import choice
+        self.output_units = None
+        hucs = [x.huc12 for x in Watershed.objects.all()]
+        chosen = []
+        for i in range(6):
+            chosen.append(choice(hucs))
+        self.output_units = ','.join([str(x) for x in chosen])
+        return True
+
+    @property 
+    def kml_done(self):
+        wids = [int(x.strip()) for x  in self.output_units.split(',')]
+        wshds = Watershed.objects.filter(huc12__in=wids)
+        return "%s\n\n<Folder id=\"%s\"><name>Optimal Reserve Units</name>%s</Folder>" % (self.kml_style, 
+                self.uid,
+                '\n'.join([x.kml for x in wshds]))
+
+    @property 
+    def kml_working(self):
+        return """
+        <Placemark id="%s">
+            <visibility>0</visibility>
+            <name>%s (WORKING)</name>
+        </Placemark>
+        """ % (self.uid, self.name)
+
+    @property
+    def elapsed_time(self):
+        import datetime
+        return str(datetime.datetime.now() - self.date_modified)
+
+    @property
+    def kml_style(self):
+        return """
+        <Style id="selected-watersheds">
+            <IconStyle>
+                <color>ffffffff</color>
+                <colorMode>normal</colorMode>
+                <scale>0.9</scale> 
+                <Icon> <href>http://maps.google.com/mapfiles/kml/paddle/wht-blank.png</href> </Icon>
+            </IconStyle>
+            <LabelStyle>
+                <color>ffffffff</color>
+                <scale>0.8</scale>
+            </LabelStyle>
+            <PolyStyle>
+                <color>7766ffff</color>
+            </PolyStyle>
+        </Style>
+        """
+
+    class Options:
+        form = 'arp.forms.WatershedPrioritizationForm'
+        verbose_name = 'Watershed Prioritization Analysis'
+        show_template = 'analysis/show.html'
+        icon_url = 'common/images/watershed.png'
+
+
+@register
+class BufferPoint(Analysis):
     input_lat = models.FloatField(verbose_name='Latitude')
     input_lon = models.FloatField(verbose_name='Longitude') 
     input_buffer_distance = models.FloatField(verbose_name="Buffer Distance (m)")
@@ -93,10 +192,11 @@ class WatershedPrioritization(Analysis):
     output_poly_geom = models.PolygonField(srid=settings.GEOMETRY_DB_SRID,
             null=True, blank=True, verbose_name="Buffered Point Geometry")
 
+    @classmethod
+    def mapnik_geomfield(self):
+        return "output_poly_geom"
+
     def run(self):
-        self.output_point_geom = None
-        self.output_poly_geom = None
-        self.output_area = None
         try:
             g = GEOSGeometry('SRID=4326;POINT(%s %s)' % (self.input_lon, self.input_lat))
             g.transform(settings.GEOMETRY_DB_SRID)
@@ -113,8 +213,8 @@ class WatershedPrioritization(Analysis):
         %s
 
         <Placemark id="%s">
-            <visibility>0</visibility>
-            <name>%s results</name>
+            <visibility>1</visibility>
+            <name>%s buffer</name>
             <styleUrl>#%s-default</styleUrl>
             <MultiGeometry>
             %s
@@ -130,23 +230,16 @@ class WatershedPrioritization(Analysis):
     @property 
     def kml_working(self):
         return """
-        %s
-
         <Placemark id="%s">
             <visibility>0</visibility>
-            <name>%s (WORKING for %s sec)</name>
+            <name>%s (WORKING)</name>
             <styleUrl>#%s-default</styleUrl>
             <Point>
               <coordinates>%s,%s</coordinates>
             </Point>
         </Placemark>
-        """ % (self.kml_style, self.uid, self.name, self.elapsed_time, self.model_uid(), 
+        """ % (self.uid, self.name, self.model_uid(), 
                 self.input_lon, self.input_lat)
-
-    @property
-    def elapsed_time(self):
-        import datetime
-        return str(datetime.datetime.now() - self.date_modified)
 
     @property
     def kml_style(self):
@@ -169,9 +262,8 @@ class WatershedPrioritization(Analysis):
         """ % (self.model_uid(),)
 
     class Options:
-        form = 'arp.forms.WatershedPrioritizationForm'
-        verbose_name = 'Watershed Prioritization Analysis'
+        verbose_name = "Buffer Point"
+        form = 'arp.forms.BufferPointsForm'
         show_template = 'analysis/show.html'
-        icon_url = 'common/images/watershed.png'
+        icon_url = 'analysistools/img/buffer-16x16.png'
 
-from lingcod.analysistools.examples import *

@@ -27,17 +27,18 @@ class UserKmlForm(FeatureForm):
         model = UserKml
 
 class WatershedPrioritizationForm(FeatureForm):
-    input_lat = forms.FloatField(max_value=90, min_value=-90, 
-            widget=SliderWidget(min=-90,max=90,step=0.00001,image='analysistools/img/lat.gif'),
-            label="Latitude")
-    input_lon = forms.FloatField(max_value=180, min_value=-180, 
-            widget=SliderWidget(min=-180,max=180,step=0.00001,image='analysistools/img/lon.gif'),
-            label="Longitude")
-    input_buffer_distance = forms.FloatField(
-            widget=SliderWidget(min=10, max=50000,step=1,
-                image = 'analysistools/img/buffer.png' ),
-            label = "Buffer Distance (m)",
-            min_value=0.0001, max_value=50000)
+    input_target_coho = forms.FloatField(min_value=0, max_value=100.0,
+            widget=SliderWidget(min=0,max=100,step=0.1),
+            label="Target Percentage of Coho Habitat")
+    input_target_chinook = forms.FloatField(min_value=0, max_value=100.0,
+            widget=SliderWidget(min=0,max=100,step=0.1),
+            label="Target Percentage of Chinook Habitat")
+    input_target_steelhead = forms.FloatField(min_value=0, max_value=100.0,
+            widget=SliderWidget(min=0,max=100,step=0.1),
+            label = "Taget Percentage of Steelhead Habitat")
+    input_cost_climate = forms.FloatField(min_value=0, max_value=1,
+            widget=SliderWidget(min=0,max=1,step=0.01),
+            label="Relative Cost of Climate Change")
 
     class Meta(FeatureForm.Meta):
         model = WatershedPrioritization
@@ -46,3 +47,23 @@ class WatershedPrioritizationForm(FeatureForm):
             exclude.append(f.attname)
 
 
+class BufferPointsForm(FeatureForm):
+    input_lat = forms.FloatField(max_value=90, min_value=-90, 
+            widget=SliderWidget(min=43,max=44,step=0.001,image='analysistools/img/lat.gif'),
+            label="Latitude")
+    input_lon = forms.FloatField(max_value=180, min_value=-180, 
+            widget=SliderWidget(min=-124.5,max=-122.5,step=0.001,image='analysistools/img/lon.gif'),
+            label="Longitude")
+    input_buffer_distance = forms.FloatField(
+            widget=SliderWidget(min=10, max=50000,step=1,
+                image = 'analysistools/img/buffer.png' ),
+            label = "Buffer Distance (m)",
+            min_value=0.0001, max_value=50000)
+
+    class Meta(FeatureForm.Meta):
+        # TODO put all this in AnalysisForm and inherit
+        # requires lots of Metaprogramming complexity
+        model = BufferPoint
+        exclude = list(FeatureForm.Meta.exclude)
+        for f in BufferPoint.output_fields():
+            exclude.append(f.attname)

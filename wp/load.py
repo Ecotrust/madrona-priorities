@@ -26,5 +26,5 @@ mapping = {
     'geometry': 'POLYGON'
 }
 
-lm = LayerMapping(Watershed,'fixtures/data/huc6_4326.shp',mapping)
+lm = LayerMapping(Watershed,'../media/staticmap/data/huc6_4326.shp',mapping)
 lm.save(verbose=True)

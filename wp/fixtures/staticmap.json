@@ -5,12 +5,12 @@
     "fields": {
       "mapfile": "staticmap/pacnw.xml", 
       "mapname": "default",
-      "default_x1": -125.177,
-      "default_y1": 41.872,
-      "default_x2": -123.466,
-      "default_y2": 46.462,
-      "default_height": 800,
-      "default_width": 616,
+      "default_x1": -124.5,
+      "default_y1": 43.0,
+      "default_x2": -122.5,
+      "default_y2": 44.0,
+      "default_height": 600,
+      "default_width": 800,
       "default_srid": 4326
     }
   }

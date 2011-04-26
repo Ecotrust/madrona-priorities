@@ -13,10 +13,10 @@
 </Rule>
 </Style>
 
-<Style name="region_style">
+<Style name="watershed_style">
 <Rule>
     <PolygonSymbolizer>
-        <CssParameter name="fill">steelblue</CssParameter>
+        <CssParameter name="fill">green</CssParameter>
     </PolygonSymbolizer>
     <LineSymbolizer>
         <CssParameter name="stroke">rgb(5%,5%,5%)</CssParameter>
@@ -38,7 +38,15 @@
     <StyleName>land_style</StyleName>
     <Datasource>
         <Parameter name="type">shape</Parameter>
-        <Parameter name="file">/usr/local/marinemap-media/staticmap/data/ca_or_stl</Parameter>
+        <Parameter name="file">/usr/local/media/watershed/staticmap/data/ca_or_stl</Parameter>
+    </Datasource>
+</Layer>
+
+<Layer name="watersheds" srs="+proj=latlong +datum=WGS84" status="on">
+    <StyleName>watershed_style</StyleName>
+    <Datasource>
+        <Parameter name="type">shape</Parameter>
+        <Parameter name="file">/usr/local/media/watershed/staticmap/data/huc6_4326</Parameter>
     </Datasource>
 </Layer>
 
@@ -46,7 +54,7 @@
     <StyleName>port_style</StyleName>
     <Datasource>
         <Parameter name="type">shape</Parameter>
-        <Parameter name="file">/usr/local/marinemap-media/staticmap/data/world_ports</Parameter>
+        <Parameter name="file">/usr/local/media/watershed/staticmap/data/world_ports</Parameter>
     </Datasource>
 </Layer>
 

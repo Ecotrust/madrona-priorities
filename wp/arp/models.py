@@ -1,4 +1,3 @@
-from django.db import models
 from django.conf import settings
 from django.contrib.gis.db import models
 from lingcod.features.models import PointFeature, LineFeature, PolygonFeature, FeatureCollection
@@ -140,9 +139,8 @@ class WatershedPrioritization(Analysis):
     def kml_done(self):
         wids = [int(x.strip()) for x  in self.output_units.split(',')]
         wshds = Watershed.objects.filter(huc12__in=wids)
-        return "%s\n\n<Folder id=\"%s\"><name>Optimal Reserve Units</name>%s</Folder>" % (self.kml_style, 
-                self.uid,
-                '\n'.join([x.kml for x in wshds]))
+        return "%s\n\n<Folder id=\"%s\"><name>%s</name>%s</Folder>" % (self.kml_style, 
+                self.uid, self.name, '\n'.join([x.kml for x in wshds]))
 
     @property 
     def kml_working(self):
@@ -221,7 +219,7 @@ class BufferPoint(Analysis):
 
         <Placemark id="%s">
             <visibility>1</visibility>
-            <name>%s buffer</name>
+            <name>%s</name>
             <styleUrl>#%s-default</styleUrl>
             <MultiGeometry>
             %s

@@ -111,6 +111,9 @@ class WatershedPrioritization(Analysis):
     input_target_coho = models.FloatField(verbose_name='Target Percentage of Coho Habitat')
     input_target_chinook = models.FloatField(verbose_name='Target Percentage of Chinook Habitat') 
     input_target_steelhead = models.FloatField(verbose_name='Target Percentage of Steelhead Habitat')
+    input_penalty_coho = models.FloatField(verbose_name='Penalty for missing Coho target', default=0.5)
+    input_penalty_chinook = models.FloatField(verbose_name='Penalty for missing Chinook target') 
+    input_penalty_steelhead = models.FloatField(verbose_name='Penalty for missing Steelhead target')
     input_cost_climate = models.FloatField(verbose_name='Relative cost of Climate Change')
 
     # All output fields should be allowed to be Null/Blank
@@ -119,16 +122,35 @@ class WatershedPrioritization(Analysis):
     output_geometry = models.MultiPolygonField(srid=settings.GEOMETRY_CLIENT_SRID, 
             null=True, blank=True, verbose_name="Watersheds")
 
+    @property
+    def species(self):
+        from arp.marxan import ConservationFeature 
+        species = []
+        ws = Watershed.objects.all()
+        for s in ['coho','chinook','steelhead']:
+            from django.db.models import Sum
+            agg = ws.aggregate(Sum(s))
+            total = agg[s + "__sum"]
+            pct = self.__dict__['input_target_' + s]
+            target = total * pct
+            penalty = self.__dict__['input_penalty_' + s] * 100
+
+            species.append( 
+                ConservationFeature(len(species)+1,s, penalty, target, pct, total) 
+            )
+
+        return species
+
     def run(self):
-        if not self.output_units:
-            from random import choice
-            hucs = [x.huc12 for x in Watershed.objects.all()]
-            chosen = []
-            for i in range(6):
-                chosen.append(choice(hucs))
-            self.output_units = ','.join([str(x) for x in chosen])
-            wshds = Watershed.objects.filter(huc12__in=chosen)
-            self.output_geometry = wshds.collect()
+        from arp.marxan import marxan_start, MarxanAnalysis
+
+        units = Watershed.objects.all()
+        m = MarxanAnalysis(self, units)
+        (path,chosen) = marxan_start(m)
+
+        wshds = units.filter(pk__in=chosen)
+        self.output_units = ','.join([str(x.huc12) for x in wshds])
+        self.output_geometry = wshds.collect()
         return True
 
     @classmethod

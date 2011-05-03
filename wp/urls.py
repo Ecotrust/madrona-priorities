@@ -7,6 +7,10 @@ urlpatterns = patterns('',
     (r'^arp/', include('arp.urls')),
 )
 
+urlpatterns = patterns('',
+    (r'^analysistools/', include('lingcod.analysistools.urls')),
+)
+
 urlpatterns += patterns('',
     # Include all lingcod app urls. 
     (r'', include('lingcod.common.urls')),

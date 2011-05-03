@@ -17,3 +17,4 @@ dist/*
 media/layers/uploaded-kml/*.kml
 media/layers/uploaded-kml/*.kmz
 media/spacing/pickled_graphs/*
+wp/celerybeat*

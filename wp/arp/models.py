@@ -11,6 +11,8 @@ from lingcod.features import register
 from django.contrib.gis.geos import GEOSGeometry 
 from lingcod.common.utils import asKml
 from django import forms
+from arp.tasks import marxan_start
+from lingcod.async.ProcessHandler import *
 import os
 
 @register
@@ -141,17 +143,72 @@ class WatershedPrioritization(Analysis):
 
         return species
 
+    @property
+    def outdir(self):
+        return os.path.realpath("/tmp/test/%s" % self.uid)
+
+    
     def run(self):
-        from arp.marxan import marxan_start, MarxanAnalysis
-
+        from arp.marxan import MarxanAnalysis
         units = Watershed.objects.all()
-        m = MarxanAnalysis(self, units)
-        (path,chosen) = marxan_start(m)
-
-        wshds = units.filter(pk__in=chosen)
-        self.output_units = ','.join([str(x.huc12) for x in wshds])
-        self.output_geometry = wshds.collect()
+        m = MarxanAnalysis(self, units, self.outdir)
+        print self.get_absolute_url()
+        check_status_or_begin(marxan_start, task_args=(m,), polling_url=self.get_absolute_url())
+        self.process_results()
         return True
+
+    @property
+    def progress(self):
+        runs = 500
+        import glob
+        path = os.path.join(self.outdir,"output","test_r*.dat")
+        outputs = glob.glob(path)
+        if len(outputs) == runs and not self.done:
+            return (0,runs)
+        return (len(outputs), 500)
+
+    @property
+    def status_html(self):
+        if process_is_complete(self.get_absolute_url()):
+            status = "%s processing is done" % self.name
+        elif process_is_pending(self.get_absolute_url()):
+            status = "%s is in the queue but not yet running" % self.name
+        elif process_is_running(self.get_absolute_url()):
+            status = "Analysis for <em>%s</em> is currently running. </p><p> %s of %s model runs completed." % (self.name,
+                    self.progress[0], self.progress[1])
+        else:
+            status = "something isn't right here..."
+
+        return "<p>%s</p>" % status
+
+    def process_results(self):
+        if process_is_complete(self.get_absolute_url()):
+            chosen = get_process_result(self.get_absolute_url())
+            units = Watershed.objects.all()
+            wshds = units.filter(pk__in=chosen)
+            self.output_units = ','.join([str(x.huc12) for x in wshds])
+            self.output_geometry = wshds.collect()
+            super(Analysis, self).save() # save without calling save()
+        else:
+            # still working
+            pass
+
+    @property
+    def done(self):
+        """ Boolean; is process complete? """
+        done = True
+        for of in self.outputs.keys():
+            if not self.outputs[of]:
+                done = False
+        if not done:
+            done = True
+            # only process async results if output fields are blank
+            # this means we have to recheck after running
+            self.process_results()
+            for of in self.outputs.keys():
+                if not self.outputs[of]:
+                    done = False
+        return done
 
     @classmethod
     def mapnik_geomfield(self):
@@ -172,11 +229,6 @@ class WatershedPrioritization(Analysis):
             <name>%s (WORKING)</name>
         </Placemark>
         """ % (self.uid, self.name)
-
-    @property
-    def elapsed_time(self):
-        import datetime
-        return str(datetime.datetime.now() - self.date_modified)
 
     @property
     def kml_style(self):
@@ -293,4 +345,3 @@ class BufferPoint(Analysis):
         form = 'arp.forms.BufferPointsForm'
         show_template = 'analysis/show.html'
         icon_url = 'analysistools/img/buffer-16x16.png'
-

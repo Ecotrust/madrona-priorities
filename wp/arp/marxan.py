@@ -1,4 +1,3 @@
-from celery.decorators import task
 import os
 
 class ConservationFeature(object):
@@ -16,12 +15,12 @@ class ConservationFeature(object):
                 self.name, self.target, self.penalty, self.pct, self.total)
 
 class MarxanAnalysis(object):
-    from arp.models import Watershed, WatershedPrioritization
 
-    def __init__(self, params, units):
-        #TODO get these from settings
-        self.outdir = os.path.realpath("/tmp/test/%s" % params.uid)
+    def __init__(self, params, units, outdir):
+        self.outdir = os.path.realpath(outdir)
         self.exe = os.path.realpath("/home/mperry/Marxan/Marxan.exe")
+        self.NUMREPS = 500
+        self.NUMITNS = 1000000
 
         self.params = params
         self.species = params.species
@@ -89,11 +88,11 @@ PROP  0.00000000000000E+0000
 RANDSEED -1
 BESTSCORE  1.00000000000000E+0001
 #### CONFIG
-NUMREPS 10
+NUMREPS %d
 
 Annealing Parameters
 #### CONFIG
-NUMITNS 1000000
+NUMITNS %d
 STARTTEMP -1.00000000000000E+0000
 COOLFAC  6.00000000000000E+0000
 NUMTEMP 10000
@@ -132,7 +131,8 @@ HEURTYPE -1
 CLUMPTYPE 0
 VERBOSITY 2
 
-"""
+""" % (self.NUMREPS, self.NUMITNS)
+
         fh = open("%s/input.dat" % self.outdir,'w')
         fh.write(input_dat)
         fh.close()
@@ -151,49 +151,13 @@ VERBOSITY 2
         #subprocess.call(['wine Marxan.exe \n \n'], shell=True)
         proc = subprocess.Popen(
                 ['wine Marxan.exe'], 
-                shell=True,
-                stdin=subprocess.PIPE,
-                stdout=subprocess.PIPE,
-            )
+                shell=True, 
+                stdin=subprocess.PIPE, 
+                stdout=subprocess.PIPE,) 
         proc.communicate('\n')
 
     @property 
     def best(self):
-        for s in self.species:
-            print s
         os.chdir(self.outdir)
         pks = [int(x) for x in open("%s/output/test_best.dat" % self.outdir,'r').readlines()]
         return pks
-
-
-@task
-def marxan_start(m):
-    print "Setting up dirs"
-    m.setup()
-    print "writing .dat files"
-    m.write_pu()
-    m.write_puvcf()
-    m.write_spec()
-    m.write_input()
-    print "running..."
-    m.run()
-    return m.outdir, m.best
-
-
-if __name__ == "__main__":
-    from django.core.management import setup_environ
-    import os
-    import sys
-    sys.path.append(os.path.dirname(__file__))
-    import settings
-    setup_environ(settings)
-    #===================================#
-
-    parameters = WatershedPrioritization.objects.latest('date_modified')
-    units = Watershed.objects.all()
-
-    m = MarxanAnalysis(parameters, units)
-    print marxan_start(m)
-    ## async
-    #results = marxan.start(m)
-    #print results 

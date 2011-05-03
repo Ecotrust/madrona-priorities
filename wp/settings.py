@@ -37,4 +37,7 @@ KML_ALTITUDEMODE_DEFAULT = 'clampToGround'
 STATICMAP_WIDTH_BUFFER = None
 STATICMAP_HEIGHT_BUFFER = None
 
+CELERY_IMPORT = ('arp.tasks',)
+
 from settings_local import *
+

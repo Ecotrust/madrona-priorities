@@ -80,6 +80,7 @@ class UserKml(PrivateLayerList):
     class Options:
         verbose_name = "Uploaded KML"
         form = 'arp.forms.UserKmlForm'
+        show_template = 'layers/privatekml_show.html'
 
 class Watershed(models.Model):
     fid = models.IntegerField()

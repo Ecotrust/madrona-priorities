@@ -1,0 +1,125 @@
+{% extends "common/panel.html" %}
+{% block title %}{{title}}{% endblock %}
+{% block panel %}
+<script type="text/javascript" charset="utf-8">
+    lingcod.onShow(function(){
+        lingcod.setupForm($('#featureform'));
+    });
+</script>
+<style>
+    div .field > label { font-size: 12px; display: inline; }
+    div .species { 
+        -moz-box-shadow: 5px 5px 5px #ddd;
+        -webkit-box-shadow: 5px 5px 5px #ddd;
+        box-shadow: 5px 5px 5px #ddd; 
+        -moz-border-radius: 6px;
+        -webkit-border-radius: 6px;
+        -khtml-border-radius: 6px;
+        border-radius: 6px;
+        border: 1px #ddd solid;
+        padding: 6px;
+        padding-left: 126px; 
+        margin-top: 4px;
+        margin-bottom: 8px;
+        background-color: white; 
+        background-repeat: no-repeat;
+    }
+    #coho {background-image: url("/media/species/coho2.jpg"); }
+    #chinook {background-image: url("/media/species/chinook2.jpg"); }
+    #steelhead {background-image: url("/media/species/steel2.jpg"); }
+    #climate {background-image: url("http://arsagsoftware.ars.usda.gov/DesktopModules/Weather/images/default/64x64/11.png"); }
+</style>
+{% if form.media %} {{ form.media }} {% endif %}
+<h1>{{title}} input parameters</h1>
+<form id="featureform" action="{{action}}" method="post"> 
+    {% for hidden in form.hidden_fields %}
+    <div style="display:none;">
+        {{ hidden.errors }}
+    </div>
+    {{ hidden }}
+    {% endfor %}
+
+<div class="field required">
+{{ form.name.label_tag }}
+{{ form.name.errors }}
+{{ form.name }}            
+</div>
+
+<div class="tabs">
+    <ul>
+        <li>
+            <a href="#speciestab">
+                <span>Species</span>
+            </a>
+        </li>
+    <li>
+        <a href="#costs">
+            <span>Costs</span>
+        </a>
+    </li>
+    </ul>
+
+
+
+    <div id="speciestab">
+        <div class="species" id="coho">
+            <div class="field required">
+                {{ form.input_target_coho.label_tag }}
+                {{ form.input_target_coho.errors }}
+                {{ form.input_target_coho }}            
+            </div>
+            <div class="field required">
+                {{ form.input_penalty_coho.label_tag }}
+                {{ form.input_penalty_coho.errors }}
+                {{ form.input_penalty_coho }}            
+            </div>
+        </div>
+        <div class="species" id="chinook">
+            <div class="field required">
+                {{ form.input_target_chinook.label_tag }}
+                {{ form.input_target_chinook.errors }}
+                {{ form.input_target_chinook }}            
+            </div>
+            <div class="field required">
+                {{ form.input_penalty_chinook.label_tag }}
+                {{ form.input_penalty_chinook.errors }}
+                {{ form.input_penalty_chinook }}            
+            </div>
+        </div>
+        <div class="species" id="steelhead">
+            <div class="field required">
+                {{ form.input_target_steelhead.label_tag }}
+                {{ form.input_target_steelhead.errors }}
+                {{ form.input_target_steelhead }}            
+            </div>
+            <div class="field required">
+                {{ form.input_penalty_steelhead.label_tag }}
+                {{ form.input_penalty_steelhead.errors }}
+                {{ form.input_penalty_steelhead }}            
+            </div>
+        </div>
+    </div>
+
+    <div id="costs">
+        <div class="species" id="climate">
+            <div class="field required">
+                {{ form.input_cost_climate.label_tag }}
+                {{ form.input_cost_climate.errors }}
+                {{ form.input_cost_climate }}            
+            </div>
+        </div>
+    </div>
+    <p><input type="submit" value="submit"></p>
+    </form>
+
+
+    <br class="clear" />
+    <div class="form_controls">
+        <a href="#" class="submit_button button" onclick="this.blur(); return false;"><span>Submit</span></a>
+        <a href="#" class="cancel_button button red" onclick="this.blur(); return false;"><span>Cancel</span></a>
+        <br class="clear" />
+    </div>
+
+    </div>    
+
+{% endblock %}

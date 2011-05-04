@@ -14,6 +14,7 @@ from django import forms
 from arp.tasks import marxan_start
 from lingcod.async.ProcessHandler import *
 import os
+import glob
 
 @register
 class AOI(PolygonFeature):
@@ -80,6 +81,7 @@ class UserKml(PrivateLayerList):
     class Options:
         verbose_name = "Uploaded KML"
         form = 'arp.forms.UserKmlForm'
+        export_png = False
         show_template = 'layers/privatekml_show.html'
 
 class Watershed(models.Model):
@@ -161,22 +163,24 @@ class WatershedPrioritization(Analysis):
     @property
     def progress(self):
         runs = 500
-        import glob
         path = os.path.join(self.outdir,"output","test_r*.dat")
         outputs = glob.glob(path)
-        if len(outputs) == runs and not self.done:
-            return (0,runs)
+        if len(outputs) == runs:
+            if not self.done:
+                return (0,runs)
         return (len(outputs), 500)
 
     @property
     def status_html(self):
-        if process_is_complete(self.get_absolute_url()):
-            status = "%s processing is done" % self.name
-        elif process_is_pending(self.get_absolute_url()):
+        url = self.get_absolute_url()
+        if process_is_running(url):
+            status = """"Analysis for <em>%s</em> is currently running.</p>
+            <p>%s of %s model runs completed.""" % (self.name,
+                     self.progress[0], self.progress[1])
+        elif process_is_complete(url):
+            status = "%s processing is done. Close this panel and hit 'Refresh' to see the results." % self.name
+        elif process_is_pending(url):
             status = "%s is in the queue but not yet running" % self.name
-        elif process_is_running(self.get_absolute_url()):
-            status = "Analysis for <em>%s</em> is currently running. </p><p> %s of %s model runs completed." % (self.name,
-                    self.progress[0], self.progress[1])
         else:
             status = "something isn't right here..."
 
@@ -254,7 +258,8 @@ class WatershedPrioritization(Analysis):
     class Options:
         form = 'arp.forms.WatershedPrioritizationForm'
         verbose_name = 'Watershed Prioritization Analysis'
-        show_template = 'analysis/show.html'
+        show_template = 'wp/show.html'
+        form_template = 'wp/form.html'
         icon_url = 'common/images/watershed.png'
 
 

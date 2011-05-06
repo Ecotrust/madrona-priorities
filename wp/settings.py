@@ -26,7 +26,12 @@ TEMPLATE_DIRS = ( os.path.realpath(os.path.join(os.path.dirname(__file__), 'temp
 
 INSTALLED_APPS += ( 'arp', 
                     'lingcod.analysistools',
+                    'django.contrib.humanize',
                   )
+
+COMPRESS_CSS['application']['source_filenames'] += (
+    'common/css/wp.css',
+)
 # The following is used to assign a name to the default folder under My Shapes 
 KML_UNATTACHED_NAME = 'Areas of Inquiry'
 
@@ -38,6 +43,10 @@ STATICMAP_WIDTH_BUFFER = None
 STATICMAP_HEIGHT_BUFFER = None
 
 CELERY_IMPORT = ('arp.tasks',)
+
+MARXAN_EXE = "/home/mperry/Marxan/Marxan.exe"
+MARXAN_NUMREPS = 20
+MARXAN_NUMITNS = 1000000
 
 from settings_local import *
 

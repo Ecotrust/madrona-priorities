@@ -153,28 +153,112 @@ class WatershedPrioritization(Analysis):
     
     def run(self):
         from arp.marxan import MarxanAnalysis
+
         units = Watershed.objects.all()
         m = MarxanAnalysis(self, units, self.outdir)
-        print self.get_absolute_url()
+
         check_status_or_begin(marxan_start, task_args=(m,), polling_url=self.get_absolute_url())
         self.process_results()
         return True
 
     @property
     def progress(self):
-        runs = 500
         path = os.path.join(self.outdir,"output","test_r*.dat")
         outputs = glob.glob(path)
-        if len(outputs) == runs:
+        if len(outputs) == settings.MARXAN_NUMREPS:
             if not self.done:
-                return (0,runs)
-        return (len(outputs), 500)
+                return (0,settings.MARXAN_NUMREPS)
+        return (len(outputs), settings.MARXAN_NUMREPS)
+
+    @property
+    def marxan(self):
+        """
+        TODO Fix this crap ... it works as proof-of-concept but it's horribly sloppy
+        Whoever wrote this should be punished and likely will be 
+        if they try to maintain or debug this property
+
+        Ideally this should all be handled in process_results(?)
+        """
+        from django.core.cache import cache
+        use_cache = False
+        key = "wp_marxan_%s_%s" % (self.pk, self.date_modified)
+        try:
+            cached_result = cache.get(key)
+            if use_cache and cached_result: 
+                return cached_result
+        except:
+            pass
+
+        log = open(os.path.join(self.outdir,"output","test_log.dat"),'r').read()
+
+        wids = [int(x.strip()) for x  in self.output_units.split(',')]
+        wshds = Watershed.objects.filter(huc12__in=wids)
+        num_units = len(wshds)
+        sum_area = 0
+        for w in wshds:
+            sum_area += w.area
+
+        species = self.species
+        time = open(os.path.join(self.outdir,"output","test_log.dat"),'r').readlines()[-3]
+        time = time.replace("Time passed so far is ","")
+        best = [x.split('\t') for x in open(os.path.join(self.outdir,"output","test_mvbest.dat"),'r').readlines()][1:]
+        out_species = []
+        gchart_seqs = []
+        gchart_labels = []
+
+        max_habitat = 0
+        for s in species:
+            if s.total > max_habitat:
+                max_habitat = s.total
+
+        hit = 0
+        miss = 0
+        for b in best:
+            cf = [s for s in species if s.name == b[1]][0] 
+            cf.amount = float(b[3])
+            cf.occurences = int(b[5])
+            cf.miss = False
+            if b[8].strip().lower() != 'yes':
+                cf.miss = True
+                miss += 1
+            else:
+                hit += 1
+            out_species.append(cf)
+
+            minpixel = int(max_habitat / 350.)*2
+
+            if cf.miss:
+                gchart_seqs.append((int(cf.amount), int(cf.target - cf.amount), minpixel, 0, int(cf.total - cf.target)) )
+            else:
+                gchart_seqs.append((int(cf.target), 0, minpixel, int(cf.amount - cf.target), int(cf.total - cf.amount)) )
+            gchart_labels.append(cf.name)
+
+        cs = []
+        for c in zip(*gchart_seqs):
+            cs.append(','.join([str(x) for x in c]))
+        chd = '|'.join(cs)
+
+        gchart_url = "https://chart.googleapis.com/chart?cht=bhs&chs=350x125&chd=t:%(chd)s&chco=2d69ff,dd6a6a,111111,4f89f9,c6d9fd&chbh=20&chds=0,%(max_habitat)s&chxt=x,y&chxl=1:|Coho|Chinook|Steelhead|0:|0|%(max_habitat)s" % {'chd': chd, 'max_habitat': int(max_habitat)}
+
+        r = {'log': log,
+            'watersheds': wshds,
+            'num_units': num_units,
+            'area': sum_area,
+            'species': out_species, 
+            'chart_url': gchart_url,
+            'hit': hit,
+            'num_species': hit+miss,
+            'time': time,
+            'runs': settings.MARXAN_NUMREPS
+        }
+        cache.set(key, r)
+        return r
 
     @property
     def status_html(self):
         url = self.get_absolute_url()
         if process_is_running(url):
-            status = """"Analysis for <em>%s</em> is currently running.</p>
+            status = """Analysis for <em>%s</em> is currently running.</p>
             <p>%s of %s model runs completed.""" % (self.name,
                      self.progress[0], self.progress[1])
         elif process_is_complete(url):
@@ -194,9 +278,6 @@ class WatershedPrioritization(Analysis):
             self.output_units = ','.join([str(x.huc12) for x in wshds])
             self.output_geometry = wshds.collect()
             super(Analysis, self).save() # save without calling save()
-        else:
-            # still working
-            pass
 
     @property
     def done(self):

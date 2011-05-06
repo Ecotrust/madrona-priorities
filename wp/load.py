@@ -16,9 +16,9 @@ for i in a:
 
 mapping = {
     'fid': "OBJECTID", 
-    'coho': 'Coho_kmkm2', 
-    'chinook': 'chn_km_km2', 
-    'steelhead': 'StHd_kmkm2', 
+    'coho': 'Coho_m', 
+    'chinook': 'Chnk_m', 
+    'steelhead': 'StlHd_m', 
     'climate_cost': 'pcp80bdfmm', 
     'area': 'area_km2',
     'name': 'HU_12_NAME',

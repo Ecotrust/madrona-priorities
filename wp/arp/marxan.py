@@ -1,4 +1,5 @@
 import os
+from django.conf import settings
 
 class ConservationFeature(object):
     def __init__(self, id, fieldname, penalty, target, pct, total):
@@ -18,9 +19,9 @@ class MarxanAnalysis(object):
 
     def __init__(self, params, units, outdir):
         self.outdir = os.path.realpath(outdir)
-        self.exe = os.path.realpath("/home/mperry/Marxan/Marxan.exe")
-        self.NUMREPS = 500
-        self.NUMITNS = 1000000
+        self.exe = os.path.realpath(settings.MARXAN_EXE)
+        self.NUMREPS = settings.MARXAN_NUMREPS
+        self.NUMITNS = settings.MARXAN_NUMITNS
 
         self.params = params
         self.species = params.species
@@ -113,9 +114,9 @@ SCENNAME test
 SAVERUN 1
 SAVEBEST 1
 SAVESUMMARY 1
-SAVESCEN 0
-SAVETARGMET 0
-SAVESUMSOLN 0
+SAVESCEN 1
+SAVETARGMET 1
+SAVESUMSOLN 1
 SAVELOG 1
 SAVESNAPSTEPS 0
 SAVESNAPCHANGES 0

@@ -175,7 +175,7 @@ class WatershedPrioritization(Analysis):
             <p>%s of %s model runs completed.""" % (self.name,
                      self.progress[0], self.progress[1])
         elif process_is_complete(url):
-            status = "%s processing is done. Close this panel and hit 'Refresh' to see the results." % self.name
+            status = "%s processing is done." % self.name
         elif process_is_pending(url):
             status = "%s is in the queue but not yet running" % self.name
         else:

@@ -159,13 +159,13 @@ class WatershedPrioritization(Analysis):
 
     @property
     def progress(self):
-        runs = 500
+        runs = settings.MARXAN_NUMREPS
         path = os.path.join(self.outdir,"output","test_r*.dat")
         outputs = glob.glob(path)
         if len(outputs) == runs:
             if not self.done:
                 return (0,runs)
-        return (len(outputs), 500)
+        return (len(outputs), runs)
 
     @property
     def status_html(self):

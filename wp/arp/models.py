@@ -150,7 +150,7 @@ class WatershedPrioritization(Analysis):
 
     @property
     def outdir(self):
-        return os.path.realpath("/tmp/test/%s" % self.uid)
+        return os.path.realpath(settings.MARXAN_OUTDIR + "/%s" % self.uid)
 
     
     def run(self):

@@ -45,6 +45,7 @@ STATICMAP_HEIGHT_BUFFER = None
 CELERY_IMPORT = ('arp.tasks',)
 
 MARXAN_EXE = "/home/mperry/Marxan/Marxan.exe"
+MARXAN_OUTDIR = "/tmp/marxan_out/"
 MARXAN_NUMREPS = 20
 MARXAN_NUMITNS = 1000000
 

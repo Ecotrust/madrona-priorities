@@ -19,7 +19,11 @@ class MarxanAnalysis(object):
 
     def __init__(self, params, units, outdir):
         self.outdir = os.path.realpath(outdir)
+        if not os.access(self.outdir, os.W_OK):
+            raise Exception("self.outdir %s not writeable" % self.outdir)
         self.exe = os.path.realpath(settings.MARXAN_EXE)
+        if not os.path.exists(self.exe):
+            raise Exception("Marxan.exe not found; tried %s" self.exe)
         self.NUMREPS = settings.MARXAN_NUMREPS
         self.NUMITNS = settings.MARXAN_NUMITNS
 

@@ -43,31 +43,10 @@ lingcod.onShow(function(){
                     {{instance.uid}}_call_again = true;
                 } else {
                     {{instance.uid}}_running = false;
-
-                    console.log("Finished processing {{instance.uid}} - hit refresh");
-                    //alert("Finished processing '{{instance.name}}'.\nHit Refresh to see the results");
-
-                    /*
-                    // Options 1: Show a panel
                     {{instance.uid}}_done_panel = lingcod.panel({appendTo: $('#panel-holder'), 
                         showCloseButton: true});
                     {{instance.uid}}_done_panel.showUrl(
-                       '/analysistools/arp_watershedprioritization_5/progress.json',
-                       { showClose: true });
-                    */
-
-                    // Option 2: refresh
-                    var myshps = lingcod.editors[0];
-                    myshps.tree.clearSelection();
-                    myshps.refresh( function() {
-                        var anode = myshps.tree.getNodesById('{{instance.uid}}');
-                        console.log(anode);
-                        if (anode.length === 1) {
-                            myshps.tree.selectNode(anode); 
-                        }
-                    });
-
-
+                       '/analysistools/{{instance.uid}}/progress.html', { showClose: true });
                 }
             });
         };

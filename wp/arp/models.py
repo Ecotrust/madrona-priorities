@@ -13,6 +13,8 @@ from lingcod.common.utils import asKml
 from django import forms
 from arp.tasks import marxan_start
 from lingcod.async.ProcessHandler import *
+from django.core.cache import cache
+from django.template.defaultfilters import slugify
 import os
 import glob
 
@@ -179,15 +181,12 @@ class WatershedPrioritization(Analysis):
 
         Ideally this should all be handled in process_results(?)
         """
-        from django.core.cache import cache
         use_cache = False
-        key = "wp_marxan_%s_%s" % (self.pk, self.date_modified)
-        try:
+        key = "wp_marxan_%s_%s" % (self.pk, slugify(self.date_modified))
+        if use_cache:
             cached_result = cache.get(key)
-            if use_cache and cached_result: 
+            if cached_result: 
                 return cached_result
-        except:
-            pass
 
         log = open(os.path.join(self.outdir,"output","test_log.dat"),'r').read()
 
@@ -251,7 +250,9 @@ class WatershedPrioritization(Analysis):
             'time': time,
             'runs': settings.MARXAN_NUMREPS
         }
-        cache.set(key, r)
+
+        if use_cache:
+            cache.set(key, r)
         return r
 
     @property
@@ -262,7 +263,7 @@ class WatershedPrioritization(Analysis):
             <p>%s of %s model runs completed.""" % (self.name,
                      self.progress[0], self.progress[1])
         elif process_is_complete(url):
-            status = "%s processing is done. Close this panel and hit 'Refresh' to see the results." % self.name
+            status = "%s processing is done." % self.name
         elif process_is_pending(url):
             status = "%s is in the queue but not yet running" % self.name
         else:

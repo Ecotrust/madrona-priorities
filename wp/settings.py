@@ -7,8 +7,7 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.contrib.gis.db.backends.postgis',
         'NAME': 'watersheds',
-        'USER': 'postgres',
-     }
+        'USER': 'postgres', }
 }
 
 GEOMETRY_DB_SRID = 99999
@@ -44,8 +43,8 @@ STATICMAP_HEIGHT_BUFFER = None
 
 CELERY_IMPORT = ('arp.tasks',)
 
-MARXAN_EXE = "/home/mperry/Marxan/Marxan.exe"
-MARXAN_OUTDIR = "/tmp/marxan_out/"
+MARXAN_EXE =  os.path.realpath(os.path.join(os.path.dirname(__file__), '..', 'Marxan.exe'))
+MARXAN_OUTDIR =  os.path.realpath(os.path.join(os.path.dirname(__file__), '..', 'marxan_output'))
 MARXAN_NUMREPS = 20
 MARXAN_NUMITNS = 1000000
 

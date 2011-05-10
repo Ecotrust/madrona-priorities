@@ -143,21 +143,15 @@ VERBOSITY 2
 
     def run(self):
         os.chdir(self.outdir)
-        #os.system("wine Marxan.exe")
-
-        #import popen2
-        #(stdo, stdi) = popen2.popen2("wine Marxan.exe")
-        #stdi.write("\n")
-        #print stdo.read()
-
         import subprocess
-        #subprocess.call(['wine Marxan.exe \n \n'], shell=True)
         proc = subprocess.Popen(
                 ['wine Marxan.exe'], 
                 shell=True, 
                 stdin=subprocess.PIPE, 
-                stdout=subprocess.PIPE,) 
-        proc.communicate('\n')
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+        ) 
+        #print proc.communicate()
 
     @property 
     def best(self):

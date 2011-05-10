@@ -73,10 +73,7 @@ class Folder(FeatureCollection):
 
     @classmethod
     def css(klass):
-        return """ li.KmlDocument > .icon { 
-        background: url('%(media)skmltree/dist/images/sprites/kml.png?1302821411') no-repeat -566px 0px ! important;
-        }
-        li.%(uid)s > .icon { 
+        return """li.%(uid)s > .icon { 
         background: url('%(media)skmltree/dist/images/sprites/kml.png?1302821411') no-repeat -231px 0px ! important;
         } """ % { 'uid': klass.model_uid(), 'media': settings.MEDIA_URL }
     

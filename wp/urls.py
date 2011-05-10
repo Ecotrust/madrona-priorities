@@ -5,9 +5,6 @@ admin.autodiscover()
 
 urlpatterns = patterns('',
     (r'^arp/', include('arp.urls')),
-)
-
-urlpatterns = patterns('',
     (r'^analysistools/', include('lingcod.analysistools.urls')),
 )
 

@@ -1,0 +1,49 @@
+<VirtualHost *:8001>
+  #TODO set up domain
+  ServerName ninkasi.ecotrust.org
+  #Listen 0.0.0.0:8001
+
+  WSGIScriptAlias / /usr/local/apps/watershed-priorities/wsgi.py
+  WSGIDaemonProcess wp user=www-data group=www-data processes=10 threads=1
+  WSGIProcessGroup wp
+
+ErrorLog "/usr/local/apps/watershed-priorities/apache-error.log"
+CustomLog "/usr/local/apps/watershed-priorities/apache-access.log" combined
+
+  Alias /admin-media /usr/local/apps/watershed-priorities/wp_env/src/django/django/contrib/admin/media
+
+ServerAdmin webmaster@localhost
+
+DocumentRoot /var/www
+<Directory />
+	Options FollowSymLinks
+	AllowOverride None
+</Directory>
+<Directory /var/www/>
+	Options Indexes FollowSymLinks MultiViews
+	AllowOverride None
+	Order allow,deny
+	allow from all
+</Directory>
+
+  <Location /admin-media>
+    Order allow,deny
+    Allow from all
+  </Location>
+
+  Alias /media /usr/local/apps/watershed-priorities/mediaroot
+
+  <Location /media>
+    #GZIP media files just not images or for IE6
+    SetOutputFilter DEFLATE
+    SetEnvIfNoCase Request_URI \
+    \.(?:gif|jpe?g|png)$ no-gzip dont-vary   
+    BrowserMatch \bMSIE\s6 no-gzip
+
+    Order allow,deny
+    Allow from all
+  </Location>
+
+</VirtualHost>
+
+WSGIRestrictStdin Off

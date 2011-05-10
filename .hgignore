@@ -25,3 +25,4 @@ cache/*
 marxan_output/*
 Marxan.exe
 celeryd*log
+apache*log

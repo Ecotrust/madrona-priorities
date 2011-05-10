@@ -17,6 +17,8 @@ from django.core.cache import cache
 from django.template.defaultfilters import slugify
 import os
 import glob
+from lingcod.common.utils import get_logger
+logger = get_logger()
 
 @register
 class AOI(PolygonFeature):
@@ -181,8 +183,9 @@ class WatershedPrioritization(Analysis):
 
         Ideally this should all be handled in process_results(?)
         """
-        use_cache = False
+        use_cache = settings.USE_CACHE
         key = "wp_marxan_%s_%s" % (self.pk, slugify(self.date_modified))
+        logger.info("Hit the cache for %s?" % key)
         if use_cache:
             cached_result = cache.get(key)
             if cached_result: 

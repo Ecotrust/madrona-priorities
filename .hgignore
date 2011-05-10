@@ -19,3 +19,9 @@ media/layers/uploaded-kml/*.kmz
 media/spacing/pickled_graphs/*
 wp/celerybeat*
 wp/try.py
+wp_env/*
+mediaroot/*
+cache/*
+marxan_output/*
+Marxan.exe
+celeryd*log

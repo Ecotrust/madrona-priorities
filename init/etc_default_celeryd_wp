@@ -1,0 +1,9 @@
+# Where the Django project is.
+export DJANGO_SETTINGS_MODULE="settings"
+CELERYD="/usr/local/apps/watershed-priorities/wp_env/bin/python /usr/local/apps/watershed-priorities/wp/manage.py celeryd"
+CELERYD_OPTS="-c 2 -E"
+CELERYD_CHDIR="/usr/local/apps/watershed-priorities/wp"
+VIRTUAL_ENV="/usr/local/apps/watershed-priorities/wp_env"
+CELERYD_USER="mperry"
+CELERYD_GROUP="admin"
+CELERYD_LOG_FILE="/usr/local/apps/watershed-priorities/celeryd_wp.log"

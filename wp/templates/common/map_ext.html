@@ -1,6 +1,8 @@
 {% extends 'common/map.html' %}
 {% block pagetitle %}Umpqua River Watershed Prioritization Demo{% endblock pagetitle %}
+{% block title %}Umpqua River Watershed Prioritization Demo{% endblock title %}
 {% block toggle %}{% endblock toggle %}
+
             {% block metanavigation %}
             {% if user.is_authenticated %}
             <li>{{user.username}} | </li>
@@ -18,3 +20,5 @@
             <li><a href="#" id="signin">sign in</a></li>
             {% endif %}                
             {% endblock metanavigation %}
+
+{% block addToOptions %}options.show_panel='about';{% endblock addToOptions %}

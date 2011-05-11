@@ -1,6 +1,6 @@
 {% extends 'common/map.html' %}
-{% block pagetitle %}Umpqua River Watershed Prioritization Demo{% endblock pagetitle %}
-{% block title %}Umpqua River Watershed Prioritization Demo{% endblock title %}
+{% block pagetitle %}Umpqua River Watershed Prioritization Demo (alpha){% endblock pagetitle %}
+{% block title %}Umpqua River Watershed Prioritization Demo (alpha){% endblock title %}
 {% block toggle %}{% endblock toggle %}
 
             {% block metanavigation %}
@@ -10,7 +10,9 @@
             <li><a href="#" id="news">news</a> | </li>
             <li><a href="#" id="about">about</a> | </li>
             {% block meta_navigation_list_insert %}{% endblock %}
+            <!--
             <li><a href="{% url help-main %}" target="_blank" id="help">help</a> | </li>
+            -->
             {% if user.is_authenticated %}
             <li><a href="#" id="profile">my profile</a> | </li>
             <li><a href="{% url user_signout %}">sign out</a></li>

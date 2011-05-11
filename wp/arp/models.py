@@ -69,7 +69,7 @@ class Folder(FeatureCollection):
                 'arp.models.WatershedPrioritization',
                 )
         form = 'arp.forms.FolderForm'
-        show_template = 'array/show.html'
+        show_template = 'folder/show.html'
 
     @classmethod
     def css(klass):

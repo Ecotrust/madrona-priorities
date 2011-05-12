@@ -1,6 +1,7 @@
 # Django settings for omm project.
 from lingcod.common.default_settings import *
 
+APP_NAME = "Watershed Priorities"
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 DATABASES = {

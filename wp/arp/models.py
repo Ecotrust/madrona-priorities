@@ -31,6 +31,46 @@ class AOI(PolygonFeature):
         form = 'arp.forms.AOIForm'
         icon_url = 'common/images/aoi.png'
 
+    @property
+    def kml(self):
+        return """
+        <Placemark id="%s">
+            <visibility>1</visibility>
+            <name>%s</name>
+            <styleUrl>#%s-default</styleUrl>
+            <ExtendedData>
+                <Data name="name"><value>%s</value></Data>
+                <Data name="user"><value>%s</value></Data>
+                <Data name="desc"><value>%s</value></Data>
+                <Data name="modified"><value>%s</value></Data>
+            </ExtendedData>
+            %s 
+        </Placemark>
+        """ % (self.uid, self.name, self.model_uid(), 
+               self.name, self.user, self.description, self.date_modified, 
+               self.geom_kml)
+
+    @property
+    def kml_style(self):
+        return """
+        <Style id="%s-default">
+            <BalloonStyle>
+                <bgColor>ffeeeeee</bgColor>
+                <text> <![CDATA[
+                    <font color="#1A3752"><strong>$[name]</strong></font><br />
+                    <p>$[desc]</p>
+                    <font size=1>Created by $[user] on $[modified]</font>
+                ]]> </text>
+            </BalloonStyle>
+            <PolyStyle>
+                <color>778B1A55</color>
+            </PolyStyle>
+            <LineStyle>
+                <color>ffffffff</color>
+            </LineStyle>
+        </Style>
+        """ % (self.model_uid())
+
 @register
 class LOI(LineFeature):
     description = models.TextField(default="", null=True, blank=True)
@@ -42,6 +82,43 @@ class LOI(LineFeature):
         form = 'arp.forms.LOIForm'
         icon_url = 'common/images/loi.png'
 
+    @property
+    def kml(self):
+        return """
+        <Placemark id="%s">
+            <visibility>1</visibility>
+            <name>%s</name>
+            <styleUrl>#%s-default</styleUrl>
+            <ExtendedData>
+                <Data name="name"><value>%s</value></Data>
+                <Data name="user"><value>%s</value></Data>
+                <Data name="desc"><value>%s</value></Data>
+                <Data name="modified"><value>%s</value></Data>
+            </ExtendedData>
+            %s 
+        </Placemark>
+        """ % (self.uid, self.name, self.model_uid(), 
+               self.name, self.user, self.description, self.date_modified, 
+               self.geom_kml)
+
+    @property
+    def kml_style(self):
+        return """
+        <Style id="%s-default">
+            <BalloonStyle>
+                <bgColor>ffeeeeee</bgColor>
+                <text> <![CDATA[
+                    <font color="#1A3752"><strong>$[name]</strong></font><br />
+                    <p>$[desc]</p>
+                    <font size=1>Created by $[user] on $[modified]</font>
+                ]]> </text>
+            </BalloonStyle>
+            <LineStyle>
+                <color>ffffffff</color>
+            </LineStyle>
+        </Style>
+        """ % (self.model_uid())
+
 @register
 class POI(PointFeature):
     description = models.TextField(default="", null=True, blank=True)
@@ -52,6 +129,50 @@ class POI(PointFeature):
         show_template = 'foi/show.html'
         form = 'arp.forms.POIForm'
         icon_url = 'common/images/poi.png'
+
+    @property
+    def kml(self):
+        return """
+        <Placemark id="%s">
+            <visibility>1</visibility>
+            <name>%s</name>
+            <styleUrl>#%s-default</styleUrl>
+            <ExtendedData>
+                <Data name="name"><value>%s</value></Data>
+                <Data name="user"><value>%s</value></Data>
+                <Data name="desc"><value>%s</value></Data>
+                <Data name="modified"><value>%s</value></Data>
+            </ExtendedData>
+            %s 
+        </Placemark>
+        """ % (self.uid, self.name, self.model_uid(), 
+               self.name, self.user, self.description, self.date_modified, 
+               self.geom_kml)
+
+    @property
+    def kml_style(self):
+        return """
+        <Style id="%s-default">
+            <IconStyle>
+                <color>ffffffff</color>
+                <colorMode>normal</colorMode>
+                <scale>0.9</scale> 
+                <Icon> <href>http://maps.google.com/mapfiles/kml/paddle/wht-blank.png</href> </Icon>
+            </IconStyle>
+            <BalloonStyle>
+                <bgColor>ffeeeeee</bgColor>
+                <text> <![CDATA[
+                    <font color="#1A3752"><strong>$[name]</strong></font><br />
+                    <p>$[desc]</p>
+                    <font size=1>Created by $[user] on $[modified]</font>
+                ]]> </text>
+            </BalloonStyle>
+            <LabelStyle>
+                <color>ffffffff</color>
+                <scale>0.8</scale>
+            </LabelStyle>
+        </Style>
+        """ % (self.model_uid())
 
 @register
 class Folder(FeatureCollection):

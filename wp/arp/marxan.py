@@ -12,8 +12,8 @@ class ConservationFeature(object):
         self.total = total
 
     def __repr__(self):
-        return "%s : target habitat is %s, penalty is %s, target is %s of %s total" % (
-                self.name, self.target, self.penalty, self.pct, self.total)
+        return "%s: target=%s (%s), penalty=%s" % (
+                self.name, self.target, self.pct, self.penalty)
 
 class MarxanAnalysis(object):
 
@@ -151,7 +151,7 @@ VERBOSITY 2
                 stdout=subprocess.PIPE,
                 stderr=subprocess.PIPE,
         ) 
-        #print proc.communicate()
+        print str(proc.communicate()[0])[:800] + "....."
 
     @property 
     def best(self):

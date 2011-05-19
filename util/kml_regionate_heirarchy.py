@@ -6,18 +6,19 @@ import zipfile
 
 #URL = "http://usfw.labs.ecotrust.org/kmltest/"
 URL = "./"
-kmz = True
+kmz = False
 if kmz:
     extension = "kmz"
 else:
     extension = "kml"
-test = False 
+test = True 
 
 Level = namedtuple('Level',['ds', 'simplify', 'uidfield','parent_uidfield'])
 
 if test:
     INDIR = "/home/mperry/subset/input1/"
     OUTDIR = "/home/mperry/subset/output1"
+    URL = "http://a.perrygeo.net/output1/"
     LEVELS = [
         Level(DataSource(INDIR + 'huc6.shp'), 0.003, 'HUC_6', None),
         Level(DataSource(INDIR + 'huc8.shp'), 0.001, 'HUC_8', 'HUC_6'),
@@ -48,6 +49,13 @@ def lfind(needle, haystack):
         except:
             break
 
+def name_callback(huc):
+    return "HUC %s" % huc
+
+def desc_callback(huc):
+    level = len(huc)/2
+    return "Level %s HUC" % level
+
 def drilldown(levelnum, levels, parent=None):
     for levelnum in range(len(levels)):
         level = levels[levelnum]
@@ -55,7 +63,12 @@ def drilldown(levelnum, levels, parent=None):
         if levelnum < len(levels)-1: 
             if levelnum == 0:
                 kmlfile = 'doc.%s' % (extension,)
-                kmls[kmlfile] = (levelnum, [{'geom': f.geom, 'uid': f.get(level.uidfield)} for f in level.ds[0]])
+                kmls[kmlfile] = (levelnum, [
+                    {'geom': f.geom, 
+                     'uid': f.get(level.uidfield),
+                     'name': name_callback(f.get(level.uidfield)),
+                     'desc': desc_callback(f.get(level.uidfield)) 
+                    } for f in level.ds[0]])
 
             children_layer = levels[levelnum+1].ds[0]
             children_parent_uids = children_layer.get_fields(levels[levelnum+1].parent_uidfield)
@@ -68,7 +81,12 @@ def drilldown(levelnum, levels, parent=None):
                 children = []
                 for i in indexes:
                     f = children_layer[i]
-                    children.append({'geom': f.geom, 'uid': f.get(child_uidf)})
+                    children.append({
+                        'geom': f.geom, 
+                        'uid': f.get(child_uidf),
+                        'name': name_callback(f.get(child_uidf)),
+                        'desc': desc_callback(f.get(child_uidf)) 
+                        })
 
                 kmls[kmlfile] = (levelnum+1, children)
         else:
@@ -85,16 +103,12 @@ def write_kmls(kmls):
     <open>1</open>
     <visibility>1</visibility>
     <Style id="default">
-        <IconStyle>
-            <color>ffffffff</color>
-            <colorMode>normal</colorMode>
-            <scale>0.9</scale> 
-            <Icon> <href>http://maps.google.com/mapfiles/kml/paddle/wht-blank.png</href> </Icon>
-        </IconStyle>
         <BalloonStyle>
             <bgColor>ffeeeeee</bgColor>
             <text> <![CDATA[
                 <font color="#1A3752"><strong>$[name]</strong></font><br />
+                <font color="#1A3752">$[description]</strong></font><br />
+
             ]]> </text>
         </BalloonStyle>
         <LabelStyle>
@@ -127,7 +141,7 @@ def write_kmls(kmls):
         <north>%s</north>
       </LatLonAltBox>
       <Lod>
-        <minLodPixels>448</minLodPixels>
+        <minLodPixels>356</minLodPixels>
         <maxLodPixels>%s</maxLodPixels>
       </Lod>
     </Region>
@@ -140,6 +154,7 @@ def write_kmls(kmls):
 
     region = """
     <Region>
+      <!-- Region for top-level placemarks -->
       <LatLonAltBox>
         <west>%s</west>
         <south>%s</south>
@@ -148,7 +163,7 @@ def write_kmls(kmls):
       </LatLonAltBox>
       <Lod>
         <minLodPixels>-1</minLodPixels>
-        <maxLodPixels>%s</maxLodPixels>
+        <maxLodPixels>512</maxLodPixels>
       </Lod>
     </Region>
     """
@@ -156,6 +171,7 @@ def write_kmls(kmls):
     placemark = """
     <Placemark>
         <name>%s</name>
+        <description>%s</description>
         <styleUrl>#default</styleUrl>
         %s
         %s
@@ -175,6 +191,8 @@ def write_kmls(kmls):
         for feature in features:
             geom = feature['geom'].transform(4326,clone=True)
             uid = feature['uid']
+            name = feature['name']
+            desc = feature['desc']
             if level.simplify:
                 geom = geom.geos.simplify(level.simplify)
             else:
@@ -190,13 +208,11 @@ def write_kmls(kmls):
             if levelnum == len(LEVELS)-2:
                 maxlod = "-1"
             else:
-                maxlod = "1600"
+                maxlod = "1450"
 
             placemark_region = ""
             if levelnum == 0:
-                placemark_region = region % (e[0],e[1],e[2],e[3],maxlod)
-
-            fh.write(placemark % (uid,geom.kml,placemark_region))
+                placemark_region = region % (e[0],e[1],e[2],e[3])
 
             if not levelnum == len(LEVELS)-1:
                 neturl = "%s%s.%s" % (URL,uid,extension)
@@ -205,6 +221,8 @@ def write_kmls(kmls):
                                     maxlod,    
                                     neturl)
                 )
+
+            fh.write(placemark % (name,desc,geom.kml,placemark_region))
 
         fh.write(kmlfoot)
         fh.close()
@@ -218,6 +236,5 @@ def write_kmls(kmls):
 if __name__ == "__main__":
     kmls = {}
     drilldown(0,LEVELS)
+    print kmls
     write_kmls(kmls)
-
-    

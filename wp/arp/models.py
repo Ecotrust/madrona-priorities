@@ -464,6 +464,13 @@ class WatershedPrioritization(Analysis):
         show_template = 'wp/show.html'
         form_template = 'wp/form.html'
         icon_url = 'common/images/watershed.png'
+        links = (
+            alternate('Shapefile',
+                'arp.views.watershed_shapefile',
+                select='single',
+                type='application/zip',
+            ),
+        )
 
 
 @register

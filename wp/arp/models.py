@@ -1,5 +1,12 @@
+import os
+import glob
+from django import forms
 from django.conf import settings
 from django.contrib.gis.db import models
+from django.contrib.gis.geos import GEOSGeometry 
+from django.core.cache import cache
+from django.template.defaultfilters import slugify
+from django.utils.html import escape
 from lingcod.features.models import PointFeature, LineFeature, PolygonFeature, FeatureCollection
 from lingcod.features import register, alternate
 from lingcod.layers.models import PrivateLayerList
@@ -8,16 +15,11 @@ from lingcod.analysistools.models import Analysis
 from lingcod.analysistools.widgets import SliderWidget
 from lingcod.common.utils import get_class
 from lingcod.features import register
-from django.contrib.gis.geos import GEOSGeometry 
 from lingcod.common.utils import asKml
-from django import forms
-from arp.tasks import marxan_start
 from lingcod.async.ProcessHandler import *
-from django.core.cache import cache
-from django.template.defaultfilters import slugify
-import os
-import glob
 from lingcod.common.utils import get_logger
+from arp.tasks import marxan_start
+
 logger = get_logger()
 
 @register
@@ -46,8 +48,8 @@ class AOI(PolygonFeature):
             </ExtendedData>
             %s 
         </Placemark>
-        """ % (self.uid, self.name, self.model_uid(), 
-               self.name, self.user, self.description, self.date_modified, 
+        """ % (self.uid, escape(self.name), self.model_uid(), 
+               escape(self.name), self.user, escape(self.description), self.date_modified, 
                self.geom_kml)
 
     @property
@@ -97,8 +99,8 @@ class LOI(LineFeature):
             </ExtendedData>
             %s 
         </Placemark>
-        """ % (self.uid, self.name, self.model_uid(), 
-               self.name, self.user, self.description, self.date_modified, 
+        """ % (self.uid, escape(self.name), self.model_uid(), 
+               escape(self.name), self.user, escape(self.description), self.date_modified, 
                self.geom_kml)
 
     @property
@@ -145,8 +147,8 @@ class POI(PointFeature):
             </ExtendedData>
             %s 
         </Placemark>
-        """ % (self.uid, self.name, self.model_uid(), 
-               self.name, self.user, self.description, self.date_modified, 
+        """ % (self.uid, escape(self.name), self.model_uid(), 
+               escape(self.name), self.user, escape(self.description), self.date_modified, 
                self.geom_kml)
 
     @property
@@ -427,7 +429,7 @@ class WatershedPrioritization(Analysis):
         wids = [int(x.strip()) for x  in self.output_units.split(',')]
         wshds = Watershed.objects.filter(huc12__in=wids)
         return "%s\n\n<Folder id=\"%s\"><name>%s</name>%s</Folder>" % (self.kml_style, 
-                self.uid, self.name, '\n'.join([x.kml for x in wshds]))
+                self.uid, escape(self.name), '\n'.join([x.kml for x in wshds]))
 
     @property 
     def kml_working(self):
@@ -436,7 +438,7 @@ class WatershedPrioritization(Analysis):
             <visibility>0</visibility>
             <name>%s (WORKING)</name>
         </Placemark>
-        """ % (self.uid, self.name)
+        """ % (self.uid, escape(self.name))
 
     @property
     def kml_style(self):
@@ -516,7 +518,7 @@ class BufferPoint(Analysis):
             %s
             </MultiGeometry>
         </Placemark>
-        """ % (self.kml_style, self.uid, self.name, self.model_uid(),
+        """ % (self.kml_style, self.uid, escape(self.name), self.model_uid(),
             asKml(self.output_point_geom.transform(
                     settings.GEOMETRY_CLIENT_SRID, clone=True)),
             asKml(self.output_poly_geom.transform(
@@ -533,7 +535,7 @@ class BufferPoint(Analysis):
               <coordinates>%s,%s</coordinates>
             </Point>
         </Placemark>
-        """ % (self.uid, self.name, self.model_uid(), 
+        """ % (self.uid, escape(self.name), self.model_uid(), 
                 self.input_lon, self.input_lat)
 
     @property

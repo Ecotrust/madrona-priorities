@@ -297,11 +297,8 @@ class WatershedPrioritization(Analysis):
     @property
     def marxan(self):
         """
-        TODO Fix this crap ... it works as proof-of-concept but it's horribly sloppy
-        Whoever wrote this should be punished and likely will be 
-        if they try to maintain or debug this property
-
-        Ideally this should all be handled in process_results(?)
+        Called by process_results which will cache the dict
+        May want to "cache" them by saving them to output_ fields of the feature instead?
         """
         use_cache = settings.USE_CACHE
         key = "wp_marxan_%s_%s" % (self.pk, slugify(self.date_modified))
@@ -402,6 +399,7 @@ class WatershedPrioritization(Analysis):
             self.output_units = ','.join([str(x.huc12) for x in wshds])
             self.output_geometry = wshds.collect()
             super(Analysis, self).save() # save without calling save()
+            first_run = self.marxan
 
     @property
     def done(self):

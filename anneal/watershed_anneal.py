@@ -118,7 +118,7 @@ def run():
     		steps -- the number of steps requested
     		updates -- the number of updates to print during annealing
     """
-    state, e = annealer.anneal(state, 4500, 10, 10000 * len(hucs), 9)
+    state, e = annealer.anneal(state, 4500, 10, 3000 * len(hucs), 9)
 
     print "Reserve cost = %r" % reserve_energy(state)
     for watershed in state:

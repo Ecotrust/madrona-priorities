@@ -1,0 +1,83 @@
+id,level1,level2,level3,level4,level5,full_name,common_name,species_name
+1,Widespread,Lamprey,Pacific ,,,Lamprey Pacific ,"Lamprey, Pacific ",Lampetra tridentata  (Entosphenus tridentatus)
+2,Widespread,Lamprey,River,,,Lamprey River ,"Lamprey, River",Lampetra ayresii  
+3,Widespread,Lamprey,Western brook,,,Lamprey Western brook ,"Lamprey, Western brook",Lampetra richardsoni
+4,Widespread,Salmon,Chinook,Deschutes River summer/fall-run ESU,,Salmon Chinook Deschutes River summer-fall-run ESU,"Salmon, Chinook",Oncorhynchus tshawytscha
+5,Widespread,Salmon,Chinook,Lower Columbia River Chinook ESU,,Salmon Chinook Lower Columbia River Chinook ESU,"Salmon, Chinook",Oncorhynchus tshawytscha
+6,Widespread,Salmon,Chinook,Middle Columbia River spring-run Chinook ESU,,Salmon Chinook Middle Columbia River spring-run Chinook ESU,"Salmon, Chinook",Oncorhynchus tshawytscha
+7,Widespread,Salmon,Chinook,Oregon Coast Chinook ESU,,Salmon Chinook Oregon Coast Chinook ESU,"Salmon, Chinook",Oncorhynchus tshawytscha
+8,Widespread,Salmon,Chinook,Puget Sound Chinook ESU,,Salmon Chinook Puget Sound Chinook ESU,"Salmon, Chinook",Oncorhynchus tshawytscha
+9,Widespread,Salmon,Chinook,Snake River Fall-run Chinook ESU,,Salmon Chinook Snake River Fall-run Chinook ESU,"Salmon, Chinook",Oncorhynchus tshawytscha
+10,Widespread,Salmon,Chinook,Snake River Spring/Summer Run Chinook ESU,,Salmon Chinook Snake River Spring-Summer Run Chinook ESU,"Salmon, Chinook",Oncorhynchus tshawytscha
+11,Widespread,Salmon,Chinook,Southern OR and Northern CA Coast Chinook ESU,,Salmon Chinook Southern OR and Northern CA Coast Chinook ESU,"Salmon, Chinook",Oncorhynchus tshawytscha
+12,Widespread,Salmon,Chinook,Upper Columbia River Spring-run Chinook ESU,,Salmon Chinook Upper Columbia River Spring-run Chinook ESU,"Salmon, Chinook",Oncorhynchus tshawytscha
+13,Widespread,Salmon,Chinook,Upper Columbia River summer/fall-run Chinook ESU,,Salmon Chinook Upper Columbia River summer-fall-run Chinook ESU,"Salmon, Chinook",Oncorhynchus tshawytscha
+14,Widespread,Salmon,Chinook,Upper Klamath-Trinity Rivers Chinook ESU,,Salmon Chinook Upper Klamath-Trinity Rivers Chinook ESU,"Salmon, Chinook",Oncorhynchus tshawytscha
+15,Widespread,Salmon,Chinook,Upper Willamette River Chinook ESU,,Salmon Chinook Upper Willamette River Chinook ESU,"Salmon, Chinook",Oncorhynchus tshawytscha
+16,Widespread,Salmon,Chinook,Washington Coast Chinook ESU,,Salmon Chinook Washington Coast Chinook ESU,"Salmon, Chinook",Oncorhynchus tshawytscha
+17,Widespread,Salmon,Chum,Columbia River Chum ESU,,Salmon Chum Columbia River Chum ESU,"Salmon, Chum",Oncorhynchus keta
+18,Widespread,Salmon,Chum,Hood Canal Summer-run Chum ESU,,Salmon Chum Hood Canal Summer-run Chum ESU,"Salmon, Chum",Oncorhynchus keta
+19,Widespread,Salmon,Chum,Pacific Coast Chum ESU,,Salmon Chum Pacific Coast Chum ESU,"Salmon, Chum",Oncorhynchus keta
+20,Widespread,Salmon,Chum,Puget Sound/Strait of Georgia Chum ESU,,Salmon Chum Puget Sound-Strait of Georgia Chum ESU,"Salmon, Chum",Oncorhynchus keta
+21,Widespread,Salmon,Coho,Lower Columbia River Coho ESU,,Salmon Coho Lower Columbia River Coho ESU,"Salmon, Coho",Oncorhynchus kisutch
+22,Widespread,Salmon,Coho,Olympic Peninsula Coho ESU,,Salmon Coho Olympic Peninsula Coho ESU,"Salmon, Coho",Oncorhynchus kisutch
+23,Widespread,Salmon,Coho,Oregon Coast Coho ESU,,Salmon Coho Oregon Coast Coho ESU,"Salmon, Coho",Oncorhynchus kisutch
+24,Widespread,Salmon,Coho,Puget Sound/Strait of Georgia Coho ESU,,Salmon Coho Puget Sound-Strait of Georgia Coho ESU,"Salmon, Coho",Oncorhynchus kisutch
+25,Widespread,Salmon,Coho,Southern Oregon/Northern California Coho ESU,,Salmon Coho Southern Oregon-Northern California Coho ESU,"Salmon, Coho",Oncorhynchus kisutch
+26,Widespread,Salmon,Coho,Southwest Washington Coho ESU,,Salmon Coho Southwest Washington Coho ESU,"Salmon, Coho",Oncorhynchus kisutch
+27,Widespread,Salmon,Pink,Even-year pink salmon ESU,,Salmon Pink Even-year pink salmon ESU,"Salmon, Pink",Oncorhynchus gorbuscha
+28,Widespread,Salmon,Pink,Odd-year pink salmon ESU,,Salmon Pink Odd-year pink salmon ESU,"Salmon, Pink",Oncorhynchus gorbuscha
+29,Widespread,Salmon,Sockeye,Baker River Sockeye ESU,,Salmon Sockeye Baker River Sockeye ESU,"Salmon, Sockeye",Oncorhynchus nerka
+30,Widespread,Salmon,Sockeye,Lake Pleasant Sockeye ESU,,Salmon Sockeye Lake Pleasant Sockeye ESU,"Salmon, Sockeye",Oncorhynchus nerka
+31,Widespread,Salmon,Sockeye,Lake Wenatchee Sockeye ESU,,Salmon Sockeye Lake Wenatchee Sockeye ESU,"Salmon, Sockeye",Oncorhynchus nerka
+32,Widespread,Salmon,Sockeye,Okanogan River Sockeye ESU,,Salmon Sockeye Okanogan River Sockeye ESU,"Salmon, Sockeye",Oncorhynchus nerka
+33,Widespread,Salmon,Sockeye,Ozette Lake Sockeye ESU,,Salmon Sockeye Ozette Lake Sockeye ESU,"Salmon, Sockeye",Oncorhynchus nerka
+34,Widespread,Salmon,Sockeye,Quinalt Lake Sockeye ESU,,Salmon Sockeye Quinalt Lake Sockeye ESU,"Salmon, Sockeye",Oncorhynchus nerka
+35,Widespread,Salmon,Sockeye,Snake River Sockeye ESU,,Salmon Sockeye Snake River Sockeye ESU,"Salmon, Sockeye",Oncorhynchus nerka
+36,Widespread,Steelhead,Klamath Mountains Province Steelhead DPS,,,Steelhead Klamath Mountains Province Steelhead DPS,Steelhead,Oncorhynchus mykiss
+37,Widespread,Steelhead,Lower Columbia River  Steelhead DPS,,,Steelhead Lower Columbia River Steelhead DPS,Steelhead,Oncorhynchus mykiss
+38,Widespread,Steelhead,Middle Columbia River Steelhead DPS,,,Steelhead Middle Columbia River Steelhead DPS,Steelhead,Oncorhynchus mykiss
+39,Widespread,Steelhead,Olympic Peninsula Steelhead DPS,,,Steelhead Olympic Peninsula Steelhead DPS,Steelhead,Oncorhynchus mykiss
+40,Widespread,Steelhead,Oregon Coast Steelhead DPS,,,Steelhead Oregon Coast Steelhead DPS,Steelhead,Oncorhynchus mykiss
+41,Widespread,Steelhead,Puget Sound Steelhead DPS,,,Steelhead Puget Sound Steelhead DPS,Steelhead,Oncorhynchus mykiss
+42,Widespread,Steelhead,Snake River Basin Steelhead DPS,,,Steelhead Snake River Basin Steelhead DPS,Steelhead,Oncorhynchus mykiss
+43,Widespread,Steelhead,Southwest Washington Steelhead DPS,,,Steelhead Southwest Washington Steelhead DPS,Steelhead,Oncorhynchus mykiss
+44,Widespread,Steelhead,Upper Columbia River Steelhead DPS,,,Steelhead Upper Columbia River Steelhead DPS,Steelhead,Oncorhynchus mykiss
+45,Widespread,Steelhead,Upper Willamette River Steelhead DPS,,,Steelhead Upper Willamette River Steelhead DPS,Steelhead,Oncorhynchus mykiss
+46,Widespread,Steelhead,Washington Coast Steelhead DPS,,,Steelhead Washington Coast Steelhead DPS,Steelhead,Oncorhynchus mykiss
+47,Widespread,Trout,Bull,,,Trout Bull ,"Trout, Bull",Salvelinus confluentus
+48,Widespread,Trout,Cutthroat,Bonneville,,Trout Cutthroat Bonneville,"Trout, Cutthroat: Bonneville",Oncorhynchus clarki utah
+49,Widespread,Trout,Cutthroat,Coastal,,Trout Cutthroat Coastal,"Trout, Cutthroat: Coastal",Oncorhynchus clarki clarki
+50,Widespread,Trout,Cutthroat,Lahontan,,Trout Cutthroat Lahontan,"Trout, Cutthroat: Lahontan",Oncorhynchus clarki henshawi
+51,Widespread,Trout,Cutthroat,Westslope,,Trout Cutthroat Westslope,"Trout, Cutthroat: Westslope",Oncorhynchus clarki lewisi
+52,Widespread,Trout,Cutthroat,Yellowstone,,Trout Cutthroat Yellowstone,"Trout, Cutthroat: Yellowstone",Onchorhynchus clarki bouvieri
+53,Widespread,Trout,Redband,,,Trout Redband ,"Trout, Redband",Oncorhynchus mykiss gairdnerii
+54,Locally endemic,Burbot,,,,Burbot ,Burbot,Lota lota
+55,Locally endemic,Chub,Alvord,,,Chub Alvord ,"Chub, Alvord",Gila alvordensis  
+56,Locally endemic,Chub,Blue,,,Chub Blue ,"Chub, blue",Gila coerulea  
+57,Locally endemic,Chub,Borax Lake,,,Chub Borax Lake ,"Chub, Borax Lake",Gila boraxobius  
+58,Locally endemic,Chub,Northern Leatherside,,,Chub Northern Leatherside ,"Chub, northern leatherside",Lepidomeda copei  
+59,Locally endemic,Chub,Oregon,,,Chub Oregon ,"Chub, Oregon",Oregonichthys crameri
+60,Locally endemic,Chub,Utah,,,Chub Utah ,"Chub, Utah",Gila atraria  
+61,Locally endemic,Dace,Leopard,,,Dace Leopard ,"Dace, leopard",Rhinichthys falcatus  
+62,Locally endemic,Dace,Longnose,,,Dace Longnose ,"Dace, longnose",Rhinichthys cataractae  
+63,Locally endemic,Dace,Umatilla,,,Dace Umatilla ,"Dace, Umatilla",Rhinichthys umatilla  
+64,Locally endemic,Eulachon (smelt),,,,Eulachon (smelt) ,Eulachon (smelt),Thaleichthys pacificus
+65,Locally endemic,Lamprey,Miller Lake,,,Lamprey Miller Lake ,"Lamprey, Miller Lake",Lampetra minima  
+66,Locally endemic,Olympic mudminnow,,,,Olympic mudminnow ,Olympic mudminnow,Novumbra hubbsi
+67,Locally endemic,pygmy whitefish,,,,pygmy whitefish ,pygmy whitefish,Prosopium coulteri
+68,Locally endemic,Sculpin,Malheur mottled,,,Sculpin Malheur mottled ,"Sculpin, Malheur mottled",Cottus bendirei  
+69,Locally endemic,Sculpin,margined,,,Sculpin margined ,"Sculpin, margined",Cottus marginatus  
+70,Locally endemic,Sculpin,Paiute,,,Sculpin Paiute ,"Sculpin, Paiute",Cottus beldingii  
+71,Locally endemic,Sculpin,Shoshone,,,Sculpin Shoshone ,"Sculpin, Shoshone",Cottus greenei  
+72,Locally endemic,Sculpin,Wood River,,,Sculpin Wood River ,"Sculpin, Wood River",Cottus leiopomus  
+73,Locally endemic,Sucker,Klamath largescale,,,Sucker Klamath largescale ,"Sucker, Klamath largescale",Catostomus snyderi  
+74,Locally endemic,Sucker,Lost River,,,Sucker Lost River ,"Sucker, Lost River",Deltistes luxatus  
+75,Locally endemic,Sucker,Modoc,,,Sucker Modoc ,"Sucker, Modoc",Catostomus microps  
+76,Locally endemic,Sucker,mountain,,,Sucker mountain ,"Sucker, mountain",Catostomus platyrhynchus  
+77,Locally endemic,Sucker,shortnose,,,Sucker shortnose ,"Sucker, shortnose",Chasmistes brevirostris  
+78,Locally endemic,Sucker,Warner,,,Sucker Warner ,"Sucker, Warner",Catostomus warnerensis  
+79,Locally endemic,Whitefish,Bear Lake,,,Whitefish Bear Lake ,"Whitefish, Bear Lake",Prosopium abyssicola
+80,Locally endemic,Whitefish,mountain,,,Whitefish mountain ,"Whitefish, Mountain",Prosopium williamsoni  
+81,Locally endemic,kokanee,,,,kokanee ,kokanee,Oncorhynchus nerka
+82,Locally endemic,Sucker,Goose Lake,,,Sucker Goose Lake ,"Sucker, Goose Lake",Catostomus occidentalis lacusanserinus  

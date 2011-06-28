@@ -1,0 +1,1018 @@
+[
+    {
+        "pk": 1, 
+        "model": "arp.focalspecies", 
+        "fields": {
+            "species_name": "Lampetra tridentata  (Entosphenus tridentatus)", 
+            "level1": "Widespread", 
+            "level2": "Lamprey", 
+            "level3": "Pacific", 
+            "full_name": "Lamprey Pacific", 
+            "common_name": "Lamprey, Pacific"
+        }
+    }, 
+    {
+        "pk": 2, 
+        "model": "arp.focalspecies", 
+        "fields": {
+            "species_name": "Lampetra ayresii", 
+            "level1": "Widespread", 
+            "level2": "Lamprey", 
+            "level3": "River", 
+            "full_name": "Lamprey River", 
+            "common_name": "Lamprey, River"
+        }
+    }, 
+    {
+        "pk": 3, 
+        "model": "arp.focalspecies", 
+        "fields": {
+            "species_name": "Lampetra richardsoni", 
+            "level1": "Widespread", 
+            "level2": "Lamprey", 
+            "level3": "Western brook", 
+            "full_name": "Lamprey Western brook", 
+            "common_name": "Lamprey, Western brook"
+        }
+    }, 
+    {
+        "pk": 4, 
+        "model": "arp.focalspecies", 
+        "fields": {
+            "species_name": "Oncorhynchus tshawytscha", 
+            "level1": "Widespread", 
+            "level2": "Salmon", 
+            "level3": "Chinook", 
+            "level4": "Deschutes River summer/fall-run ESU", 
+            "full_name": "Salmon Chinook Deschutes River summer-fall-run ESU", 
+            "common_name": "Salmon, Chinook"
+        }
+    }, 
+    {
+        "pk": 5, 
+        "model": "arp.focalspecies", 
+        "fields": {
+            "species_name": "Oncorhynchus tshawytscha", 
+            "level1": "Widespread", 
+            "level2": "Salmon", 
+            "level3": "Chinook", 
+            "level4": "Lower Columbia River Chinook ESU", 
+            "full_name": "Salmon Chinook Lower Columbia River Chinook ESU", 
+            "common_name": "Salmon, Chinook"
+        }
+    }, 
+    {
+        "pk": 6, 
+        "model": "arp.focalspecies", 
+        "fields": {
+            "species_name": "Oncorhynchus tshawytscha", 
+            "level1": "Widespread", 
+            "level2": "Salmon", 
+            "level3": "Chinook", 
+            "level4": "Middle Columbia River spring-run Chinook ESU", 
+            "full_name": "Salmon Chinook Middle Columbia River spring-run Chinook ESU", 
+            "common_name": "Salmon, Chinook"
+        }
+    }, 
+    {
+        "pk": 7, 
+        "model": "arp.focalspecies", 
+        "fields": {
+            "species_name": "Oncorhynchus tshawytscha", 
+            "level1": "Widespread", 
+            "level2": "Salmon", 
+            "level3": "Chinook", 
+            "level4": "Oregon Coast Chinook ESU", 
+            "full_name": "Salmon Chinook Oregon Coast Chinook ESU", 
+            "common_name": "Salmon, Chinook"
+        }
+    }, 
+    {
+        "pk": 8, 
+        "model": "arp.focalspecies", 
+        "fields": {
+            "species_name": "Oncorhynchus tshawytscha", 
+            "level1": "Widespread", 
+            "level2": "Salmon", 
+            "level3": "Chinook", 
+            "level4": "Puget Sound Chinook ESU", 
+            "full_name": "Salmon Chinook Puget Sound Chinook ESU", 
+            "common_name": "Salmon, Chinook"
+        }
+    }, 
+    {
+        "pk": 9, 
+        "model": "arp.focalspecies", 
+        "fields": {
+            "species_name": "Oncorhynchus tshawytscha", 
+            "level1": "Widespread", 
+            "level2": "Salmon", 
+            "level3": "Chinook", 
+            "level4": "Snake River Fall-run Chinook ESU", 
+            "full_name": "Salmon Chinook Snake River Fall-run Chinook ESU", 
+            "common_name": "Salmon, Chinook"
+        }
+    }, 
+    {
+        "pk": 10, 
+        "model": "arp.focalspecies", 
+        "fields": {
+            "species_name": "Oncorhynchus tshawytscha", 
+            "level1": "Widespread", 
+            "level2": "Salmon", 
+            "level3": "Chinook", 
+            "level4": "Snake River Spring/Summer Run Chinook ESU", 
+            "full_name": "Salmon Chinook Snake River Spring-Summer Run Chinook ESU", 
+            "common_name": "Salmon, Chinook"
+        }
+    }, 
+    {
+        "pk": 11, 
+        "model": "arp.focalspecies", 
+        "fields": {
+            "species_name": "Oncorhynchus tshawytscha", 
+            "level1": "Widespread", 
+            "level2": "Salmon", 
+            "level3": "Chinook", 
+            "level4": "Southern OR and Northern CA Coast Chinook ESU", 
+            "full_name": "Salmon Chinook Southern OR and Northern CA Coast Chinook ESU", 
+            "common_name": "Salmon, Chinook"
+        }
+    }, 
+    {
+        "pk": 12, 
+        "model": "arp.focalspecies", 
+        "fields": {
+            "species_name": "Oncorhynchus tshawytscha", 
+            "level1": "Widespread", 
+            "level2": "Salmon", 
+            "level3": "Chinook", 
+            "level4": "Upper Columbia River Spring-run Chinook ESU", 
+            "full_name": "Salmon Chinook Upper Columbia River Spring-run Chinook ESU", 
+            "common_name": "Salmon, Chinook"
+        }
+    }, 
+    {
+        "pk": 13, 
+        "model": "arp.focalspecies", 
+        "fields": {
+            "species_name": "Oncorhynchus tshawytscha", 
+            "level1": "Widespread", 
+            "level2": "Salmon", 
+            "level3": "Chinook", 
+            "level4": "Upper Columbia River summer/fall-run Chinook ESU", 
+            "full_name": "Salmon Chinook Upper Columbia River summer-fall-run Chinook ESU", 
+            "common_name": "Salmon, Chinook"
+        }
+    }, 
+    {
+        "pk": 14, 
+        "model": "arp.focalspecies", 
+        "fields": {
+            "species_name": "Oncorhynchus tshawytscha", 
+            "level1": "Widespread", 
+            "level2": "Salmon", 
+            "level3": "Chinook", 
+            "level4": "Upper Klamath-Trinity Rivers Chinook ESU", 
+            "full_name": "Salmon Chinook Upper Klamath-Trinity Rivers Chinook ESU", 
+            "common_name": "Salmon, Chinook"
+        }
+    }, 
+    {
+        "pk": 15, 
+        "model": "arp.focalspecies", 
+        "fields": {
+            "species_name": "Oncorhynchus tshawytscha", 
+            "level1": "Widespread", 
+            "level2": "Salmon", 
+            "level3": "Chinook", 
+            "level4": "Upper Willamette River Chinook ESU", 
+            "full_name": "Salmon Chinook Upper Willamette River Chinook ESU", 
+            "common_name": "Salmon, Chinook"
+        }
+    }, 
+    {
+        "pk": 16, 
+        "model": "arp.focalspecies", 
+        "fields": {
+            "species_name": "Oncorhynchus tshawytscha", 
+            "level1": "Widespread", 
+            "level2": "Salmon", 
+            "level3": "Chinook", 
+            "level4": "Washington Coast Chinook ESU", 
+            "full_name": "Salmon Chinook Washington Coast Chinook ESU", 
+            "common_name": "Salmon, Chinook"
+        }
+    }, 
+    {
+        "pk": 17, 
+        "model": "arp.focalspecies", 
+        "fields": {
+            "species_name": "Oncorhynchus keta", 
+            "level1": "Widespread", 
+            "level2": "Salmon", 
+            "level3": "Chum", 
+            "level4": "Columbia River Chum ESU", 
+            "full_name": "Salmon Chum Columbia River Chum ESU", 
+            "common_name": "Salmon, Chum"
+        }
+    }, 
+    {
+        "pk": 18, 
+        "model": "arp.focalspecies", 
+        "fields": {
+            "species_name": "Oncorhynchus keta", 
+            "level1": "Widespread", 
+            "level2": "Salmon", 
+            "level3": "Chum", 
+            "level4": "Hood Canal Summer-run Chum ESU", 
+            "full_name": "Salmon Chum Hood Canal Summer-run Chum ESU", 
+            "common_name": "Salmon, Chum"
+        }
+    }, 
+    {
+        "pk": 19, 
+        "model": "arp.focalspecies", 
+        "fields": {
+            "species_name": "Oncorhynchus keta", 
+            "level1": "Widespread", 
+            "level2": "Salmon", 
+            "level3": "Chum", 
+            "level4": "Pacific Coast Chum ESU", 
+            "full_name": "Salmon Chum Pacific Coast Chum ESU", 
+            "common_name": "Salmon, Chum"
+        }
+    }, 
+    {
+        "pk": 20, 
+        "model": "arp.focalspecies", 
+        "fields": {
+            "species_name": "Oncorhynchus keta", 
+            "level1": "Widespread", 
+            "level2": "Salmon", 
+            "level3": "Chum", 
+            "level4": "Puget Sound/Strait of Georgia Chum ESU", 
+            "full_name": "Salmon Chum Puget Sound-Strait of Georgia Chum ESU", 
+            "common_name": "Salmon, Chum"
+        }
+    }, 
+    {
+        "pk": 21, 
+        "model": "arp.focalspecies", 
+        "fields": {
+            "species_name": "Oncorhynchus kisutch", 
+            "level1": "Widespread", 
+            "level2": "Salmon", 
+            "level3": "Coho", 
+            "level4": "Lower Columbia River Coho ESU", 
+            "full_name": "Salmon Coho Lower Columbia River Coho ESU", 
+            "common_name": "Salmon, Coho"
+        }
+    }, 
+    {
+        "pk": 22, 
+        "model": "arp.focalspecies", 
+        "fields": {
+            "species_name": "Oncorhynchus kisutch", 
+            "level1": "Widespread", 
+            "level2": "Salmon", 
+            "level3": "Coho", 
+            "level4": "Olympic Peninsula Coho ESU", 
+            "full_name": "Salmon Coho Olympic Peninsula Coho ESU", 
+            "common_name": "Salmon, Coho"
+        }
+    }, 
+    {
+        "pk": 23, 
+        "model": "arp.focalspecies", 
+        "fields": {
+            "species_name": "Oncorhynchus kisutch", 
+            "level1": "Widespread", 
+            "level2": "Salmon", 
+            "level3": "Coho", 
+            "level4": "Oregon Coast Coho ESU", 
+            "full_name": "Salmon Coho Oregon Coast Coho ESU", 
+            "common_name": "Salmon, Coho"
+        }
+    }, 
+    {
+        "pk": 24, 
+        "model": "arp.focalspecies", 
+        "fields": {
+            "species_name": "Oncorhynchus kisutch", 
+            "level1": "Widespread", 
+            "level2": "Salmon", 
+            "level3": "Coho", 
+            "level4": "Puget Sound/Strait of Georgia Coho ESU", 
+            "full_name": "Salmon Coho Puget Sound-Strait of Georgia Coho ESU", 
+            "common_name": "Salmon, Coho"
+        }
+    }, 
+    {
+        "pk": 25, 
+        "model": "arp.focalspecies", 
+        "fields": {
+            "species_name": "Oncorhynchus kisutch", 
+            "level1": "Widespread", 
+            "level2": "Salmon", 
+            "level3": "Coho", 
+            "level4": "Southern Oregon/Northern California Coho ESU", 
+            "full_name": "Salmon Coho Southern Oregon-Northern California Coho ESU", 
+            "common_name": "Salmon, Coho"
+        }
+    }, 
+    {
+        "pk": 26, 
+        "model": "arp.focalspecies", 
+        "fields": {
+            "species_name": "Oncorhynchus kisutch", 
+            "level1": "Widespread", 
+            "level2": "Salmon", 
+            "level3": "Coho", 
+            "level4": "Southwest Washington Coho ESU", 
+            "full_name": "Salmon Coho Southwest Washington Coho ESU", 
+            "common_name": "Salmon, Coho"
+        }
+    }, 
+    {
+        "pk": 27, 
+        "model": "arp.focalspecies", 
+        "fields": {
+            "species_name": "Oncorhynchus gorbuscha", 
+            "level1": "Widespread", 
+            "level2": "Salmon", 
+            "level3": "Pink", 
+            "level4": "Even-year pink salmon ESU", 
+            "full_name": "Salmon Pink Even-year pink salmon ESU", 
+            "common_name": "Salmon, Pink"
+        }
+    }, 
+    {
+        "pk": 28, 
+        "model": "arp.focalspecies", 
+        "fields": {
+            "species_name": "Oncorhynchus gorbuscha", 
+            "level1": "Widespread", 
+            "level2": "Salmon", 
+            "level3": "Pink", 
+            "level4": "Odd-year pink salmon ESU", 
+            "full_name": "Salmon Pink Odd-year pink salmon ESU", 
+            "common_name": "Salmon, Pink"
+        }
+    }, 
+    {
+        "pk": 29, 
+        "model": "arp.focalspecies", 
+        "fields": {
+            "species_name": "Oncorhynchus nerka", 
+            "level1": "Widespread", 
+            "level2": "Salmon", 
+            "level3": "Sockeye", 
+            "level4": "Baker River Sockeye ESU", 
+            "full_name": "Salmon Sockeye Baker River Sockeye ESU", 
+            "common_name": "Salmon, Sockeye"
+        }
+    }, 
+    {
+        "pk": 30, 
+        "model": "arp.focalspecies", 
+        "fields": {
+            "species_name": "Oncorhynchus nerka", 
+            "level1": "Widespread", 
+            "level2": "Salmon", 
+            "level3": "Sockeye", 
+            "level4": "Lake Pleasant Sockeye ESU", 
+            "full_name": "Salmon Sockeye Lake Pleasant Sockeye ESU", 
+            "common_name": "Salmon, Sockeye"
+        }
+    }, 
+    {
+        "pk": 31, 
+        "model": "arp.focalspecies", 
+        "fields": {
+            "species_name": "Oncorhynchus nerka", 
+            "level1": "Widespread", 
+            "level2": "Salmon", 
+            "level3": "Sockeye", 
+            "level4": "Lake Wenatchee Sockeye ESU", 
+            "full_name": "Salmon Sockeye Lake Wenatchee Sockeye ESU", 
+            "common_name": "Salmon, Sockeye"
+        }
+    }, 
+    {
+        "pk": 32, 
+        "model": "arp.focalspecies", 
+        "fields": {
+            "species_name": "Oncorhynchus nerka", 
+            "level1": "Widespread", 
+            "level2": "Salmon", 
+            "level3": "Sockeye", 
+            "level4": "Okanogan River Sockeye ESU", 
+            "full_name": "Salmon Sockeye Okanogan River Sockeye ESU", 
+            "common_name": "Salmon, Sockeye"
+        }
+    }, 
+    {
+        "pk": 33, 
+        "model": "arp.focalspecies", 
+        "fields": {
+            "species_name": "Oncorhynchus nerka", 
+            "level1": "Widespread", 
+            "level2": "Salmon", 
+            "level3": "Sockeye", 
+            "level4": "Ozette Lake Sockeye ESU", 
+            "full_name": "Salmon Sockeye Ozette Lake Sockeye ESU", 
+            "common_name": "Salmon, Sockeye"
+        }
+    }, 
+    {
+        "pk": 34, 
+        "model": "arp.focalspecies", 
+        "fields": {
+            "species_name": "Oncorhynchus nerka", 
+            "level1": "Widespread", 
+            "level2": "Salmon", 
+            "level3": "Sockeye", 
+            "level4": "Quinalt Lake Sockeye ESU", 
+            "full_name": "Salmon Sockeye Quinalt Lake Sockeye ESU", 
+            "common_name": "Salmon, Sockeye"
+        }
+    }, 
+    {
+        "pk": 35, 
+        "model": "arp.focalspecies", 
+        "fields": {
+            "species_name": "Oncorhynchus nerka", 
+            "level1": "Widespread", 
+            "level2": "Salmon", 
+            "level3": "Sockeye", 
+            "level4": "Snake River Sockeye ESU", 
+            "full_name": "Salmon Sockeye Snake River Sockeye ESU", 
+            "common_name": "Salmon, Sockeye"
+        }
+    }, 
+    {
+        "pk": 36, 
+        "model": "arp.focalspecies", 
+        "fields": {
+            "species_name": "Oncorhynchus mykiss", 
+            "level1": "Widespread", 
+            "level2": "Steelhead", 
+            "level3": "Klamath Mountains Province Steelhead DPS", 
+            "full_name": "Steelhead Klamath Mountains Province Steelhead DPS", 
+            "common_name": "Steelhead"
+        }
+    }, 
+    {
+        "pk": 37, 
+        "model": "arp.focalspecies", 
+        "fields": {
+            "species_name": "Oncorhynchus mykiss", 
+            "level1": "Widespread", 
+            "level2": "Steelhead", 
+            "level3": "Lower Columbia River  Steelhead DPS", 
+            "full_name": "Steelhead Lower Columbia River Steelhead DPS", 
+            "common_name": "Steelhead"
+        }
+    }, 
+    {
+        "pk": 38, 
+        "model": "arp.focalspecies", 
+        "fields": {
+            "species_name": "Oncorhynchus mykiss", 
+            "level1": "Widespread", 
+            "level2": "Steelhead", 
+            "level3": "Middle Columbia River Steelhead DPS", 
+            "full_name": "Steelhead Middle Columbia River Steelhead DPS", 
+            "common_name": "Steelhead"
+        }
+    }, 
+    {
+        "pk": 39, 
+        "model": "arp.focalspecies", 
+        "fields": {
+            "species_name": "Oncorhynchus mykiss", 
+            "level1": "Widespread", 
+            "level2": "Steelhead", 
+            "level3": "Olympic Peninsula Steelhead DPS", 
+            "full_name": "Steelhead Olympic Peninsula Steelhead DPS", 
+            "common_name": "Steelhead"
+        }
+    }, 
+    {
+        "pk": 40, 
+        "model": "arp.focalspecies", 
+        "fields": {
+            "species_name": "Oncorhynchus mykiss", 
+            "level1": "Widespread", 
+            "level2": "Steelhead", 
+            "level3": "Oregon Coast Steelhead DPS", 
+            "full_name": "Steelhead Oregon Coast Steelhead DPS", 
+            "common_name": "Steelhead"
+        }
+    }, 
+    {
+        "pk": 41, 
+        "model": "arp.focalspecies", 
+        "fields": {
+            "species_name": "Oncorhynchus mykiss", 
+            "level1": "Widespread", 
+            "level2": "Steelhead", 
+            "level3": "Puget Sound Steelhead DPS", 
+            "full_name": "Steelhead Puget Sound Steelhead DPS", 
+            "common_name": "Steelhead"
+        }
+    }, 
+    {
+        "pk": 42, 
+        "model": "arp.focalspecies", 
+        "fields": {
+            "species_name": "Oncorhynchus mykiss", 
+            "level1": "Widespread", 
+            "level2": "Steelhead", 
+            "level3": "Snake River Basin Steelhead DPS", 
+            "full_name": "Steelhead Snake River Basin Steelhead DPS", 
+            "common_name": "Steelhead"
+        }
+    }, 
+    {
+        "pk": 43, 
+        "model": "arp.focalspecies", 
+        "fields": {
+            "species_name": "Oncorhynchus mykiss", 
+            "level1": "Widespread", 
+            "level2": "Steelhead", 
+            "level3": "Southwest Washington Steelhead DPS", 
+            "full_name": "Steelhead Southwest Washington Steelhead DPS", 
+            "common_name": "Steelhead"
+        }
+    }, 
+    {
+        "pk": 44, 
+        "model": "arp.focalspecies", 
+        "fields": {
+            "species_name": "Oncorhynchus mykiss", 
+            "level1": "Widespread", 
+            "level2": "Steelhead", 
+            "level3": "Upper Columbia River Steelhead DPS", 
+            "full_name": "Steelhead Upper Columbia River Steelhead DPS", 
+            "common_name": "Steelhead"
+        }
+    }, 
+    {
+        "pk": 45, 
+        "model": "arp.focalspecies", 
+        "fields": {
+            "species_name": "Oncorhynchus mykiss", 
+            "level1": "Widespread", 
+            "level2": "Steelhead", 
+            "level3": "Upper Willamette River Steelhead DPS", 
+            "full_name": "Steelhead Upper Willamette River Steelhead DPS", 
+            "common_name": "Steelhead"
+        }
+    }, 
+    {
+        "pk": 46, 
+        "model": "arp.focalspecies", 
+        "fields": {
+            "species_name": "Oncorhynchus mykiss", 
+            "level1": "Widespread", 
+            "level2": "Steelhead", 
+            "level3": "Washington Coast Steelhead DPS", 
+            "full_name": "Steelhead Washington Coast Steelhead DPS", 
+            "common_name": "Steelhead"
+        }
+    }, 
+    {
+        "pk": 47, 
+        "model": "arp.focalspecies", 
+        "fields": {
+            "species_name": "Salvelinus confluentus", 
+            "level1": "Widespread", 
+            "level2": "Trout", 
+            "level3": "Bull", 
+            "full_name": "Trout Bull", 
+            "common_name": "Trout, Bull"
+        }
+    }, 
+    {
+        "pk": 48, 
+        "model": "arp.focalspecies", 
+        "fields": {
+            "species_name": "Oncorhynchus clarki utah", 
+            "level1": "Widespread", 
+            "level2": "Trout", 
+            "level3": "Cutthroat", 
+            "level4": "Bonneville", 
+            "full_name": "Trout Cutthroat Bonneville", 
+            "common_name": "Trout, Cutthroat: Bonneville"
+        }
+    }, 
+    {
+        "pk": 49, 
+        "model": "arp.focalspecies", 
+        "fields": {
+            "species_name": "Oncorhynchus clarki clarki", 
+            "level1": "Widespread", 
+            "level2": "Trout", 
+            "level3": "Cutthroat", 
+            "level4": "Coastal", 
+            "full_name": "Trout Cutthroat Coastal", 
+            "common_name": "Trout, Cutthroat: Coastal"
+        }
+    }, 
+    {
+        "pk": 50, 
+        "model": "arp.focalspecies", 
+        "fields": {
+            "species_name": "Oncorhynchus clarki henshawi", 
+            "level1": "Widespread", 
+            "level2": "Trout", 
+            "level3": "Cutthroat", 
+            "level4": "Lahontan", 
+            "full_name": "Trout Cutthroat Lahontan", 
+            "common_name": "Trout, Cutthroat: Lahontan"
+        }
+    }, 
+    {
+        "pk": 51, 
+        "model": "arp.focalspecies", 
+        "fields": {
+            "species_name": "Oncorhynchus clarki lewisi", 
+            "level1": "Widespread", 
+            "level2": "Trout", 
+            "level3": "Cutthroat", 
+            "level4": "Westslope", 
+            "full_name": "Trout Cutthroat Westslope", 
+            "common_name": "Trout, Cutthroat: Westslope"
+        }
+    }, 
+    {
+        "pk": 52, 
+        "model": "arp.focalspecies", 
+        "fields": {
+            "species_name": "Onchorhynchus clarki bouvieri", 
+            "level1": "Widespread", 
+            "level2": "Trout", 
+            "level3": "Cutthroat", 
+            "level4": "Yellowstone", 
+            "full_name": "Trout Cutthroat Yellowstone", 
+            "common_name": "Trout, Cutthroat: Yellowstone"
+        }
+    }, 
+    {
+        "pk": 53, 
+        "model": "arp.focalspecies", 
+        "fields": {
+            "species_name": "Oncorhynchus mykiss gairdnerii", 
+            "level1": "Widespread", 
+            "level2": "Trout", 
+            "level3": "Redband", 
+            "full_name": "Trout Redband", 
+            "common_name": "Trout, Redband"
+        }
+    }, 
+    {
+        "pk": 54, 
+        "model": "arp.focalspecies", 
+        "fields": {
+            "common_name": "Burbot", 
+            "level1": "Locally endemic", 
+            "level2": "Burbot", 
+            "species_name": "Lota lota", 
+            "full_name": "Burbot"
+        }
+    }, 
+    {
+        "pk": 55, 
+        "model": "arp.focalspecies", 
+        "fields": {
+            "species_name": "Gila alvordensis", 
+            "level1": "Locally endemic", 
+            "level2": "Chub", 
+            "level3": "Alvord", 
+            "full_name": "Chub Alvord", 
+            "common_name": "Chub, Alvord"
+        }
+    }, 
+    {
+        "pk": 56, 
+        "model": "arp.focalspecies", 
+        "fields": {
+            "species_name": "Gila coerulea", 
+            "level1": "Locally endemic", 
+            "level2": "Chub", 
+            "level3": "Blue", 
+            "full_name": "Chub Blue", 
+            "common_name": "Chub, blue"
+        }
+    }, 
+    {
+        "pk": 57, 
+        "model": "arp.focalspecies", 
+        "fields": {
+            "species_name": "Gila boraxobius", 
+            "level1": "Locally endemic", 
+            "level2": "Chub", 
+            "level3": "Borax Lake", 
+            "full_name": "Chub Borax Lake", 
+            "common_name": "Chub, Borax Lake"
+        }
+    }, 
+    {
+        "pk": 58, 
+        "model": "arp.focalspecies", 
+        "fields": {
+            "species_name": "Lepidomeda copei", 
+            "level1": "Locally endemic", 
+            "level2": "Chub", 
+            "level3": "Northern Leatherside", 
+            "full_name": "Chub Northern Leatherside", 
+            "common_name": "Chub, northern leatherside"
+        }
+    }, 
+    {
+        "pk": 59, 
+        "model": "arp.focalspecies", 
+        "fields": {
+            "species_name": "Oregonichthys crameri", 
+            "level1": "Locally endemic", 
+            "level2": "Chub", 
+            "level3": "Oregon", 
+            "full_name": "Chub Oregon", 
+            "common_name": "Chub, Oregon"
+        }
+    }, 
+    {
+        "pk": 60, 
+        "model": "arp.focalspecies", 
+        "fields": {
+            "species_name": "Gila atraria", 
+            "level1": "Locally endemic", 
+            "level2": "Chub", 
+            "level3": "Utah", 
+            "full_name": "Chub Utah", 
+            "common_name": "Chub, Utah"
+        }
+    }, 
+    {
+        "pk": 61, 
+        "model": "arp.focalspecies", 
+        "fields": {
+            "species_name": "Rhinichthys falcatus", 
+            "level1": "Locally endemic", 
+            "level2": "Dace", 
+            "level3": "Leopard", 
+            "full_name": "Dace Leopard", 
+            "common_name": "Dace, leopard"
+        }
+    }, 
+    {
+        "pk": 62, 
+        "model": "arp.focalspecies", 
+        "fields": {
+            "species_name": "Rhinichthys cataractae", 
+            "level1": "Locally endemic", 
+            "level2": "Dace", 
+            "level3": "Longnose", 
+            "full_name": "Dace Longnose", 
+            "common_name": "Dace, longnose"
+        }
+    }, 
+    {
+        "pk": 63, 
+        "model": "arp.focalspecies", 
+        "fields": {
+            "species_name": "Rhinichthys umatilla", 
+            "level1": "Locally endemic", 
+            "level2": "Dace", 
+            "level3": "Umatilla", 
+            "full_name": "Dace Umatilla", 
+            "common_name": "Dace, Umatilla"
+        }
+    }, 
+    {
+        "pk": 64, 
+        "model": "arp.focalspecies", 
+        "fields": {
+            "common_name": "Eulachon (smelt)", 
+            "level1": "Locally endemic", 
+            "level2": "Eulachon (smelt)", 
+            "species_name": "Thaleichthys pacificus", 
+            "full_name": "Eulachon (smelt)"
+        }
+    }, 
+    {
+        "pk": 65, 
+        "model": "arp.focalspecies", 
+        "fields": {
+            "species_name": "Lampetra minima", 
+            "level1": "Locally endemic", 
+            "level2": "Lamprey", 
+            "level3": "Miller Lake", 
+            "full_name": "Lamprey Miller Lake", 
+            "common_name": "Lamprey, Miller Lake"
+        }
+    }, 
+    {
+        "pk": 66, 
+        "model": "arp.focalspecies", 
+        "fields": {
+            "common_name": "Olympic mudminnow", 
+            "level1": "Locally endemic", 
+            "level2": "Olympic mudminnow", 
+            "species_name": "Novumbra hubbsi", 
+            "full_name": "Olympic mudminnow"
+        }
+    }, 
+    {
+        "pk": 67, 
+        "model": "arp.focalspecies", 
+        "fields": {
+            "common_name": "pygmy whitefish", 
+            "level1": "Locally endemic", 
+            "level2": "pygmy whitefish", 
+            "species_name": "Prosopium coulteri", 
+            "full_name": "pygmy whitefish"
+        }
+    }, 
+    {
+        "pk": 68, 
+        "model": "arp.focalspecies", 
+        "fields": {
+            "species_name": "Cottus bendirei", 
+            "level1": "Locally endemic", 
+            "level2": "Sculpin", 
+            "level3": "Malheur mottled", 
+            "full_name": "Sculpin Malheur mottled", 
+            "common_name": "Sculpin, Malheur mottled"
+        }
+    }, 
+    {
+        "pk": 69, 
+        "model": "arp.focalspecies", 
+        "fields": {
+            "species_name": "Cottus marginatus", 
+            "level1": "Locally endemic", 
+            "level2": "Sculpin", 
+            "level3": "margined", 
+            "full_name": "Sculpin margined", 
+            "common_name": "Sculpin, margined"
+        }
+    }, 
+    {
+        "pk": 70, 
+        "model": "arp.focalspecies", 
+        "fields": {
+            "species_name": "Cottus beldingii", 
+            "level1": "Locally endemic", 
+            "level2": "Sculpin", 
+            "level3": "Paiute", 
+            "full_name": "Sculpin Paiute", 
+            "common_name": "Sculpin, Paiute"
+        }
+    }, 
+    {
+        "pk": 71, 
+        "model": "arp.focalspecies", 
+        "fields": {
+            "species_name": "Cottus greenei", 
+            "level1": "Locally endemic", 
+            "level2": "Sculpin", 
+            "level3": "Shoshone", 
+            "full_name": "Sculpin Shoshone", 
+            "common_name": "Sculpin, Shoshone"
+        }
+    }, 
+    {
+        "pk": 72, 
+        "model": "arp.focalspecies", 
+        "fields": {
+            "species_name": "Cottus leiopomus", 
+            "level1": "Locally endemic", 
+            "level2": "Sculpin", 
+            "level3": "Wood River", 
+            "full_name": "Sculpin Wood River", 
+            "common_name": "Sculpin, Wood River"
+        }
+    }, 
+    {
+        "pk": 73, 
+        "model": "arp.focalspecies", 
+        "fields": {
+            "species_name": "Catostomus snyderi", 
+            "level1": "Locally endemic", 
+            "level2": "Sucker", 
+            "level3": "Klamath largescale", 
+            "full_name": "Sucker Klamath largescale", 
+            "common_name": "Sucker, Klamath largescale"
+        }
+    }, 
+    {
+        "pk": 74, 
+        "model": "arp.focalspecies", 
+        "fields": {
+            "species_name": "Deltistes luxatus", 
+            "level1": "Locally endemic", 
+            "level2": "Sucker", 
+            "level3": "Lost River", 
+            "full_name": "Sucker Lost River", 
+            "common_name": "Sucker, Lost River"
+        }
+    }, 
+    {
+        "pk": 75, 
+        "model": "arp.focalspecies", 
+        "fields": {
+            "species_name": "Catostomus microps", 
+            "level1": "Locally endemic", 
+            "level2": "Sucker", 
+            "level3": "Modoc", 
+            "full_name": "Sucker Modoc", 
+            "common_name": "Sucker, Modoc"
+        }
+    }, 
+    {
+        "pk": 76, 
+        "model": "arp.focalspecies", 
+        "fields": {
+            "species_name": "Catostomus platyrhynchus", 
+            "level1": "Locally endemic", 
+            "level2": "Sucker", 
+            "level3": "mountain", 
+            "full_name": "Sucker mountain", 
+            "common_name": "Sucker, mountain"
+        }
+    }, 
+    {
+        "pk": 77, 
+        "model": "arp.focalspecies", 
+        "fields": {
+            "species_name": "Chasmistes brevirostris", 
+            "level1": "Locally endemic", 
+            "level2": "Sucker", 
+            "level3": "shortnose", 
+            "full_name": "Sucker shortnose", 
+            "common_name": "Sucker, shortnose"
+        }
+    }, 
+    {
+        "pk": 78, 
+        "model": "arp.focalspecies", 
+        "fields": {
+            "species_name": "Catostomus warnerensis", 
+            "level1": "Locally endemic", 
+            "level2": "Sucker", 
+            "level3": "Warner", 
+            "full_name": "Sucker Warner", 
+            "common_name": "Sucker, Warner"
+        }
+    }, 
+    {
+        "pk": 79, 
+        "model": "arp.focalspecies", 
+        "fields": {
+            "species_name": "Prosopium abyssicola", 
+            "level1": "Locally endemic", 
+            "level2": "Whitefish", 
+            "level3": "Bear Lake", 
+            "full_name": "Whitefish Bear Lake", 
+            "common_name": "Whitefish, Bear Lake"
+        }
+    }, 
+    {
+        "pk": 80, 
+        "model": "arp.focalspecies", 
+        "fields": {
+            "species_name": "Prosopium williamsoni", 
+            "level1": "Locally endemic", 
+            "level2": "Whitefish", 
+            "level3": "mountain", 
+            "full_name": "Whitefish mountain", 
+            "common_name": "Whitefish, Mountain"
+        }
+    }, 
+    {
+        "pk": 81, 
+        "model": "arp.focalspecies", 
+        "fields": {
+            "common_name": "kokanee", 
+            "level1": "Locally endemic", 
+            "level2": "kokanee", 
+            "species_name": "Oncorhynchus nerka", 
+            "full_name": "kokanee"
+        }
+    }, 
+    {
+        "pk": 82, 
+        "model": "arp.focalspecies", 
+        "fields": {
+            "species_name": "Catostomus occidentalis lacusanserinus", 
+            "level1": "Locally endemic", 
+            "level2": "Sucker", 
+            "level3": "Goose Lake", 
+            "full_name": "Sucker Goose Lake", 
+            "common_name": "Sucker, Goose Lake"
+        }
+    }
+]

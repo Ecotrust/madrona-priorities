@@ -22,6 +22,19 @@ from arp.tasks import marxan_start
 
 logger = get_logger()
 
+class FocalSpecies(models.Model):
+    common_name = models.CharField(max_length=99)
+    species_name = models.CharField(max_length=99)
+    full_name = models.CharField(max_length=99)
+    level1 = models.CharField(max_length=99)
+    level2 = models.CharField(max_length=99,null=True,blank=True)
+    level3 = models.CharField(max_length=99,null=True,blank=True)
+    level4 = models.CharField(max_length=99,null=True,blank=True)
+    level5 = models.CharField(max_length=99,null=True,blank=True)
+
+    def __unicode__(self):
+        return u'%s' % self.full_name
+
 @register
 class AOI(PolygonFeature):
     description = models.TextField(default="", null=True, blank=True)

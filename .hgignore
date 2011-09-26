@@ -32,4 +32,5 @@ wp.log
 *rand.c
 anneal/stats/*
 *.orig
+anneal/backup/*
 

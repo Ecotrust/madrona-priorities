@@ -27,3 +27,9 @@ Marxan.exe
 celeryd*log
 apache*log
 wp.log
+*.o
+*.so
+*rand.c
+anneal/stats/*
+*.orig
+

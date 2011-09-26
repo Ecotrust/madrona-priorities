@@ -1,4 +1,4 @@
-import random
+from numpy import random
 import math
 import sys
 from anneal import Annealer
@@ -50,7 +50,7 @@ def run():
 
     state = []
     for i in range(5): # To start off, pick 5 watersheds at random
-        state.append(random.choice(hucs))
+        state.append(hucs[random.randint(num_hucs)])
 
     def reserve_move(state):
         """
@@ -58,23 +58,30 @@ def run():
         then
         2nd Random choice: Which watershed to add or remove
         """
-        add_new = random.choice([True,False])
+        #add_new = random.choice([True,False])
+        add_new = random.randint(2)
 
-        if add_new:
+        if add_new==1:
             # Append a new watershed to reserve
             if len(state) < num_hucs:
                 # About 3x faster than ... h = random.choice(hucs)
-                h = hucs[ int(random.random() * num_hucs)]
+                h = hucs[ random.randint(num_hucs)]
                 while h in state: 
                     # keep going until we find one not already in the reserve
-                    h = hucs[ int(random.random() * num_hucs)]
+                    h = hucs[ random.randint(num_hucs)]
                 state.append(h)
         else:
             # Remove an existing watershed from reserve
             lenstate = len(state)
             if lenstate > 1:
-                h = state[ int(random.random() * lenstate)]
+                h = state[ random.randint(lenstate)]
                 state.remove(h)
+
+    totals = {}
+    for s in species:
+        totals[s] = 0
+
+    def set_totals():
 
     def reserve_energy(state):
         """
@@ -88,16 +95,17 @@ def run():
         but at least we have access to it!
         """
         e = 0
-        totals = {}
-        for s in species:
-            totals[s] = 0
-
         for huc in state:
             watershed = watersheds[huc]
+            if e == 0:
+                for s in species:
+                    totals[s] = watershed[s]
+            else:
+                for s in species:
+                    totals[s] += watershed[s]
+
             for cost in costs:
                 e += watershed[cost]
-            for s in species:
-                totals[s] += watershed[s]
 
         # incorporate penalties for missing species targets
         for s in species:
@@ -121,6 +129,7 @@ def run():
     state, e = annealer.anneal(state, 4500, 10, 3000 * len(hucs), 9)
 
     print "Reserve cost = %r" % reserve_energy(state)
+    state.sort()
     for watershed in state:
         print "\t", watershed, watersheds[watershed]
 

@@ -52,7 +52,8 @@ Notes:
 # 4) Run the automatic annealer which will attempt to choose reasonable values
 # for maximum and minimum temperatures and then anneal for the allotted time.
 
-import copy, math, random, sys, time
+import copy, math, sys, time
+from numpy import random
 
 def round_figures(x, n):
     """Returns x rounded to n significant figures."""

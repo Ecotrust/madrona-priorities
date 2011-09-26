@@ -10,23 +10,23 @@ setup_environ(settings)
 from arp.models import FocalSpecies as F
 from django.template.defaultfilters import slugify
 
-def output(level,val,crumbs):
+def output(level,val,crumbs, target=0.5, penalty=0.5):
     id = '---'.join([slugify(x) for x in crumbs])
     print "  "*level, "<span>", val,'</span>'
     print "  "*level, '''<span class="sliders">
     <table>
     <tr>
     <td>Target</td>
-    <td><input type="text" class="slidervalue" id="target---%(id)s" value="%(default)s"/></td>
+    <td><input type="text" class="slidervalue" id="target---%(id)s" value="%(target)s"/></td>
     <td><div class="slider" id="slider_target---%(id)s"></div></td>
     </tr>
     <tr>
     <td>Penalty</td>
-    <td><input type="text" class="slidervalue" id="penalty---%(id)s" value="%(default)s"/></td>
+    <td><input type="text" class="slidervalue" id="penalty---%(id)s" value="%(penalty)s"/></td>
     <td><div class="slider" id="slider_penalty---%(id)s"></div></td>
     </tr>
     </table>
-    </span>''' % {'id': id, 'default': 0.5}
+    </span>''' % {'id': id, 'target': target, 'penalty': penalty}
 
 def header():
     print """<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -90,16 +90,26 @@ $(document).ready(function(){
 });
     </script>
 
+    <link rel="stylesheet" href="./treeview/jquery.treeview.css" />
+    <!-- TODO remove this when in panel -->
+    <link rel="stylesheet" href="./treeview/jquery-widgets.css" />
     <style type="text/css">
+        #params { float: right; padding: 10px; border: 1px black solid; margin: 10px; width:500px; }
         li.collapsable > span.sliders { display: none; }
         li.expandable > span.sliders { color: black; display: inline; }
-        .slider { margin-bottom: 5px;   }
         td { padding-right:6px; font-size: 80%; }
+        .slider { margin-bottom: 1px;   }
         .slidervalue { font-size: 80% }
-        #params { float: right; padding: 10px; border: 1px black solid; margin: 10px; width:500px; }
+        .ui-slider .ui-slider-handle { position: absolute; z-index: 2; width: 0.7em; height: 0.7em; 
+            cursor: default; border: 1px solid #b3b3b3/*{borderColorDefault}*/; 
+            background: #d6d6d6/*{bgColorDefault}*/; font-weight: normal/*{fwDefault}*/; color: #555555/*{fcDefault}*/; }
+        .ui-slider-horizontal { height: .4em; border: 1px solid #888888/*{borderColorContent}*/; 
+            background: #eeeeee/*{bgColorContent}*/; color: #222222/*{fcContent}*/; }
+        .ui-slider-horizontal .ui-slider-range { top: 0; height: 100%; }
+        .ui-slider-horizontal .ui-slider-range-min { left: 0; background:#9a9a9a}
+        .slider { width: 150px; }
+        .slidervalue { width: 45px ! important;}
     </style>
-    <link rel="stylesheet" href="./treeview/jquery.treeview.css" />
-    <link rel="stylesheet" href="./treeview/jquery-widgets.css" />
 
     </head>
     <body> 
@@ -114,11 +124,12 @@ $(document).ready(function(){
     <p style="width: 400px;"> If you expand the list to get more detail, you must set values for all visible categories. 
         Only those species/groups that are visible (expanded) will be passed to the prioritization analysis.
         The box at the far-right shows the parameters that will be passed given the current state. </p>
+    <form action="postit.html" id="focalspecies_form">
     <span>Focal Fish Species</span>
 """
 
 def footer():
-    print """ </body></html>"""
+    print """ <input type="submit"/></form></body></html>"""
 
 def main():
     L1 = F.objects.values_list('level1',flat=True).distinct()

@@ -260,7 +260,8 @@ class Annealer:
         
         # Perform anneal
         print 'Annealing from %.2f to %.2f over %i steps:' % (Tmax, Tmin, duration)
-        return self.anneal(state, Tmax, Tmin, duration, 20)
+        #return self.anneal(state, Tmax, Tmin, duration, 20)
+        return {'tmax': Tmax, 'tmin': Tmin, 'steps': duration}
 
 if __name__ == '__main__':
     """Test annealer with a traveling salesman problem."""

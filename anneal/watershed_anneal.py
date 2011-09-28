@@ -1,13 +1,17 @@
 from numpy import random
 import math
 import sys
+import os
+import json
 from anneal import Annealer
+#from cport.anneal import Annealer
 from django.contrib.gis.gdal import DataSource
 
 #-----------------------------------------------#
 #-------------- Configuration ------------------#
 #-----------------------------------------------#
-ds = DataSource('../media/staticmap/data/huc6_4326.shp')
+shp = '../media/staticmap/data/huc6_4326.shp'
+json_cache = './watersheds.json'
 species = ['StlHd_m', 'Coho_m', 'Chnk_m']
 targets = { 'StlHd_m': 511000, 
             'Coho_m': 521000, 
@@ -17,10 +21,18 @@ penalties = { 'StlHd_m': 300,
             'Chnk_m': 100 }
 costs = ['pcp80bdfmm']
 uidfield = 'OBJECTID'
+NUMREPS = 1 # 30
+NUMITER = 50000 # 1 million
 #-----------------------------------------------#
 
-def run(schedule=None):
-    watersheds = {}
+watersheds = {}
+if os.path.exists(json_cache):
+    print "Loading data from json..."
+    fh = open(json_cache,'r')
+    watersheds = json.loads(fh.read())
+else:
+    print "Loading data from shapefile..."
+    ds = DataSource(shp)
     for f in ds[0]:
         skip = False
         vals = {}
@@ -32,52 +44,30 @@ def run(schedule=None):
             vals[c] = f.get(c)
 
         if not skip:
-            watersheds[f.get(uidfield)] = vals
+            watersheds[int(f.get(uidfield))] = vals
+        fh = open(json_cache, 'w')
+        fh.write(json.dumps(watersheds))
+        fh.close()
 
-    """
-     At this point, the `watersheds`variable should be 
-     a dictionary of watersheds
-     where each watershed value is a dictionary of species and costs, eg
-    
-     {
-      'HUC 171003030703': {'Chnk_m': 11223.5, 'StlHd_m': 12263.7, 'Coho_m': 11359.1}, 
-      .....
-     }
-    """
+"""
+    At this point, the `watersheds`variable should be 
+    a dictionary of watersheds
+    where each watershed value is a dictionary of species and costs, eg
 
-    hucs = watersheds.keys()
-    num_hucs = len(hucs)
-    print num_hucs
-    sys.exit()
+    {
+    171003030703: {'Chnk_m': 11223.5, 'StlHd_m': 12263.7, 'Coho_m': 11359.1}, 
+    .....
+    }
+"""
+hucs = watersheds.keys()
+num_hucs = len(hucs)
 
+def run(schedule=None):
     state = []
-    for i in range(5): # To start off, pick 5 watersheds at random
-        state.append(hucs[random.randint(num_hucs)])
+    totals = {}
+    for s in species:
+        totals[s] = 0
 
-    def old_reserve_move(state):
-        """
-        1st Random choice: Add new watershed OR remove an existing one
-        then
-        2nd Random choice: Which watershed to add or remove
-        """
-        #add_new = random.choice([True,False])
-        add_new = random.randint(2)
-
-        if add_new==1:
-            # Append a new watershed to reserve
-            if len(state) < num_hucs:
-                # About 3x faster than ... h = random.choice(hucs)
-                h = hucs[ random.randint(num_hucs)]
-                while h in state: 
-                    # keep going until we find one not already in the reserve
-                    h = hucs[ random.randint(num_hucs)]
-                state.append(h)
-        else:
-            # Remove an existing watershed from reserve
-            lenstate = len(state)
-            if lenstate > 1:
-                h = state[ random.randint(lenstate)]
-                state.remove(h)
 
     def reserve_move(state):
         """
@@ -93,10 +83,6 @@ def run(schedule=None):
             state.remove(huc)
         else:
             state.append(huc)
-
-    totals = {}
-    for s in species:
-        totals[s] = 0
 
     #def set_totals():
 
@@ -147,15 +133,14 @@ def run(schedule=None):
        # Automatically chosen temperature schedule
        schedule = annealer.auto(state, minutes=0.3)
 
-    """
-    OR
-     Manually chosen temperature schedule
-    		state -- an initial arrangement of the system
-    		Tmax -- maximum temperature (in units of energy)
-    		Tmin -- minimum temperature (must be greater than zero)
-    		steps -- the number of steps requested
-    		updates -- the number of updates to print during annealing
-    """
+    try:
+        schedule['steps'] = NUMITER
+    except:
+        pass # just keep the auto one
+
+    print '---\nAnnealing from %.2f to %.2f over %i steps:' % (schedule['tmax'], 
+            schedule['tmin'], schedule['steps'])
+
     state, e = annealer.anneal(state, schedule['tmax'], schedule['tmin'], 
                                schedule['steps'], updates=6)
 
@@ -169,7 +154,7 @@ if __name__ == "__main__":
     freq = {}
     states = []
     schedule = None
-    for i in range(4):
+    for i in range(NUMREPS):
         state, energy, schedule = run(schedule)
         states.append((state, energy))
         for w in state:

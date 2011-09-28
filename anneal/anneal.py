@@ -258,8 +258,7 @@ class Annealer:
         elapsed = time.time() - start
         duration = round_figures(int(60.0 * minutes * step / elapsed), 2)
         
-        # Perform anneal
-        print 'Annealing from %.2f to %.2f over %i steps:' % (Tmax, Tmin, duration)
+        # MP: Don't perform anneal, just return params
         #return self.anneal(state, Tmax, Tmin, duration, 20)
         return {'tmax': Tmax, 'tmin': Tmin, 'steps': duration}
 

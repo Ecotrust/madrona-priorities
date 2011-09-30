@@ -23,6 +23,7 @@ costs = ['pcp80bdfmm']
 uidfield = 'OBJECTID'
 NUMREPS = 1 # 30
 NUMITER = 50000 # 1 million
+SCHEDULE = {'tmin': 10, 'tmax': 6500, 'steps': 1}
 #-----------------------------------------------#
 
 watersheds = {}
@@ -153,7 +154,10 @@ def run(schedule=None):
 if __name__ == "__main__":
     freq = {}
     states = []
-    schedule = None
+    try:
+        schedule = SCHEDULE
+    except:
+        schedule = None
     for i in range(NUMREPS):
         state, energy, schedule = run(schedule)
         states.append((state, energy))

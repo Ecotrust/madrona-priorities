@@ -33,4 +33,7 @@ wp.log
 anneal/stats/*
 *.orig
 anneal/backup/*
+*.out
+*.prof
+*.working
 

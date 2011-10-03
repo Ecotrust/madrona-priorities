@@ -13,10 +13,10 @@ target_list = [511000, 521000, 53100]
 penalty_list = [300, 200, 100]
 cost_fields = ['pcp80bdfmm']
 uidfield = 'OBJECTID'
-NUMREPS = 4 # 30
-NUMITER = 50000 # 1 million
-TMAX = 2555.0 
-TMIN = 5.0
+NUMREPS = 2 # 30
+NUMITER = 500000 # 1 million
+TMAX = 6555.0 
+TMIN = 10.0
 
 
 

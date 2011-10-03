@@ -83,7 +83,7 @@ cdef extern from "math.h":
     double fabs(double)
     double exp(double)
 
-def move(np.ndarray[ITYPE_t, ndim=1] state):
+cdef move(np.ndarray[ITYPE_t, ndim=1] state):
     """
     Selects a planning unit at random and change it's status
     """
@@ -95,7 +95,7 @@ def move(np.ndarray[ITYPE_t, ndim=1] state):
     else:
         state[x] = 1
 
-def energy(np.ndarray[ITYPE_t, ndim=1] state, 
+cdef double energy(np.ndarray[ITYPE_t, ndim=1] state, 
             np.ndarray[DTYPE_t, ndim=2] features, 
             np.ndarray[DTYPE_t, ndim=1] targets, 
             np.ndarray[DTYPE_t, ndim=1] penalties, 
@@ -159,6 +159,7 @@ cpdef np.ndarray[ITYPE_t, ndim=1] anneal(np.ndarray[ITYPE_t, ndim=1] state,
     cdef int trials 
     cdef int accepts
     cdef int improves
+    cdef int do_update
     cdef np.ndarray[ITYPE_t, ndim=1] prevState
     cdef np.ndarray[ITYPE_t, ndim=1] bestState
 
@@ -176,15 +177,15 @@ cpdef np.ndarray[ITYPE_t, ndim=1] anneal(np.ndarray[ITYPE_t, ndim=1] state,
     bestState = state.copy()
     bestEnergy = E
     trials, accepts, improves = 0, 0, 0
-    do_update = False
+    do_update = 0
     
     # Attempt moves to new states
     while step < steps:
         step += 1
         steps_since_update += 1
 
-        if update and (step % update == 0 or step < 10):
-            do_update = True
+        if update and (step % update == 0 or step == 1):
+            do_update = 1
             print "Step", step
 
         T = Tmax * exp( Tfactor * step / steps )
@@ -213,7 +214,7 @@ cpdef np.ndarray[ITYPE_t, ndim=1] anneal(np.ndarray[ITYPE_t, ndim=1] state,
 
         if do_update:
             print "  accepts =", int(float(accepts)*100/steps_since_update), "%  improves=", int(float(improves)*100/steps_since_update),"%"
-            do_update = False
+            do_update = 0
             steps_since_update = 1
             accepts = 0
             improves = 0

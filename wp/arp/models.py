@@ -19,6 +19,7 @@ from lingcod.common.utils import asKml
 from lingcod.async.ProcessHandler import *
 from lingcod.common.utils import get_logger
 from arp.tasks import marxan_start
+from arp.marxan import MarxanError
 
 logger = get_logger()
 
@@ -321,7 +322,7 @@ class WatershedPrioritization(Analysis):
             if cached_result: 
                 return cached_result
 
-        log = open(os.path.join(self.outdir,"output","test_log.dat"),'r').read()
+        log = open(os.path.join(self.outdir,"output","wp_log.dat"),'r').read()
 
         wids = [int(x.strip()) for x  in self.output_units.split(',')]
         wshds = Watershed.objects.filter(huc12__in=wids)
@@ -331,9 +332,9 @@ class WatershedPrioritization(Analysis):
             sum_area += w.area
 
         species = self.species
-        time = open(os.path.join(self.outdir,"output","test_log.dat"),'r').readlines()[-3]
+        time = open(os.path.join(self.outdir,"output","wp_log.dat"),'r').readlines()[-3]
         time = time.replace("Time passed so far is ","")
-        best = [x.split('\t') for x in open(os.path.join(self.outdir,"output","test_mvbest.dat"),'r').readlines()][1:]
+        best = [x.split('\t') for x in open(os.path.join(self.outdir,"output","wp_mvbest.dat"),'r').readlines()][1:]
         out_species = []
         gchart_seqs = []
         gchart_labels = []
@@ -398,9 +399,15 @@ class WatershedPrioritization(Analysis):
         elif process_is_complete(url):
             status = "%s processing is done." % self.name
         elif process_is_pending(url):
-            status = "%s is in the queue but not yet running" % self.name
+            status = "%s is in the queue but not yet running." % self.name
+            res = get_process_result(url)
+            if res is not None:
+                status += "... "
+                status += str(res)
         else:
-            status = "something isn't right here..."
+            status = "An error occured while running this analysis..."
+            res = get_process_result(url)
+            status += str(res)
 
         return "<p>%s</p>" % status
 

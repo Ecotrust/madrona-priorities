@@ -11,6 +11,11 @@ DATABASES = {
         'USER': 'postgres', }
 }
 
+# makes djcelery and djkombu happy?
+DATABASE_ENGINE = "postgis" 
+DATABASE_NAME = "watersheds"
+DATABASE_USER = "postgres"
+
 GEOMETRY_DB_SRID = 99999
 
 TIME_ZONE = 'America/Vancouver'
@@ -25,6 +30,7 @@ ROOT_URLCONF = 'wp.urls'
 TEMPLATE_DIRS = ( os.path.realpath(os.path.join(os.path.dirname(__file__), 'templates').replace('\\','/')), )
 
 INSTALLED_APPS += ( 'arp', 
+                    'djkombu',
                     'lingcod.analysistools',
                     'django.contrib.humanize',) 
 
@@ -43,7 +49,7 @@ STATICMAP_HEIGHT_BUFFER = None
 
 CELERY_IMPORT = ('arp.tasks',)
 
-MARXAN_EXE =  os.path.realpath(os.path.join(os.path.dirname(__file__), '..', 'Marxan.exe'))
+MARXAN_BIN =  '/usr/local/marxan243/MarOpt_v243_Linux32' # or 64 bit?
 MARXAN_OUTDIR =  os.path.realpath(os.path.join(os.path.dirname(__file__), '..', 'marxan_output'))
 MARXAN_NUMREPS = 20
 MARXAN_NUMITNS = 1000000

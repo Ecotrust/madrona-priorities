@@ -32,18 +32,13 @@ lingcod.onShow(function(){
                 if (data) {
                     var progress = parseInt(data.complete) / parseInt(data.total);
                     var error = parseInt(data.error);
-                    console.log(data);
                     var progress_html = data.html;
                     $('#{{instance.uid}}_progressbar').progressbar( "option", "value", progress*100 );
                     $('#{{instance.uid}}_progress_html').html(progress_html);
                     if (error < 1) {
-                        console.log('no error');
                         if (progress < 1.0) {
-
-                            console.log('still working');
                             {{instance.uid}}_running = true;
                             if ({{instance.uid}}_call_again) {
-                                console.log('call again');
                                 window.setTimeout(update_progress_info_{{instance.uid}}, {{instance.uid}}_delay);
                             }
                             {{instance.uid}}_call_again = true;

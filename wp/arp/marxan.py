@@ -52,35 +52,37 @@ class MarxanAnalysis(object):
     def write_pu(self):
         ws = self.units
         fh = open("%s/data/pu.dat" % self.outdir, 'w')
-        fh.write("\t".join(["id","cost","status","xloc","yloc"]))
+        fh.write(",".join(["id","cost","status"]))
         for w in ws:
             fh.write("\n")
-            fh.write("\t".join(str(x) for x in 
-                [w.pk,w.climate_cost,0,w.geometry.centroid[0],w.geometry.centroid[1]]))
+            fh.write(",".join(str(x) for x in 
+                [w.pk,w.climate_cost,0]))
+        #w.geometry.centroid[0],w.geometry.centroid[1]
         fh.close()
 
     def write_puvcf(self):
         ws = self.units
         species = self.species
         fh = open("%s/data/puvcf.dat" % self.outdir, 'w')
-        fh.write("amount	species	pu")
-        for s in species:
-            for w in ws:
+        fh.write("species,pu,amount")
+        # must be in ascending order by planning unit ID!!
+        for w in ws:
+            for s in species:
                 amount = w.__dict__[s.fieldname]
                 if amount and amount > 0.0:
                     fh.write("\n")
-                    fh.write("\t".join(str(x) for x in 
-                        [w.__dict__[s.fieldname], s.id, w.pk]))
+                    fh.write(",".join(str(x) for x in 
+                        [s.id, w.pk, w.__dict__[s.fieldname]]))
         fh.close()
         
     def write_spec(self):
         ws = self.units
         species = self.species
         fh = open("%s/data/spec.dat" % self.outdir, 'w')
-        fh.write("\t".join(['id','type','target','spf','name']))
+        fh.write(",".join(['id','type','target','spf','name']))
         for s in species:
             fh.write("\n")
-            fh.write("\t".join(str(x) for x in 
+            fh.write(",".join(str(x) for x in 
                 [s.id,0,s.target,s.penalty,s.name]))
             
         fh.close()
@@ -100,8 +102,7 @@ NUMREPS %d
 
 Annealing Parameters
 NUMITNS %d
-STARTTEMP -1.00000000000000E+0000
-COOLFAC  6.00000000000000E+0000
+STARTTEMP -1
 NUMTEMP 10000
 
 Cost Threshold
@@ -117,18 +118,19 @@ PUVSPRNAME puvcf.dat
 
 Save Files
 SCENNAME %s
-SAVERUN 1
-SAVEBEST 1
-SAVESUMMARY 1
-SAVESCEN 1
-SAVETARGMET 1
-SAVESUMSOLN 1
-SAVELOG 1
+SAVERUN 3
+SAVEBEST 3
+SAVESUMMARY 3
+SAVESCEN 3
+SAVETARGMET 3
+SAVESUMSOLN 3
+SAVEPENALTY 3
+SAVELOG 2
 OUTPUTDIR output
 
 Program control.
 RUNMODE 1
-MISSLEVEL 0.95
+MISSLEVEL 1
 CLUMPTYPE 0
 VERBOSITY 3
 """ % (self.NUMREPS, self.NUMITNS, self.name)
@@ -153,12 +155,18 @@ VERBOSITY 3
     @property 
     def best(self):
         os.chdir(self.outdir)
-        fname = os.path.realpath("%s/output/%s_best.dat" % (self.outdir, self.name))
+        fname = os.path.realpath("%s/output/%s_best.csv" % (self.outdir, self.name))
         try:
             fh = open(fname ,'r')
         except:
             log.error("Marxan output file %s was not found" % fname) 
             raise MarxanError("Error: Marxan output files could not be found") 
-        pks = [int(x) for x in fh.readlines()]
+        unit_status = [x.strip().split(',') for x in fh.readlines()]
+        pks = []
+        for u in unit_status[1:]:
+            if int(u[1]) == 1:
+                pks.append(int(u[0]))
+            elif int(u[1]) > 1:
+                log.warn("Check the _best.csv file .. got one with status > 1!") 
         fh.close()
         return pks

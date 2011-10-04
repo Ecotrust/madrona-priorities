@@ -301,7 +301,7 @@ class WatershedPrioritization(Analysis):
 
     @property
     def progress(self):
-        path = os.path.join(self.outdir,"output","test_r*.dat")
+        path = os.path.join(self.outdir,"output","wp_r*.csv")
         outputs = glob.glob(path)
         if len(outputs) == settings.MARXAN_NUMREPS:
             if not self.done:
@@ -316,8 +316,8 @@ class WatershedPrioritization(Analysis):
         """
         use_cache = settings.USE_CACHE
         key = "wp_marxan_%s_%s" % (self.pk, slugify(self.date_modified))
-        logger.info("Hit the cache for %s?" % key)
         if use_cache:
+            logger.info("Hit the cache for %s" % key)
             cached_result = cache.get(key)
             if cached_result: 
                 return cached_result
@@ -334,7 +334,7 @@ class WatershedPrioritization(Analysis):
         species = self.species
         time = open(os.path.join(self.outdir,"output","wp_log.dat"),'r').readlines()[-3]
         time = time.replace("Time passed so far is ","")
-        best = [x.split('\t') for x in open(os.path.join(self.outdir,"output","wp_mvbest.dat"),'r').readlines()][1:]
+        best = [x.split(',') for x in open(os.path.join(self.outdir,"output","wp_mvbest.csv"),'r').readlines()][1:]
         out_species = []
         gchart_seqs = []
         gchart_labels = []
@@ -347,7 +347,7 @@ class WatershedPrioritization(Analysis):
         hit = 0
         miss = 0
         for b in best:
-            cf = [s for s in species if s.name == b[1]][0] 
+            cf = [s for s in species if s.id == int(b[0])][0] 
             cf.amount = float(b[3])
             cf.occurences = int(b[5])
             cf.miss = False

@@ -56,7 +56,7 @@ MARXAN_NUMITNS = 1000000
 
 LOG_FILE =  os.path.realpath(os.path.join(os.path.dirname(__file__), '..', 'wp.log'))
 LOGFILE =  os.path.realpath(os.path.join(os.path.dirname(__file__), '..', 'wp.log'))
-USE_CACHE = True
+USE_CACHE = False
 
 # ecotrust.org
 GOOGLE_API_KEY = 'ABQIAAAAIcPbR_l4h09mCMF_dnut8RQbjMqOReB17GfUbkEwiTsW0KzXeRQ-3JgvCcGix8CM65XAjBAn6I0bAQ'

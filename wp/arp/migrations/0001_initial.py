@@ -18,8 +18,8 @@ class Migration(SchemaMigration):
             ('content_type', self.gf('django.db.models.fields.related.ForeignKey')(blank=True, related_name='arp_aoi_related', null=True, to=orm['contenttypes.ContentType'])),
             ('object_id', self.gf('django.db.models.fields.PositiveIntegerField')(null=True, blank=True)),
             ('manipulators', self.gf('django.db.models.fields.TextField')(null=True, blank=True)),
-            ('geometry_orig', self.gf('django.contrib.gis.db.models.fields.PolygonField')(srid=99999, null=True, blank=True)),
-            ('geometry_final', self.gf('django.contrib.gis.db.models.fields.PolygonField')(srid=99999, null=True, blank=True)),
+            ('geometry_orig', self.gf('django.contrib.gis.db.models.fields.PolygonField')(srid=99997, null=True, blank=True)),
+            ('geometry_final', self.gf('django.contrib.gis.db.models.fields.PolygonField')(srid=99997, null=True, blank=True)),
             ('description', self.gf('django.db.models.fields.TextField')(default='', null=True, blank=True)),
         ))
         db.send_create_signal('arp', ['AOI'])
@@ -42,8 +42,8 @@ class Migration(SchemaMigration):
             ('content_type', self.gf('django.db.models.fields.related.ForeignKey')(blank=True, related_name='arp_loi_related', null=True, to=orm['contenttypes.ContentType'])),
             ('object_id', self.gf('django.db.models.fields.PositiveIntegerField')(null=True, blank=True)),
             ('manipulators', self.gf('django.db.models.fields.TextField')(null=True, blank=True)),
-            ('geometry_orig', self.gf('django.contrib.gis.db.models.fields.LineStringField')(srid=99999, null=True, blank=True)),
-            ('geometry_final', self.gf('django.contrib.gis.db.models.fields.LineStringField')(srid=99999, null=True, blank=True)),
+            ('geometry_orig', self.gf('django.contrib.gis.db.models.fields.LineStringField')(srid=99997, null=True, blank=True)),
+            ('geometry_final', self.gf('django.contrib.gis.db.models.fields.LineStringField')(srid=99997, null=True, blank=True)),
             ('description', self.gf('django.db.models.fields.TextField')(default='', null=True, blank=True)),
         ))
         db.send_create_signal('arp', ['LOI'])
@@ -66,8 +66,8 @@ class Migration(SchemaMigration):
             ('content_type', self.gf('django.db.models.fields.related.ForeignKey')(blank=True, related_name='arp_poi_related', null=True, to=orm['contenttypes.ContentType'])),
             ('object_id', self.gf('django.db.models.fields.PositiveIntegerField')(null=True, blank=True)),
             ('manipulators', self.gf('django.db.models.fields.TextField')(null=True, blank=True)),
-            ('geometry_orig', self.gf('django.contrib.gis.db.models.fields.PointField')(srid=99999, null=True, blank=True)),
-            ('geometry_final', self.gf('django.contrib.gis.db.models.fields.PointField')(srid=99999, null=True, blank=True)),
+            ('geometry_orig', self.gf('django.contrib.gis.db.models.fields.PointField')(srid=99997, null=True, blank=True)),
+            ('geometry_final', self.gf('django.contrib.gis.db.models.fields.PointField')(srid=99997, null=True, blank=True)),
             ('description', self.gf('django.db.models.fields.TextField')(default='', null=True, blank=True)),
         ))
         db.send_create_signal('arp', ['POI'])
@@ -180,8 +180,8 @@ class Migration(SchemaMigration):
             ('input_lon', self.gf('django.db.models.fields.FloatField')()),
             ('input_buffer_distance', self.gf('django.db.models.fields.FloatField')()),
             ('output_area', self.gf('django.db.models.fields.FloatField')(null=True, blank=True)),
-            ('output_point_geom', self.gf('django.contrib.gis.db.models.fields.PointField')(srid=99999, null=True, blank=True)),
-            ('output_poly_geom', self.gf('django.contrib.gis.db.models.fields.PolygonField')(srid=99999, null=True, blank=True)),
+            ('output_point_geom', self.gf('django.contrib.gis.db.models.fields.PointField')(srid=99997, null=True, blank=True)),
+            ('output_poly_geom', self.gf('django.contrib.gis.db.models.fields.PolygonField')(srid=99997, null=True, blank=True)),
         ))
         db.send_create_signal('arp', ['BufferPoint'])
 
@@ -249,8 +249,8 @@ class Migration(SchemaMigration):
             'date_created': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
             'date_modified': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'}),
             'description': ('django.db.models.fields.TextField', [], {'default': "''", 'null': 'True', 'blank': 'True'}),
-            'geometry_final': ('django.contrib.gis.db.models.fields.PolygonField', [], {'srid': '99999', 'null': 'True', 'blank': 'True'}),
-            'geometry_orig': ('django.contrib.gis.db.models.fields.PolygonField', [], {'srid': '99999', 'null': 'True', 'blank': 'True'}),
+            'geometry_final': ('django.contrib.gis.db.models.fields.PolygonField', [], {'srid': '99997', 'null': 'True', 'blank': 'True'}),
+            'geometry_orig': ('django.contrib.gis.db.models.fields.PolygonField', [], {'srid': '99997', 'null': 'True', 'blank': 'True'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'manipulators': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': "'255'"}),
@@ -270,8 +270,8 @@ class Migration(SchemaMigration):
             'name': ('django.db.models.fields.CharField', [], {'max_length': "'255'"}),
             'object_id': ('django.db.models.fields.PositiveIntegerField', [], {'null': 'True', 'blank': 'True'}),
             'output_area': ('django.db.models.fields.FloatField', [], {'null': 'True', 'blank': 'True'}),
-            'output_point_geom': ('django.contrib.gis.db.models.fields.PointField', [], {'srid': '99999', 'null': 'True', 'blank': 'True'}),
-            'output_poly_geom': ('django.contrib.gis.db.models.fields.PolygonField', [], {'srid': '99999', 'null': 'True', 'blank': 'True'}),
+            'output_point_geom': ('django.contrib.gis.db.models.fields.PointField', [], {'srid': '99997', 'null': 'True', 'blank': 'True'}),
+            'output_poly_geom': ('django.contrib.gis.db.models.fields.PolygonField', [], {'srid': '99997', 'null': 'True', 'blank': 'True'}),
             'sharing_groups': ('django.db.models.fields.related.ManyToManyField', [], {'blank': 'True', 'related_name': "'arp_bufferpoint_related'", 'null': 'True', 'symmetrical': 'False', 'to': "orm['auth.Group']"}),
             'user': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'arp_bufferpoint_related'", 'to': "orm['auth.User']"})
         },
@@ -293,8 +293,8 @@ class Migration(SchemaMigration):
             'date_created': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
             'date_modified': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'}),
             'description': ('django.db.models.fields.TextField', [], {'default': "''", 'null': 'True', 'blank': 'True'}),
-            'geometry_final': ('django.contrib.gis.db.models.fields.LineStringField', [], {'srid': '99999', 'null': 'True', 'blank': 'True'}),
-            'geometry_orig': ('django.contrib.gis.db.models.fields.LineStringField', [], {'srid': '99999', 'null': 'True', 'blank': 'True'}),
+            'geometry_final': ('django.contrib.gis.db.models.fields.LineStringField', [], {'srid': '99997', 'null': 'True', 'blank': 'True'}),
+            'geometry_orig': ('django.contrib.gis.db.models.fields.LineStringField', [], {'srid': '99997', 'null': 'True', 'blank': 'True'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'manipulators': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': "'255'"}),
@@ -308,8 +308,8 @@ class Migration(SchemaMigration):
             'date_created': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
             'date_modified': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'}),
             'description': ('django.db.models.fields.TextField', [], {'default': "''", 'null': 'True', 'blank': 'True'}),
-            'geometry_final': ('django.contrib.gis.db.models.fields.PointField', [], {'srid': '99999', 'null': 'True', 'blank': 'True'}),
-            'geometry_orig': ('django.contrib.gis.db.models.fields.PointField', [], {'srid': '99999', 'null': 'True', 'blank': 'True'}),
+            'geometry_final': ('django.contrib.gis.db.models.fields.PointField', [], {'srid': '99997', 'null': 'True', 'blank': 'True'}),
+            'geometry_orig': ('django.contrib.gis.db.models.fields.PointField', [], {'srid': '99997', 'null': 'True', 'blank': 'True'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'manipulators': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': "'255'"}),

@@ -16,7 +16,7 @@ DATABASE_ENGINE = "postgis"
 DATABASE_NAME = "watersheds"
 DATABASE_USER = "postgres"
 
-GEOMETRY_DB_SRID = 99999
+GEOMETRY_DB_SRID = 99997
 
 TIME_ZONE = 'America/Vancouver'
 LANGUAGE_CODE = 'en-us'
@@ -51,8 +51,8 @@ CELERY_IMPORT = ('arp.tasks',)
 
 MARXAN_BIN =  '/usr/local/marxan243/MarOpt_v243_Linux32' # or 64 bit?
 MARXAN_OUTDIR =  os.path.realpath(os.path.join(os.path.dirname(__file__), '..', 'marxan_output'))
-MARXAN_NUMREPS = 20
-MARXAN_NUMITNS = 1000000
+MARXAN_NUMREPS = 50
+MARXAN_NUMITNS = 2000000
 
 LOG_FILE =  os.path.realpath(os.path.join(os.path.dirname(__file__), '..', 'wp.log'))
 LOGFILE =  os.path.realpath(os.path.join(os.path.dirname(__file__), '..', 'wp.log'))

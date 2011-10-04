@@ -391,25 +391,39 @@ class WatershedPrioritization(Analysis):
 
     @property
     def status_html(self):
+        code, status_html = self.status
+        return status_html
+
+    @property
+    def status_code(self):
+        code, status_html = self.status
+        return code
+    
+    @property
+    def status(self):
         url = self.get_absolute_url()
         if process_is_running(url):
             status = """Analysis for <em>%s</em> is currently running.</p>
             <p>%s of %s model runs completed.""" % (self.name,
                      self.progress[0], self.progress[1])
+            code = 2
         elif process_is_complete(url):
-            status = "%s processing is done." % self.name
+            status = "%s processing is done. Refresh to see results." % self.name
+            code = 3
         elif process_is_pending(url):
             status = "%s is in the queue but not yet running." % self.name
             res = get_process_result(url)
+            code = 1
             if res is not None:
                 status += "... "
                 status += str(res)
         else:
             status = "An error occured while running this analysis..."
+            code = 0
             res = get_process_result(url)
             status += str(res)
 
-        return "<p>%s</p>" % status
+        return (code, "<p>%s</p>" % status)
 
     def process_results(self):
         if process_is_complete(self.get_absolute_url()):
@@ -446,17 +460,30 @@ class WatershedPrioritization(Analysis):
     def kml_done(self):
         wids = [int(x.strip()) for x  in self.output_units.split(',')]
         wshds = Watershed.objects.filter(huc12__in=wids)
-        return "%s\n\n<Folder id=\"%s\"><name>%s</name>%s</Folder>" % (self.kml_style, 
-                self.uid, escape(self.name), '\n'.join([x.kml for x in wshds]))
+        return """%s
+          <Folder id='%s'>
+            <name>%s</name>
+            %s
+          </Folder>""" % (self.kml_style, 
+                          self.uid, 
+                          escape(self.name), 
+                          '\n'.join([x.kml for x in wshds]))
 
     @property 
     def kml_working(self):
+        code = self.status_code
+        if code == 3: txt = "completed"
+        elif code == 2: txt = "in progress"
+        elif code == 1: txt = "in queue"
+        elif code == 0: txt = "error occured"
+        else: txt = "status unknown"
+
         return """
         <Placemark id="%s">
             <visibility>0</visibility>
-            <name>%s (WORKING)</name>
+            <name>%s (%s)</name>
         </Placemark>
-        """ % (self.uid, escape(self.name))
+        """ % (self.uid, escape(self.name), txt)
 
     @property
     def kml_style(self):

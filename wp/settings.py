@@ -11,11 +11,6 @@ DATABASES = {
         'USER': 'postgres', }
 }
 
-# makes djcelery and djkombu happy?
-DATABASE_ENGINE = "postgis" 
-DATABASE_NAME = "watersheds"
-DATABASE_USER = "postgres"
-
 GEOMETRY_DB_SRID = 99997
 
 TIME_ZONE = 'America/Vancouver'
@@ -63,3 +58,7 @@ GOOGLE_API_KEY = 'ABQIAAAAIcPbR_l4h09mCMF_dnut8RQbjMqOReB17GfUbkEwiTsW0KzXeRQ-3J
 
 from settings_local import *
 
+# makes djcelery and djkombu happy?
+DATABASE_ENGINE = DATABASES['default']['ENGINE']
+DATABASE_NAME = DATABASES['default']['NAME']
+DATABASE_USER = DATABASES['default']['USER']

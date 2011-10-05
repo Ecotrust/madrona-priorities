@@ -24,3 +24,5 @@ echo "enable sharing"
 python ../wp/manage.py enable_sharing --all
 echo "change site"
 python ../wp/manage.py site wp.hestia.ecotrust.org
+echo "public kml"
+python ../wp/manage.py loaddata ../wp/fixtures/public_kml.json

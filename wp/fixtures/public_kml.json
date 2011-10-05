@@ -1,0 +1,11 @@
+[
+  {
+    "pk": 1, 
+    "model": "layers.publiclayerlist", 
+    "fields": {
+      "active": true, 
+      "kml_file": "layers/uploaded-kml/huc8_focal_s50_try3_2.kmz", 
+      "creation_date": "2011-10-05 13:59:53"
+    }
+  }
+]

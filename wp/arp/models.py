@@ -20,219 +20,68 @@ from lingcod.async.ProcessHandler import *
 from lingcod.common.utils import get_logger
 from arp.tasks import marxan_start
 from arp.marxan import MarxanError
+from django.core.serializers.json import DjangoJSONEncoder
+from django.utils import simplejson as json
 
 logger = get_logger()
 
-class FocalSpecies(models.Model):
+
+class JSONField(models.TextField):
+    """JSONField is a generic textfield that neatly serializes/unserializes
+    JSON objects seamlessly"""
+    # Used so to_python() is called
+    __metaclass__ = models.SubfieldBase
+
+    def to_python(self, value):
+        """Convert our string value to JSON after we load it from the DB"""
+        if value == "":
+            return None
+        try:
+            if isinstance(value, basestring):
+                return json.loads(value)
+        except ValueError:
+            pass
+        return value
+
+    def get_db_prep_save(self, value):
+        """Convert our JSON object to a string before we save"""
+        if value == "":
+            return None
+        if isinstance(value, dict):
+            value = json.dumps(value, cls=DjangoJSONEncoder)
+
+        return super(JSONField, self).get_db_prep_save(value)
+
+class ConservationFeature(models.Model):
+    sci_name = models.CharField(max_length=99)
     common_name = models.CharField(max_length=99)
-    species_name = models.CharField(max_length=99)
-    full_name = models.CharField(max_length=99)
+    name = models.CharField(max_length=99)
     level1 = models.CharField(max_length=99)
     level2 = models.CharField(max_length=99,null=True,blank=True)
     level3 = models.CharField(max_length=99,null=True,blank=True)
     level4 = models.CharField(max_length=99,null=True,blank=True)
     level5 = models.CharField(max_length=99,null=True,blank=True)
+    esu_dps = models.CharField(max_length=99, null=True, blank=True)
+    dbf_fieldname = models.CharField(max_length=15,null=True,blank=True)
+    units = models.CharField(max_length=16, null=True, blank=True)
 
     def __unicode__(self):
-        return u'%s' % self.full_name
+        return u'%s' % self.name
 
-@register
-class AOI(PolygonFeature):
-    description = models.TextField(default="", null=True, blank=True)
+class Cost(models.Model):
+    name = models.CharField(max_length=99)
+    dbf_fieldname = models.CharField(max_length=15,null=True,blank=True)
+    units = models.CharField(max_length=16, null=True, blank=True)
 
-    class Options:
-        manipulators = []
-        verbose_name = 'Area of Interest'
-        show_template = 'foi/show.html'
-        form = 'arp.forms.AOIForm'
-        icon_url = 'common/images/aoi.png'
+    def __unicode__(self):
+        return u'%s' % self.name
 
-    @property
-    def kml(self):
-        return """
-        <Placemark id="%s">
-            <visibility>1</visibility>
-            <name>%s</name>
-            <styleUrl>#%s-default</styleUrl>
-            <ExtendedData>
-                <Data name="name"><value>%s</value></Data>
-                <Data name="user"><value>%s</value></Data>
-                <Data name="desc"><value>%s</value></Data>
-                <Data name="modified"><value>%s</value></Data>
-            </ExtendedData>
-            %s 
-        </Placemark>
-        """ % (self.uid, escape(self.name), self.model_uid(), 
-               escape(self.name), self.user, escape(self.description), self.date_modified, 
-               self.geom_kml)
-
-    @property
-    def kml_style(self):
-        return """
-        <Style id="%s-default">
-            <BalloonStyle>
-                <bgColor>ffeeeeee</bgColor>
-                <text> <![CDATA[
-                    <font color="#1A3752"><strong>$[name]</strong></font><br />
-                    <p>$[desc]</p>
-                    <font size=1>Created by $[user] on $[modified]</font>
-                ]]> </text>
-            </BalloonStyle>
-            <PolyStyle>
-                <color>778B1A55</color>
-            </PolyStyle>
-            <LineStyle>
-                <color>ffffffff</color>
-            </LineStyle>
-        </Style>
-        """ % (self.model_uid())
-
-@register
-class LOI(LineFeature):
-    description = models.TextField(default="", null=True, blank=True)
-
-    class Options:
-        manipulators = []
-        verbose_name = 'Linear Feature'
-        show_template = 'foi/show.html'
-        form = 'arp.forms.LOIForm'
-        icon_url = 'common/images/loi.png'
-
-    @property
-    def kml(self):
-        return """
-        <Placemark id="%s">
-            <visibility>1</visibility>
-            <name>%s</name>
-            <styleUrl>#%s-default</styleUrl>
-            <ExtendedData>
-                <Data name="name"><value>%s</value></Data>
-                <Data name="user"><value>%s</value></Data>
-                <Data name="desc"><value>%s</value></Data>
-                <Data name="modified"><value>%s</value></Data>
-            </ExtendedData>
-            %s 
-        </Placemark>
-        """ % (self.uid, escape(self.name), self.model_uid(), 
-               escape(self.name), self.user, escape(self.description), self.date_modified, 
-               self.geom_kml)
-
-    @property
-    def kml_style(self):
-        return """
-        <Style id="%s-default">
-            <BalloonStyle>
-                <bgColor>ffeeeeee</bgColor>
-                <text> <![CDATA[
-                    <font color="#1A3752"><strong>$[name]</strong></font><br />
-                    <p>$[desc]</p>
-                    <font size=1>Created by $[user] on $[modified]</font>
-                ]]> </text>
-            </BalloonStyle>
-            <LineStyle>
-                <color>ffffffff</color>
-            </LineStyle>
-        </Style>
-        """ % (self.model_uid())
-
-@register
-class POI(PointFeature):
-    description = models.TextField(default="", null=True, blank=True)
-
-    class Options:
-        manipulators = []
-        verbose_name = 'Point of Interest'
-        show_template = 'foi/show.html'
-        form = 'arp.forms.POIForm'
-        icon_url = 'common/images/poi.png'
-
-    @property
-    def kml(self):
-        return """
-        <Placemark id="%s">
-            <visibility>1</visibility>
-            <name>%s</name>
-            <styleUrl>#%s-default</styleUrl>
-            <ExtendedData>
-                <Data name="name"><value>%s</value></Data>
-                <Data name="user"><value>%s</value></Data>
-                <Data name="desc"><value>%s</value></Data>
-                <Data name="modified"><value>%s</value></Data>
-            </ExtendedData>
-            %s 
-        </Placemark>
-        """ % (self.uid, escape(self.name), self.model_uid(), 
-               escape(self.name), self.user, escape(self.description), self.date_modified, 
-               self.geom_kml)
-
-    @property
-    def kml_style(self):
-        return """
-        <Style id="%s-default">
-            <IconStyle>
-                <color>ffffffff</color>
-                <colorMode>normal</colorMode>
-                <scale>0.9</scale> 
-                <Icon> <href>http://maps.google.com/mapfiles/kml/paddle/wht-blank.png</href> </Icon>
-            </IconStyle>
-            <BalloonStyle>
-                <bgColor>ffeeeeee</bgColor>
-                <text> <![CDATA[
-                    <font color="#1A3752"><strong>$[name]</strong></font><br />
-                    <p>$[desc]</p>
-                    <font size=1>Created by $[user] on $[modified]</font>
-                ]]> </text>
-            </BalloonStyle>
-            <LabelStyle>
-                <color>ffffffff</color>
-                <scale>0.8</scale>
-            </LabelStyle>
-        </Style>
-        """ % (self.model_uid())
-
-@register
-class Folder(FeatureCollection):
-    description = models.TextField(default="", null=True, blank=True)
-        
-    class Options:
-        verbose_name = 'Folder'
-        valid_children = ( 
-                'arp.models.AOI', 
-                'arp.models.LOI', 
-                'arp.models.POI', 
-                'arp.models.Folder',
-                'arp.models.UserKml',
-                'arp.models.BufferPoint',
-                'arp.models.WatershedPrioritization',
-                )
-        form = 'arp.forms.FolderForm'
-        show_template = 'folder/show.html'
-
-    @classmethod
-    def css(klass):
-        return """li.%(uid)s > .icon { 
-        background: url('%(media)skmltree/dist/images/sprites/kml.png?1302821411') no-repeat -231px 0px ! important;
-        } """ % { 'uid': klass.model_uid(), 'media': settings.MEDIA_URL }
-    
-@register
-class UserKml(PrivateLayerList):
-    class Options:
-        verbose_name = "Uploaded KML"
-        form = 'arp.forms.UserKmlForm'
-        export_png = False
-        show_template = 'layers/privatekml_show.html'
-
-class Watershed(models.Model):
+class PlanningUnit(models.Model):
     fid = models.IntegerField()
-    huc12 = models.BigIntegerField()
-    coho = models.FloatField()
-    chinook = models.FloatField()
-    steelhead = models.FloatField()
-    climate_cost = models.FloatField()
     area = models.FloatField()
     name = models.CharField(max_length=99)
-    geometry = models.PolygonField(srid=settings.GEOMETRY_CLIENT_SRID, 
-            null=True, blank=True, verbose_name="Watersheds")
+    geometry = models.MultiPolygonField(srid=settings.GEOMETRY_CLIENT_SRID, 
+            null=True, blank=True, verbose_name="Planning Unit Geometry")
     objects = models.GeoManager()
 
     def __unicode__(self):
@@ -249,19 +98,30 @@ class Watershed(models.Model):
         </Placemark>
         """ % (self.huc12, self.name, asKml(self.geometry))
 
+class PuVsCf(models.Model):
+    pu = models.ForeignKey(PlanningUnit)
+    cf = models.ForeignKey(ConservationFeature)
+    amount = models.FloatField()
+    class Meta:
+        unique_together = ("pu", "cf")
+
+class PuVsCost(models.Model):
+    pu = models.ForeignKey(PlanningUnit)
+    cost = models.ForeignKey(Cost)
+    amount = models.FloatField()
+    class Meta:
+        unique_together = ("pu", "cost")
+
 @register
 class WatershedPrioritization(Analysis):
-    input_target_coho = models.FloatField(verbose_name='Target Percentage of Coho Habitat')
-    input_target_chinook = models.FloatField(verbose_name='Target Percentage of Chinook Habitat') 
-    input_target_steelhead = models.FloatField(verbose_name='Target Percentage of Steelhead Habitat')
-    input_penalty_coho = models.FloatField(verbose_name='Penalty for missing Coho target', default=0.5)
-    input_penalty_chinook = models.FloatField(verbose_name='Penalty for missing Chinook target') 
-    input_penalty_steelhead = models.FloatField(verbose_name='Penalty for missing Steelhead target')
-    input_cost_climate = models.FloatField(verbose_name='Relative cost of Climate Change')
+    input_target = JSONField(verbose_name='Target Percentage of Habitat')
+    input_penalty = JSONField(verbose_name='Penalties for Missing Targets') 
+    input_relativecost = JSONField(verbose_name='Relative Costs')
 
     # All output fields should be allowed to be Null/Blank
-    output_units = models.TextField(null=True, blank=True,
+    output_best = JSONField(null=True, blank=True,
             verbose_name="Watersheds in Optimal Reserve")
+    output_unit_counts = JSONField(null=True, blank=True)
     output_geometry = models.MultiPolygonField(srid=settings.GEOMETRY_CLIENT_SRID, 
             null=True, blank=True, verbose_name="Watersheds")
 
@@ -270,7 +130,8 @@ class WatershedPrioritization(Analysis):
         from arp.marxan import ConservationFeature 
         species = []
         ws = Watershed.objects.all()
-        for s in ['coho','chinook','steelhead']:
+        cfs = ConservationFeature.objects.all()
+        for cf in cfs:
             from django.db.models import Sum
             agg = ws.aggregate(Sum(s))
             total = agg[s + "__sum"]
@@ -279,7 +140,8 @@ class WatershedPrioritization(Analysis):
             penalty = self.__dict__['input_penalty_' + s] * 100
 
             species.append( 
-                ConservationFeature(len(species)+1,s, penalty, target, pct, total) 
+                #(id, fieldname, penalty, target, pct, total):
+                (len(species)+1, s, penalty, target, pct, total) 
             )
 
         return species
@@ -519,92 +381,26 @@ class WatershedPrioritization(Analysis):
             ),
         )
 
-
 @register
-class BufferPoint(Analysis):
-    input_lat = models.FloatField(verbose_name='Latitude')
-    input_lon = models.FloatField(verbose_name='Longitude') 
-    input_buffer_distance = models.FloatField(verbose_name="Buffer Distance (m)")
-
-    # All output fields should be allowed to be Null/Blank
-    output_area= models.FloatField(null=True,blank=True, 
-            verbose_name="Buffer Area (meters)")
-    output_point_geom = models.PointField(srid=settings.GEOMETRY_DB_SRID,
-            null=True, blank=True, verbose_name="Point Geometry")
-    output_poly_geom = models.PolygonField(srid=settings.GEOMETRY_DB_SRID,
-            null=True, blank=True, verbose_name="Buffered Point Geometry")
+class Folder(FeatureCollection):
+    description = models.TextField(default="", null=True, blank=True)
+        
+    class Options:
+        verbose_name = 'Folder'
+        valid_children = ( 
+                'arp.models.AOI', 
+                'arp.models.LOI', 
+                'arp.models.POI', 
+                'arp.models.Folder',
+                'arp.models.UserKml',
+                'arp.models.BufferPoint',
+                'arp.models.WatershedPrioritization',
+                )
+        form = 'arp.forms.FolderForm'
+        show_template = 'folder/show.html'
 
     @classmethod
-    def mapnik_geomfield(self):
-        return "output_poly_geom"
-
-    def run(self):
-        try:
-            g = GEOSGeometry('SRID=4326;POINT(%s %s)' % (self.input_lon, self.input_lat))
-            g.transform(settings.GEOMETRY_DB_SRID)
-            self.output_point_geom = g
-            self.output_poly_geom = g.buffer(self.input_buffer_distance)
-            self.output_area = self.output_poly_geom.area
-        except:
-            return False
-        return True
-
-    @property 
-    def kml_done(self):
-        return """
-        %s
-
-        <Placemark id="%s">
-            <visibility>1</visibility>
-            <name>%s</name>
-            <styleUrl>#%s-default</styleUrl>
-            <MultiGeometry>
-            %s
-            %s
-            </MultiGeometry>
-        </Placemark>
-        """ % (self.kml_style, self.uid, escape(self.name), self.model_uid(),
-            asKml(self.output_point_geom.transform(
-                    settings.GEOMETRY_CLIENT_SRID, clone=True)),
-            asKml(self.output_poly_geom.transform(
-                    settings.GEOMETRY_CLIENT_SRID, clone=True)))
-
-    @property 
-    def kml_working(self):
-        return """
-        <Placemark id="%s">
-            <visibility>0</visibility>
-            <name>%s (WORKING)</name>
-            <styleUrl>#%s-default</styleUrl>
-            <Point>
-              <coordinates>%s,%s</coordinates>
-            </Point>
-        </Placemark>
-        """ % (self.uid, escape(self.name), self.model_uid(), 
-                self.input_lon, self.input_lat)
-
-    @property
-    def kml_style(self):
-        return """
-        <Style id="%s-default">
-            <IconStyle>
-                <color>ffffffff</color>
-                <colorMode>normal</colorMode>
-                <scale>0.9</scale> 
-                <Icon> <href>http://maps.google.com/mapfiles/kml/paddle/wht-blank.png</href> </Icon>
-            </IconStyle>
-            <LabelStyle>
-                <color>ffffffff</color>
-                <scale>0.8</scale>
-            </LabelStyle>
-            <PolyStyle>
-                <color>778B1A55</color>
-            </PolyStyle>
-        </Style>
-        """ % (self.model_uid(),)
-
-    class Options:
-        verbose_name = "Buffer Point"
-        form = 'arp.forms.BufferPointsForm'
-        show_template = 'analysis/show.html'
-        icon_url = 'analysistools/img/buffer-16x16.png'
+    def css(klass):
+        return """li.%(uid)s > .icon { 
+        background: url('%(media)skmltree/dist/images/sprites/kml.png?1302821411') no-repeat -231px 0px ! important;
+        } """ % { 'uid': klass.model_uid(), 'media': settings.MEDIA_URL }

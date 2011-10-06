@@ -3,20 +3,6 @@ from django.conf import settings
 from lingcod.common.utils import get_logger
 log = get_logger()
 
-class ConservationFeature(object):
-    def __init__(self, id, fieldname, penalty, target, pct, total):
-        self.id = id
-        self.fieldname = fieldname
-        self.name = fieldname
-        self.penalty = penalty
-        self.target = target
-        self.pct = pct
-        self.total = total
-
-    def __repr__(self):
-        return "%s: target=%s (%s), penalty=%s" % (
-                self.name, self.target, self.pct, self.penalty)
-
 class MarxanError(Exception):
     pass
 

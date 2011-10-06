@@ -1,7 +1,7 @@
 from django.core.management import setup_environ
 import os
 import sys
-sys.path.append(os.path.dirname(__file__))
+sys.path.append(os.path.dirname(os.path.join('..','wp',__file__)))
 
 import settings
 setup_environ(settings)

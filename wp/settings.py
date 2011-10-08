@@ -26,6 +26,7 @@ TEMPLATE_DIRS = ( os.path.realpath(os.path.join(os.path.dirname(__file__), 'temp
 
 INSTALLED_APPS += ( 'arp', 
                     'djkombu',
+                    'django_extensions', 
                     'lingcod.analysistools',
                     'django.contrib.humanize',) 
 
@@ -46,6 +47,7 @@ CELERY_IMPORT = ('arp.tasks',)
 
 MARXAN_BIN =  '/usr/local/marxan243/MarOpt_v243_Linux32' # or 64 bit?
 MARXAN_OUTDIR =  os.path.realpath(os.path.join(os.path.dirname(__file__), '..', 'marxan_output'))
+MARXAN_TEMPLATEDIR = os.path.join(MARXAN_OUTDIR, 'template')
 MARXAN_NUMREPS = 50
 MARXAN_NUMITNS = 2000000
 

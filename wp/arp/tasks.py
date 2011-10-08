@@ -9,9 +9,7 @@ def marxan_start(m):
     m.write_puvcf()
     m.write_spec()
     m.write_input()
-    print "running Marxan with ..."
-    for s in m.species:
-        print "  ", s 
+    print "running Marxan..."
     m.run()
     print 
     print "COMPLETE"

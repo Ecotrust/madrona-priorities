@@ -43,14 +43,14 @@ class JSONField(models.TextField):
             pass
         return value
 
-    def get_db_prep_save(self, value):
+    def get_db_prep_save(self, value, *args, **kwargs):
         """Convert our JSON object to a string before we save"""
         if value == "":
             return None
         if isinstance(value, dict):
             value = json.dumps(value, cls=DjangoJSONEncoder)
 
-        return super(JSONField, self).get_db_prep_save(value)
+        return super(JSONField, self).get_db_prep_save(value, *args, **kwargs)
 
 class ConservationFeature(models.Model):
     sci_name = models.CharField(max_length=99)
@@ -119,44 +119,50 @@ class WatershedPrioritization(Analysis):
     input_relativecost = JSONField(verbose_name='Relative Costs')
 
     # All output fields should be allowed to be Null/Blank
-    output_best = JSONField(null=True, blank=True,
-            verbose_name="Watersheds in Optimal Reserve")
+    output_calculated_target = JSONField(null=True, blank=True)
+    output_best = JSONField(null=True, blank=True, verbose_name="Watersheds in Optimal Reserve")
     output_unit_counts = JSONField(null=True, blank=True)
     output_geometry = models.MultiPolygonField(srid=settings.GEOMETRY_CLIENT_SRID, 
             null=True, blank=True, verbose_name="Watersheds")
 
     @property
-    def species(self):
-        from arp.marxan import ConservationFeature 
-        species = []
-        ws = Watershed.objects.all()
-        cfs = ConservationFeature.objects.all()
-        for cf in cfs:
-            from django.db.models import Sum
-            agg = ws.aggregate(Sum(s))
-            total = agg[s + "__sum"]
-            pct = self.__dict__['input_target_' + s]
-            target = total * pct
-            penalty = self.__dict__['input_penalty_' + s] * 100
-
-            species.append( 
-                #(id, fieldname, penalty, target, pct, total):
-                (len(species)+1, s, penalty, target, pct, total) 
-            )
-
-        return species
-
-    @property
     def outdir(self):
-        return os.path.realpath(settings.MARXAN_OUTDIR + "/%s" % self.uid)
+        return os.path.realpath(os.path.join(settings.MARXAN_OUTDIR, "%s_" % (self.uid,) ))
+        # slugify(self.date_modified))
+        # TODO this is not asycn-safe!!!
 
-    
     def run(self):
         from arp.marxan import MarxanAnalysis
+        from django.db.models import Sum
+         
+        # create the target and penalties
+        print "Create targets and penalties"
+        cfs = []
+        for cf in ConservationFeature.objects.annotate(Sum('puvscf__amount')):
+            try:
+                total = float(cf.puvscf__amount__sum)
+            except TypeError: 
+                total = 0.0
+            target = total * 0.5 # TODO get actual target pcts!!!
+            penalty = 50.0 # TODO get actual penalties!!!
+            if target > 0:
+                cfs.append((cf.pk, target, penalty, cf.name))
 
-        units = Watershed.objects.all()
-        m = MarxanAnalysis(self, units, self.outdir)
+        # Calc costs for each planning unit
+        # TODO incorporate weightings instead of just a sum
+        print "Calculate costs for each planning unit"
+        pucosts = [(pu.pk, pu.puvscost__amount__sum) for pu in PlanningUnit.objects.annotate(Sum('puvscost__amount'))]
 
+        # Pull the puvscf table
+        #print "Pull data from the puvscf table"
+        # This takes and insanely long time and is not stable
+        # resort to a horrible hack of exporting the data directly to csv via SQL query
+        #puvscf = [(r.cf.pk, r.pu.pk, r.amount) for r in PuVsCf.objects.all().order_by('pu__pk')]
+
+        print "Creating the MarxanAnalysis object"
+        m = MarxanAnalysis(pucosts, cfs, self.outdir)
+
+        print "Firing off the asycn process"
         check_status_or_begin(marxan_start, task_args=(m,), polling_url=self.get_absolute_url())
         self.process_results()
         return True
@@ -290,12 +296,11 @@ class WatershedPrioritization(Analysis):
     def process_results(self):
         if process_is_complete(self.get_absolute_url()):
             chosen = get_process_result(self.get_absolute_url())
-            units = Watershed.objects.all()
-            wshds = units.filter(pk__in=chosen)
-            self.output_units = ','.join([str(x.huc12) for x in wshds])
+            wshds = PlanningUnits.filter(pk__in=chosen)
+            self.output_units = json.dumps([str(x.pk) for x in wshds])
             self.output_geometry = wshds.collect()
             super(Analysis, self).save() # save without calling save()
-            first_run = self.marxan
+            #first_run = self.marxan
 
     @property
     def done(self):

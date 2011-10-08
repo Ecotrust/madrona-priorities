@@ -13,11 +13,12 @@ from arp.models import ConservationFeature, PlanningUnit, Cost, PuVsCf, PuVsCost
 xls = "../data/PrioritySpeciesList_DRAFT_mp.xls" # NOT xlsx
 shp = "../data/HUC8_FocalSpecies.shp"
 backup = False
+import_shp = False
 #------------------------------------#
 
-modls = ['ConservationFeature',  'Cost', 'PuVsCf', 'PuVsCost',
-        #'PlanningUnit'
-        ]
+modls = ['ConservationFeature',  'Cost', 'PuVsCf', 'PuVsCost']
+if import_shp:
+    modls.append('PlanningUnit')
 
 # backup old tables
 if backup:
@@ -39,7 +40,10 @@ if backup:
 # Clear them out
 print
 print "Cleaning out old tables"
-for m in ConservationFeature, Cost, PuVsCf, PuVsCost: #PlanningUnit, 
+ms = [ConservationFeature, Cost, PuVsCf, PuVsCost]
+if import_shp:
+    ms.append(PlanningUnit)
+for m in ms: 
     objs = m.objects.all()
     for obj in objs:
         obj.delete()
@@ -140,3 +144,18 @@ for feature in layer:
 assert len(PuVsCf.objects.all()) == len(pus) * len(cfs_with_fields)
 assert len(PuVsCost.objects.all()) == len(pus) * len(cs)
 
+# Export the puvscf table to csv directly 
+from django.conf import settings
+out = os.path.realpath(os.path.join(settings.MARXAN_TEMPLATEDIR, 'puvcf.dat'))
+print "Exporting the table to %s" % out
+query = """
+    COPY (SELECT cf_id as species, pu_id as pu, amount 
+          FROM arp_puvscf
+          ORDER BY pu)
+    TO '%s'
+    WITH DELIMITER ','
+    CSV HEADER
+""" % out
+from django.db import connection
+cursor = connection.cursor()
+cursor.execute(query)

@@ -29,65 +29,64 @@ def output(level,val,crumbs, target=0.5, penalty=0.5):
     </span>''' % {'id': id, 'target': target, 'penalty': penalty}
 
 def header():
-    print """<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
+    print """{% extends "common/panel.html" %}
+{% block title %}{{title}}{% endblock %}
+{% block panel %}
+<script type="text/javascript" charset="utf-8">
+    lingcod.onShow(function(){
+        var params_impute = function() {
+            // If the input json is not null, 
+            // Use them to restore the state of the tree
+            if (!$('#id_input_targets').val() || 
+                !$('#id_input_penalties').val() ||
+                !$('#id_input_relativecosts').val()) { 
+                console.log("Restoring Species List State...");
+                
+                
+            };
+        }; 
+        params_impute();
 
-    <meta http-equiv="content-type" content="text/html; charset=iso-8859-1"/>
-    <title>Focal Species</title>
-    
-    <!--
-    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.2.6/jquery.min.js"></script>
-    -->
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.5/jquery.min.js" type="text/javascript"></script>
-    <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.11/jquery-ui.min.js" type="text/javascript"></script> 
-    <script type="text/javascript" src="http://jqueryui.com/ui/jquery.ui.slider.js"></script> 
-    <script src="./treeview/jquery.treeview.js" type="text/javascript"></script>
-    
-    <script type="text/javascript">
-$(document).ready(function(){
-    $("#focalspecies").treeview({
-        collapsed: true
-    });
-      
-      var params_update = function() {
-        var html = "";
-        $('#params_out').html(html);
-        var targets = {};
-        var penalties = {};
-        $('.targetvalue:visible').each( function(index) {
-            var xid = $(this).attr("id");
-            var id = "#" + xid;
-            xid = xid.replace(/^target---/,''); //  Remove preceding identifier
-            xid = xid.replace(/---$/,''); // Remove trailing ---
-            targets[xid] = parseFloat($(id).val());
+        lingcod.setupForm($('#featureform'));
+        $("#focalspecies_tree").treeview({
+            collapsed: true
         });
-        $('.penaltyvalue:visible').each( function(index) {
-            var xid = $(this).attr("id");
-            var id = "#" + xid;
-            xid = xid.replace(/^penalty---/,''); //  Remove preceding identifier
-            xid = xid.replace(/---$/,''); // Remove trailing ---
-            penalties[xid] = parseFloat($(id).val());
-        });
-        html += JSON.stringify(targets);
-        html += JSON.stringify(penalties);
-        $('#params_out').text(html);
-        $.post('http://wp.hestia.ecotrust.org/arp/test_params/', 
-            {'input_targets': JSON.stringify(targets), 'input_penalties': JSON.stringify(penalties)},
-            function(data) {
-                console.log(data);
-                $('#server_out').text(JSON.stringify(data));
-            },
-            'json'
-        );
+        
+       
+        var params_collect = function() {
+            var targets = {};
+            var penalties = {};
+            var costs = {};
+            $('.targetvalue:visible').each( function(index) {
+                var xid = $(this).attr("id");
+                var id = "#" + xid;
+                xid = xid.replace(/^target---/,''); //  Remove preceding identifier
+                xid = xid.replace(/---$/,''); // Remove trailing ---
+                targets[xid] = parseFloat($(id).val());
+            });
+            $('.penaltyvalue:visible').each( function(index) {
+                var xid = $(this).attr("id");
+                var id = "#" + xid;
+                xid = xid.replace(/^penalty---/,''); //  Remove preceding identifier
+                xid = xid.replace(/---$/,''); // Remove trailing ---
+                penalties[xid] = parseFloat($(id).val());
+            });
+            $('.costvalue:visible').each( function(index) {
+                var xid = $(this).attr("id");
+                var id = "#" + xid;
+                xid = xid.replace(/^cost-/,''); //  Remove preceding identifier
+                costs[xid] = parseFloat($(id).val());
+            });
+            $('#id_input_targets').val( JSON.stringify(targets) ); 
+            $('#id_input_penalties').val( JSON.stringify(penalties) );
+            $('#id_input_relativecosts').val( JSON.stringify(costs) );
+        };
 
-      };
-
-      $('.slidervalue').each( function(index) {
-        var id = $(this).attr("id");
-        var slider_id = "#slider_" + id;
-        id = "#" + id;
-        $(slider_id).slider({
+        $('.slidervalue').each( function(index) {
+            var id = $(this).attr("id");
+            var slider_id = "#slider_" + id;
+            id = "#" + id;
+            $(slider_id).slider({
                 range: 'min',
                 min : 0, 
                 max : 1,
@@ -98,63 +97,89 @@ $(document).ready(function(){
                 slide : function(event, ui) {
                     $(id).val($(this).slider('value'));
                 }
-        });
-        $(slider_id).slider('value', $(id).val());
-        $(id).change( function(){
-            $(slider_id).slider("value", $(id).val());
-        });
-      });
-
-            $('#refresh_params').click(function(event){ 
-                params_update();
-                event.preventDefault();
             });
-});
-    </script>
+            $(slider_id).slider('value', $(id).val());
+            $(id).change( function(){
+                $(slider_id).slider("value", $(id).val());
+            });
+        });
 
-    <link rel="stylesheet" href="./treeview/jquery.treeview.css" />
-    <!-- TODO remove this when in panel -->
-    <link rel="stylesheet" href="./treeview/jquery-widgets.css" />
-    <style type="text/css">
-        #params { float: right; padding: 10px; border: 1px black solid; margin: 10px; width:500px; }
-        li.collapsable > span.sliders { display: none; }
-        li.expandable > span.sliders { color: black; display: inline; }
-        td { padding-right:6px; font-size: 80%; }
-        .slider { margin-bottom: 1px;   }
-        .slidervalue { font-size: 80% }
-        .ui-slider .ui-slider-handle { position: absolute; z-index: 2; width: 0.7em; height: 0.7em; 
-            cursor: default; border: 1px solid #b3b3b3/*{borderColorDefault}*/; 
-            background: #d6d6d6/*{bgColorDefault}*/; font-weight: normal/*{fwDefault}*/; color: #555555/*{fcDefault}*/; }
-        .ui-slider-horizontal { height: .4em; border: 1px solid #888888/*{borderColorContent}*/; 
-            background: #eeeeee/*{bgColorContent}*/; color: #222222/*{fcContent}*/; }
-        .ui-slider-horizontal .ui-slider-range { top: 0; height: 100%; }
-        .ui-slider-horizontal .ui-slider-range-min { left: 0; background:#9a9a9a}
-        .slider { width: 150px; }
-        .slidervalue { width: 45px ! important;}
-    </style>
+        $('.submit_button').click(function(event){ 
+            params_collect(); 
+            $('#wp_form').trigger('submit');
+        });
+    });
+</script>
 
-    </head>
-    <body> 
-     
-    <div id="params">
-      <span> Parameters to be submitted </span> <a href="#" id="refresh_params">[Refresh]</a>
-      <div id="params_out"></div>
-      <hr/>
-      <span> Server response </span>
-      <div id="server_out"></div>
-    </div>
+<link rel="stylesheet" href="/media/common/js/treeview/jquery.treeview.css" />
+<link rel="stylesheet" href="/media/common/js/treeview/jquery-widgets.css" />
+<style type="text/css">
+    .hidden { display: none; }
+    li.collapsable > span.sliders { display: none; }
+    li.expandable > span.sliders { color: black; display: inline; }
+    td { padding-right:6px; font-size: 75%; color:#444; }
+    .slider { margin-bottom: 1px;   }
+    .slidervalue { font-size: 80% }
+    .ui-slider .ui-slider-handle { position: absolute; z-index: 2; width: 0.7em; height: 0.7em; 
+        cursor: default; border: 1px solid #b3b3b3/*{borderColorDefault}*/; 
+        background: #F4F8FB; font-weight: normal; color: #555555; }
+    .ui-slider-horizontal { height: .4em; border: 1px solid #888888; color: #222222; }
+    .ui-slider-horizontal .ui-slider-range { top: 0; height: 100%; }
+    .ui-slider-horizontal .ui-slider-range-min { left: 0; background:#9a9a9a}
+    .ui-widget { font-size: 100% ! important; }
+    .treeview ul {background-color: #F4F8FB ! important; }
+    .slider { width: 120px; }
+    .slidervalue { width: 35px ! important;}
+    .marinemap-panel form ul li { padding-left: 16px ! important; }
+    .marinemap-panel form textarea, .marinemap-panel form input { margin-bottom: 1px ! important;}
+</style>
 
+    <h1>{{title}} input parameters</h1>
+
+
+    <form id="featureform" action="{{action}}" method="post"> 
+            <div class="field required">
+                {{ form.name.label_tag }}
+                {{ form.name.errors }}
+                {{ form.name }}
+            </div>
+            <div class="hidden field required">
+                {{ form.input_penalties.label_tag }}
+                {{ form.input_penalties.errors }}
+                {{ form.input_penalties }}            
+                {{ form.input_targets.label_tag }}
+                {{ form.input_targets.errors }}
+                {{ form.input_targets }}            
+                {{ form.input_relativecosts.label_tag }}
+                {{ form.input_relativecosts.errors }}
+                {{ form.input_relativecosts }}            
+            </div>
+            <p><input type="submit" value="submit"></p>
+    </form>
+
+<div class="tabs">
+    <ul>
+        <li>
+            <a href="#speciestab">
+                <span>Species</span>
+            </a>
+        </li>
+    <li>
+        <a href="#coststab">
+            <span>Costs</span>
+        </a>
+    </li>
+    </ul>
+
+    <div id="speciestab">
     <h3>Set Proptions and Weights for Focal Fish Species</h3>
-    <form action="postit.html" id="focalspecies_form">
-    <span>Focal Fish Species</span>
+    <br/>
+    <form action="#" id="focalspecies_form">
 """
-
-def footer():
-    print """ <input type="submit"/></form></body></html>"""
 
 def main():
     L1 = F.objects.values_list('level1',flat=True).distinct()
-    print "<ul id='focalspecies'>"
+    print "<ul id='focalspecies_tree'>"
     for val1 in L1:
         print "  <li>"
         output(1,val1,[val1])
@@ -181,6 +206,45 @@ def main():
         if len(L2) > 0: print "  </ul>"
         print "  </li>"
     print "</ul>"
+
+def footer():
+    print """ 
+    </form></div> <!-- End species tab -->
+    <div id="coststab">
+        <h3>Set Relative Weights for Costs</h3>
+        <br />
+        <form action="#" id="costs_form">
+           <div>
+            <table>
+                <tr>
+                <td><label for="id_climate">Climate</label></td>
+                <td><input type="text" class="slidervalue costvalue" id="cost-climate" value="0.5"/></td>
+                <td><div class="slider" id="slider_cost-climate"></div></td>
+                </tr>
+                <tr>
+                <td><label for="id_invasives">Invasives</label></td>
+                <td><input type="text" class="slidervalue costvalue" id="cost-invasives" value="0.5"/></td>
+                <td><div class="slider" id="slider_cost-invasives"></div></td>
+                </tr>
+                <tr>
+                <td><label for="id_watershedcondition">Watershed Condition</label></td>
+                <td><input type="text" class="slidervalue costvalue" id="cost-watershedcondition" value="0.5"/></td>
+                <td><div class="slider" id="slider_cost-watershedcondition"></div></td>
+                </tr>
+             </table>
+           </div>
+        </form>
+    </div>
+  </div>
+
+    <br class="clear" />
+    <div class="form_controls">
+        <a href="#" class="submit_button button" onclick="this.blur(); return false;"><span>Submit</span></a>
+        <a href="#" class="cancel_button button red" onclick="this.blur(); return false;"><span>Cancel</span></a>
+        <br class="clear" />
+    </div>
+{% endblock panel %}"""
+
 
 if __name__ == '__main__':
     header()

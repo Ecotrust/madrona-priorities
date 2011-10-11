@@ -265,7 +265,6 @@ class WatershedPrioritization(Analysis):
                     selected[int(s[0])] = num
             print selected
             self.output_pu_count = json.dumps(selected) 
-            #self.output_geometry = [x.geometry.centroid for x in wshds]
             super(Analysis, self).save() # save without calling save()
             #first_run = self.marxan
 

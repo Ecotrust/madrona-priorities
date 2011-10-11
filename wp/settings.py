@@ -26,9 +26,13 @@ TEMPLATE_DIRS = ( os.path.realpath(os.path.join(os.path.dirname(__file__), 'temp
 
 INSTALLED_APPS += ( 'arp', 
                     'djkombu',
-                    #'django_extensions', 
+                    'django_extensions', 
                     'lingcod.analysistools',
                     'django.contrib.humanize',) 
+
+COMPRESS_JS['application']['source_filenames'] += (
+    'common/js/treeview/jquery.treeview.js',
+)
 
 COMPRESS_CSS['application']['source_filenames'] += (
     'common/css/wp.css',

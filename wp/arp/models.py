@@ -65,6 +65,11 @@ class ConservationFeature(models.Model):
     dbf_fieldname = models.CharField(max_length=15,null=True,blank=True)
     units = models.CharField(max_length=16, null=True, blank=True)
 
+    @ property
+    def level_string(self):
+        levels = [self.level1, self.level2, self.level3, self.level4, self.level5]
+        return '---'.join([slugify(x.lower()) for x in levels])
+
     def __unicode__(self):
         return u'%s' % self.name
 
@@ -80,23 +85,33 @@ class PlanningUnit(models.Model):
     fid = models.IntegerField()
     area = models.FloatField()
     name = models.CharField(max_length=99)
-    geometry = models.MultiPolygonField(srid=settings.GEOMETRY_CLIENT_SRID, 
+    geometry = models.MultiPolygonField(srid=settings.GEOMETRY_DB_SRID, 
             null=True, blank=True, verbose_name="Planning Unit Geometry")
     objects = models.GeoManager()
 
     def __unicode__(self):
         return u'%s' % self.name
 
-    @property
-    def kml(self):
+    def kml(self, scale):
+        scale = scale/25.0
         return """
+        <Style id="style_%s">
+            <IconStyle>
+                <color>ff00ffaa</color>
+                <scale>%s</scale>
+                <Icon>
+                    <href>http://maps.google.com/mapfiles/kml/shapes/shaded_dot.png</href>
+                </Icon>
+            </IconStyle>
+            <LabelStyle></LabelStyle>
+        </Style>
         <Placemark id="huc_%s">
             <visibility>1</visibility>
             <name>%s</name>
-            <styleUrl>#selected-watersheds</styleUrl>
+            <styleUrl>style_%s</styleUrl>
             %s
         </Placemark>
-        """ % (self.huc12, self.name, asKml(self.geometry))
+        """ % (self.fid, scale, self.fid, self.name, self.fid, asKml(self.geometry.point_on_surface))
 
 class PuVsCf(models.Model):
     pu = models.ForeignKey(PlanningUnit)
@@ -114,22 +129,52 @@ class PuVsCost(models.Model):
 
 @register
 class WatershedPrioritization(Analysis):
-    input_target = JSONField(verbose_name='Target Percentage of Habitat')
-    input_penalty = JSONField(verbose_name='Penalties for Missing Targets') 
-    input_relativecost = JSONField(verbose_name='Relative Costs')
+    input_targets = JSONField(verbose_name='Target Percentage of Habitat')
+    input_penalties = JSONField(verbose_name='Penalties for Missing Targets') 
+    input_relativecosts = JSONField(verbose_name='Relative Costs')
 
     # All output fields should be allowed to be Null/Blank
-    output_calculated_target = JSONField(null=True, blank=True)
+    #output_calculated_target = JSONField(null=True, blank=True)
     output_best = JSONField(null=True, blank=True, verbose_name="Watersheds in Optimal Reserve")
-    output_unit_counts = JSONField(null=True, blank=True)
-    output_geometry = models.MultiPolygonField(srid=settings.GEOMETRY_CLIENT_SRID, 
-            null=True, blank=True, verbose_name="Watersheds")
+    output_pu_count = JSONField(null=True, blank=True)
+    #output_geometry = models.MultiPolygonField(srid=settings.GEOMETRY_CLIENT_SRID, 
+    #        null=True, blank=True, verbose_name="Watersheds")
 
     @property
     def outdir(self):
         return os.path.realpath(os.path.join(settings.MARXAN_OUTDIR, "%s_" % (self.uid,) ))
-        # slugify(self.date_modified))
         # TODO this is not asycn-safe!!!
+        # slugify(self.date_modified))
+
+    def process_dict(self, d):
+        """
+        Use the levels in the ConservationFeature table to determine the 
+        per-species value based on the specified levels.
+        Input:
+         {
+             'widespread---trout': 0.5,
+             'widespread---lamprey': 0.4,
+             'widespread---salmon': 0.3,
+             'widespread---steelhead': 0.2,
+             'locally endemic': 0.1,
+         }
+
+        Return:
+        species pk is the key
+        { 1: 0.5, 2: 0.5, ......}
+        """
+        ndict = {}
+        for s in ConservationFeature.objects.all():
+            levels = s.level_string
+            val = None
+            for k,v in d.items():
+                if levels.startswith(k.lower()):
+                    val = v
+                    break
+            if val is None:
+                raise Exception("Found no matching target for:  %s %s" % (s.name, s.level_string))
+            ndict[s.pk] = val
+        return ndict
 
     def run(self):
         from arp.marxan import MarxanAnalysis
@@ -137,14 +182,24 @@ class WatershedPrioritization(Analysis):
          
         # create the target and penalties
         print "Create targets and penalties"
+        targets = self.process_dict(self.input_targets)
+        penalties = self.process_dict(self.input_penalties)
+        cost_weights = self.input_relativecosts 
+
+        assert len(targets.keys()) == len(penalties.keys()) == len(ConservationFeature.objects.all())
+        assert max(targets.values()) < 1.0
+        assert min(targets.values()) >=  0.0
+
+        # Apply the target and penalties
+        print "Apply the targets and penalties"
         cfs = []
         for cf in ConservationFeature.objects.annotate(Sum('puvscf__amount')):
             try:
                 total = float(cf.puvscf__amount__sum)
             except TypeError: 
                 total = 0.0
-            target = total * 0.5 # TODO get actual target pcts!!!
-            penalty = 50.0 # TODO get actual penalties!!!
+            target = total * targets[cf.pk]
+            penalty = penalties[cf.pk]
             if target > 0:
                 cfs.append((cf.pk, target, penalty, cf.name))
 
@@ -177,85 +232,8 @@ class WatershedPrioritization(Analysis):
         return (len(outputs), settings.MARXAN_NUMREPS)
 
     @property
-    def marxan(self):
-        """
-        Called by process_results which will cache the dict
-        May want to "cache" them by saving them to output_ fields of the feature instead?
-        """
-        use_cache = settings.USE_CACHE
-        key = "wp_marxan_%s_%s" % (self.pk, slugify(self.date_modified))
-        if use_cache:
-            logger.info("Hit the cache for %s" % key)
-            cached_result = cache.get(key)
-            if cached_result: 
-                return cached_result
-
-        log = open(os.path.join(self.outdir,"output","wp_log.dat"),'r').read()
-
-        wids = [int(x.strip()) for x  in self.output_units.split(',')]
-        wshds = Watershed.objects.filter(huc12__in=wids)
-        num_units = len(wshds)
-        sum_area = 0
-        for w in wshds:
-            sum_area += w.area
-
-        species = self.species
-        time = open(os.path.join(self.outdir,"output","wp_log.dat"),'r').readlines()[-3]
-        time = time.replace("Time passed so far is ","")
-        best = [x.split(',') for x in open(os.path.join(self.outdir,"output","wp_mvbest.csv"),'r').readlines()][1:]
-        out_species = []
-        gchart_seqs = []
-        gchart_labels = []
-
-        max_habitat = 0
-        for s in species:
-            if s.total > max_habitat:
-                max_habitat = s.total
-
-        hit = 0
-        miss = 0
-        for b in best:
-            cf = [s for s in species if s.id == int(b[0])][0] 
-            cf.amount = float(b[3])
-            cf.occurences = int(b[5])
-            cf.miss = False
-            if b[8].strip().lower() != 'yes':
-                cf.miss = True
-                miss += 1
-            else:
-                hit += 1
-            out_species.append(cf)
-
-            minpixel = int(max_habitat / 350.)*2
-
-            if cf.miss:
-                gchart_seqs.append((int(cf.amount), int(cf.target - cf.amount), minpixel, 0, int(cf.total - cf.target)) )
-            else:
-                gchart_seqs.append((int(cf.target), 0, minpixel, int(cf.amount - cf.target), int(cf.total - cf.amount)) )
-            gchart_labels.append(cf.name)
-
-        cs = []
-        for c in zip(*gchart_seqs):
-            cs.append(','.join([str(x) for x in c]))
-        chd = '|'.join(cs)
-
-        gchart_url = "https://chart.googleapis.com/chart?cht=bhs&chs=350x125&chd=t:%(chd)s&chco=2d69ff,dd6a6a,111111,4f89f9,c6d9fd&chbh=20&chds=0,%(max_habitat)s&chxt=x,y&chxl=1:|Coho|Chinook|Steelhead|0:|0|%(max_habitat)s" % {'chd': chd, 'max_habitat': int(max_habitat)}
-
-        r = {'log': log,
-            'watersheds': wshds,
-            'num_units': num_units,
-            'area': sum_area,
-            'species': out_species, 
-            'chart_url': gchart_url,
-            'hit': hit,
-            'num_species': hit+miss,
-            'time': time,
-            'runs': settings.MARXAN_NUMREPS
-        }
-
-        if use_cache:
-            cache.set(key, r)
-        return r
+    def results(self):
+        return self.output_best
 
     @property
     def status_html(self):
@@ -296,9 +274,18 @@ class WatershedPrioritization(Analysis):
     def process_results(self):
         if process_is_complete(self.get_absolute_url()):
             chosen = get_process_result(self.get_absolute_url())
-            wshds = PlanningUnits.filter(pk__in=chosen)
-            self.output_units = json.dumps([str(x.pk) for x in wshds])
-            self.output_geometry = wshds.collect()
+            wshds = PlanningUnit.objects.filter(pk__in=chosen)
+            self.output_best = json.dumps({'best': [str(x.pk) for x in wshds]})
+            ssoln = [x.strip().split(',') for x in 
+                     open(os.path.join(self.outdir,"output","wp_ssoln.csv"),'r').readlines()][1:]
+            selected = {}
+            for s in ssoln:
+                num = int(s[1])
+                if num > 0:
+                    selected[int(s[0])] = num
+            print selected
+            self.output_pu_count = json.dumps(selected) 
+            #self.output_geometry = [x.geometry.centroid for x in wshds]
             super(Analysis, self).save() # save without calling save()
             #first_run = self.marxan
 
@@ -306,17 +293,16 @@ class WatershedPrioritization(Analysis):
     def done(self):
         """ Boolean; is process complete? """
         done = True
-        for of in self.outputs.keys():
-            if not self.outputs[of]:
-                done = False
+        if self.output_best is None: done = False
+        if self.output_pu_count is None: done = False
+
         if not done:
             done = True
             # only process async results if output fields are blank
             # this means we have to recheck after running
             self.process_results()
-            for of in self.outputs.keys():
-                if not self.outputs[of]:
-                    done = False
+            if self.output_best is None: done = False
+            if self.output_pu_count is None: done = False
         return done
 
     @classmethod
@@ -325,8 +311,9 @@ class WatershedPrioritization(Analysis):
 
     @property 
     def kml_done(self):
-        wids = [int(x.strip()) for x  in self.output_units.split(',')]
-        wshds = Watershed.objects.filter(huc12__in=wids)
+        wids = [int(x.strip()) for x in self.output_best['best']]
+        wshds = PlanningUnit.objects.filter(pk__in=wids)
+        kml = ''
         return """%s
           <Folder id='%s'>
             <name>%s</name>
@@ -334,7 +321,7 @@ class WatershedPrioritization(Analysis):
           </Folder>""" % (self.kml_style, 
                           self.uid, 
                           escape(self.name), 
-                          '\n'.join([x.kml for x in wshds]))
+                          '\n'.join([x.kml( ) for x in wshds]))
 
     @property 
     def kml_working(self):

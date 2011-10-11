@@ -7,7 +7,7 @@ import settings
 setup_environ(settings)
 
 #==================================#
-from arp.models import FocalSpecies as F
+from arp.models import ConservationFeature as F
 from django.template.defaultfilters import slugify
 
 def output(level,val,crumbs, target=0.5, penalty=0.5):
@@ -16,13 +16,13 @@ def output(level,val,crumbs, target=0.5, penalty=0.5):
     print "  "*level, '''<span class="sliders">
     <table>
     <tr>
-    <td>Target</td>
-    <td><input type="text" class="slidervalue" id="target---%(id)s" value="%(target)s"/></td>
+    <td>Proportion of Total Value</td>
+    <td><input type="text" class="slidervalue targetvalue" id="target---%(id)s" value="%(target)s"/></td>
     <td><div class="slider" id="slider_target---%(id)s"></div></td>
     </tr>
     <tr>
-    <td>Penalty</td>
-    <td><input type="text" class="slidervalue" id="penalty---%(id)s" value="%(penalty)s"/></td>
+    <td>Importance Weighting</td>
+    <td><input type="text" class="slidervalue penaltyvalue" id="penalty---%(id)s" value="%(penalty)s"/></td>
     <td><div class="slider" id="slider_penalty---%(id)s"></div></td>
     </tr>
     </table>
@@ -53,12 +53,34 @@ $(document).ready(function(){
       var params_update = function() {
         var html = "";
         $('#params_out').html(html);
-        $('.slidervalue:visible').each( function(index) {
+        var targets = {};
+        var penalties = {};
+        $('.targetvalue:visible').each( function(index) {
             var xid = $(this).attr("id");
             var id = "#" + xid;
-            html += "<tr><td>" + xid + "</td><td>" + $(id).val() + "</td></tr>";
+            xid = xid.replace(/^target---/,''); //  Remove preceding identifier
+            xid = xid.replace(/---$/,''); // Remove trailing ---
+            targets[xid] = parseFloat($(id).val());
         });
-        $('#params_out').html("<table>" + html + "</table>");
+        $('.penaltyvalue:visible').each( function(index) {
+            var xid = $(this).attr("id");
+            var id = "#" + xid;
+            xid = xid.replace(/^penalty---/,''); //  Remove preceding identifier
+            xid = xid.replace(/---$/,''); // Remove trailing ---
+            penalties[xid] = parseFloat($(id).val());
+        });
+        html += JSON.stringify(targets);
+        html += JSON.stringify(penalties);
+        $('#params_out').text(html);
+        $.post('http://wp.hestia.ecotrust.org/arp/test_params/', 
+            {'input_targets': JSON.stringify(targets), 'input_penalties': JSON.stringify(penalties)},
+            function(data) {
+                console.log(data);
+                $('#server_out').text(JSON.stringify(data));
+            },
+            'json'
+        );
+
       };
 
       $('.slidervalue').each( function(index) {
@@ -116,14 +138,13 @@ $(document).ready(function(){
      
     <div id="params">
       <span> Parameters to be submitted </span> <a href="#" id="refresh_params">[Refresh]</a>
-      <hr/>
       <div id="params_out"></div>
+      <hr/>
+      <span> Server response </span>
+      <div id="server_out"></div>
     </div>
 
-    <h3>Set Targets and Penalties for Focal Fish Species</h3>
-    <p style="width: 400px;"> If you expand the list to get more detail, you must set values for all visible categories. 
-        Only those species/groups that are visible (expanded) will be passed to the prioritization analysis.
-        The box at the far-right shows the parameters that will be passed given the current state. </p>
+    <h3>Set Proptions and Weights for Focal Fish Species</h3>
     <form action="postit.html" id="focalspecies_form">
     <span>Focal Fish Species</span>
 """

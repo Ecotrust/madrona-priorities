@@ -13,7 +13,7 @@ from arp.models import ConservationFeature, PlanningUnit, Cost, PuVsCf, PuVsCost
 xls = "../data/PrioritySpeciesList_DRAFT_mp.xls" # NOT xlsx
 shp = "../data/HUC8_FocalSpecies.shp"
 backup = False
-import_shp = False
+import_shp = True
 #------------------------------------#
 
 modls = ['ConservationFeature',  'Cost', 'PuVsCf', 'PuVsCost']

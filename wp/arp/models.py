@@ -22,6 +22,7 @@ from arp.tasks import marxan_start
 from arp.marxan import MarxanError
 from django.core.serializers.json import DjangoJSONEncoder
 from django.utils import simplejson as json
+from lingcod.common.models import KmlCache
 
 logger = get_logger()
 
@@ -91,32 +92,6 @@ class PlanningUnit(models.Model):
 
     def __unicode__(self):
         return u'%s' % self.name
-
-    def kml(self, prop=0.5):
-        import random
-        prop = random.random()
-        scale = (2.0 * prop) + 0.2  # from 0.2 to 2.2
-        return """
-        <Style id="style_%s">
-            <IconStyle>
-                <color>ff00ffaa</color>
-                <scale>%s</scale>
-                <Icon>
-                    <href>http://maps.google.com/mapfiles/kml/shapes/shaded_dot.png</href>
-                </Icon>
-            </IconStyle>
-            <LabelStyle>
-                <color>0000ffaa</color>
-                <scale>0.1</scale>
-            </LabelStyle>
-        </Style>
-        <Placemark id="huc_%s">
-            <visibility>1</visibility>
-            <name>%s</name>
-            <styleUrl>style_%s</styleUrl>
-            %s
-        </Placemark>
-        """ % (self.fid, scale, self.fid, self.name, self.fid, asKml(self.geometry.point_on_surface))
 
 class PuVsCf(models.Model):
     pu = models.ForeignKey(PlanningUnit)
@@ -316,17 +291,65 @@ class WatershedPrioritization(Analysis):
 
     @property 
     def kml_done(self):
+        key = "watershed_kmldone_%s_%s" % (self.uid, slugify(self.date_modified))
+        kmlcache, created = KmlCache.objects.get_or_create(key=key)
+        kml = kmlcache.kml_text
+        if not created and kml:
+            logger.warn("%s ... kml cache found" % key)
+            return kml
+        logger.warn("%s ... NO kml cache found ... seeding" % key)
+
         wids = [int(x.strip()) for x in self.output_best['best']]
+        puc = self.output_pu_count
         wshds = PlanningUnit.objects.filter(pk__in=wids)
-        kml = '' #TODO get ssoln
-        return """%s
+        kmls = []
+        for ws in wshds:
+            hits = puc[str(ws.pk)] 
+            numruns = settings.MARXAN_NUMREPS
+            prop = float(hits)/numruns
+            scale = (1.2 * prop * prop) 
+            if scale < 0.2: scale = 0.2
+            color = 'ff33ffdd'
+            if prop == 1: 
+                color = 'ff00ffff'
+
+            kmls.append( """
+            <Style id="style_%s">
+                <IconStyle>
+                    <color>%s</color>
+                    <scale>%s</scale>
+                    <Icon>
+                        <href>http://maps.google.com/mapfiles/kml/shapes/shaded_dot.png</href>
+                    </Icon>
+                </IconStyle>
+                <LabelStyle>
+                    <color>0000ffaa</color>
+                    <scale>0.1</scale>
+                </LabelStyle>
+            </Style>
+            <Placemark id="huc_%s">
+                <visibility>1</visibility>
+                <name>%s</name>
+                <description>Included in %s out of %s runs.</description>
+                <styleUrl>style_%s</styleUrl>
+                %s
+            </Placemark>
+            """ % (ws.fid, color, scale, ws.fid, ws.name, hits, numruns, ws.fid, asKml(ws.geometry.point_on_surface)))
+
+
+        fullkml = """%s
           <Folder id='%s'>
             <name>%s</name>
             %s
           </Folder>""" % (self.kml_style, 
                           self.uid, 
                           escape(self.name), 
-                          '\n'.join([x.kml(1) for x in wshds]))
+                          '\n'.join(kmls))
+
+        kmlcache.kml_text = fullkml
+        kmlcache.save()
+        return fullkml
+       
 
     @property 
     def kml_working(self):

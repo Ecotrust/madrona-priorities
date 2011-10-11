@@ -92,8 +92,10 @@ class PlanningUnit(models.Model):
     def __unicode__(self):
         return u'%s' % self.name
 
-    def kml(self, scale):
-        scale = scale/25.0
+    def kml(self, prop=0.5):
+        import random
+        prop = random.random()
+        scale = (2.0 * prop) + 0.2  # from 0.2 to 2.2
         return """
         <Style id="style_%s">
             <IconStyle>
@@ -103,7 +105,10 @@ class PlanningUnit(models.Model):
                     <href>http://maps.google.com/mapfiles/kml/shapes/shaded_dot.png</href>
                 </Icon>
             </IconStyle>
-            <LabelStyle></LabelStyle>
+            <LabelStyle>
+                <color>0000ffaa</color>
+                <scale>0.1</scale>
+            </LabelStyle>
         </Style>
         <Placemark id="huc_%s">
             <visibility>1</visibility>
@@ -313,7 +318,7 @@ class WatershedPrioritization(Analysis):
     def kml_done(self):
         wids = [int(x.strip()) for x in self.output_best['best']]
         wshds = PlanningUnit.objects.filter(pk__in=wids)
-        kml = ''
+        kml = '' #TODO get ssoln
         return """%s
           <Folder id='%s'>
             <name>%s</name>
@@ -321,7 +326,7 @@ class WatershedPrioritization(Analysis):
           </Folder>""" % (self.kml_style, 
                           self.uid, 
                           escape(self.name), 
-                          '\n'.join([x.kml( ) for x in wshds]))
+                          '\n'.join([x.kml(1) for x in wshds]))
 
     @property 
     def kml_working(self):

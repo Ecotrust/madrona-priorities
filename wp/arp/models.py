@@ -26,7 +26,6 @@ from lingcod.common.models import KmlCache
 
 logger = get_logger()
 
-
 class JSONField(models.TextField):
     """JSONField is a generic textfield that neatly serializes/unserializes
     JSON objects seamlessly"""
@@ -37,11 +36,10 @@ class JSONField(models.TextField):
         """Convert our string value to JSON after we load it from the DB"""
         if value == "":
             return None
-        try:
-            if isinstance(value, basestring):
-                return json.loads(value)
-        except ValueError:
-            pass
+        # Actually we'll just return the string
+        # need to explicitly call json.loads(X) in your code
+        # reason: converting to dict then repr that dict in a form is invalid json
+        # i.e. {"test": 0.5} becomes {u'test': 0.5} (not unicode and single quotes)
         return value
 
     def get_db_prep_save(self, value, *args, **kwargs):
@@ -162,9 +160,9 @@ class WatershedPrioritization(Analysis):
          
         # create the target and penalties
         print "Create targets and penalties"
-        targets = self.process_dict(self.input_targets)
-        penalties = self.process_dict(self.input_penalties)
-        cost_weights = self.input_relativecosts 
+        targets = self.process_dict(json.loads(self.input_targets))
+        penalties = self.process_dict(json.loads(self.input_penalties))
+        cost_weights = json.loads(self.input_relativecosts)
 
         assert len(targets.keys()) == len(penalties.keys()) == len(ConservationFeature.objects.all())
         assert max(targets.values()) < 1.0
@@ -298,8 +296,9 @@ class WatershedPrioritization(Analysis):
             return kml
         logger.warn("%s ... NO kml cache found ... seeding" % key)
 
-        wids = [int(x.strip()) for x in self.output_best['best']]
-        puc = self.output_pu_count
+        ob = json.loads(self.output_best)
+        wids = [int(x.strip()) for x in ob['best']]
+        puc = json.loads(self.output_pu_count)
         wshds = PlanningUnit.objects.filter(pk__in=wids)
         kmls = []
         for ws in wshds:

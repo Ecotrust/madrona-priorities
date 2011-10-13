@@ -37,12 +37,19 @@ def header():
         var params_impute = function() {
             // If the input json is not null, 
             // Use them to restore the state of the tree
-            if (!$('#id_input_targets').val() || 
-                !$('#id_input_penalties').val() ||
-                !$('#id_input_relativecosts').val()) { 
+            if ($('#id_input_targets').val() && 
+                $('#id_input_penalties').val() && 
+                $('#id_input_relativecosts').val()) { 
                 console.log("Restoring Species List State...");
-                
-                
+                 
+                // This could get ugly...
+                // The textareas contain the repr of the corresponding model field
+                // This means the dicts have unicody stuff in there ... {u'costs': ....}
+                var costs = JSON.parse($('#id_input_relativecosts').val());
+                $.each(costs, function(key, val) {
+                    $("#cost-" + key).val(val);
+                });
+
             };
         }; 
         params_impute();
@@ -217,17 +224,17 @@ def footer():
            <div>
             <table>
                 <tr>
-                <td><label for="id_climate">Climate</label></td>
+                <td><label for="cost-climate">Climate</label></td>
                 <td><input type="text" class="slidervalue costvalue" id="cost-climate" value="0.5"/></td>
                 <td><div class="slider" id="slider_cost-climate"></div></td>
                 </tr>
                 <tr>
-                <td><label for="id_invasives">Invasives</label></td>
+                <td><label for="cost-invasives">Invasives</label></td>
                 <td><input type="text" class="slidervalue costvalue" id="cost-invasives" value="0.5"/></td>
                 <td><div class="slider" id="slider_cost-invasives"></div></td>
                 </tr>
                 <tr>
-                <td><label for="id_watershedcondition">Watershed Condition</label></td>
+                <td><label for="cost-watershedcondition">Watershed Condition</label></td>
                 <td><input type="text" class="slidervalue costvalue" id="cost-watershedcondition" value="0.5"/></td>
                 <td><div class="slider" id="slider_cost-watershedcondition"></div></td>
                 </tr>

@@ -1,5 +1,6 @@
 import os
 import glob
+import random
 from django import forms
 from django.conf import settings
 from django.contrib.gis.db import models
@@ -112,7 +113,6 @@ class WatershedPrioritization(Analysis):
     input_relativecosts = JSONField(verbose_name='Relative Costs')
 
     # All output fields should be allowed to be Null/Blank
-    #output_calculated_target = JSONField(null=True, blank=True)
     output_best = JSONField(null=True, blank=True, verbose_name="Watersheds in Optimal Reserve")
     output_pu_count = JSONField(null=True, blank=True)
     #output_geometry = models.MultiPolygonField(srid=settings.GEOMETRY_CLIENT_SRID, 
@@ -159,7 +159,7 @@ class WatershedPrioritization(Analysis):
         from django.db.models import Sum
          
         # create the target and penalties
-        print "Create targets and penalties"
+        logger.debug("Create targets and penalties")
         targets = self.process_dict(json.loads(self.input_targets))
         penalties = self.process_dict(json.loads(self.input_penalties))
         cost_weights = json.loads(self.input_relativecosts)
@@ -169,7 +169,7 @@ class WatershedPrioritization(Analysis):
         assert min(targets.values()) >=  0.0
 
         # Apply the target and penalties
-        print "Apply the targets and penalties"
+        logger.debug("Apply the targets and penalties")
         cfs = []
         for cf in ConservationFeature.objects.annotate(Sum('puvscf__amount')):
             try:
@@ -182,20 +182,27 @@ class WatershedPrioritization(Analysis):
                 cfs.append((cf.pk, target, penalty, cf.name))
 
         # Calc costs for each planning unit
-        # TODO incorporate weightings instead of just a sum
-        print "Calculate costs for each planning unit"
-        pucosts = [(pu.pk, pu.puvscost__amount__sum) for pu in PlanningUnit.objects.annotate(Sum('puvscost__amount'))]
+        # Old way - no wieghting
+        # pucosts = [(pu.pk, pu.puvscost__amount__sum) for pu in PlanningUnit.objects.annotate(Sum('puvscost__amount'))]
+        logger.debug("Calculate costs for each planning unit")
+        pucosts = []
+        for pu in PlanningUnit.objects.all():
+            puc = PuVsCost.objects.filter(pu=pu)
+            weighted_cost = 0
+            for c in puc:
+                costkey = slugify(c.cost.name.lower())
+                weighted_cost += cost_weights[costkey] * c.amount
+            pucosts.append( (pu.pk, weighted_cost) )
 
         # Pull the puvscf table
-        #print "Pull data from the puvscf table"
         # This takes and insanely long time and is not stable
         # resort to a horrible hack of exporting the data directly to csv via SQL query
         #puvscf = [(r.cf.pk, r.pu.pk, r.amount) for r in PuVsCf.objects.all().order_by('pu__pk')]
 
-        print "Creating the MarxanAnalysis object"
+        logger.debug("Creating the MarxanAnalysis object")
         m = MarxanAnalysis(pucosts, cfs, self.outdir)
 
-        print "Firing off the asycn process"
+        logger.debug("Firing off the asycn process")
         check_status_or_begin(marxan_start, task_args=(m,), polling_url=self.get_absolute_url())
         self.process_results()
         return True
@@ -211,8 +218,60 @@ class WatershedPrioritization(Analysis):
 
     @property
     def results(self):
-        return self.output_best
+        targets = json.loads(self.input_targets)
+        penalties = json.loads(self.input_penalties)
+        cost_weights = json.loads(self.input_relativecosts)
+        targets_penalties = {}
+        for k, v in targets.items():
+            targets_penalties[k] = {'target': v, 'penalty': None}
+        for k, v in penalties.items():
+            try:
+                targets_penalties[k]['penalty'] = v
+            except KeyError:
+                # this should never happen but just in case
+                targets_penalties[k] = {'target': None, 'penalty': v}
 
+        if not self.done:
+            return {'targets_penalties': targets_penalties, 'costs': cost_weights}
+
+        best = json.loads(self.output_best)
+        best = [int(x) for x in best['best']]
+        best = PlanningUnit.objects.filter(pk__in=best)
+        sum_area = sum([x.area for x in best])
+
+        # Parse mvbest
+        fh = open(os.path.join(self.outdir,"output","wp_mvbest.csv"), 'r')
+        lines = [x.strip().split(',') for x in fh.readlines()[1:]]
+        fh.close()
+        species = []
+        num_met = 0
+        for line in lines:
+            sid = int(line[0])
+            sname = ConservationFeature.objects.get(pk=sid).name
+            sunits = ConservationFeature.objects.get(pk=sid).units
+            starget = float(line[2])
+            sheld = float(line[3])
+            smpm = float(line[9])
+            smet = False
+            if line[8] == 'yes' or smpm > 1.0:
+                smet = True
+                num_met += 1
+            s = {'name': sname, 'id': sid, 'target': starget, 'units': sunits,
+                 'held': sheld, 'met': smet, 'pct_target': smpm }
+            species.append(s)      
+
+        res = {
+            'costs': cost_weights,
+            'targets_penalties': targets_penalties,
+            'area': sum_area, 
+            'num_units': len(best),
+            'num_met': num_met,
+            'num_species': len(species),
+            'units': best,
+            'species': species
+        }
+        return res
+        
     @property
     def status_html(self):
         code, status_html = self.status
@@ -261,7 +320,6 @@ class WatershedPrioritization(Analysis):
                 num = int(s[1])
                 if num > 0:
                     selected[int(s[0])] = num
-            print selected
             self.output_pu_count = json.dumps(selected) 
             super(Analysis, self).save() # save without calling save()
             #first_run = self.marxan
@@ -301,16 +359,14 @@ class WatershedPrioritization(Analysis):
         puc = json.loads(self.output_pu_count)
         wshds = PlanningUnit.objects.filter(pk__in=wids)
         kmls = []
+        #color = '9933ffdd'
+        color = "cc%02X%02X%02X" % (random.randint(0,255),random.randint(0,255),random.randint(0,255))
         for ws in wshds:
             hits = puc[str(ws.pk)] 
             numruns = settings.MARXAN_NUMREPS
             prop = float(hits)/numruns
             scale = (1.2 * prop * prop) 
             if scale < 0.2: scale = 0.2
-            color = 'ff33ffdd'
-            if prop == 1: 
-                color = 'ff00ffff'
-
             kmls.append( """
             <Style id="style_%s">
                 <IconStyle>

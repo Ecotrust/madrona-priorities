@@ -96,6 +96,7 @@ for h in range(len(headers)):
 for i in xrange(1, sheet.nrows):
     vals = [str(x.strip()) for x in sheet.row_values(i)]
     params = dict(zip(fieldnames, vals))
+    print params
     c = Cost(**params)
     c.save()
 

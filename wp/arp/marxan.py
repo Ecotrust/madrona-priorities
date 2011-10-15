@@ -71,7 +71,7 @@ class MarxanAnalysis(object):
         fh.write(",".join(['id','type','target','spf','name']))
         for s in self.cfs:
             fh.write("\n")
-            fh.write(",".join(str(x) for x in [s[0],0,s[1],s[2],s[3]]))
+            fh.write(",".join(str(x) for x in [s[0],0,s[1],s[2],s[3].replace(",",'')]))
             
         fh.close()
 
@@ -123,7 +123,7 @@ OUTPUTDIR output
 
 Program control.
 RUNMODE 1
-MISSLEVEL 1
+MISSLEVEL 0.98
 CLUMPTYPE 0
 VERBOSITY 3
 """ % (self.NUMREPS, self.NUMITNS, self.name)

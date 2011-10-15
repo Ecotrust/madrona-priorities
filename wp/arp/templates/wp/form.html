@@ -9,16 +9,26 @@
             if ($('#id_input_targets').val() && 
                 $('#id_input_penalties').val() && 
                 $('#id_input_relativecosts').val()) { 
-                console.log("Restoring Species List State...");
                  
-                // This could get ugly...
-                // The textareas contain the repr of the corresponding model field
-                // This means the dicts have unicody stuff in there ... {u'costs': ....}
-                var costs = JSON.parse($('#id_input_relativecosts').val());
-                $.each(costs, function(key, val) {
-                    $("#cost-" + key).val(val);
+                //console.log("Restoring Costs slider state...");
+                var in_costs = JSON.parse($('#id_input_relativecosts').val());
+                $.each(in_costs, function(key, val) {
+                    $("#cost---" + key).val(val);
                 });
 
+                //console.log("Restoring Targets slider state...");
+                var in_targets = JSON.parse($('#id_input_targets').val());
+                $.each(in_targets, function(key, val) {
+                    $("#target---" + key).val(val);
+                });
+
+                //console.log("Restoring Penalties slider state...");
+                var in_penalties = JSON.parse($('#id_input_penalties').val());
+                $.each(in_penalties, function(key, val) {
+                    $("#penalty---" + key).val(val);
+                });
+
+                // TODO Restore tree state
             };
         }; 
         params_impute();
@@ -50,7 +60,7 @@
             $('.costvalue:visible').each( function(index) {
                 var xid = $(this).attr("id");
                 var id = "#" + xid;
-                xid = xid.replace(/^cost-/,''); //  Remove preceding identifier
+                xid = xid.replace(/^cost---/,''); //  Remove preceding identifier
                 costs[xid] = parseFloat($(id).val());
             });
             $('#id_input_targets').val( JSON.stringify(targets) ); 
@@ -89,26 +99,6 @@
 
 <link rel="stylesheet" href="/media/common/js/treeview/jquery.treeview.css" />
 <link rel="stylesheet" href="/media/common/js/treeview/jquery-widgets.css" />
-<style type="text/css">
-    .hidden { display: none; }
-    li.collapsable > span.sliders { display: none; }
-    li.expandable > span.sliders { color: black; display: inline; }
-    td { padding-right:6px; font-size: 75%; color:#444; }
-    .slider { margin-bottom: 1px;   }
-    .slidervalue { font-size: 80% }
-    .ui-slider .ui-slider-handle { position: absolute; z-index: 2; width: 0.7em; height: 0.7em; 
-        cursor: default; border: 1px solid #b3b3b3/*{borderColorDefault}*/; 
-        background: #F4F8FB; font-weight: normal; color: #555555; }
-    .ui-slider-horizontal { height: .4em; border: 1px solid #888888; color: #222222; }
-    .ui-slider-horizontal .ui-slider-range { top: 0; height: 100%; }
-    .ui-slider-horizontal .ui-slider-range-min { left: 0; background:#9a9a9a}
-    .ui-widget { font-size: 100% ! important; }
-    .treeview ul {background-color: #F4F8FB ! important; }
-    .slider { width: 120px; }
-    .slidervalue { width: 35px ! important;}
-    .marinemap-panel form ul li { padding-left: 16px ! important; }
-    .marinemap-panel form textarea, .marinemap-panel form input { margin-bottom: 1px ! important;}
-</style>
 
     <h1>{{title}} input parameters</h1>
 
@@ -154,16 +144,16 @@
 
 <ul id='focalspecies_tree'>
   <li>
-   <span> Locally endemic </span>
+   <span class="specieslabel"> Locally endemic </span>
    <span class="sliders">
     <table>
     <tr>
-    <td>Proportion of Total Value</td>
+    <td class="treelabel">Proportion of Total Value</td>
     <td><input type="text" class="slidervalue targetvalue" id="target---locally-endemic" value="0.5"/></td>
     <td><div class="slider" id="slider_target---locally-endemic"></div></td>
     </tr>
     <tr>
-    <td>Importance Weighting</td>
+    <td class="treelabel">Importance Weighting</td>
     <td><input type="text" class="slidervalue penaltyvalue" id="penalty---locally-endemic" value="0.5"/></td>
     <td><div class="slider" id="slider_penalty---locally-endemic"></div></td>
     </tr>
@@ -171,16 +161,16 @@
     </span>
   <ul>
     <li>
-     <span> Sucker </span>
+     <span class="specieslabel"> Sucker </span>
      <span class="sliders">
     <table>
     <tr>
-    <td>Proportion of Total Value</td>
+    <td class="treelabel">Proportion of Total Value</td>
     <td><input type="text" class="slidervalue targetvalue" id="target---locally-endemic---sucker" value="0.5"/></td>
     <td><div class="slider" id="slider_target---locally-endemic---sucker"></div></td>
     </tr>
     <tr>
-    <td>Importance Weighting</td>
+    <td class="treelabel">Importance Weighting</td>
     <td><input type="text" class="slidervalue penaltyvalue" id="penalty---locally-endemic---sucker" value="0.5"/></td>
     <td><div class="slider" id="slider_penalty---locally-endemic---sucker"></div></td>
     </tr>
@@ -188,162 +178,86 @@
     </span>
     <ul>
       <li>
-       <span> Mountain </span>
+       <span class="specieslabel"> Mountain </span>
        <span class="sliders">
     <table>
     <tr>
-    <td>Proportion of Total Value</td>
+    <td class="treelabel">Proportion of Total Value</td>
     <td><input type="text" class="slidervalue targetvalue" id="target---locally-endemic---sucker---mountain" value="0.5"/></td>
     <td><div class="slider" id="slider_target---locally-endemic---sucker---mountain"></div></td>
     </tr>
     <tr>
-    <td>Importance Weighting</td>
+    <td class="treelabel">Importance Weighting</td>
     <td><input type="text" class="slidervalue penaltyvalue" id="penalty---locally-endemic---sucker---mountain" value="0.5"/></td>
     <td><div class="slider" id="slider_penalty---locally-endemic---sucker---mountain"></div></td>
     </tr>
     </table>
     </span>
-      <ul>
-        <li>
-         <span>  </span>
-         <span class="sliders">
-    <table>
-    <tr>
-    <td>Proportion of Total Value</td>
-    <td><input type="text" class="slidervalue targetvalue" id="target---locally-endemic---sucker---mountain---" value="0.5"/></td>
-    <td><div class="slider" id="slider_target---locally-endemic---sucker---mountain---"></div></td>
-    </tr>
-    <tr>
-    <td>Importance Weighting</td>
-    <td><input type="text" class="slidervalue penaltyvalue" id="penalty---locally-endemic---sucker---mountain---" value="0.5"/></td>
-    <td><div class="slider" id="slider_penalty---locally-endemic---sucker---mountain---"></div></td>
-    </tr>
-    </table>
-    </span>
-        </li>
-      </ul>
       </li>
       <li>
-       <span> Warner </span>
+       <span class="specieslabel"> Warner </span>
        <span class="sliders">
     <table>
     <tr>
-    <td>Proportion of Total Value</td>
+    <td class="treelabel">Proportion of Total Value</td>
     <td><input type="text" class="slidervalue targetvalue" id="target---locally-endemic---sucker---warner" value="0.5"/></td>
     <td><div class="slider" id="slider_target---locally-endemic---sucker---warner"></div></td>
     </tr>
     <tr>
-    <td>Importance Weighting</td>
+    <td class="treelabel">Importance Weighting</td>
     <td><input type="text" class="slidervalue penaltyvalue" id="penalty---locally-endemic---sucker---warner" value="0.5"/></td>
     <td><div class="slider" id="slider_penalty---locally-endemic---sucker---warner"></div></td>
     </tr>
     </table>
     </span>
-      <ul>
-        <li>
-         <span>  </span>
-         <span class="sliders">
-    <table>
-    <tr>
-    <td>Proportion of Total Value</td>
-    <td><input type="text" class="slidervalue targetvalue" id="target---locally-endemic---sucker---warner---" value="0.5"/></td>
-    <td><div class="slider" id="slider_target---locally-endemic---sucker---warner---"></div></td>
-    </tr>
-    <tr>
-    <td>Importance Weighting</td>
-    <td><input type="text" class="slidervalue penaltyvalue" id="penalty---locally-endemic---sucker---warner---" value="0.5"/></td>
-    <td><div class="slider" id="slider_penalty---locally-endemic---sucker---warner---"></div></td>
-    </tr>
-    </table>
-    </span>
-        </li>
-      </ul>
       </li>
       <li>
-       <span> Lost River </span>
+       <span class="specieslabel"> Lost River </span>
        <span class="sliders">
     <table>
     <tr>
-    <td>Proportion of Total Value</td>
+    <td class="treelabel">Proportion of Total Value</td>
     <td><input type="text" class="slidervalue targetvalue" id="target---locally-endemic---sucker---lost-river" value="0.5"/></td>
     <td><div class="slider" id="slider_target---locally-endemic---sucker---lost-river"></div></td>
     </tr>
     <tr>
-    <td>Importance Weighting</td>
+    <td class="treelabel">Importance Weighting</td>
     <td><input type="text" class="slidervalue penaltyvalue" id="penalty---locally-endemic---sucker---lost-river" value="0.5"/></td>
     <td><div class="slider" id="slider_penalty---locally-endemic---sucker---lost-river"></div></td>
     </tr>
     </table>
     </span>
-      <ul>
-        <li>
-         <span>  </span>
-         <span class="sliders">
-    <table>
-    <tr>
-    <td>Proportion of Total Value</td>
-    <td><input type="text" class="slidervalue targetvalue" id="target---locally-endemic---sucker---lost-river---" value="0.5"/></td>
-    <td><div class="slider" id="slider_target---locally-endemic---sucker---lost-river---"></div></td>
-    </tr>
-    <tr>
-    <td>Importance Weighting</td>
-    <td><input type="text" class="slidervalue penaltyvalue" id="penalty---locally-endemic---sucker---lost-river---" value="0.5"/></td>
-    <td><div class="slider" id="slider_penalty---locally-endemic---sucker---lost-river---"></div></td>
-    </tr>
-    </table>
-    </span>
-        </li>
-      </ul>
       </li>
       <li>
-       <span> Shortnose </span>
+       <span class="specieslabel"> Shortnose </span>
        <span class="sliders">
     <table>
     <tr>
-    <td>Proportion of Total Value</td>
+    <td class="treelabel">Proportion of Total Value</td>
     <td><input type="text" class="slidervalue targetvalue" id="target---locally-endemic---sucker---shortnose" value="0.5"/></td>
     <td><div class="slider" id="slider_target---locally-endemic---sucker---shortnose"></div></td>
     </tr>
     <tr>
-    <td>Importance Weighting</td>
+    <td class="treelabel">Importance Weighting</td>
     <td><input type="text" class="slidervalue penaltyvalue" id="penalty---locally-endemic---sucker---shortnose" value="0.5"/></td>
     <td><div class="slider" id="slider_penalty---locally-endemic---sucker---shortnose"></div></td>
     </tr>
     </table>
     </span>
-      <ul>
-        <li>
-         <span>  </span>
-         <span class="sliders">
-    <table>
-    <tr>
-    <td>Proportion of Total Value</td>
-    <td><input type="text" class="slidervalue targetvalue" id="target---locally-endemic---sucker---shortnose---" value="0.5"/></td>
-    <td><div class="slider" id="slider_target---locally-endemic---sucker---shortnose---"></div></td>
-    </tr>
-    <tr>
-    <td>Importance Weighting</td>
-    <td><input type="text" class="slidervalue penaltyvalue" id="penalty---locally-endemic---sucker---shortnose---" value="0.5"/></td>
-    <td><div class="slider" id="slider_penalty---locally-endemic---sucker---shortnose---"></div></td>
-    </tr>
-    </table>
-    </span>
-        </li>
-      </ul>
       </li>
     </ul>
   </li>
     <li>
-     <span> Dace </span>
+     <span class="specieslabel"> Dace </span>
      <span class="sliders">
     <table>
     <tr>
-    <td>Proportion of Total Value</td>
+    <td class="treelabel">Proportion of Total Value</td>
     <td><input type="text" class="slidervalue targetvalue" id="target---locally-endemic---dace" value="0.5"/></td>
     <td><div class="slider" id="slider_target---locally-endemic---dace"></div></td>
     </tr>
     <tr>
-    <td>Importance Weighting</td>
+    <td class="treelabel">Importance Weighting</td>
     <td><input type="text" class="slidervalue penaltyvalue" id="penalty---locally-endemic---dace" value="0.5"/></td>
     <td><div class="slider" id="slider_penalty---locally-endemic---dace"></div></td>
     </tr>
@@ -351,90 +265,52 @@
     </span>
     <ul>
       <li>
-       <span> Leopard </span>
+       <span class="specieslabel"> Leopard </span>
        <span class="sliders">
     <table>
     <tr>
-    <td>Proportion of Total Value</td>
+    <td class="treelabel">Proportion of Total Value</td>
     <td><input type="text" class="slidervalue targetvalue" id="target---locally-endemic---dace---leopard" value="0.5"/></td>
     <td><div class="slider" id="slider_target---locally-endemic---dace---leopard"></div></td>
     </tr>
     <tr>
-    <td>Importance Weighting</td>
+    <td class="treelabel">Importance Weighting</td>
     <td><input type="text" class="slidervalue penaltyvalue" id="penalty---locally-endemic---dace---leopard" value="0.5"/></td>
     <td><div class="slider" id="slider_penalty---locally-endemic---dace---leopard"></div></td>
     </tr>
     </table>
     </span>
-      <ul>
-        <li>
-         <span>  </span>
-         <span class="sliders">
-    <table>
-    <tr>
-    <td>Proportion of Total Value</td>
-    <td><input type="text" class="slidervalue targetvalue" id="target---locally-endemic---dace---leopard---" value="0.5"/></td>
-    <td><div class="slider" id="slider_target---locally-endemic---dace---leopard---"></div></td>
-    </tr>
-    <tr>
-    <td>Importance Weighting</td>
-    <td><input type="text" class="slidervalue penaltyvalue" id="penalty---locally-endemic---dace---leopard---" value="0.5"/></td>
-    <td><div class="slider" id="slider_penalty---locally-endemic---dace---leopard---"></div></td>
-    </tr>
-    </table>
-    </span>
-        </li>
-      </ul>
       </li>
       <li>
-       <span> Longnose </span>
+       <span class="specieslabel"> Longnose </span>
        <span class="sliders">
     <table>
     <tr>
-    <td>Proportion of Total Value</td>
+    <td class="treelabel">Proportion of Total Value</td>
     <td><input type="text" class="slidervalue targetvalue" id="target---locally-endemic---dace---longnose" value="0.5"/></td>
     <td><div class="slider" id="slider_target---locally-endemic---dace---longnose"></div></td>
     </tr>
     <tr>
-    <td>Importance Weighting</td>
+    <td class="treelabel">Importance Weighting</td>
     <td><input type="text" class="slidervalue penaltyvalue" id="penalty---locally-endemic---dace---longnose" value="0.5"/></td>
     <td><div class="slider" id="slider_penalty---locally-endemic---dace---longnose"></div></td>
     </tr>
     </table>
     </span>
-      <ul>
-        <li>
-         <span>  </span>
-         <span class="sliders">
-    <table>
-    <tr>
-    <td>Proportion of Total Value</td>
-    <td><input type="text" class="slidervalue targetvalue" id="target---locally-endemic---dace---longnose---" value="0.5"/></td>
-    <td><div class="slider" id="slider_target---locally-endemic---dace---longnose---"></div></td>
-    </tr>
-    <tr>
-    <td>Importance Weighting</td>
-    <td><input type="text" class="slidervalue penaltyvalue" id="penalty---locally-endemic---dace---longnose---" value="0.5"/></td>
-    <td><div class="slider" id="slider_penalty---locally-endemic---dace---longnose---"></div></td>
-    </tr>
-    </table>
-    </span>
-        </li>
-      </ul>
       </li>
     </ul>
   </li>
     <li>
-     <span> Sculpin </span>
+     <span class="specieslabel"> Sculpin </span>
      <span class="sliders">
     <table>
     <tr>
-    <td>Proportion of Total Value</td>
+    <td class="treelabel">Proportion of Total Value</td>
     <td><input type="text" class="slidervalue targetvalue" id="target---locally-endemic---sculpin" value="0.5"/></td>
     <td><div class="slider" id="slider_target---locally-endemic---sculpin"></div></td>
     </tr>
     <tr>
-    <td>Importance Weighting</td>
+    <td class="treelabel">Importance Weighting</td>
     <td><input type="text" class="slidervalue penaltyvalue" id="penalty---locally-endemic---sculpin" value="0.5"/></td>
     <td><div class="slider" id="slider_penalty---locally-endemic---sculpin"></div></td>
     </tr>
@@ -442,162 +318,86 @@
     </span>
     <ul>
       <li>
-       <span> Paiute </span>
+       <span class="specieslabel"> Paiute </span>
        <span class="sliders">
     <table>
     <tr>
-    <td>Proportion of Total Value</td>
+    <td class="treelabel">Proportion of Total Value</td>
     <td><input type="text" class="slidervalue targetvalue" id="target---locally-endemic---sculpin---paiute" value="0.5"/></td>
     <td><div class="slider" id="slider_target---locally-endemic---sculpin---paiute"></div></td>
     </tr>
     <tr>
-    <td>Importance Weighting</td>
+    <td class="treelabel">Importance Weighting</td>
     <td><input type="text" class="slidervalue penaltyvalue" id="penalty---locally-endemic---sculpin---paiute" value="0.5"/></td>
     <td><div class="slider" id="slider_penalty---locally-endemic---sculpin---paiute"></div></td>
     </tr>
     </table>
     </span>
-      <ul>
-        <li>
-         <span>  </span>
-         <span class="sliders">
-    <table>
-    <tr>
-    <td>Proportion of Total Value</td>
-    <td><input type="text" class="slidervalue targetvalue" id="target---locally-endemic---sculpin---paiute---" value="0.5"/></td>
-    <td><div class="slider" id="slider_target---locally-endemic---sculpin---paiute---"></div></td>
-    </tr>
-    <tr>
-    <td>Importance Weighting</td>
-    <td><input type="text" class="slidervalue penaltyvalue" id="penalty---locally-endemic---sculpin---paiute---" value="0.5"/></td>
-    <td><div class="slider" id="slider_penalty---locally-endemic---sculpin---paiute---"></div></td>
-    </tr>
-    </table>
-    </span>
-        </li>
-      </ul>
       </li>
       <li>
-       <span> Wood River </span>
+       <span class="specieslabel"> Wood River </span>
        <span class="sliders">
     <table>
     <tr>
-    <td>Proportion of Total Value</td>
+    <td class="treelabel">Proportion of Total Value</td>
     <td><input type="text" class="slidervalue targetvalue" id="target---locally-endemic---sculpin---wood-river" value="0.5"/></td>
     <td><div class="slider" id="slider_target---locally-endemic---sculpin---wood-river"></div></td>
     </tr>
     <tr>
-    <td>Importance Weighting</td>
+    <td class="treelabel">Importance Weighting</td>
     <td><input type="text" class="slidervalue penaltyvalue" id="penalty---locally-endemic---sculpin---wood-river" value="0.5"/></td>
     <td><div class="slider" id="slider_penalty---locally-endemic---sculpin---wood-river"></div></td>
     </tr>
     </table>
     </span>
-      <ul>
-        <li>
-         <span>  </span>
-         <span class="sliders">
-    <table>
-    <tr>
-    <td>Proportion of Total Value</td>
-    <td><input type="text" class="slidervalue targetvalue" id="target---locally-endemic---sculpin---wood-river---" value="0.5"/></td>
-    <td><div class="slider" id="slider_target---locally-endemic---sculpin---wood-river---"></div></td>
-    </tr>
-    <tr>
-    <td>Importance Weighting</td>
-    <td><input type="text" class="slidervalue penaltyvalue" id="penalty---locally-endemic---sculpin---wood-river---" value="0.5"/></td>
-    <td><div class="slider" id="slider_penalty---locally-endemic---sculpin---wood-river---"></div></td>
-    </tr>
-    </table>
-    </span>
-        </li>
-      </ul>
       </li>
       <li>
-       <span> Shoshone </span>
+       <span class="specieslabel"> Shoshone </span>
        <span class="sliders">
     <table>
     <tr>
-    <td>Proportion of Total Value</td>
+    <td class="treelabel">Proportion of Total Value</td>
     <td><input type="text" class="slidervalue targetvalue" id="target---locally-endemic---sculpin---shoshone" value="0.5"/></td>
     <td><div class="slider" id="slider_target---locally-endemic---sculpin---shoshone"></div></td>
     </tr>
     <tr>
-    <td>Importance Weighting</td>
+    <td class="treelabel">Importance Weighting</td>
     <td><input type="text" class="slidervalue penaltyvalue" id="penalty---locally-endemic---sculpin---shoshone" value="0.5"/></td>
     <td><div class="slider" id="slider_penalty---locally-endemic---sculpin---shoshone"></div></td>
     </tr>
     </table>
     </span>
-      <ul>
-        <li>
-         <span>  </span>
-         <span class="sliders">
-    <table>
-    <tr>
-    <td>Proportion of Total Value</td>
-    <td><input type="text" class="slidervalue targetvalue" id="target---locally-endemic---sculpin---shoshone---" value="0.5"/></td>
-    <td><div class="slider" id="slider_target---locally-endemic---sculpin---shoshone---"></div></td>
-    </tr>
-    <tr>
-    <td>Importance Weighting</td>
-    <td><input type="text" class="slidervalue penaltyvalue" id="penalty---locally-endemic---sculpin---shoshone---" value="0.5"/></td>
-    <td><div class="slider" id="slider_penalty---locally-endemic---sculpin---shoshone---"></div></td>
-    </tr>
-    </table>
-    </span>
-        </li>
-      </ul>
       </li>
       <li>
-       <span> margined </span>
+       <span class="specieslabel"> Margined </span>
        <span class="sliders">
     <table>
     <tr>
-    <td>Proportion of Total Value</td>
+    <td class="treelabel">Proportion of Total Value</td>
     <td><input type="text" class="slidervalue targetvalue" id="target---locally-endemic---sculpin---margined" value="0.5"/></td>
     <td><div class="slider" id="slider_target---locally-endemic---sculpin---margined"></div></td>
     </tr>
     <tr>
-    <td>Importance Weighting</td>
+    <td class="treelabel">Importance Weighting</td>
     <td><input type="text" class="slidervalue penaltyvalue" id="penalty---locally-endemic---sculpin---margined" value="0.5"/></td>
     <td><div class="slider" id="slider_penalty---locally-endemic---sculpin---margined"></div></td>
     </tr>
     </table>
     </span>
-      <ul>
-        <li>
-         <span>  </span>
-         <span class="sliders">
-    <table>
-    <tr>
-    <td>Proportion of Total Value</td>
-    <td><input type="text" class="slidervalue targetvalue" id="target---locally-endemic---sculpin---margined---" value="0.5"/></td>
-    <td><div class="slider" id="slider_target---locally-endemic---sculpin---margined---"></div></td>
-    </tr>
-    <tr>
-    <td>Importance Weighting</td>
-    <td><input type="text" class="slidervalue penaltyvalue" id="penalty---locally-endemic---sculpin---margined---" value="0.5"/></td>
-    <td><div class="slider" id="slider_penalty---locally-endemic---sculpin---margined---"></div></td>
-    </tr>
-    </table>
-    </span>
-        </li>
-      </ul>
       </li>
     </ul>
   </li>
     <li>
-     <span> Chub </span>
+     <span class="specieslabel"> Chub </span>
      <span class="sliders">
     <table>
     <tr>
-    <td>Proportion of Total Value</td>
+    <td class="treelabel">Proportion of Total Value</td>
     <td><input type="text" class="slidervalue targetvalue" id="target---locally-endemic---chub" value="0.5"/></td>
     <td><div class="slider" id="slider_target---locally-endemic---chub"></div></td>
     </tr>
     <tr>
-    <td>Importance Weighting</td>
+    <td class="treelabel">Importance Weighting</td>
     <td><input type="text" class="slidervalue penaltyvalue" id="penalty---locally-endemic---chub" value="0.5"/></td>
     <td><div class="slider" id="slider_penalty---locally-endemic---chub"></div></td>
     </tr>
@@ -605,198 +405,103 @@
     </span>
     <ul>
       <li>
-       <span> Blue </span>
+       <span class="specieslabel"> Blue </span>
        <span class="sliders">
     <table>
     <tr>
-    <td>Proportion of Total Value</td>
+    <td class="treelabel">Proportion of Total Value</td>
     <td><input type="text" class="slidervalue targetvalue" id="target---locally-endemic---chub---blue" value="0.5"/></td>
     <td><div class="slider" id="slider_target---locally-endemic---chub---blue"></div></td>
     </tr>
     <tr>
-    <td>Importance Weighting</td>
+    <td class="treelabel">Importance Weighting</td>
     <td><input type="text" class="slidervalue penaltyvalue" id="penalty---locally-endemic---chub---blue" value="0.5"/></td>
     <td><div class="slider" id="slider_penalty---locally-endemic---chub---blue"></div></td>
     </tr>
     </table>
     </span>
-      <ul>
-        <li>
-         <span>  </span>
-         <span class="sliders">
-    <table>
-    <tr>
-    <td>Proportion of Total Value</td>
-    <td><input type="text" class="slidervalue targetvalue" id="target---locally-endemic---chub---blue---" value="0.5"/></td>
-    <td><div class="slider" id="slider_target---locally-endemic---chub---blue---"></div></td>
-    </tr>
-    <tr>
-    <td>Importance Weighting</td>
-    <td><input type="text" class="slidervalue penaltyvalue" id="penalty---locally-endemic---chub---blue---" value="0.5"/></td>
-    <td><div class="slider" id="slider_penalty---locally-endemic---chub---blue---"></div></td>
-    </tr>
-    </table>
-    </span>
-        </li>
-      </ul>
       </li>
       <li>
-       <span> Northern leatherside </span>
+       <span class="specieslabel"> Northern leatherside </span>
        <span class="sliders">
     <table>
     <tr>
-    <td>Proportion of Total Value</td>
+    <td class="treelabel">Proportion of Total Value</td>
     <td><input type="text" class="slidervalue targetvalue" id="target---locally-endemic---chub---northern-leatherside" value="0.5"/></td>
     <td><div class="slider" id="slider_target---locally-endemic---chub---northern-leatherside"></div></td>
     </tr>
     <tr>
-    <td>Importance Weighting</td>
+    <td class="treelabel">Importance Weighting</td>
     <td><input type="text" class="slidervalue penaltyvalue" id="penalty---locally-endemic---chub---northern-leatherside" value="0.5"/></td>
     <td><div class="slider" id="slider_penalty---locally-endemic---chub---northern-leatherside"></div></td>
     </tr>
     </table>
     </span>
-      <ul>
-        <li>
-         <span>  </span>
-         <span class="sliders">
-    <table>
-    <tr>
-    <td>Proportion of Total Value</td>
-    <td><input type="text" class="slidervalue targetvalue" id="target---locally-endemic---chub---northern-leatherside---" value="0.5"/></td>
-    <td><div class="slider" id="slider_target---locally-endemic---chub---northern-leatherside---"></div></td>
-    </tr>
-    <tr>
-    <td>Importance Weighting</td>
-    <td><input type="text" class="slidervalue penaltyvalue" id="penalty---locally-endemic---chub---northern-leatherside---" value="0.5"/></td>
-    <td><div class="slider" id="slider_penalty---locally-endemic---chub---northern-leatherside---"></div></td>
-    </tr>
-    </table>
-    </span>
-        </li>
-      </ul>
       </li>
       <li>
-       <span> Oregon </span>
+       <span class="specieslabel"> Oregon </span>
        <span class="sliders">
     <table>
     <tr>
-    <td>Proportion of Total Value</td>
+    <td class="treelabel">Proportion of Total Value</td>
     <td><input type="text" class="slidervalue targetvalue" id="target---locally-endemic---chub---oregon" value="0.5"/></td>
     <td><div class="slider" id="slider_target---locally-endemic---chub---oregon"></div></td>
     </tr>
     <tr>
-    <td>Importance Weighting</td>
+    <td class="treelabel">Importance Weighting</td>
     <td><input type="text" class="slidervalue penaltyvalue" id="penalty---locally-endemic---chub---oregon" value="0.5"/></td>
     <td><div class="slider" id="slider_penalty---locally-endemic---chub---oregon"></div></td>
     </tr>
     </table>
     </span>
-      <ul>
-        <li>
-         <span>  </span>
-         <span class="sliders">
-    <table>
-    <tr>
-    <td>Proportion of Total Value</td>
-    <td><input type="text" class="slidervalue targetvalue" id="target---locally-endemic---chub---oregon---" value="0.5"/></td>
-    <td><div class="slider" id="slider_target---locally-endemic---chub---oregon---"></div></td>
-    </tr>
-    <tr>
-    <td>Importance Weighting</td>
-    <td><input type="text" class="slidervalue penaltyvalue" id="penalty---locally-endemic---chub---oregon---" value="0.5"/></td>
-    <td><div class="slider" id="slider_penalty---locally-endemic---chub---oregon---"></div></td>
-    </tr>
-    </table>
-    </span>
-        </li>
-      </ul>
       </li>
       <li>
-       <span> Alvord </span>
+       <span class="specieslabel"> Alvord </span>
        <span class="sliders">
     <table>
     <tr>
-    <td>Proportion of Total Value</td>
+    <td class="treelabel">Proportion of Total Value</td>
     <td><input type="text" class="slidervalue targetvalue" id="target---locally-endemic---chub---alvord" value="0.5"/></td>
     <td><div class="slider" id="slider_target---locally-endemic---chub---alvord"></div></td>
     </tr>
     <tr>
-    <td>Importance Weighting</td>
+    <td class="treelabel">Importance Weighting</td>
     <td><input type="text" class="slidervalue penaltyvalue" id="penalty---locally-endemic---chub---alvord" value="0.5"/></td>
     <td><div class="slider" id="slider_penalty---locally-endemic---chub---alvord"></div></td>
     </tr>
     </table>
     </span>
-      <ul>
-        <li>
-         <span>  </span>
-         <span class="sliders">
-    <table>
-    <tr>
-    <td>Proportion of Total Value</td>
-    <td><input type="text" class="slidervalue targetvalue" id="target---locally-endemic---chub---alvord---" value="0.5"/></td>
-    <td><div class="slider" id="slider_target---locally-endemic---chub---alvord---"></div></td>
-    </tr>
-    <tr>
-    <td>Importance Weighting</td>
-    <td><input type="text" class="slidervalue penaltyvalue" id="penalty---locally-endemic---chub---alvord---" value="0.5"/></td>
-    <td><div class="slider" id="slider_penalty---locally-endemic---chub---alvord---"></div></td>
-    </tr>
-    </table>
-    </span>
-        </li>
-      </ul>
       </li>
       <li>
-       <span> Borax Lake </span>
+       <span class="specieslabel"> Borax Lake </span>
        <span class="sliders">
     <table>
     <tr>
-    <td>Proportion of Total Value</td>
+    <td class="treelabel">Proportion of Total Value</td>
     <td><input type="text" class="slidervalue targetvalue" id="target---locally-endemic---chub---borax-lake" value="0.5"/></td>
     <td><div class="slider" id="slider_target---locally-endemic---chub---borax-lake"></div></td>
     </tr>
     <tr>
-    <td>Importance Weighting</td>
+    <td class="treelabel">Importance Weighting</td>
     <td><input type="text" class="slidervalue penaltyvalue" id="penalty---locally-endemic---chub---borax-lake" value="0.5"/></td>
     <td><div class="slider" id="slider_penalty---locally-endemic---chub---borax-lake"></div></td>
     </tr>
     </table>
     </span>
-      <ul>
-        <li>
-         <span>  </span>
-         <span class="sliders">
-    <table>
-    <tr>
-    <td>Proportion of Total Value</td>
-    <td><input type="text" class="slidervalue targetvalue" id="target---locally-endemic---chub---borax-lake---" value="0.5"/></td>
-    <td><div class="slider" id="slider_target---locally-endemic---chub---borax-lake---"></div></td>
-    </tr>
-    <tr>
-    <td>Importance Weighting</td>
-    <td><input type="text" class="slidervalue penaltyvalue" id="penalty---locally-endemic---chub---borax-lake---" value="0.5"/></td>
-    <td><div class="slider" id="slider_penalty---locally-endemic---chub---borax-lake---"></div></td>
-    </tr>
-    </table>
-    </span>
-        </li>
-      </ul>
       </li>
     </ul>
   </li>
     <li>
-     <span> Whitefish </span>
+     <span class="specieslabel"> Whitefish </span>
      <span class="sliders">
     <table>
     <tr>
-    <td>Proportion of Total Value</td>
+    <td class="treelabel">Proportion of Total Value</td>
     <td><input type="text" class="slidervalue targetvalue" id="target---locally-endemic---whitefish" value="0.5"/></td>
     <td><div class="slider" id="slider_target---locally-endemic---whitefish"></div></td>
     </tr>
     <tr>
-    <td>Importance Weighting</td>
+    <td class="treelabel">Importance Weighting</td>
     <td><input type="text" class="slidervalue penaltyvalue" id="penalty---locally-endemic---whitefish" value="0.5"/></td>
     <td><div class="slider" id="slider_penalty---locally-endemic---whitefish"></div></td>
     </tr>
@@ -804,126 +509,69 @@
     </span>
     <ul>
       <li>
-       <span> Mountain </span>
+       <span class="specieslabel"> Mountain </span>
        <span class="sliders">
     <table>
     <tr>
-    <td>Proportion of Total Value</td>
+    <td class="treelabel">Proportion of Total Value</td>
     <td><input type="text" class="slidervalue targetvalue" id="target---locally-endemic---whitefish---mountain" value="0.5"/></td>
     <td><div class="slider" id="slider_target---locally-endemic---whitefish---mountain"></div></td>
     </tr>
     <tr>
-    <td>Importance Weighting</td>
+    <td class="treelabel">Importance Weighting</td>
     <td><input type="text" class="slidervalue penaltyvalue" id="penalty---locally-endemic---whitefish---mountain" value="0.5"/></td>
     <td><div class="slider" id="slider_penalty---locally-endemic---whitefish---mountain"></div></td>
     </tr>
     </table>
     </span>
-      <ul>
-        <li>
-         <span>  </span>
-         <span class="sliders">
-    <table>
-    <tr>
-    <td>Proportion of Total Value</td>
-    <td><input type="text" class="slidervalue targetvalue" id="target---locally-endemic---whitefish---mountain---" value="0.5"/></td>
-    <td><div class="slider" id="slider_target---locally-endemic---whitefish---mountain---"></div></td>
-    </tr>
-    <tr>
-    <td>Importance Weighting</td>
-    <td><input type="text" class="slidervalue penaltyvalue" id="penalty---locally-endemic---whitefish---mountain---" value="0.5"/></td>
-    <td><div class="slider" id="slider_penalty---locally-endemic---whitefish---mountain---"></div></td>
-    </tr>
-    </table>
-    </span>
-        </li>
-      </ul>
       </li>
       <li>
-       <span> Pygmy </span>
+       <span class="specieslabel"> Pygmy </span>
        <span class="sliders">
     <table>
     <tr>
-    <td>Proportion of Total Value</td>
+    <td class="treelabel">Proportion of Total Value</td>
     <td><input type="text" class="slidervalue targetvalue" id="target---locally-endemic---whitefish---pygmy" value="0.5"/></td>
     <td><div class="slider" id="slider_target---locally-endemic---whitefish---pygmy"></div></td>
     </tr>
     <tr>
-    <td>Importance Weighting</td>
+    <td class="treelabel">Importance Weighting</td>
     <td><input type="text" class="slidervalue penaltyvalue" id="penalty---locally-endemic---whitefish---pygmy" value="0.5"/></td>
     <td><div class="slider" id="slider_penalty---locally-endemic---whitefish---pygmy"></div></td>
     </tr>
     </table>
     </span>
-      <ul>
-        <li>
-         <span>  </span>
-         <span class="sliders">
-    <table>
-    <tr>
-    <td>Proportion of Total Value</td>
-    <td><input type="text" class="slidervalue targetvalue" id="target---locally-endemic---whitefish---pygmy---" value="0.5"/></td>
-    <td><div class="slider" id="slider_target---locally-endemic---whitefish---pygmy---"></div></td>
-    </tr>
-    <tr>
-    <td>Importance Weighting</td>
-    <td><input type="text" class="slidervalue penaltyvalue" id="penalty---locally-endemic---whitefish---pygmy---" value="0.5"/></td>
-    <td><div class="slider" id="slider_penalty---locally-endemic---whitefish---pygmy---"></div></td>
-    </tr>
-    </table>
-    </span>
-        </li>
-      </ul>
       </li>
       <li>
-       <span> Bear Lake </span>
+       <span class="specieslabel"> Bear Lake </span>
        <span class="sliders">
     <table>
     <tr>
-    <td>Proportion of Total Value</td>
+    <td class="treelabel">Proportion of Total Value</td>
     <td><input type="text" class="slidervalue targetvalue" id="target---locally-endemic---whitefish---bear-lake" value="0.5"/></td>
     <td><div class="slider" id="slider_target---locally-endemic---whitefish---bear-lake"></div></td>
     </tr>
     <tr>
-    <td>Importance Weighting</td>
+    <td class="treelabel">Importance Weighting</td>
     <td><input type="text" class="slidervalue penaltyvalue" id="penalty---locally-endemic---whitefish---bear-lake" value="0.5"/></td>
     <td><div class="slider" id="slider_penalty---locally-endemic---whitefish---bear-lake"></div></td>
     </tr>
     </table>
     </span>
-      <ul>
-        <li>
-         <span>  </span>
-         <span class="sliders">
-    <table>
-    <tr>
-    <td>Proportion of Total Value</td>
-    <td><input type="text" class="slidervalue targetvalue" id="target---locally-endemic---whitefish---bear-lake---" value="0.5"/></td>
-    <td><div class="slider" id="slider_target---locally-endemic---whitefish---bear-lake---"></div></td>
-    </tr>
-    <tr>
-    <td>Importance Weighting</td>
-    <td><input type="text" class="slidervalue penaltyvalue" id="penalty---locally-endemic---whitefish---bear-lake---" value="0.5"/></td>
-    <td><div class="slider" id="slider_penalty---locally-endemic---whitefish---bear-lake---"></div></td>
-    </tr>
-    </table>
-    </span>
-        </li>
-      </ul>
       </li>
     </ul>
   </li>
     <li>
-     <span> Eulachon </span>
+     <span class="specieslabel"> Eulachon </span>
      <span class="sliders">
     <table>
     <tr>
-    <td>Proportion of Total Value</td>
+    <td class="treelabel">Proportion of Total Value</td>
     <td><input type="text" class="slidervalue targetvalue" id="target---locally-endemic---eulachon" value="0.5"/></td>
     <td><div class="slider" id="slider_target---locally-endemic---eulachon"></div></td>
     </tr>
     <tr>
-    <td>Importance Weighting</td>
+    <td class="treelabel">Importance Weighting</td>
     <td><input type="text" class="slidervalue penaltyvalue" id="penalty---locally-endemic---eulachon" value="0.5"/></td>
     <td><div class="slider" id="slider_penalty---locally-endemic---eulachon"></div></td>
     </tr>
@@ -931,54 +579,35 @@
     </span>
     <ul>
       <li>
-       <span> Eulachon (smelt) </span>
+       <span class="specieslabel"> Eulachon (smelt) </span>
        <span class="sliders">
     <table>
     <tr>
-    <td>Proportion of Total Value</td>
+    <td class="treelabel">Proportion of Total Value</td>
     <td><input type="text" class="slidervalue targetvalue" id="target---locally-endemic---eulachon---eulachon-smelt" value="0.5"/></td>
     <td><div class="slider" id="slider_target---locally-endemic---eulachon---eulachon-smelt"></div></td>
     </tr>
     <tr>
-    <td>Importance Weighting</td>
+    <td class="treelabel">Importance Weighting</td>
     <td><input type="text" class="slidervalue penaltyvalue" id="penalty---locally-endemic---eulachon---eulachon-smelt" value="0.5"/></td>
     <td><div class="slider" id="slider_penalty---locally-endemic---eulachon---eulachon-smelt"></div></td>
     </tr>
     </table>
     </span>
-      <ul>
-        <li>
-         <span>  </span>
-         <span class="sliders">
-    <table>
-    <tr>
-    <td>Proportion of Total Value</td>
-    <td><input type="text" class="slidervalue targetvalue" id="target---locally-endemic---eulachon---eulachon-smelt---" value="0.5"/></td>
-    <td><div class="slider" id="slider_target---locally-endemic---eulachon---eulachon-smelt---"></div></td>
-    </tr>
-    <tr>
-    <td>Importance Weighting</td>
-    <td><input type="text" class="slidervalue penaltyvalue" id="penalty---locally-endemic---eulachon---eulachon-smelt---" value="0.5"/></td>
-    <td><div class="slider" id="slider_penalty---locally-endemic---eulachon---eulachon-smelt---"></div></td>
-    </tr>
-    </table>
-    </span>
-        </li>
-      </ul>
       </li>
     </ul>
   </li>
     <li>
-     <span> Lamprey </span>
+     <span class="specieslabel"> Lamprey </span>
      <span class="sliders">
     <table>
     <tr>
-    <td>Proportion of Total Value</td>
+    <td class="treelabel">Proportion of Total Value</td>
     <td><input type="text" class="slidervalue targetvalue" id="target---locally-endemic---lamprey" value="0.5"/></td>
     <td><div class="slider" id="slider_target---locally-endemic---lamprey"></div></td>
     </tr>
     <tr>
-    <td>Importance Weighting</td>
+    <td class="treelabel">Importance Weighting</td>
     <td><input type="text" class="slidervalue penaltyvalue" id="penalty---locally-endemic---lamprey" value="0.5"/></td>
     <td><div class="slider" id="slider_penalty---locally-endemic---lamprey"></div></td>
     </tr>
@@ -986,202 +615,88 @@
     </span>
     <ul>
       <li>
-       <span> Miller Lake </span>
+       <span class="specieslabel"> Miller Lake </span>
        <span class="sliders">
     <table>
     <tr>
-    <td>Proportion of Total Value</td>
+    <td class="treelabel">Proportion of Total Value</td>
     <td><input type="text" class="slidervalue targetvalue" id="target---locally-endemic---lamprey---miller-lake" value="0.5"/></td>
     <td><div class="slider" id="slider_target---locally-endemic---lamprey---miller-lake"></div></td>
     </tr>
     <tr>
-    <td>Importance Weighting</td>
+    <td class="treelabel">Importance Weighting</td>
     <td><input type="text" class="slidervalue penaltyvalue" id="penalty---locally-endemic---lamprey---miller-lake" value="0.5"/></td>
     <td><div class="slider" id="slider_penalty---locally-endemic---lamprey---miller-lake"></div></td>
     </tr>
     </table>
     </span>
-      <ul>
-        <li>
-         <span>  </span>
-         <span class="sliders">
-    <table>
-    <tr>
-    <td>Proportion of Total Value</td>
-    <td><input type="text" class="slidervalue targetvalue" id="target---locally-endemic---lamprey---miller-lake---" value="0.5"/></td>
-    <td><div class="slider" id="slider_target---locally-endemic---lamprey---miller-lake---"></div></td>
-    </tr>
-    <tr>
-    <td>Importance Weighting</td>
-    <td><input type="text" class="slidervalue penaltyvalue" id="penalty---locally-endemic---lamprey---miller-lake---" value="0.5"/></td>
-    <td><div class="slider" id="slider_penalty---locally-endemic---lamprey---miller-lake---"></div></td>
-    </tr>
-    </table>
-    </span>
-        </li>
-      </ul>
       </li>
       <li>
-       <span> Pacific </span>
+       <span class="specieslabel"> Pacific </span>
        <span class="sliders">
     <table>
     <tr>
-    <td>Proportion of Total Value</td>
+    <td class="treelabel">Proportion of Total Value</td>
     <td><input type="text" class="slidervalue targetvalue" id="target---locally-endemic---lamprey---pacific" value="0.5"/></td>
     <td><div class="slider" id="slider_target---locally-endemic---lamprey---pacific"></div></td>
     </tr>
     <tr>
-    <td>Importance Weighting</td>
+    <td class="treelabel">Importance Weighting</td>
     <td><input type="text" class="slidervalue penaltyvalue" id="penalty---locally-endemic---lamprey---pacific" value="0.5"/></td>
     <td><div class="slider" id="slider_penalty---locally-endemic---lamprey---pacific"></div></td>
     </tr>
     </table>
     </span>
-      <ul>
-        <li>
-         <span>  </span>
-         <span class="sliders">
-    <table>
-    <tr>
-    <td>Proportion of Total Value</td>
-    <td><input type="text" class="slidervalue targetvalue" id="target---locally-endemic---lamprey---pacific---" value="0.5"/></td>
-    <td><div class="slider" id="slider_target---locally-endemic---lamprey---pacific---"></div></td>
-    </tr>
-    <tr>
-    <td>Importance Weighting</td>
-    <td><input type="text" class="slidervalue penaltyvalue" id="penalty---locally-endemic---lamprey---pacific---" value="0.5"/></td>
-    <td><div class="slider" id="slider_penalty---locally-endemic---lamprey---pacific---"></div></td>
-    </tr>
-    </table>
-    </span>
-        </li>
-      </ul>
       </li>
     </ul>
   </li>
     <li>
-     <span> Olympic mudminnow </span>
+     <span class="specieslabel"> Olympic mudminnow </span>
      <span class="sliders">
     <table>
     <tr>
-    <td>Proportion of Total Value</td>
+    <td class="treelabel">Proportion of Total Value</td>
     <td><input type="text" class="slidervalue targetvalue" id="target---locally-endemic---olympic-mudminnow" value="0.5"/></td>
     <td><div class="slider" id="slider_target---locally-endemic---olympic-mudminnow"></div></td>
     </tr>
     <tr>
-    <td>Importance Weighting</td>
+    <td class="treelabel">Importance Weighting</td>
     <td><input type="text" class="slidervalue penaltyvalue" id="penalty---locally-endemic---olympic-mudminnow" value="0.5"/></td>
     <td><div class="slider" id="slider_penalty---locally-endemic---olympic-mudminnow"></div></td>
     </tr>
     </table>
     </span>
-    <ul>
-      <li>
-       <span>  </span>
-       <span class="sliders">
-    <table>
-    <tr>
-    <td>Proportion of Total Value</td>
-    <td><input type="text" class="slidervalue targetvalue" id="target---locally-endemic---olympic-mudminnow---" value="0.5"/></td>
-    <td><div class="slider" id="slider_target---locally-endemic---olympic-mudminnow---"></div></td>
-    </tr>
-    <tr>
-    <td>Importance Weighting</td>
-    <td><input type="text" class="slidervalue penaltyvalue" id="penalty---locally-endemic---olympic-mudminnow---" value="0.5"/></td>
-    <td><div class="slider" id="slider_penalty---locally-endemic---olympic-mudminnow---"></div></td>
-    </tr>
-    </table>
-    </span>
-      <ul>
-        <li>
-         <span>  </span>
-         <span class="sliders">
-    <table>
-    <tr>
-    <td>Proportion of Total Value</td>
-    <td><input type="text" class="slidervalue targetvalue" id="target---locally-endemic---olympic-mudminnow------" value="0.5"/></td>
-    <td><div class="slider" id="slider_target---locally-endemic---olympic-mudminnow------"></div></td>
-    </tr>
-    <tr>
-    <td>Importance Weighting</td>
-    <td><input type="text" class="slidervalue penaltyvalue" id="penalty---locally-endemic---olympic-mudminnow------" value="0.5"/></td>
-    <td><div class="slider" id="slider_penalty---locally-endemic---olympic-mudminnow------"></div></td>
-    </tr>
-    </table>
-    </span>
-        </li>
-      </ul>
-      </li>
-    </ul>
   </li>
     <li>
-     <span> Burbot </span>
+     <span class="specieslabel"> Burbot </span>
      <span class="sliders">
     <table>
     <tr>
-    <td>Proportion of Total Value</td>
+    <td class="treelabel">Proportion of Total Value</td>
     <td><input type="text" class="slidervalue targetvalue" id="target---locally-endemic---burbot" value="0.5"/></td>
     <td><div class="slider" id="slider_target---locally-endemic---burbot"></div></td>
     </tr>
     <tr>
-    <td>Importance Weighting</td>
+    <td class="treelabel">Importance Weighting</td>
     <td><input type="text" class="slidervalue penaltyvalue" id="penalty---locally-endemic---burbot" value="0.5"/></td>
     <td><div class="slider" id="slider_penalty---locally-endemic---burbot"></div></td>
     </tr>
     </table>
     </span>
-    <ul>
-      <li>
-       <span>  </span>
-       <span class="sliders">
-    <table>
-    <tr>
-    <td>Proportion of Total Value</td>
-    <td><input type="text" class="slidervalue targetvalue" id="target---locally-endemic---burbot---" value="0.5"/></td>
-    <td><div class="slider" id="slider_target---locally-endemic---burbot---"></div></td>
-    </tr>
-    <tr>
-    <td>Importance Weighting</td>
-    <td><input type="text" class="slidervalue penaltyvalue" id="penalty---locally-endemic---burbot---" value="0.5"/></td>
-    <td><div class="slider" id="slider_penalty---locally-endemic---burbot---"></div></td>
-    </tr>
-    </table>
-    </span>
-      <ul>
-        <li>
-         <span>  </span>
-         <span class="sliders">
-    <table>
-    <tr>
-    <td>Proportion of Total Value</td>
-    <td><input type="text" class="slidervalue targetvalue" id="target---locally-endemic---burbot------" value="0.5"/></td>
-    <td><div class="slider" id="slider_target---locally-endemic---burbot------"></div></td>
-    </tr>
-    <tr>
-    <td>Importance Weighting</td>
-    <td><input type="text" class="slidervalue penaltyvalue" id="penalty---locally-endemic---burbot------" value="0.5"/></td>
-    <td><div class="slider" id="slider_penalty---locally-endemic---burbot------"></div></td>
-    </tr>
-    </table>
-    </span>
-        </li>
-      </ul>
-      </li>
-    </ul>
   </li>
   </ul>
   </li>
   <li>
-   <span> widespread </span>
+   <span class="specieslabel"> Widespread </span>
    <span class="sliders">
     <table>
     <tr>
-    <td>Proportion of Total Value</td>
+    <td class="treelabel">Proportion of Total Value</td>
     <td><input type="text" class="slidervalue targetvalue" id="target---widespread" value="0.5"/></td>
     <td><div class="slider" id="slider_target---widespread"></div></td>
     </tr>
     <tr>
-    <td>Importance Weighting</td>
+    <td class="treelabel">Importance Weighting</td>
     <td><input type="text" class="slidervalue penaltyvalue" id="penalty---widespread" value="0.5"/></td>
     <td><div class="slider" id="slider_penalty---widespread"></div></td>
     </tr>
@@ -1189,16 +704,16 @@
     </span>
   <ul>
     <li>
-     <span> Trout </span>
+     <span class="specieslabel"> Trout </span>
      <span class="sliders">
     <table>
     <tr>
-    <td>Proportion of Total Value</td>
+    <td class="treelabel">Proportion of Total Value</td>
     <td><input type="text" class="slidervalue targetvalue" id="target---widespread---trout" value="0.5"/></td>
     <td><div class="slider" id="slider_target---widespread---trout"></div></td>
     </tr>
     <tr>
-    <td>Importance Weighting</td>
+    <td class="treelabel">Importance Weighting</td>
     <td><input type="text" class="slidervalue penaltyvalue" id="penalty---widespread---trout" value="0.5"/></td>
     <td><div class="slider" id="slider_penalty---widespread---trout"></div></td>
     </tr>
@@ -1206,16 +721,16 @@
     </span>
     <ul>
       <li>
-       <span> Cutthroat </span>
+       <span class="specieslabel"> Cutthroat </span>
        <span class="sliders">
     <table>
     <tr>
-    <td>Proportion of Total Value</td>
+    <td class="treelabel">Proportion of Total Value</td>
     <td><input type="text" class="slidervalue targetvalue" id="target---widespread---trout---cutthroat" value="0.5"/></td>
     <td><div class="slider" id="slider_target---widespread---trout---cutthroat"></div></td>
     </tr>
     <tr>
-    <td>Importance Weighting</td>
+    <td class="treelabel">Importance Weighting</td>
     <td><input type="text" class="slidervalue penaltyvalue" id="penalty---widespread---trout---cutthroat" value="0.5"/></td>
     <td><div class="slider" id="slider_penalty---widespread---trout---cutthroat"></div></td>
     </tr>
@@ -1223,16 +738,16 @@
     </span>
       <ul>
         <li>
-         <span> Lahontan </span>
+         <span class="specieslabel"> Lahontan </span>
          <span class="sliders">
     <table>
     <tr>
-    <td>Proportion of Total Value</td>
+    <td class="treelabel">Proportion of Total Value</td>
     <td><input type="text" class="slidervalue targetvalue" id="target---widespread---trout---cutthroat---lahontan" value="0.5"/></td>
     <td><div class="slider" id="slider_target---widespread---trout---cutthroat---lahontan"></div></td>
     </tr>
     <tr>
-    <td>Importance Weighting</td>
+    <td class="treelabel">Importance Weighting</td>
     <td><input type="text" class="slidervalue penaltyvalue" id="penalty---widespread---trout---cutthroat---lahontan" value="0.5"/></td>
     <td><div class="slider" id="slider_penalty---widespread---trout---cutthroat---lahontan"></div></td>
     </tr>
@@ -1240,16 +755,16 @@
     </span>
         </li>
         <li>
-         <span> Yellowstone </span>
+         <span class="specieslabel"> Yellowstone </span>
          <span class="sliders">
     <table>
     <tr>
-    <td>Proportion of Total Value</td>
+    <td class="treelabel">Proportion of Total Value</td>
     <td><input type="text" class="slidervalue targetvalue" id="target---widespread---trout---cutthroat---yellowstone" value="0.5"/></td>
     <td><div class="slider" id="slider_target---widespread---trout---cutthroat---yellowstone"></div></td>
     </tr>
     <tr>
-    <td>Importance Weighting</td>
+    <td class="treelabel">Importance Weighting</td>
     <td><input type="text" class="slidervalue penaltyvalue" id="penalty---widespread---trout---cutthroat---yellowstone" value="0.5"/></td>
     <td><div class="slider" id="slider_penalty---widespread---trout---cutthroat---yellowstone"></div></td>
     </tr>
@@ -1257,16 +772,16 @@
     </span>
         </li>
         <li>
-         <span> Westslope </span>
+         <span class="specieslabel"> Westslope </span>
          <span class="sliders">
     <table>
     <tr>
-    <td>Proportion of Total Value</td>
+    <td class="treelabel">Proportion of Total Value</td>
     <td><input type="text" class="slidervalue targetvalue" id="target---widespread---trout---cutthroat---westslope" value="0.5"/></td>
     <td><div class="slider" id="slider_target---widespread---trout---cutthroat---westslope"></div></td>
     </tr>
     <tr>
-    <td>Importance Weighting</td>
+    <td class="treelabel">Importance Weighting</td>
     <td><input type="text" class="slidervalue penaltyvalue" id="penalty---widespread---trout---cutthroat---westslope" value="0.5"/></td>
     <td><div class="slider" id="slider_penalty---widespread---trout---cutthroat---westslope"></div></td>
     </tr>
@@ -1274,16 +789,16 @@
     </span>
         </li>
         <li>
-         <span> Coastal </span>
+         <span class="specieslabel"> Coastal </span>
          <span class="sliders">
     <table>
     <tr>
-    <td>Proportion of Total Value</td>
+    <td class="treelabel">Proportion of Total Value</td>
     <td><input type="text" class="slidervalue targetvalue" id="target---widespread---trout---cutthroat---coastal" value="0.5"/></td>
     <td><div class="slider" id="slider_target---widespread---trout---cutthroat---coastal"></div></td>
     </tr>
     <tr>
-    <td>Importance Weighting</td>
+    <td class="treelabel">Importance Weighting</td>
     <td><input type="text" class="slidervalue penaltyvalue" id="penalty---widespread---trout---cutthroat---coastal" value="0.5"/></td>
     <td><div class="slider" id="slider_penalty---widespread---trout---cutthroat---coastal"></div></td>
     </tr>
@@ -1291,16 +806,16 @@
     </span>
         </li>
         <li>
-         <span> Bonneville </span>
+         <span class="specieslabel"> Bonneville </span>
          <span class="sliders">
     <table>
     <tr>
-    <td>Proportion of Total Value</td>
+    <td class="treelabel">Proportion of Total Value</td>
     <td><input type="text" class="slidervalue targetvalue" id="target---widespread---trout---cutthroat---bonneville" value="0.5"/></td>
     <td><div class="slider" id="slider_target---widespread---trout---cutthroat---bonneville"></div></td>
     </tr>
     <tr>
-    <td>Importance Weighting</td>
+    <td class="treelabel">Importance Weighting</td>
     <td><input type="text" class="slidervalue penaltyvalue" id="penalty---widespread---trout---cutthroat---bonneville" value="0.5"/></td>
     <td><div class="slider" id="slider_penalty---widespread---trout---cutthroat---bonneville"></div></td>
     </tr>
@@ -1310,90 +825,52 @@
       </ul>
       </li>
       <li>
-       <span> Bull </span>
+       <span class="specieslabel"> Bull </span>
        <span class="sliders">
     <table>
     <tr>
-    <td>Proportion of Total Value</td>
+    <td class="treelabel">Proportion of Total Value</td>
     <td><input type="text" class="slidervalue targetvalue" id="target---widespread---trout---bull" value="0.5"/></td>
     <td><div class="slider" id="slider_target---widespread---trout---bull"></div></td>
     </tr>
     <tr>
-    <td>Importance Weighting</td>
+    <td class="treelabel">Importance Weighting</td>
     <td><input type="text" class="slidervalue penaltyvalue" id="penalty---widespread---trout---bull" value="0.5"/></td>
     <td><div class="slider" id="slider_penalty---widespread---trout---bull"></div></td>
     </tr>
     </table>
     </span>
-      <ul>
-        <li>
-         <span>  </span>
-         <span class="sliders">
-    <table>
-    <tr>
-    <td>Proportion of Total Value</td>
-    <td><input type="text" class="slidervalue targetvalue" id="target---widespread---trout---bull---" value="0.5"/></td>
-    <td><div class="slider" id="slider_target---widespread---trout---bull---"></div></td>
-    </tr>
-    <tr>
-    <td>Importance Weighting</td>
-    <td><input type="text" class="slidervalue penaltyvalue" id="penalty---widespread---trout---bull---" value="0.5"/></td>
-    <td><div class="slider" id="slider_penalty---widespread---trout---bull---"></div></td>
-    </tr>
-    </table>
-    </span>
-        </li>
-      </ul>
       </li>
       <li>
-       <span> Redband </span>
+       <span class="specieslabel"> Redband </span>
        <span class="sliders">
     <table>
     <tr>
-    <td>Proportion of Total Value</td>
+    <td class="treelabel">Proportion of Total Value</td>
     <td><input type="text" class="slidervalue targetvalue" id="target---widespread---trout---redband" value="0.5"/></td>
     <td><div class="slider" id="slider_target---widespread---trout---redband"></div></td>
     </tr>
     <tr>
-    <td>Importance Weighting</td>
+    <td class="treelabel">Importance Weighting</td>
     <td><input type="text" class="slidervalue penaltyvalue" id="penalty---widespread---trout---redband" value="0.5"/></td>
     <td><div class="slider" id="slider_penalty---widespread---trout---redband"></div></td>
     </tr>
     </table>
     </span>
-      <ul>
-        <li>
-         <span>  </span>
-         <span class="sliders">
-    <table>
-    <tr>
-    <td>Proportion of Total Value</td>
-    <td><input type="text" class="slidervalue targetvalue" id="target---widespread---trout---redband---" value="0.5"/></td>
-    <td><div class="slider" id="slider_target---widespread---trout---redband---"></div></td>
-    </tr>
-    <tr>
-    <td>Importance Weighting</td>
-    <td><input type="text" class="slidervalue penaltyvalue" id="penalty---widespread---trout---redband---" value="0.5"/></td>
-    <td><div class="slider" id="slider_penalty---widespread---trout---redband---"></div></td>
-    </tr>
-    </table>
-    </span>
-        </li>
-      </ul>
       </li>
     </ul>
   </li>
     <li>
-     <span> Lamprey </span>
+     <span class="specieslabel"> Lamprey </span>
      <span class="sliders">
     <table>
     <tr>
-    <td>Proportion of Total Value</td>
+    <td class="treelabel">Proportion of Total Value</td>
     <td><input type="text" class="slidervalue targetvalue" id="target---widespread---lamprey" value="0.5"/></td>
     <td><div class="slider" id="slider_target---widespread---lamprey"></div></td>
     </tr>
     <tr>
-    <td>Importance Weighting</td>
+    <td class="treelabel">Importance Weighting</td>
     <td><input type="text" class="slidervalue penaltyvalue" id="penalty---widespread---lamprey" value="0.5"/></td>
     <td><div class="slider" id="slider_penalty---widespread---lamprey"></div></td>
     </tr>
@@ -1401,90 +878,52 @@
     </span>
     <ul>
       <li>
-       <span> Miller Lake </span>
+       <span class="specieslabel"> Miller Lake </span>
        <span class="sliders">
     <table>
     <tr>
-    <td>Proportion of Total Value</td>
+    <td class="treelabel">Proportion of Total Value</td>
     <td><input type="text" class="slidervalue targetvalue" id="target---widespread---lamprey---miller-lake" value="0.5"/></td>
     <td><div class="slider" id="slider_target---widespread---lamprey---miller-lake"></div></td>
     </tr>
     <tr>
-    <td>Importance Weighting</td>
+    <td class="treelabel">Importance Weighting</td>
     <td><input type="text" class="slidervalue penaltyvalue" id="penalty---widespread---lamprey---miller-lake" value="0.5"/></td>
     <td><div class="slider" id="slider_penalty---widespread---lamprey---miller-lake"></div></td>
     </tr>
     </table>
     </span>
-      <ul>
-        <li>
-         <span>  </span>
-         <span class="sliders">
-    <table>
-    <tr>
-    <td>Proportion of Total Value</td>
-    <td><input type="text" class="slidervalue targetvalue" id="target---widespread---lamprey---miller-lake---" value="0.5"/></td>
-    <td><div class="slider" id="slider_target---widespread---lamprey---miller-lake---"></div></td>
-    </tr>
-    <tr>
-    <td>Importance Weighting</td>
-    <td><input type="text" class="slidervalue penaltyvalue" id="penalty---widespread---lamprey---miller-lake---" value="0.5"/></td>
-    <td><div class="slider" id="slider_penalty---widespread---lamprey---miller-lake---"></div></td>
-    </tr>
-    </table>
-    </span>
-        </li>
-      </ul>
       </li>
       <li>
-       <span> Pacific </span>
+       <span class="specieslabel"> Pacific </span>
        <span class="sliders">
     <table>
     <tr>
-    <td>Proportion of Total Value</td>
+    <td class="treelabel">Proportion of Total Value</td>
     <td><input type="text" class="slidervalue targetvalue" id="target---widespread---lamprey---pacific" value="0.5"/></td>
     <td><div class="slider" id="slider_target---widespread---lamprey---pacific"></div></td>
     </tr>
     <tr>
-    <td>Importance Weighting</td>
+    <td class="treelabel">Importance Weighting</td>
     <td><input type="text" class="slidervalue penaltyvalue" id="penalty---widespread---lamprey---pacific" value="0.5"/></td>
     <td><div class="slider" id="slider_penalty---widespread---lamprey---pacific"></div></td>
     </tr>
     </table>
     </span>
-      <ul>
-        <li>
-         <span>  </span>
-         <span class="sliders">
-    <table>
-    <tr>
-    <td>Proportion of Total Value</td>
-    <td><input type="text" class="slidervalue targetvalue" id="target---widespread---lamprey---pacific---" value="0.5"/></td>
-    <td><div class="slider" id="slider_target---widespread---lamprey---pacific---"></div></td>
-    </tr>
-    <tr>
-    <td>Importance Weighting</td>
-    <td><input type="text" class="slidervalue penaltyvalue" id="penalty---widespread---lamprey---pacific---" value="0.5"/></td>
-    <td><div class="slider" id="slider_penalty---widespread---lamprey---pacific---"></div></td>
-    </tr>
-    </table>
-    </span>
-        </li>
-      </ul>
       </li>
     </ul>
   </li>
     <li>
-     <span> Salmon </span>
+     <span class="specieslabel"> Salmon </span>
      <span class="sliders">
     <table>
     <tr>
-    <td>Proportion of Total Value</td>
+    <td class="treelabel">Proportion of Total Value</td>
     <td><input type="text" class="slidervalue targetvalue" id="target---widespread---salmon" value="0.5"/></td>
     <td><div class="slider" id="slider_target---widespread---salmon"></div></td>
     </tr>
     <tr>
-    <td>Importance Weighting</td>
+    <td class="treelabel">Importance Weighting</td>
     <td><input type="text" class="slidervalue penaltyvalue" id="penalty---widespread---salmon" value="0.5"/></td>
     <td><div class="slider" id="slider_penalty---widespread---salmon"></div></td>
     </tr>
@@ -1492,16 +931,16 @@
     </span>
     <ul>
       <li>
-       <span> Sockeye </span>
+       <span class="specieslabel"> Sockeye </span>
        <span class="sliders">
     <table>
     <tr>
-    <td>Proportion of Total Value</td>
+    <td class="treelabel">Proportion of Total Value</td>
     <td><input type="text" class="slidervalue targetvalue" id="target---widespread---salmon---sockeye" value="0.5"/></td>
     <td><div class="slider" id="slider_target---widespread---salmon---sockeye"></div></td>
     </tr>
     <tr>
-    <td>Importance Weighting</td>
+    <td class="treelabel">Importance Weighting</td>
     <td><input type="text" class="slidervalue penaltyvalue" id="penalty---widespread---salmon---sockeye" value="0.5"/></td>
     <td><div class="slider" id="slider_penalty---widespread---salmon---sockeye"></div></td>
     </tr>
@@ -1509,16 +948,16 @@
     </span>
       <ul>
         <li>
-         <span> Lake Pleasant Sockeye ESU </span>
+         <span class="specieslabel"> Lake Pleasant Sockeye ESU </span>
          <span class="sliders">
     <table>
     <tr>
-    <td>Proportion of Total Value</td>
+    <td class="treelabel">Proportion of Total Value</td>
     <td><input type="text" class="slidervalue targetvalue" id="target---widespread---salmon---sockeye---lake-pleasant-sockeye-esu" value="0.5"/></td>
     <td><div class="slider" id="slider_target---widespread---salmon---sockeye---lake-pleasant-sockeye-esu"></div></td>
     </tr>
     <tr>
-    <td>Importance Weighting</td>
+    <td class="treelabel">Importance Weighting</td>
     <td><input type="text" class="slidervalue penaltyvalue" id="penalty---widespread---salmon---sockeye---lake-pleasant-sockeye-esu" value="0.5"/></td>
     <td><div class="slider" id="slider_penalty---widespread---salmon---sockeye---lake-pleasant-sockeye-esu"></div></td>
     </tr>
@@ -1526,16 +965,16 @@
     </span>
         </li>
         <li>
-         <span> Okanogan River Sockeye ESU </span>
+         <span class="specieslabel"> Okanogan River Sockeye ESU </span>
          <span class="sliders">
     <table>
     <tr>
-    <td>Proportion of Total Value</td>
+    <td class="treelabel">Proportion of Total Value</td>
     <td><input type="text" class="slidervalue targetvalue" id="target---widespread---salmon---sockeye---okanogan-river-sockeye-esu" value="0.5"/></td>
     <td><div class="slider" id="slider_target---widespread---salmon---sockeye---okanogan-river-sockeye-esu"></div></td>
     </tr>
     <tr>
-    <td>Importance Weighting</td>
+    <td class="treelabel">Importance Weighting</td>
     <td><input type="text" class="slidervalue penaltyvalue" id="penalty---widespread---salmon---sockeye---okanogan-river-sockeye-esu" value="0.5"/></td>
     <td><div class="slider" id="slider_penalty---widespread---salmon---sockeye---okanogan-river-sockeye-esu"></div></td>
     </tr>
@@ -1543,16 +982,16 @@
     </span>
         </li>
         <li>
-         <span> Ozette Lake Sockeye ESU </span>
+         <span class="specieslabel"> Ozette Lake Sockeye ESU </span>
          <span class="sliders">
     <table>
     <tr>
-    <td>Proportion of Total Value</td>
+    <td class="treelabel">Proportion of Total Value</td>
     <td><input type="text" class="slidervalue targetvalue" id="target---widespread---salmon---sockeye---ozette-lake-sockeye-esu" value="0.5"/></td>
     <td><div class="slider" id="slider_target---widespread---salmon---sockeye---ozette-lake-sockeye-esu"></div></td>
     </tr>
     <tr>
-    <td>Importance Weighting</td>
+    <td class="treelabel">Importance Weighting</td>
     <td><input type="text" class="slidervalue penaltyvalue" id="penalty---widespread---salmon---sockeye---ozette-lake-sockeye-esu" value="0.5"/></td>
     <td><div class="slider" id="slider_penalty---widespread---salmon---sockeye---ozette-lake-sockeye-esu"></div></td>
     </tr>
@@ -1560,16 +999,16 @@
     </span>
         </li>
         <li>
-         <span> Snake River Sockeye ESU </span>
+         <span class="specieslabel"> Snake River Sockeye ESU </span>
          <span class="sliders">
     <table>
     <tr>
-    <td>Proportion of Total Value</td>
+    <td class="treelabel">Proportion of Total Value</td>
     <td><input type="text" class="slidervalue targetvalue" id="target---widespread---salmon---sockeye---snake-river-sockeye-esu" value="0.5"/></td>
     <td><div class="slider" id="slider_target---widespread---salmon---sockeye---snake-river-sockeye-esu"></div></td>
     </tr>
     <tr>
-    <td>Importance Weighting</td>
+    <td class="treelabel">Importance Weighting</td>
     <td><input type="text" class="slidervalue penaltyvalue" id="penalty---widespread---salmon---sockeye---snake-river-sockeye-esu" value="0.5"/></td>
     <td><div class="slider" id="slider_penalty---widespread---salmon---sockeye---snake-river-sockeye-esu"></div></td>
     </tr>
@@ -1577,16 +1016,16 @@
     </span>
         </li>
         <li>
-         <span> Lake Wenatchee Sockeye ESU </span>
+         <span class="specieslabel"> Lake Wenatchee Sockeye ESU </span>
          <span class="sliders">
     <table>
     <tr>
-    <td>Proportion of Total Value</td>
+    <td class="treelabel">Proportion of Total Value</td>
     <td><input type="text" class="slidervalue targetvalue" id="target---widespread---salmon---sockeye---lake-wenatchee-sockeye-esu" value="0.5"/></td>
     <td><div class="slider" id="slider_target---widespread---salmon---sockeye---lake-wenatchee-sockeye-esu"></div></td>
     </tr>
     <tr>
-    <td>Importance Weighting</td>
+    <td class="treelabel">Importance Weighting</td>
     <td><input type="text" class="slidervalue penaltyvalue" id="penalty---widespread---salmon---sockeye---lake-wenatchee-sockeye-esu" value="0.5"/></td>
     <td><div class="slider" id="slider_penalty---widespread---salmon---sockeye---lake-wenatchee-sockeye-esu"></div></td>
     </tr>
@@ -1594,16 +1033,16 @@
     </span>
         </li>
         <li>
-         <span> Quinalt Lake Sockeye ESU </span>
+         <span class="specieslabel"> Quinalt Lake Sockeye ESU </span>
          <span class="sliders">
     <table>
     <tr>
-    <td>Proportion of Total Value</td>
+    <td class="treelabel">Proportion of Total Value</td>
     <td><input type="text" class="slidervalue targetvalue" id="target---widespread---salmon---sockeye---quinalt-lake-sockeye-esu" value="0.5"/></td>
     <td><div class="slider" id="slider_target---widespread---salmon---sockeye---quinalt-lake-sockeye-esu"></div></td>
     </tr>
     <tr>
-    <td>Importance Weighting</td>
+    <td class="treelabel">Importance Weighting</td>
     <td><input type="text" class="slidervalue penaltyvalue" id="penalty---widespread---salmon---sockeye---quinalt-lake-sockeye-esu" value="0.5"/></td>
     <td><div class="slider" id="slider_penalty---widespread---salmon---sockeye---quinalt-lake-sockeye-esu"></div></td>
     </tr>
@@ -1611,16 +1050,16 @@
     </span>
         </li>
         <li>
-         <span> Baker River Sockeye ESU </span>
+         <span class="specieslabel"> Baker River Sockeye ESU </span>
          <span class="sliders">
     <table>
     <tr>
-    <td>Proportion of Total Value</td>
+    <td class="treelabel">Proportion of Total Value</td>
     <td><input type="text" class="slidervalue targetvalue" id="target---widespread---salmon---sockeye---baker-river-sockeye-esu" value="0.5"/></td>
     <td><div class="slider" id="slider_target---widespread---salmon---sockeye---baker-river-sockeye-esu"></div></td>
     </tr>
     <tr>
-    <td>Importance Weighting</td>
+    <td class="treelabel">Importance Weighting</td>
     <td><input type="text" class="slidervalue penaltyvalue" id="penalty---widespread---salmon---sockeye---baker-river-sockeye-esu" value="0.5"/></td>
     <td><div class="slider" id="slider_penalty---widespread---salmon---sockeye---baker-river-sockeye-esu"></div></td>
     </tr>
@@ -1630,16 +1069,16 @@
       </ul>
       </li>
       <li>
-       <span> Pink </span>
+       <span class="specieslabel"> Pink </span>
        <span class="sliders">
     <table>
     <tr>
-    <td>Proportion of Total Value</td>
+    <td class="treelabel">Proportion of Total Value</td>
     <td><input type="text" class="slidervalue targetvalue" id="target---widespread---salmon---pink" value="0.5"/></td>
     <td><div class="slider" id="slider_target---widespread---salmon---pink"></div></td>
     </tr>
     <tr>
-    <td>Importance Weighting</td>
+    <td class="treelabel">Importance Weighting</td>
     <td><input type="text" class="slidervalue penaltyvalue" id="penalty---widespread---salmon---pink" value="0.5"/></td>
     <td><div class="slider" id="slider_penalty---widespread---salmon---pink"></div></td>
     </tr>
@@ -1647,16 +1086,16 @@
     </span>
       <ul>
         <li>
-         <span> Even-year pink salmon ESU </span>
+         <span class="specieslabel"> Even-year pink salmon ESU </span>
          <span class="sliders">
     <table>
     <tr>
-    <td>Proportion of Total Value</td>
+    <td class="treelabel">Proportion of Total Value</td>
     <td><input type="text" class="slidervalue targetvalue" id="target---widespread---salmon---pink---even-year-pink-salmon-esu" value="0.5"/></td>
     <td><div class="slider" id="slider_target---widespread---salmon---pink---even-year-pink-salmon-esu"></div></td>
     </tr>
     <tr>
-    <td>Importance Weighting</td>
+    <td class="treelabel">Importance Weighting</td>
     <td><input type="text" class="slidervalue penaltyvalue" id="penalty---widespread---salmon---pink---even-year-pink-salmon-esu" value="0.5"/></td>
     <td><div class="slider" id="slider_penalty---widespread---salmon---pink---even-year-pink-salmon-esu"></div></td>
     </tr>
@@ -1664,16 +1103,16 @@
     </span>
         </li>
         <li>
-         <span> Odd-year pink salmon ESU </span>
+         <span class="specieslabel"> Odd-year pink salmon ESU </span>
          <span class="sliders">
     <table>
     <tr>
-    <td>Proportion of Total Value</td>
+    <td class="treelabel">Proportion of Total Value</td>
     <td><input type="text" class="slidervalue targetvalue" id="target---widespread---salmon---pink---odd-year-pink-salmon-esu" value="0.5"/></td>
     <td><div class="slider" id="slider_target---widespread---salmon---pink---odd-year-pink-salmon-esu"></div></td>
     </tr>
     <tr>
-    <td>Importance Weighting</td>
+    <td class="treelabel">Importance Weighting</td>
     <td><input type="text" class="slidervalue penaltyvalue" id="penalty---widespread---salmon---pink---odd-year-pink-salmon-esu" value="0.5"/></td>
     <td><div class="slider" id="slider_penalty---widespread---salmon---pink---odd-year-pink-salmon-esu"></div></td>
     </tr>
@@ -1683,16 +1122,16 @@
       </ul>
       </li>
       <li>
-       <span> Coho </span>
+       <span class="specieslabel"> Coho </span>
        <span class="sliders">
     <table>
     <tr>
-    <td>Proportion of Total Value</td>
+    <td class="treelabel">Proportion of Total Value</td>
     <td><input type="text" class="slidervalue targetvalue" id="target---widespread---salmon---coho" value="0.5"/></td>
     <td><div class="slider" id="slider_target---widespread---salmon---coho"></div></td>
     </tr>
     <tr>
-    <td>Importance Weighting</td>
+    <td class="treelabel">Importance Weighting</td>
     <td><input type="text" class="slidervalue penaltyvalue" id="penalty---widespread---salmon---coho" value="0.5"/></td>
     <td><div class="slider" id="slider_penalty---widespread---salmon---coho"></div></td>
     </tr>
@@ -1700,16 +1139,16 @@
     </span>
       <ul>
         <li>
-         <span> Southern Oregon/Northern California Coho ESU </span>
+         <span class="specieslabel"> Southern Oregon/Northern California Coho ESU </span>
          <span class="sliders">
     <table>
     <tr>
-    <td>Proportion of Total Value</td>
+    <td class="treelabel">Proportion of Total Value</td>
     <td><input type="text" class="slidervalue targetvalue" id="target---widespread---salmon---coho---southern-oregonnorthern-california-coho-esu" value="0.5"/></td>
     <td><div class="slider" id="slider_target---widespread---salmon---coho---southern-oregonnorthern-california-coho-esu"></div></td>
     </tr>
     <tr>
-    <td>Importance Weighting</td>
+    <td class="treelabel">Importance Weighting</td>
     <td><input type="text" class="slidervalue penaltyvalue" id="penalty---widespread---salmon---coho---southern-oregonnorthern-california-coho-esu" value="0.5"/></td>
     <td><div class="slider" id="slider_penalty---widespread---salmon---coho---southern-oregonnorthern-california-coho-esu"></div></td>
     </tr>
@@ -1717,16 +1156,16 @@
     </span>
         </li>
         <li>
-         <span> Olympic Peninsula Coho ESU </span>
+         <span class="specieslabel"> Olympic Peninsula Coho ESU </span>
          <span class="sliders">
     <table>
     <tr>
-    <td>Proportion of Total Value</td>
+    <td class="treelabel">Proportion of Total Value</td>
     <td><input type="text" class="slidervalue targetvalue" id="target---widespread---salmon---coho---olympic-peninsula-coho-esu" value="0.5"/></td>
     <td><div class="slider" id="slider_target---widespread---salmon---coho---olympic-peninsula-coho-esu"></div></td>
     </tr>
     <tr>
-    <td>Importance Weighting</td>
+    <td class="treelabel">Importance Weighting</td>
     <td><input type="text" class="slidervalue penaltyvalue" id="penalty---widespread---salmon---coho---olympic-peninsula-coho-esu" value="0.5"/></td>
     <td><div class="slider" id="slider_penalty---widespread---salmon---coho---olympic-peninsula-coho-esu"></div></td>
     </tr>
@@ -1734,16 +1173,16 @@
     </span>
         </li>
         <li>
-         <span> Puget Sound/Strait of Georgia Coho ESU </span>
+         <span class="specieslabel"> Puget Sound/Strait of Georgia Coho ESU </span>
          <span class="sliders">
     <table>
     <tr>
-    <td>Proportion of Total Value</td>
+    <td class="treelabel">Proportion of Total Value</td>
     <td><input type="text" class="slidervalue targetvalue" id="target---widespread---salmon---coho---puget-soundstrait-of-georgia-coho-esu" value="0.5"/></td>
     <td><div class="slider" id="slider_target---widespread---salmon---coho---puget-soundstrait-of-georgia-coho-esu"></div></td>
     </tr>
     <tr>
-    <td>Importance Weighting</td>
+    <td class="treelabel">Importance Weighting</td>
     <td><input type="text" class="slidervalue penaltyvalue" id="penalty---widespread---salmon---coho---puget-soundstrait-of-georgia-coho-esu" value="0.5"/></td>
     <td><div class="slider" id="slider_penalty---widespread---salmon---coho---puget-soundstrait-of-georgia-coho-esu"></div></td>
     </tr>
@@ -1751,16 +1190,16 @@
     </span>
         </li>
         <li>
-         <span> Lower Columbia River Coho ESU </span>
+         <span class="specieslabel"> Lower Columbia River Coho ESU </span>
          <span class="sliders">
     <table>
     <tr>
-    <td>Proportion of Total Value</td>
+    <td class="treelabel">Proportion of Total Value</td>
     <td><input type="text" class="slidervalue targetvalue" id="target---widespread---salmon---coho---lower-columbia-river-coho-esu" value="0.5"/></td>
     <td><div class="slider" id="slider_target---widespread---salmon---coho---lower-columbia-river-coho-esu"></div></td>
     </tr>
     <tr>
-    <td>Importance Weighting</td>
+    <td class="treelabel">Importance Weighting</td>
     <td><input type="text" class="slidervalue penaltyvalue" id="penalty---widespread---salmon---coho---lower-columbia-river-coho-esu" value="0.5"/></td>
     <td><div class="slider" id="slider_penalty---widespread---salmon---coho---lower-columbia-river-coho-esu"></div></td>
     </tr>
@@ -1768,16 +1207,16 @@
     </span>
         </li>
         <li>
-         <span> Oregon Coast Coho ESU </span>
+         <span class="specieslabel"> Oregon Coast Coho ESU </span>
          <span class="sliders">
     <table>
     <tr>
-    <td>Proportion of Total Value</td>
+    <td class="treelabel">Proportion of Total Value</td>
     <td><input type="text" class="slidervalue targetvalue" id="target---widespread---salmon---coho---oregon-coast-coho-esu" value="0.5"/></td>
     <td><div class="slider" id="slider_target---widespread---salmon---coho---oregon-coast-coho-esu"></div></td>
     </tr>
     <tr>
-    <td>Importance Weighting</td>
+    <td class="treelabel">Importance Weighting</td>
     <td><input type="text" class="slidervalue penaltyvalue" id="penalty---widespread---salmon---coho---oregon-coast-coho-esu" value="0.5"/></td>
     <td><div class="slider" id="slider_penalty---widespread---salmon---coho---oregon-coast-coho-esu"></div></td>
     </tr>
@@ -1785,16 +1224,16 @@
     </span>
         </li>
         <li>
-         <span> Southwest Washington Coho ESU </span>
+         <span class="specieslabel"> Southwest Washington Coho ESU </span>
          <span class="sliders">
     <table>
     <tr>
-    <td>Proportion of Total Value</td>
+    <td class="treelabel">Proportion of Total Value</td>
     <td><input type="text" class="slidervalue targetvalue" id="target---widespread---salmon---coho---southwest-washington-coho-esu" value="0.5"/></td>
     <td><div class="slider" id="slider_target---widespread---salmon---coho---southwest-washington-coho-esu"></div></td>
     </tr>
     <tr>
-    <td>Importance Weighting</td>
+    <td class="treelabel">Importance Weighting</td>
     <td><input type="text" class="slidervalue penaltyvalue" id="penalty---widespread---salmon---coho---southwest-washington-coho-esu" value="0.5"/></td>
     <td><div class="slider" id="slider_penalty---widespread---salmon---coho---southwest-washington-coho-esu"></div></td>
     </tr>
@@ -1804,16 +1243,16 @@
       </ul>
       </li>
       <li>
-       <span> Chum </span>
+       <span class="specieslabel"> Chum </span>
        <span class="sliders">
     <table>
     <tr>
-    <td>Proportion of Total Value</td>
+    <td class="treelabel">Proportion of Total Value</td>
     <td><input type="text" class="slidervalue targetvalue" id="target---widespread---salmon---chum" value="0.5"/></td>
     <td><div class="slider" id="slider_target---widespread---salmon---chum"></div></td>
     </tr>
     <tr>
-    <td>Importance Weighting</td>
+    <td class="treelabel">Importance Weighting</td>
     <td><input type="text" class="slidervalue penaltyvalue" id="penalty---widespread---salmon---chum" value="0.5"/></td>
     <td><div class="slider" id="slider_penalty---widespread---salmon---chum"></div></td>
     </tr>
@@ -1821,16 +1260,16 @@
     </span>
       <ul>
         <li>
-         <span> Columbia River Chum ESU </span>
+         <span class="specieslabel"> Columbia River Chum ESU </span>
          <span class="sliders">
     <table>
     <tr>
-    <td>Proportion of Total Value</td>
+    <td class="treelabel">Proportion of Total Value</td>
     <td><input type="text" class="slidervalue targetvalue" id="target---widespread---salmon---chum---columbia-river-chum-esu" value="0.5"/></td>
     <td><div class="slider" id="slider_target---widespread---salmon---chum---columbia-river-chum-esu"></div></td>
     </tr>
     <tr>
-    <td>Importance Weighting</td>
+    <td class="treelabel">Importance Weighting</td>
     <td><input type="text" class="slidervalue penaltyvalue" id="penalty---widespread---salmon---chum---columbia-river-chum-esu" value="0.5"/></td>
     <td><div class="slider" id="slider_penalty---widespread---salmon---chum---columbia-river-chum-esu"></div></td>
     </tr>
@@ -1838,16 +1277,16 @@
     </span>
         </li>
         <li>
-         <span> Hood Canal Summer-run Chum ESU </span>
+         <span class="specieslabel"> Hood Canal Summer-run Chum ESU </span>
          <span class="sliders">
     <table>
     <tr>
-    <td>Proportion of Total Value</td>
+    <td class="treelabel">Proportion of Total Value</td>
     <td><input type="text" class="slidervalue targetvalue" id="target---widespread---salmon---chum---hood-canal-summer-run-chum-esu" value="0.5"/></td>
     <td><div class="slider" id="slider_target---widespread---salmon---chum---hood-canal-summer-run-chum-esu"></div></td>
     </tr>
     <tr>
-    <td>Importance Weighting</td>
+    <td class="treelabel">Importance Weighting</td>
     <td><input type="text" class="slidervalue penaltyvalue" id="penalty---widespread---salmon---chum---hood-canal-summer-run-chum-esu" value="0.5"/></td>
     <td><div class="slider" id="slider_penalty---widespread---salmon---chum---hood-canal-summer-run-chum-esu"></div></td>
     </tr>
@@ -1855,16 +1294,16 @@
     </span>
         </li>
         <li>
-         <span> Pacific Coast Chum ESU </span>
+         <span class="specieslabel"> Pacific Coast Chum ESU </span>
          <span class="sliders">
     <table>
     <tr>
-    <td>Proportion of Total Value</td>
+    <td class="treelabel">Proportion of Total Value</td>
     <td><input type="text" class="slidervalue targetvalue" id="target---widespread---salmon---chum---pacific-coast-chum-esu" value="0.5"/></td>
     <td><div class="slider" id="slider_target---widespread---salmon---chum---pacific-coast-chum-esu"></div></td>
     </tr>
     <tr>
-    <td>Importance Weighting</td>
+    <td class="treelabel">Importance Weighting</td>
     <td><input type="text" class="slidervalue penaltyvalue" id="penalty---widespread---salmon---chum---pacific-coast-chum-esu" value="0.5"/></td>
     <td><div class="slider" id="slider_penalty---widespread---salmon---chum---pacific-coast-chum-esu"></div></td>
     </tr>
@@ -1872,16 +1311,16 @@
     </span>
         </li>
         <li>
-         <span> Puget Sound/Strait of Georgia Chum ESU </span>
+         <span class="specieslabel"> Puget Sound/Strait of Georgia Chum ESU </span>
          <span class="sliders">
     <table>
     <tr>
-    <td>Proportion of Total Value</td>
+    <td class="treelabel">Proportion of Total Value</td>
     <td><input type="text" class="slidervalue targetvalue" id="target---widespread---salmon---chum---puget-soundstrait-of-georgia-chum-esu" value="0.5"/></td>
     <td><div class="slider" id="slider_target---widespread---salmon---chum---puget-soundstrait-of-georgia-chum-esu"></div></td>
     </tr>
     <tr>
-    <td>Importance Weighting</td>
+    <td class="treelabel">Importance Weighting</td>
     <td><input type="text" class="slidervalue penaltyvalue" id="penalty---widespread---salmon---chum---puget-soundstrait-of-georgia-chum-esu" value="0.5"/></td>
     <td><div class="slider" id="slider_penalty---widespread---salmon---chum---puget-soundstrait-of-georgia-chum-esu"></div></td>
     </tr>
@@ -1891,16 +1330,16 @@
       </ul>
       </li>
       <li>
-       <span> Chinook </span>
+       <span class="specieslabel"> Chinook </span>
        <span class="sliders">
     <table>
     <tr>
-    <td>Proportion of Total Value</td>
+    <td class="treelabel">Proportion of Total Value</td>
     <td><input type="text" class="slidervalue targetvalue" id="target---widespread---salmon---chinook" value="0.5"/></td>
     <td><div class="slider" id="slider_target---widespread---salmon---chinook"></div></td>
     </tr>
     <tr>
-    <td>Importance Weighting</td>
+    <td class="treelabel">Importance Weighting</td>
     <td><input type="text" class="slidervalue penaltyvalue" id="penalty---widespread---salmon---chinook" value="0.5"/></td>
     <td><div class="slider" id="slider_penalty---widespread---salmon---chinook"></div></td>
     </tr>
@@ -1908,16 +1347,16 @@
     </span>
       <ul>
         <li>
-         <span> Lower Columbia River Chinook ESU </span>
+         <span class="specieslabel"> Lower Columbia River Chinook ESU </span>
          <span class="sliders">
     <table>
     <tr>
-    <td>Proportion of Total Value</td>
+    <td class="treelabel">Proportion of Total Value</td>
     <td><input type="text" class="slidervalue targetvalue" id="target---widespread---salmon---chinook---lower-columbia-river-chinook-esu" value="0.5"/></td>
     <td><div class="slider" id="slider_target---widespread---salmon---chinook---lower-columbia-river-chinook-esu"></div></td>
     </tr>
     <tr>
-    <td>Importance Weighting</td>
+    <td class="treelabel">Importance Weighting</td>
     <td><input type="text" class="slidervalue penaltyvalue" id="penalty---widespread---salmon---chinook---lower-columbia-river-chinook-esu" value="0.5"/></td>
     <td><div class="slider" id="slider_penalty---widespread---salmon---chinook---lower-columbia-river-chinook-esu"></div></td>
     </tr>
@@ -1925,16 +1364,16 @@
     </span>
         </li>
         <li>
-         <span> Oregon Coast Chinook ESU </span>
+         <span class="specieslabel"> Oregon Coast Chinook ESU </span>
          <span class="sliders">
     <table>
     <tr>
-    <td>Proportion of Total Value</td>
+    <td class="treelabel">Proportion of Total Value</td>
     <td><input type="text" class="slidervalue targetvalue" id="target---widespread---salmon---chinook---oregon-coast-chinook-esu" value="0.5"/></td>
     <td><div class="slider" id="slider_target---widespread---salmon---chinook---oregon-coast-chinook-esu"></div></td>
     </tr>
     <tr>
-    <td>Importance Weighting</td>
+    <td class="treelabel">Importance Weighting</td>
     <td><input type="text" class="slidervalue penaltyvalue" id="penalty---widespread---salmon---chinook---oregon-coast-chinook-esu" value="0.5"/></td>
     <td><div class="slider" id="slider_penalty---widespread---salmon---chinook---oregon-coast-chinook-esu"></div></td>
     </tr>
@@ -1942,16 +1381,16 @@
     </span>
         </li>
         <li>
-         <span> Upper Willamette River Chinook ESU </span>
+         <span class="specieslabel"> Upper Willamette River Chinook ESU </span>
          <span class="sliders">
     <table>
     <tr>
-    <td>Proportion of Total Value</td>
+    <td class="treelabel">Proportion of Total Value</td>
     <td><input type="text" class="slidervalue targetvalue" id="target---widespread---salmon---chinook---upper-willamette-river-chinook-esu" value="0.5"/></td>
     <td><div class="slider" id="slider_target---widespread---salmon---chinook---upper-willamette-river-chinook-esu"></div></td>
     </tr>
     <tr>
-    <td>Importance Weighting</td>
+    <td class="treelabel">Importance Weighting</td>
     <td><input type="text" class="slidervalue penaltyvalue" id="penalty---widespread---salmon---chinook---upper-willamette-river-chinook-esu" value="0.5"/></td>
     <td><div class="slider" id="slider_penalty---widespread---salmon---chinook---upper-willamette-river-chinook-esu"></div></td>
     </tr>
@@ -1959,16 +1398,16 @@
     </span>
         </li>
         <li>
-         <span> Upper Columbia River Spring-run Chinook ESU </span>
+         <span class="specieslabel"> Upper Columbia River Spring-run Chinook ESU </span>
          <span class="sliders">
     <table>
     <tr>
-    <td>Proportion of Total Value</td>
+    <td class="treelabel">Proportion of Total Value</td>
     <td><input type="text" class="slidervalue targetvalue" id="target---widespread---salmon---chinook---upper-columbia-river-spring-run-chinook-esu" value="0.5"/></td>
     <td><div class="slider" id="slider_target---widespread---salmon---chinook---upper-columbia-river-spring-run-chinook-esu"></div></td>
     </tr>
     <tr>
-    <td>Importance Weighting</td>
+    <td class="treelabel">Importance Weighting</td>
     <td><input type="text" class="slidervalue penaltyvalue" id="penalty---widespread---salmon---chinook---upper-columbia-river-spring-run-chinook-esu" value="0.5"/></td>
     <td><div class="slider" id="slider_penalty---widespread---salmon---chinook---upper-columbia-river-spring-run-chinook-esu"></div></td>
     </tr>
@@ -1976,16 +1415,16 @@
     </span>
         </li>
         <li>
-         <span> Upper Columbia River summer/fall-run Chinook ESU </span>
+         <span class="specieslabel"> Upper Columbia River summer/fall-run Chinook ESU </span>
          <span class="sliders">
     <table>
     <tr>
-    <td>Proportion of Total Value</td>
+    <td class="treelabel">Proportion of Total Value</td>
     <td><input type="text" class="slidervalue targetvalue" id="target---widespread---salmon---chinook---upper-columbia-river-summerfall-run-chinook-esu" value="0.5"/></td>
     <td><div class="slider" id="slider_target---widespread---salmon---chinook---upper-columbia-river-summerfall-run-chinook-esu"></div></td>
     </tr>
     <tr>
-    <td>Importance Weighting</td>
+    <td class="treelabel">Importance Weighting</td>
     <td><input type="text" class="slidervalue penaltyvalue" id="penalty---widespread---salmon---chinook---upper-columbia-river-summerfall-run-chinook-esu" value="0.5"/></td>
     <td><div class="slider" id="slider_penalty---widespread---salmon---chinook---upper-columbia-river-summerfall-run-chinook-esu"></div></td>
     </tr>
@@ -1993,118 +1432,16 @@
     </span>
         </li>
         <li>
-         <span> Puget Sound Chinook ESU </span>
+         <span class="specieslabel"> Middle Columbia River spring-run Chinook ESU </span>
          <span class="sliders">
     <table>
     <tr>
-    <td>Proportion of Total Value</td>
-    <td><input type="text" class="slidervalue targetvalue" id="target---widespread---salmon---chinook---puget-sound-chinook-esu" value="0.5"/></td>
-    <td><div class="slider" id="slider_target---widespread---salmon---chinook---puget-sound-chinook-esu"></div></td>
-    </tr>
-    <tr>
-    <td>Importance Weighting</td>
-    <td><input type="text" class="slidervalue penaltyvalue" id="penalty---widespread---salmon---chinook---puget-sound-chinook-esu" value="0.5"/></td>
-    <td><div class="slider" id="slider_penalty---widespread---salmon---chinook---puget-sound-chinook-esu"></div></td>
-    </tr>
-    </table>
-    </span>
-        </li>
-        <li>
-         <span> Southern OR and Northern CA Coast Chinook ESU </span>
-         <span class="sliders">
-    <table>
-    <tr>
-    <td>Proportion of Total Value</td>
-    <td><input type="text" class="slidervalue targetvalue" id="target---widespread---salmon---chinook---southern-or-and-northern-ca-coast-chinook-esu" value="0.5"/></td>
-    <td><div class="slider" id="slider_target---widespread---salmon---chinook---southern-or-and-northern-ca-coast-chinook-esu"></div></td>
-    </tr>
-    <tr>
-    <td>Importance Weighting</td>
-    <td><input type="text" class="slidervalue penaltyvalue" id="penalty---widespread---salmon---chinook---southern-or-and-northern-ca-coast-chinook-esu" value="0.5"/></td>
-    <td><div class="slider" id="slider_penalty---widespread---salmon---chinook---southern-or-and-northern-ca-coast-chinook-esu"></div></td>
-    </tr>
-    </table>
-    </span>
-        </li>
-        <li>
-         <span> Upper Klamath-Trinity Rivers Chinook ESU </span>
-         <span class="sliders">
-    <table>
-    <tr>
-    <td>Proportion of Total Value</td>
-    <td><input type="text" class="slidervalue targetvalue" id="target---widespread---salmon---chinook---upper-klamath-trinity-rivers-chinook-esu" value="0.5"/></td>
-    <td><div class="slider" id="slider_target---widespread---salmon---chinook---upper-klamath-trinity-rivers-chinook-esu"></div></td>
-    </tr>
-    <tr>
-    <td>Importance Weighting</td>
-    <td><input type="text" class="slidervalue penaltyvalue" id="penalty---widespread---salmon---chinook---upper-klamath-trinity-rivers-chinook-esu" value="0.5"/></td>
-    <td><div class="slider" id="slider_penalty---widespread---salmon---chinook---upper-klamath-trinity-rivers-chinook-esu"></div></td>
-    </tr>
-    </table>
-    </span>
-        </li>
-        <li>
-         <span> Washington Coast Chinook ESU </span>
-         <span class="sliders">
-    <table>
-    <tr>
-    <td>Proportion of Total Value</td>
-    <td><input type="text" class="slidervalue targetvalue" id="target---widespread---salmon---chinook---washington-coast-chinook-esu" value="0.5"/></td>
-    <td><div class="slider" id="slider_target---widespread---salmon---chinook---washington-coast-chinook-esu"></div></td>
-    </tr>
-    <tr>
-    <td>Importance Weighting</td>
-    <td><input type="text" class="slidervalue penaltyvalue" id="penalty---widespread---salmon---chinook---washington-coast-chinook-esu" value="0.5"/></td>
-    <td><div class="slider" id="slider_penalty---widespread---salmon---chinook---washington-coast-chinook-esu"></div></td>
-    </tr>
-    </table>
-    </span>
-        </li>
-        <li>
-         <span> Deschutes River summer/fall-run ESU </span>
-         <span class="sliders">
-    <table>
-    <tr>
-    <td>Proportion of Total Value</td>
-    <td><input type="text" class="slidervalue targetvalue" id="target---widespread---salmon---chinook---deschutes-river-summerfall-run-esu" value="0.5"/></td>
-    <td><div class="slider" id="slider_target---widespread---salmon---chinook---deschutes-river-summerfall-run-esu"></div></td>
-    </tr>
-    <tr>
-    <td>Importance Weighting</td>
-    <td><input type="text" class="slidervalue penaltyvalue" id="penalty---widespread---salmon---chinook---deschutes-river-summerfall-run-esu" value="0.5"/></td>
-    <td><div class="slider" id="slider_penalty---widespread---salmon---chinook---deschutes-river-summerfall-run-esu"></div></td>
-    </tr>
-    </table>
-    </span>
-        </li>
-        <li>
-         <span> Snake River Spring/Summer Run Chinook ESU </span>
-         <span class="sliders">
-    <table>
-    <tr>
-    <td>Proportion of Total Value</td>
-    <td><input type="text" class="slidervalue targetvalue" id="target---widespread---salmon---chinook---snake-river-springsummer-run-chinook-esu" value="0.5"/></td>
-    <td><div class="slider" id="slider_target---widespread---salmon---chinook---snake-river-springsummer-run-chinook-esu"></div></td>
-    </tr>
-    <tr>
-    <td>Importance Weighting</td>
-    <td><input type="text" class="slidervalue penaltyvalue" id="penalty---widespread---salmon---chinook---snake-river-springsummer-run-chinook-esu" value="0.5"/></td>
-    <td><div class="slider" id="slider_penalty---widespread---salmon---chinook---snake-river-springsummer-run-chinook-esu"></div></td>
-    </tr>
-    </table>
-    </span>
-        </li>
-        <li>
-         <span> Middle Columbia River spring-run Chinook ESU </span>
-         <span class="sliders">
-    <table>
-    <tr>
-    <td>Proportion of Total Value</td>
+    <td class="treelabel">Proportion of Total Value</td>
     <td><input type="text" class="slidervalue targetvalue" id="target---widespread---salmon---chinook---middle-columbia-river-spring-run-chinook-esu" value="0.5"/></td>
     <td><div class="slider" id="slider_target---widespread---salmon---chinook---middle-columbia-river-spring-run-chinook-esu"></div></td>
     </tr>
     <tr>
-    <td>Importance Weighting</td>
+    <td class="treelabel">Importance Weighting</td>
     <td><input type="text" class="slidervalue penaltyvalue" id="penalty---widespread---salmon---chinook---middle-columbia-river-spring-run-chinook-esu" value="0.5"/></td>
     <td><div class="slider" id="slider_penalty---widespread---salmon---chinook---middle-columbia-river-spring-run-chinook-esu"></div></td>
     </tr>
@@ -2112,18 +1449,120 @@
     </span>
         </li>
         <li>
-         <span> Snake River Fall-run Chinook ESU </span>
+         <span class="specieslabel"> Puget Sound Chinook ESU </span>
          <span class="sliders">
     <table>
     <tr>
-    <td>Proportion of Total Value</td>
+    <td class="treelabel">Proportion of Total Value</td>
+    <td><input type="text" class="slidervalue targetvalue" id="target---widespread---salmon---chinook---puget-sound-chinook-esu" value="0.5"/></td>
+    <td><div class="slider" id="slider_target---widespread---salmon---chinook---puget-sound-chinook-esu"></div></td>
+    </tr>
+    <tr>
+    <td class="treelabel">Importance Weighting</td>
+    <td><input type="text" class="slidervalue penaltyvalue" id="penalty---widespread---salmon---chinook---puget-sound-chinook-esu" value="0.5"/></td>
+    <td><div class="slider" id="slider_penalty---widespread---salmon---chinook---puget-sound-chinook-esu"></div></td>
+    </tr>
+    </table>
+    </span>
+        </li>
+        <li>
+         <span class="specieslabel"> Snake River Fall-run Chinook ESU </span>
+         <span class="sliders">
+    <table>
+    <tr>
+    <td class="treelabel">Proportion of Total Value</td>
     <td><input type="text" class="slidervalue targetvalue" id="target---widespread---salmon---chinook---snake-river-fall-run-chinook-esu" value="0.5"/></td>
     <td><div class="slider" id="slider_target---widespread---salmon---chinook---snake-river-fall-run-chinook-esu"></div></td>
     </tr>
     <tr>
-    <td>Importance Weighting</td>
+    <td class="treelabel">Importance Weighting</td>
     <td><input type="text" class="slidervalue penaltyvalue" id="penalty---widespread---salmon---chinook---snake-river-fall-run-chinook-esu" value="0.5"/></td>
     <td><div class="slider" id="slider_penalty---widespread---salmon---chinook---snake-river-fall-run-chinook-esu"></div></td>
+    </tr>
+    </table>
+    </span>
+        </li>
+        <li>
+         <span class="specieslabel"> Southern OR and Northern CA Coast Chinook ESU </span>
+         <span class="sliders">
+    <table>
+    <tr>
+    <td class="treelabel">Proportion of Total Value</td>
+    <td><input type="text" class="slidervalue targetvalue" id="target---widespread---salmon---chinook---southern-or-and-northern-ca-coast-chinook-esu" value="0.5"/></td>
+    <td><div class="slider" id="slider_target---widespread---salmon---chinook---southern-or-and-northern-ca-coast-chinook-esu"></div></td>
+    </tr>
+    <tr>
+    <td class="treelabel">Importance Weighting</td>
+    <td><input type="text" class="slidervalue penaltyvalue" id="penalty---widespread---salmon---chinook---southern-or-and-northern-ca-coast-chinook-esu" value="0.5"/></td>
+    <td><div class="slider" id="slider_penalty---widespread---salmon---chinook---southern-or-and-northern-ca-coast-chinook-esu"></div></td>
+    </tr>
+    </table>
+    </span>
+        </li>
+        <li>
+         <span class="specieslabel"> Upper Klamath-Trinity Rivers Chinook ESU </span>
+         <span class="sliders">
+    <table>
+    <tr>
+    <td class="treelabel">Proportion of Total Value</td>
+    <td><input type="text" class="slidervalue targetvalue" id="target---widespread---salmon---chinook---upper-klamath-trinity-rivers-chinook-esu" value="0.5"/></td>
+    <td><div class="slider" id="slider_target---widespread---salmon---chinook---upper-klamath-trinity-rivers-chinook-esu"></div></td>
+    </tr>
+    <tr>
+    <td class="treelabel">Importance Weighting</td>
+    <td><input type="text" class="slidervalue penaltyvalue" id="penalty---widespread---salmon---chinook---upper-klamath-trinity-rivers-chinook-esu" value="0.5"/></td>
+    <td><div class="slider" id="slider_penalty---widespread---salmon---chinook---upper-klamath-trinity-rivers-chinook-esu"></div></td>
+    </tr>
+    </table>
+    </span>
+        </li>
+        <li>
+         <span class="specieslabel"> Washington Coast Chinook ESU </span>
+         <span class="sliders">
+    <table>
+    <tr>
+    <td class="treelabel">Proportion of Total Value</td>
+    <td><input type="text" class="slidervalue targetvalue" id="target---widespread---salmon---chinook---washington-coast-chinook-esu" value="0.5"/></td>
+    <td><div class="slider" id="slider_target---widespread---salmon---chinook---washington-coast-chinook-esu"></div></td>
+    </tr>
+    <tr>
+    <td class="treelabel">Importance Weighting</td>
+    <td><input type="text" class="slidervalue penaltyvalue" id="penalty---widespread---salmon---chinook---washington-coast-chinook-esu" value="0.5"/></td>
+    <td><div class="slider" id="slider_penalty---widespread---salmon---chinook---washington-coast-chinook-esu"></div></td>
+    </tr>
+    </table>
+    </span>
+        </li>
+        <li>
+         <span class="specieslabel"> Deschutes River summer/fall-run ESU </span>
+         <span class="sliders">
+    <table>
+    <tr>
+    <td class="treelabel">Proportion of Total Value</td>
+    <td><input type="text" class="slidervalue targetvalue" id="target---widespread---salmon---chinook---deschutes-river-summerfall-run-esu" value="0.5"/></td>
+    <td><div class="slider" id="slider_target---widespread---salmon---chinook---deschutes-river-summerfall-run-esu"></div></td>
+    </tr>
+    <tr>
+    <td class="treelabel">Importance Weighting</td>
+    <td><input type="text" class="slidervalue penaltyvalue" id="penalty---widespread---salmon---chinook---deschutes-river-summerfall-run-esu" value="0.5"/></td>
+    <td><div class="slider" id="slider_penalty---widespread---salmon---chinook---deschutes-river-summerfall-run-esu"></div></td>
+    </tr>
+    </table>
+    </span>
+        </li>
+        <li>
+         <span class="specieslabel"> Snake River Spring/Summer Run Chinook ESU </span>
+         <span class="sliders">
+    <table>
+    <tr>
+    <td class="treelabel">Proportion of Total Value</td>
+    <td><input type="text" class="slidervalue targetvalue" id="target---widespread---salmon---chinook---snake-river-springsummer-run-chinook-esu" value="0.5"/></td>
+    <td><div class="slider" id="slider_target---widespread---salmon---chinook---snake-river-springsummer-run-chinook-esu"></div></td>
+    </tr>
+    <tr>
+    <td class="treelabel">Importance Weighting</td>
+    <td><input type="text" class="slidervalue penaltyvalue" id="penalty---widespread---salmon---chinook---snake-river-springsummer-run-chinook-esu" value="0.5"/></td>
+    <td><div class="slider" id="slider_penalty---widespread---salmon---chinook---snake-river-springsummer-run-chinook-esu"></div></td>
     </tr>
     </table>
     </span>
@@ -2133,16 +1572,16 @@
     </ul>
   </li>
     <li>
-     <span> Steelhead </span>
+     <span class="specieslabel"> Steelhead </span>
      <span class="sliders">
     <table>
     <tr>
-    <td>Proportion of Total Value</td>
+    <td class="treelabel">Proportion of Total Value</td>
     <td><input type="text" class="slidervalue targetvalue" id="target---widespread---steelhead" value="0.5"/></td>
     <td><div class="slider" id="slider_target---widespread---steelhead"></div></td>
     </tr>
     <tr>
-    <td>Importance Weighting</td>
+    <td class="treelabel">Importance Weighting</td>
     <td><input type="text" class="slidervalue penaltyvalue" id="penalty---widespread---steelhead" value="0.5"/></td>
     <td><div class="slider" id="slider_penalty---widespread---steelhead"></div></td>
     </tr>
@@ -2150,16 +1589,16 @@
     </span>
     <ul>
       <li>
-       <span> Middle Columbia River Steelhead DPS </span>
+       <span class="specieslabel"> Middle Columbia River Steelhead DPS </span>
        <span class="sliders">
     <table>
     <tr>
-    <td>Proportion of Total Value</td>
+    <td class="treelabel">Proportion of Total Value</td>
     <td><input type="text" class="slidervalue targetvalue" id="target---widespread---steelhead---middle-columbia-river-steelhead-dps" value="0.5"/></td>
     <td><div class="slider" id="slider_target---widespread---steelhead---middle-columbia-river-steelhead-dps"></div></td>
     </tr>
     <tr>
-    <td>Importance Weighting</td>
+    <td class="treelabel">Importance Weighting</td>
     <td><input type="text" class="slidervalue penaltyvalue" id="penalty---widespread---steelhead---middle-columbia-river-steelhead-dps" value="0.5"/></td>
     <td><div class="slider" id="slider_penalty---widespread---steelhead---middle-columbia-river-steelhead-dps"></div></td>
     </tr>
@@ -2167,16 +1606,16 @@
     </span>
       <ul>
         <li>
-         <span> Middle Columbia River Steelhead DPS </span>
+         <span class="specieslabel"> Middle Columbia River Steelhead DPS </span>
          <span class="sliders">
     <table>
     <tr>
-    <td>Proportion of Total Value</td>
+    <td class="treelabel">Proportion of Total Value</td>
     <td><input type="text" class="slidervalue targetvalue" id="target---widespread---steelhead---middle-columbia-river-steelhead-dps---middle-columbia-river-steelhead-dps" value="0.5"/></td>
     <td><div class="slider" id="slider_target---widespread---steelhead---middle-columbia-river-steelhead-dps---middle-columbia-river-steelhead-dps"></div></td>
     </tr>
     <tr>
-    <td>Importance Weighting</td>
+    <td class="treelabel">Importance Weighting</td>
     <td><input type="text" class="slidervalue penaltyvalue" id="penalty---widespread---steelhead---middle-columbia-river-steelhead-dps---middle-columbia-river-steelhead-dps" value="0.5"/></td>
     <td><div class="slider" id="slider_penalty---widespread---steelhead---middle-columbia-river-steelhead-dps---middle-columbia-river-steelhead-dps"></div></td>
     </tr>
@@ -2186,16 +1625,16 @@
       </ul>
       </li>
       <li>
-       <span> Puget Sound Steelhead DPS </span>
+       <span class="specieslabel"> Puget Sound Steelhead DPS </span>
        <span class="sliders">
     <table>
     <tr>
-    <td>Proportion of Total Value</td>
+    <td class="treelabel">Proportion of Total Value</td>
     <td><input type="text" class="slidervalue targetvalue" id="target---widespread---steelhead---puget-sound-steelhead-dps" value="0.5"/></td>
     <td><div class="slider" id="slider_target---widespread---steelhead---puget-sound-steelhead-dps"></div></td>
     </tr>
     <tr>
-    <td>Importance Weighting</td>
+    <td class="treelabel">Importance Weighting</td>
     <td><input type="text" class="slidervalue penaltyvalue" id="penalty---widespread---steelhead---puget-sound-steelhead-dps" value="0.5"/></td>
     <td><div class="slider" id="slider_penalty---widespread---steelhead---puget-sound-steelhead-dps"></div></td>
     </tr>
@@ -2203,16 +1642,16 @@
     </span>
       <ul>
         <li>
-         <span> Puget Sound Steelhead DPS </span>
+         <span class="specieslabel"> Puget Sound Steelhead DPS </span>
          <span class="sliders">
     <table>
     <tr>
-    <td>Proportion of Total Value</td>
+    <td class="treelabel">Proportion of Total Value</td>
     <td><input type="text" class="slidervalue targetvalue" id="target---widespread---steelhead---puget-sound-steelhead-dps---puget-sound-steelhead-dps" value="0.5"/></td>
     <td><div class="slider" id="slider_target---widespread---steelhead---puget-sound-steelhead-dps---puget-sound-steelhead-dps"></div></td>
     </tr>
     <tr>
-    <td>Importance Weighting</td>
+    <td class="treelabel">Importance Weighting</td>
     <td><input type="text" class="slidervalue penaltyvalue" id="penalty---widespread---steelhead---puget-sound-steelhead-dps---puget-sound-steelhead-dps" value="0.5"/></td>
     <td><div class="slider" id="slider_penalty---widespread---steelhead---puget-sound-steelhead-dps---puget-sound-steelhead-dps"></div></td>
     </tr>
@@ -2222,16 +1661,16 @@
       </ul>
       </li>
       <li>
-       <span> Upper Willamette River Steelhead DPS </span>
+       <span class="specieslabel"> Upper Willamette River Steelhead DPS </span>
        <span class="sliders">
     <table>
     <tr>
-    <td>Proportion of Total Value</td>
+    <td class="treelabel">Proportion of Total Value</td>
     <td><input type="text" class="slidervalue targetvalue" id="target---widespread---steelhead---upper-willamette-river-steelhead-dps" value="0.5"/></td>
     <td><div class="slider" id="slider_target---widespread---steelhead---upper-willamette-river-steelhead-dps"></div></td>
     </tr>
     <tr>
-    <td>Importance Weighting</td>
+    <td class="treelabel">Importance Weighting</td>
     <td><input type="text" class="slidervalue penaltyvalue" id="penalty---widespread---steelhead---upper-willamette-river-steelhead-dps" value="0.5"/></td>
     <td><div class="slider" id="slider_penalty---widespread---steelhead---upper-willamette-river-steelhead-dps"></div></td>
     </tr>
@@ -2239,16 +1678,16 @@
     </span>
       <ul>
         <li>
-         <span> Upper Willamette River Steelhead DPS </span>
+         <span class="specieslabel"> Upper Willamette River Steelhead DPS </span>
          <span class="sliders">
     <table>
     <tr>
-    <td>Proportion of Total Value</td>
+    <td class="treelabel">Proportion of Total Value</td>
     <td><input type="text" class="slidervalue targetvalue" id="target---widespread---steelhead---upper-willamette-river-steelhead-dps---upper-willamette-river-steelhead-dps" value="0.5"/></td>
     <td><div class="slider" id="slider_target---widespread---steelhead---upper-willamette-river-steelhead-dps---upper-willamette-river-steelhead-dps"></div></td>
     </tr>
     <tr>
-    <td>Importance Weighting</td>
+    <td class="treelabel">Importance Weighting</td>
     <td><input type="text" class="slidervalue penaltyvalue" id="penalty---widespread---steelhead---upper-willamette-river-steelhead-dps---upper-willamette-river-steelhead-dps" value="0.5"/></td>
     <td><div class="slider" id="slider_penalty---widespread---steelhead---upper-willamette-river-steelhead-dps---upper-willamette-river-steelhead-dps"></div></td>
     </tr>
@@ -2258,16 +1697,16 @@
       </ul>
       </li>
       <li>
-       <span> Upper Columbia River Steelhead DPS </span>
+       <span class="specieslabel"> Upper Columbia River Steelhead DPS </span>
        <span class="sliders">
     <table>
     <tr>
-    <td>Proportion of Total Value</td>
+    <td class="treelabel">Proportion of Total Value</td>
     <td><input type="text" class="slidervalue targetvalue" id="target---widespread---steelhead---upper-columbia-river-steelhead-dps" value="0.5"/></td>
     <td><div class="slider" id="slider_target---widespread---steelhead---upper-columbia-river-steelhead-dps"></div></td>
     </tr>
     <tr>
-    <td>Importance Weighting</td>
+    <td class="treelabel">Importance Weighting</td>
     <td><input type="text" class="slidervalue penaltyvalue" id="penalty---widespread---steelhead---upper-columbia-river-steelhead-dps" value="0.5"/></td>
     <td><div class="slider" id="slider_penalty---widespread---steelhead---upper-columbia-river-steelhead-dps"></div></td>
     </tr>
@@ -2275,16 +1714,16 @@
     </span>
       <ul>
         <li>
-         <span> Upper Columbia River Steelhead DPS </span>
+         <span class="specieslabel"> Upper Columbia River Steelhead DPS </span>
          <span class="sliders">
     <table>
     <tr>
-    <td>Proportion of Total Value</td>
+    <td class="treelabel">Proportion of Total Value</td>
     <td><input type="text" class="slidervalue targetvalue" id="target---widespread---steelhead---upper-columbia-river-steelhead-dps---upper-columbia-river-steelhead-dps" value="0.5"/></td>
     <td><div class="slider" id="slider_target---widespread---steelhead---upper-columbia-river-steelhead-dps---upper-columbia-river-steelhead-dps"></div></td>
     </tr>
     <tr>
-    <td>Importance Weighting</td>
+    <td class="treelabel">Importance Weighting</td>
     <td><input type="text" class="slidervalue penaltyvalue" id="penalty---widespread---steelhead---upper-columbia-river-steelhead-dps---upper-columbia-river-steelhead-dps" value="0.5"/></td>
     <td><div class="slider" id="slider_penalty---widespread---steelhead---upper-columbia-river-steelhead-dps---upper-columbia-river-steelhead-dps"></div></td>
     </tr>
@@ -2294,16 +1733,16 @@
       </ul>
       </li>
       <li>
-       <span> Olympic Peninsula Steelhead DPS </span>
+       <span class="specieslabel"> Olympic Peninsula Steelhead DPS </span>
        <span class="sliders">
     <table>
     <tr>
-    <td>Proportion of Total Value</td>
+    <td class="treelabel">Proportion of Total Value</td>
     <td><input type="text" class="slidervalue targetvalue" id="target---widespread---steelhead---olympic-peninsula-steelhead-dps" value="0.5"/></td>
     <td><div class="slider" id="slider_target---widespread---steelhead---olympic-peninsula-steelhead-dps"></div></td>
     </tr>
     <tr>
-    <td>Importance Weighting</td>
+    <td class="treelabel">Importance Weighting</td>
     <td><input type="text" class="slidervalue penaltyvalue" id="penalty---widespread---steelhead---olympic-peninsula-steelhead-dps" value="0.5"/></td>
     <td><div class="slider" id="slider_penalty---widespread---steelhead---olympic-peninsula-steelhead-dps"></div></td>
     </tr>
@@ -2311,16 +1750,16 @@
     </span>
       <ul>
         <li>
-         <span> Olympic Peninsula Steelhead DPS </span>
+         <span class="specieslabel"> Olympic Peninsula Steelhead DPS </span>
          <span class="sliders">
     <table>
     <tr>
-    <td>Proportion of Total Value</td>
+    <td class="treelabel">Proportion of Total Value</td>
     <td><input type="text" class="slidervalue targetvalue" id="target---widespread---steelhead---olympic-peninsula-steelhead-dps---olympic-peninsula-steelhead-dps" value="0.5"/></td>
     <td><div class="slider" id="slider_target---widespread---steelhead---olympic-peninsula-steelhead-dps---olympic-peninsula-steelhead-dps"></div></td>
     </tr>
     <tr>
-    <td>Importance Weighting</td>
+    <td class="treelabel">Importance Weighting</td>
     <td><input type="text" class="slidervalue penaltyvalue" id="penalty---widespread---steelhead---olympic-peninsula-steelhead-dps---olympic-peninsula-steelhead-dps" value="0.5"/></td>
     <td><div class="slider" id="slider_penalty---widespread---steelhead---olympic-peninsula-steelhead-dps---olympic-peninsula-steelhead-dps"></div></td>
     </tr>
@@ -2330,16 +1769,16 @@
       </ul>
       </li>
       <li>
-       <span> Snake River Basin Steelhead DPS </span>
+       <span class="specieslabel"> Snake River Basin Steelhead DPS </span>
        <span class="sliders">
     <table>
     <tr>
-    <td>Proportion of Total Value</td>
+    <td class="treelabel">Proportion of Total Value</td>
     <td><input type="text" class="slidervalue targetvalue" id="target---widespread---steelhead---snake-river-basin-steelhead-dps" value="0.5"/></td>
     <td><div class="slider" id="slider_target---widespread---steelhead---snake-river-basin-steelhead-dps"></div></td>
     </tr>
     <tr>
-    <td>Importance Weighting</td>
+    <td class="treelabel">Importance Weighting</td>
     <td><input type="text" class="slidervalue penaltyvalue" id="penalty---widespread---steelhead---snake-river-basin-steelhead-dps" value="0.5"/></td>
     <td><div class="slider" id="slider_penalty---widespread---steelhead---snake-river-basin-steelhead-dps"></div></td>
     </tr>
@@ -2347,16 +1786,16 @@
     </span>
       <ul>
         <li>
-         <span> Snake River Basin Steelhead DPS </span>
+         <span class="specieslabel"> Snake River Basin Steelhead DPS </span>
          <span class="sliders">
     <table>
     <tr>
-    <td>Proportion of Total Value</td>
+    <td class="treelabel">Proportion of Total Value</td>
     <td><input type="text" class="slidervalue targetvalue" id="target---widespread---steelhead---snake-river-basin-steelhead-dps---snake-river-basin-steelhead-dps" value="0.5"/></td>
     <td><div class="slider" id="slider_target---widespread---steelhead---snake-river-basin-steelhead-dps---snake-river-basin-steelhead-dps"></div></td>
     </tr>
     <tr>
-    <td>Importance Weighting</td>
+    <td class="treelabel">Importance Weighting</td>
     <td><input type="text" class="slidervalue penaltyvalue" id="penalty---widespread---steelhead---snake-river-basin-steelhead-dps---snake-river-basin-steelhead-dps" value="0.5"/></td>
     <td><div class="slider" id="slider_penalty---widespread---steelhead---snake-river-basin-steelhead-dps---snake-river-basin-steelhead-dps"></div></td>
     </tr>
@@ -2366,16 +1805,16 @@
       </ul>
       </li>
       <li>
-       <span> Southwest Washington Steelhead DPS </span>
+       <span class="specieslabel"> Southwest Washington Steelhead DPS </span>
        <span class="sliders">
     <table>
     <tr>
-    <td>Proportion of Total Value</td>
+    <td class="treelabel">Proportion of Total Value</td>
     <td><input type="text" class="slidervalue targetvalue" id="target---widespread---steelhead---southwest-washington-steelhead-dps" value="0.5"/></td>
     <td><div class="slider" id="slider_target---widespread---steelhead---southwest-washington-steelhead-dps"></div></td>
     </tr>
     <tr>
-    <td>Importance Weighting</td>
+    <td class="treelabel">Importance Weighting</td>
     <td><input type="text" class="slidervalue penaltyvalue" id="penalty---widespread---steelhead---southwest-washington-steelhead-dps" value="0.5"/></td>
     <td><div class="slider" id="slider_penalty---widespread---steelhead---southwest-washington-steelhead-dps"></div></td>
     </tr>
@@ -2383,16 +1822,16 @@
     </span>
       <ul>
         <li>
-         <span> Southwest Washington Steelhead DPS </span>
+         <span class="specieslabel"> Southwest Washington Steelhead DPS </span>
          <span class="sliders">
     <table>
     <tr>
-    <td>Proportion of Total Value</td>
+    <td class="treelabel">Proportion of Total Value</td>
     <td><input type="text" class="slidervalue targetvalue" id="target---widespread---steelhead---southwest-washington-steelhead-dps---southwest-washington-steelhead-dps" value="0.5"/></td>
     <td><div class="slider" id="slider_target---widespread---steelhead---southwest-washington-steelhead-dps---southwest-washington-steelhead-dps"></div></td>
     </tr>
     <tr>
-    <td>Importance Weighting</td>
+    <td class="treelabel">Importance Weighting</td>
     <td><input type="text" class="slidervalue penaltyvalue" id="penalty---widespread---steelhead---southwest-washington-steelhead-dps---southwest-washington-steelhead-dps" value="0.5"/></td>
     <td><div class="slider" id="slider_penalty---widespread---steelhead---southwest-washington-steelhead-dps---southwest-washington-steelhead-dps"></div></td>
     </tr>
@@ -2402,16 +1841,16 @@
       </ul>
       </li>
       <li>
-       <span> Oregon Coast Steelhead DPS </span>
+       <span class="specieslabel"> Oregon Coast Steelhead DPS </span>
        <span class="sliders">
     <table>
     <tr>
-    <td>Proportion of Total Value</td>
+    <td class="treelabel">Proportion of Total Value</td>
     <td><input type="text" class="slidervalue targetvalue" id="target---widespread---steelhead---oregon-coast-steelhead-dps" value="0.5"/></td>
     <td><div class="slider" id="slider_target---widespread---steelhead---oregon-coast-steelhead-dps"></div></td>
     </tr>
     <tr>
-    <td>Importance Weighting</td>
+    <td class="treelabel">Importance Weighting</td>
     <td><input type="text" class="slidervalue penaltyvalue" id="penalty---widespread---steelhead---oregon-coast-steelhead-dps" value="0.5"/></td>
     <td><div class="slider" id="slider_penalty---widespread---steelhead---oregon-coast-steelhead-dps"></div></td>
     </tr>
@@ -2419,16 +1858,16 @@
     </span>
       <ul>
         <li>
-         <span> Oregon Coast Steelhead DPS </span>
+         <span class="specieslabel"> Oregon Coast Steelhead DPS </span>
          <span class="sliders">
     <table>
     <tr>
-    <td>Proportion of Total Value</td>
+    <td class="treelabel">Proportion of Total Value</td>
     <td><input type="text" class="slidervalue targetvalue" id="target---widespread---steelhead---oregon-coast-steelhead-dps---oregon-coast-steelhead-dps" value="0.5"/></td>
     <td><div class="slider" id="slider_target---widespread---steelhead---oregon-coast-steelhead-dps---oregon-coast-steelhead-dps"></div></td>
     </tr>
     <tr>
-    <td>Importance Weighting</td>
+    <td class="treelabel">Importance Weighting</td>
     <td><input type="text" class="slidervalue penaltyvalue" id="penalty---widespread---steelhead---oregon-coast-steelhead-dps---oregon-coast-steelhead-dps" value="0.5"/></td>
     <td><div class="slider" id="slider_penalty---widespread---steelhead---oregon-coast-steelhead-dps---oregon-coast-steelhead-dps"></div></td>
     </tr>
@@ -2438,16 +1877,16 @@
       </ul>
       </li>
       <li>
-       <span> Klamath Mountains Province Steelhead DPS </span>
+       <span class="specieslabel"> Klamath Mountains Province Steelhead DPS </span>
        <span class="sliders">
     <table>
     <tr>
-    <td>Proportion of Total Value</td>
+    <td class="treelabel">Proportion of Total Value</td>
     <td><input type="text" class="slidervalue targetvalue" id="target---widespread---steelhead---klamath-mountains-province-steelhead-dps" value="0.5"/></td>
     <td><div class="slider" id="slider_target---widespread---steelhead---klamath-mountains-province-steelhead-dps"></div></td>
     </tr>
     <tr>
-    <td>Importance Weighting</td>
+    <td class="treelabel">Importance Weighting</td>
     <td><input type="text" class="slidervalue penaltyvalue" id="penalty---widespread---steelhead---klamath-mountains-province-steelhead-dps" value="0.5"/></td>
     <td><div class="slider" id="slider_penalty---widespread---steelhead---klamath-mountains-province-steelhead-dps"></div></td>
     </tr>
@@ -2455,16 +1894,16 @@
     </span>
       <ul>
         <li>
-         <span> Klamath Mountains Province Steelhead DPS </span>
+         <span class="specieslabel"> Klamath Mountains Province Steelhead DPS </span>
          <span class="sliders">
     <table>
     <tr>
-    <td>Proportion of Total Value</td>
+    <td class="treelabel">Proportion of Total Value</td>
     <td><input type="text" class="slidervalue targetvalue" id="target---widespread---steelhead---klamath-mountains-province-steelhead-dps---klamath-mountains-province-steelhead-dps" value="0.5"/></td>
     <td><div class="slider" id="slider_target---widespread---steelhead---klamath-mountains-province-steelhead-dps---klamath-mountains-province-steelhead-dps"></div></td>
     </tr>
     <tr>
-    <td>Importance Weighting</td>
+    <td class="treelabel">Importance Weighting</td>
     <td><input type="text" class="slidervalue penaltyvalue" id="penalty---widespread---steelhead---klamath-mountains-province-steelhead-dps---klamath-mountains-province-steelhead-dps" value="0.5"/></td>
     <td><div class="slider" id="slider_penalty---widespread---steelhead---klamath-mountains-province-steelhead-dps---klamath-mountains-province-steelhead-dps"></div></td>
     </tr>
@@ -2474,16 +1913,16 @@
       </ul>
       </li>
       <li>
-       <span> Lower Columbia River  Steelhead DPS </span>
+       <span class="specieslabel"> Lower Columbia River  Steelhead DPS </span>
        <span class="sliders">
     <table>
     <tr>
-    <td>Proportion of Total Value</td>
+    <td class="treelabel">Proportion of Total Value</td>
     <td><input type="text" class="slidervalue targetvalue" id="target---widespread---steelhead---lower-columbia-river-steelhead-dps" value="0.5"/></td>
     <td><div class="slider" id="slider_target---widespread---steelhead---lower-columbia-river-steelhead-dps"></div></td>
     </tr>
     <tr>
-    <td>Importance Weighting</td>
+    <td class="treelabel">Importance Weighting</td>
     <td><input type="text" class="slidervalue penaltyvalue" id="penalty---widespread---steelhead---lower-columbia-river-steelhead-dps" value="0.5"/></td>
     <td><div class="slider" id="slider_penalty---widespread---steelhead---lower-columbia-river-steelhead-dps"></div></td>
     </tr>
@@ -2491,16 +1930,16 @@
     </span>
       <ul>
         <li>
-         <span> Lower Columbia River  Steelhead DPS </span>
+         <span class="specieslabel"> Lower Columbia River  Steelhead DPS </span>
          <span class="sliders">
     <table>
     <tr>
-    <td>Proportion of Total Value</td>
+    <td class="treelabel">Proportion of Total Value</td>
     <td><input type="text" class="slidervalue targetvalue" id="target---widespread---steelhead---lower-columbia-river-steelhead-dps---lower-columbia-river-steelhead-dps" value="0.5"/></td>
     <td><div class="slider" id="slider_target---widespread---steelhead---lower-columbia-river-steelhead-dps---lower-columbia-river-steelhead-dps"></div></td>
     </tr>
     <tr>
-    <td>Importance Weighting</td>
+    <td class="treelabel">Importance Weighting</td>
     <td><input type="text" class="slidervalue penaltyvalue" id="penalty---widespread---steelhead---lower-columbia-river-steelhead-dps---lower-columbia-river-steelhead-dps" value="0.5"/></td>
     <td><div class="slider" id="slider_penalty---widespread---steelhead---lower-columbia-river-steelhead-dps---lower-columbia-river-steelhead-dps"></div></td>
     </tr>
@@ -2522,21 +1961,29 @@
         <form action="#" id="costs_form">
            <div>
             <table>
+    
+
                 <tr>
-                <td><label for="cost-climate">Climate</label></td>
-                <td><input type="text" class="slidervalue costvalue" id="cost-climate" value="0.5"/></td>
-                <td><div class="slider" id="slider_cost-climate"></div></td>
+                <td><label for="cost---watershed-condition">Watershed Condition</label></td>
+                <td><input type="text" class="slidervalue costvalue" id="cost---watershed-condition" value="0.5"/></td>
+                <td><div class="slider" id="slider_cost---watershed-condition"></div></td>
                 </tr>
+        
+
                 <tr>
-                <td><label for="cost-invasives">Invasives</label></td>
-                <td><input type="text" class="slidervalue costvalue" id="cost-invasives" value="0.5"/></td>
-                <td><div class="slider" id="slider_cost-invasives"></div></td>
+                <td><label for="cost---invasives">Invasives</label></td>
+                <td><input type="text" class="slidervalue costvalue" id="cost---invasives" value="0.5"/></td>
+                <td><div class="slider" id="slider_cost---invasives"></div></td>
                 </tr>
+        
+
                 <tr>
-                <td><label for="cost-watershedcondition">Watershed Condition</label></td>
-                <td><input type="text" class="slidervalue costvalue" id="cost-watershedcondition" value="0.5"/></td>
-                <td><div class="slider" id="slider_cost-watershedcondition"></div></td>
+                <td><label for="cost---climate">Climate</label></td>
+                <td><input type="text" class="slidervalue costvalue" id="cost---climate" value="0.5"/></td>
+                <td><div class="slider" id="slider_cost---climate"></div></td>
                 </tr>
+        
+
              </table>
            </div>
         </form>

@@ -1,5 +1,7 @@
 {% extends 'common/panel.html' %}
 {% load humanize %}
+{% load set_var %}
+{% load percentage %}
 {% block title %}{{instance.name}}{% endblock title %}
 {% block panel %}
 <h1>Analysis results for {{instance.name}}</h1>
@@ -75,6 +77,7 @@ lingcod.beforeDestroy(function() {
 {% endblock progress %}
 {% endif %}
 
+    {% set results = instance.results %}
     <div class="tabs">
         <ul>
             <li><a href="#Inputs"><span>Inputs</span></a></li>
@@ -83,84 +86,69 @@ lingcod.beforeDestroy(function() {
             {% endif %}
         </ul>
         <div id="Inputs">
-            <div class="box species" id="coho">
-                <p> Coho target: {{ instance.input_target_coho }}</p>
-                <p> Penalty: {{ instance.input_penalty_coho }}</p>     
-            </div>
-            <div class="box species" id="chinook">
-                <p> Chinook target: {{ instance.input_target_chinook }}</p>
-                <p> Penalty: {{ instance.input_penalty_chinook }}</p>     
-            </div>
-            <div class="box species" id="steelhead">
-                <p> Steelhead target: {{ instance.input_target_steelhead }}</p>
-                <p> Penalty: {{ instance.input_penalty_steelhead }}</p>     
-            </div>
-            <div class="box species" id="climate">
-                <p> Climate Impact: {{ instance.input_cost_climate }}</p>
+            <div class="box">
+             <table class="table">
+             <thead> <th>Species Key</th><th>Proportion of Target</th><th>Importance Weighting</th></thead>
+             {%for k,v in results.targets_penalties.items %}
+             <tr> <td><strong>{{k}}</strong></td><td>{{v.target}} </td><td>{{v.penalty}}</td></tr>
+             {%endfor%}
+             </table>
+             <hr/>
+             <table class="table">
+             <thead> <th>Cost</th><th>Relative Weighting</th></thead>
+             {%for k,v in results.costs.items %}
+             <tr> <td><strong>{{k}}</strong></td><td>{{v}}</td></tr>
+             {%endfor%}
+             </table>
             </div>
         </div>
         {% if instance.done %}
         <div id="results" class="tabs">
         <ul>
             <li><a href="#summary"><span>Summary</span></a></li>
-            <li><a href="#watersheds"><span>Watersheds</span></a></li>
+            <li><a href="#watersheds"><span>Subbasins</span></a></li>
             <li><a href="#species"><span>Species</span></a></li>
-            <li><a href="#details"><span>Details</span></a></li>
         </ul>
 
         <div id="summary">
             <div class="box">
-                <p>This reserve scenario includes {{instance.marxan.num_units}} watersheds comprising a total of {{instance.marxan.area|floatformat:1|intcomma}} km<sup>2</sup>. </p>
-                <p>Habitat targets were met for {{instance.marxan.hit}} of {{instance.marxan.num_species}} focal species.</p>
-                <p>The analysis took {{instance.marxan.time}} to complete {{instance.marxan.runs}} runs.</p>
+                <p>The best (i.e. lowest "cost") watershed prioritization scenario includes {{results.num_units}} subbasins comprising a total of {{results.area|floatformat:1|intcomma}} km<sup>2</sup>. </p>
+                <p>Viability goals were met for {{results.num_met}} of {{results.num_species}} focal species.</p>
             </div>
         </div>
         <div id="watersheds">
             <div class="box">
-                <p>This reserve scenario includes {{instance.marxan.num_units}} watersheds comprising a total of {{instance.marxan.area|floatformat:1|intcomma}} km<sup>2</sup>. </p>
+                <p>The best (i.e. lowest "cost") watershed prioritization scenario includes {{results.num_units}} subbasins comprising a total of {{results.area|floatformat:1|intcomma}} km<sup>2</sup>. </p>
                 <ul>
-                {% for w in instance.marxan.watersheds %}
-                    <li>{{w.name}} ({{w.huc12}})</li>
+                {% for w in results.units %}
+                    <li>{{w.name}}</li>
                 {% endfor %}
                 </ul>
             </div>
         </div>
         <div id="species">
             <div class="box">
-                <h3> Habitat by Species (<em>meters</em>)</h3>
-                <table id="species_table" summary="Species Table">
+                <h3> Habitat by Species</h3>
+                <table class="table" id="species_table" summary="Species Table">
                 <thead>
                     <tr>
                     <th scope="col"> Species </th>
-                    <th scope="col"> Total Habitat</th>
                     <th scope="col"> Target Amount</th> 
                     <th scope="col"> Current Reserve Amount</th>
-                    <th scope="col"> Occurences</th>
+                    <th scope="col"> Percent of Target</th>
                     <tr>
                 </thead>
                 <tbody>
-                {% for s in instance.marxan.species %}
-                <tr{% if s.miss %} class="miss"{% else %} class="hit"{% endif %}>
+                {% for s in results.species %}
+                <tr{% if not s.met %} class="miss"{% else %} class="hit"{% endif %}>
                     <td> <strong>{{s.name}}</strong> </td>
-                    <td> {{s.total|floatformat:0|intcomma}} </td> 
-                    <td> {{s.target|floatformat:0|intcomma}} ({{s.pct|floatformat:2}})</td>
-                    <td> {{s.amount|floatformat:0|intcomma}} </td> 
-                    <td> {{s.occurences}} </td> 
+                    <td> {{s.target|floatformat:2|intcomma}} </td>
+                    <td> {{s.held|floatformat:2|intcomma}} </td> 
+                    <td> {% if not s.met %} {{s.pct_target|percentage}} {% else %} &#8805; 100% {% endif %} </td>
                 </tr>
                 {% endfor %}
                 </tbody>
             </table>
-
-            <img src="{{instance.marxan.chart_url}}"/>
-            </div>
-        </div>
-        <div id="details">
-            <h3> Marxan Log File output </h3>
-            <div class="box">
-                <pre class="log">
-                    {{instance.marxan.log}}
-                </pre>
-            </div>
         </div>
         </div>
         {% endif %}

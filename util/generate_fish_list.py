@@ -8,20 +8,21 @@ setup_environ(settings)
 
 #==================================#
 from arp.models import ConservationFeature as F
+from arp.models import Cost
 from django.template.defaultfilters import slugify
 
 def output(level,val,crumbs, target=0.5, penalty=0.5):
     id = '---'.join([slugify(x) for x in crumbs])
-    print "  "*level, "<span>", val,'</span>'
+    print "  "*level, '<span class="specieslabel">', val,'</span>'
     print "  "*level, '''<span class="sliders">
     <table>
     <tr>
-    <td>Proportion of Total Value</td>
+    <td class="treelabel">Proportion of Total Value</td>
     <td><input type="text" class="slidervalue targetvalue" id="target---%(id)s" value="%(target)s"/></td>
     <td><div class="slider" id="slider_target---%(id)s"></div></td>
     </tr>
     <tr>
-    <td>Importance Weighting</td>
+    <td class="treelabel">Importance Weighting</td>
     <td><input type="text" class="slidervalue penaltyvalue" id="penalty---%(id)s" value="%(penalty)s"/></td>
     <td><div class="slider" id="slider_penalty---%(id)s"></div></td>
     </tr>
@@ -40,16 +41,26 @@ def header():
             if ($('#id_input_targets').val() && 
                 $('#id_input_penalties').val() && 
                 $('#id_input_relativecosts').val()) { 
-                console.log("Restoring Species List State...");
                  
-                // This could get ugly...
-                // The textareas contain the repr of the corresponding model field
-                // This means the dicts have unicody stuff in there ... {u'costs': ....}
-                var costs = JSON.parse($('#id_input_relativecosts').val());
-                $.each(costs, function(key, val) {
-                    $("#cost-" + key).val(val);
+                //console.log("Restoring Costs slider state...");
+                var in_costs = JSON.parse($('#id_input_relativecosts').val());
+                $.each(in_costs, function(key, val) {
+                    $("#cost---" + key).val(val);
                 });
 
+                //console.log("Restoring Targets slider state...");
+                var in_targets = JSON.parse($('#id_input_targets').val());
+                $.each(in_targets, function(key, val) {
+                    $("#target---" + key).val(val);
+                });
+
+                //console.log("Restoring Penalties slider state...");
+                var in_penalties = JSON.parse($('#id_input_penalties').val());
+                $.each(in_penalties, function(key, val) {
+                    $("#penalty---" + key).val(val);
+                });
+
+                // TODO Restore tree state
             };
         }; 
         params_impute();
@@ -81,7 +92,7 @@ def header():
             $('.costvalue:visible').each( function(index) {
                 var xid = $(this).attr("id");
                 var id = "#" + xid;
-                xid = xid.replace(/^cost-/,''); //  Remove preceding identifier
+                xid = xid.replace(/^cost---/,''); //  Remove preceding identifier
                 costs[xid] = parseFloat($(id).val());
             });
             $('#id_input_targets').val( JSON.stringify(targets) ); 
@@ -185,22 +196,25 @@ def header():
 """
 
 def main():
+    """
+    Dear lord someone should be shot for writing this
+    """
     L1 = F.objects.values_list('level1',flat=True).distinct()
     print "<ul id='focalspecies_tree'>"
     for val1 in L1:
         print "  <li>"
         output(1,val1,[val1])
-        L2 = F.objects.filter(level1=val1).values_list('level2',flat=True).distinct().exclude(level2=None)
+        L2 = F.objects.filter(level1=val1).values_list('level2',flat=True).distinct().exclude(level2=None).exclude(level2='')
         print "  <ul>"
         for val2 in L2:
             print "    <li>"
             output(2,val2,[val1,val2])
-            L3 = F.objects.filter(level2=val2).values_list('level3',flat=True).distinct().exclude(level3=None)
+            L3 = F.objects.filter(level2=val2).values_list('level3',flat=True).distinct().exclude(level3=None).exclude(level3='')
             if len(L3) > 0: print "    <ul>"
             for val3 in L3:
                 print "      <li>"
                 output(3,val3,[val1,val2,val3])
-                L4 = F.objects.filter(level3=val3).values_list('level4',flat=True).distinct().exclude(level4=None)
+                L4 = F.objects.filter(level3=val3).values_list('level4',flat=True).distinct().exclude(level4=None).exclude(level4='')
                 if len(L4) > 0: print "      <ul>"
                 for val4 in L4:
                     print "        <li>"
@@ -223,21 +237,18 @@ def footer():
         <form action="#" id="costs_form">
            <div>
             <table>
+    """
+    for c in Cost.objects.all(): 
+        cname = slugify(c.name.lower())
+        print """
                 <tr>
-                <td><label for="cost-climate">Climate</label></td>
-                <td><input type="text" class="slidervalue costvalue" id="cost-climate" value="0.5"/></td>
-                <td><div class="slider" id="slider_cost-climate"></div></td>
+                <td><label for="cost---%(cname)s">%(full)s</label></td>
+                <td><input type="text" class="slidervalue costvalue" id="cost---%(cname)s" value="0.5"/></td>
+                <td><div class="slider" id="slider_cost---%(cname)s"></div></td>
                 </tr>
-                <tr>
-                <td><label for="cost-invasives">Invasives</label></td>
-                <td><input type="text" class="slidervalue costvalue" id="cost-invasives" value="0.5"/></td>
-                <td><div class="slider" id="slider_cost-invasives"></div></td>
-                </tr>
-                <tr>
-                <td><label for="cost-watershedcondition">Watershed Condition</label></td>
-                <td><input type="text" class="slidervalue costvalue" id="cost-watershedcondition" value="0.5"/></td>
-                <td><div class="slider" id="slider_cost-watershedcondition"></div></td>
-                </tr>
+        """ % {'cname': cname, 'full': c.name}
+
+    print """
              </table>
            </div>
         </form>

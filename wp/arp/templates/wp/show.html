@@ -89,9 +89,9 @@ lingcod.beforeDestroy(function() {
             <div class="box">
              <table class="table">
              <thead> <th>Species Key</th><th>Proportion of Target</th><th>Importance Weighting</th></thead>
-             {%for k,v in results.targets_penalties.items %}
+             {% for k,v in results.targets_penalties.items %}
              <tr> <td><strong>{{k}}</strong></td><td>{{v.target}} </td><td>{{v.penalty}}</td></tr>
-             {%endfor%}
+             {% endfor %}
              </table>
              <hr/>
              <table class="table">
@@ -133,6 +133,7 @@ lingcod.beforeDestroy(function() {
                 <thead>
                     <tr>
                     <th scope="col"> Species </th>
+                    <th scope="col"> Local or Widespread </th>
                     <th scope="col"> Target Amount</th> 
                     <th scope="col"> Current Reserve Amount</th>
                     <th scope="col"> Percent of Target</th>
@@ -142,6 +143,7 @@ lingcod.beforeDestroy(function() {
                 {% for s in results.species %}
                 <tr{% if not s.met %} class="miss"{% else %} class="hit"{% endif %}>
                     <td> <strong>{{s.name}}</strong> </td>
+                    <td> {{s.level1}} </td>
                     <td> {{s.target|floatformat:2|intcomma}} </td>
                     <td> {{s.held|floatformat:2|intcomma}} </td> 
                     <td> {% if not s.met %} {{s.pct_target|percentage}} {% else %} &#8805; 100% {% endif %} </td>

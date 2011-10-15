@@ -249,6 +249,7 @@ class WatershedPrioritization(Analysis):
             sid = int(line[0])
             sname = ConservationFeature.objects.get(pk=sid).name
             sunits = ConservationFeature.objects.get(pk=sid).units
+            slevel1 = ConservationFeature.objects.get(pk=sid).level1
             starget = float(line[2])
             sheld = float(line[3])
             smpm = float(line[9])
@@ -257,8 +258,10 @@ class WatershedPrioritization(Analysis):
                 smet = True
                 num_met += 1
             s = {'name': sname, 'id': sid, 'target': starget, 'units': sunits,
-                 'held': sheld, 'met': smet, 'pct_target': smpm }
+                    'held': sheld, 'met': smet, 'pct_target': smpm, 'level1': slevel1 }
             species.append(s)      
+
+        species.sort(key=lambda k:k['name'].lower())
 
         res = {
             'costs': cost_weights,
@@ -268,7 +271,7 @@ class WatershedPrioritization(Analysis):
             'num_met': num_met,
             'num_species': len(species),
             'units': best,
-            'species': species
+            'species': species, 
         }
         return res
         

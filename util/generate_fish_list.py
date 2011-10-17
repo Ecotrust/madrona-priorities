@@ -131,26 +131,6 @@ def header():
 
 <link rel="stylesheet" href="/media/common/js/treeview/jquery.treeview.css" />
 <link rel="stylesheet" href="/media/common/js/treeview/jquery-widgets.css" />
-<style type="text/css">
-    .hidden { display: none; }
-    li.collapsable > span.sliders { display: none; }
-    li.expandable > span.sliders { color: black; display: inline; }
-    td { padding-right:6px; font-size: 75%; color:#444; }
-    .slider { margin-bottom: 1px;   }
-    .slidervalue { font-size: 80% }
-    .ui-slider .ui-slider-handle { position: absolute; z-index: 2; width: 0.7em; height: 0.7em; 
-        cursor: default; border: 1px solid #b3b3b3/*{borderColorDefault}*/; 
-        background: #F4F8FB; font-weight: normal; color: #555555; }
-    .ui-slider-horizontal { height: .4em; border: 1px solid #888888; color: #222222; }
-    .ui-slider-horizontal .ui-slider-range { top: 0; height: 100%; }
-    .ui-slider-horizontal .ui-slider-range-min { left: 0; background:#9a9a9a}
-    .ui-widget { font-size: 100% ! important; }
-    .treeview ul {background-color: #F4F8FB ! important; }
-    .slider { width: 120px; }
-    .slidervalue { width: 35px ! important;}
-    .marinemap-panel form ul li { padding-left: 16px ! important; }
-    .marinemap-panel form textarea, .marinemap-panel form input { margin-bottom: 1px ! important;}
-</style>
 
     <h1>{{title}} input parameters</h1>
 

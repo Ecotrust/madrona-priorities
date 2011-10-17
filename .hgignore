@@ -36,5 +36,5 @@ anneal/backup/*
 *.out
 *.prof
 *.working
-data/*
+data/local/*
 

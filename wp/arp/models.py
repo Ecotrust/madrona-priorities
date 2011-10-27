@@ -63,7 +63,7 @@ class ConservationFeature(models.Model):
     level5 = models.CharField(max_length=99,null=True,blank=True)
     esu_dps = models.CharField(max_length=99, null=True, blank=True)
     dbf_fieldname = models.CharField(max_length=15,null=True,blank=True)
-    units = models.CharField(max_length=16, null=True, blank=True)
+    units = models.CharField(max_length=40, null=True, blank=True)
 
     @ property
     def level_string(self):

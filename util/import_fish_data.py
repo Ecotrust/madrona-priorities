@@ -10,8 +10,8 @@ from arp.models import ConservationFeature, PlanningUnit, Cost, PuVsCf, PuVsCost
 
 #------------------------------------#
 # Config
-xls = "../data/PrioritySpeciesList_DRAFT_mp.xls" # NOT xlsx
-shp = "../data/HUC8_FocalSpecies.shp"
+xls = "../data/local/input/PrioritySpeciesList_DRAFT_mp.xls" # NOT xlsx
+shp = "../data/local/input/HUC8_FocalSpecies.shp"
 backup = False
 import_shp = True
 #------------------------------------#

@@ -165,7 +165,7 @@ class WatershedPrioritization(Analysis):
         cost_weights = json.loads(self.input_relativecosts)
 
         assert len(targets.keys()) == len(penalties.keys()) == len(ConservationFeature.objects.all())
-        assert max(targets.values()) < 1.0
+        assert max(targets.values()) <= 1.0
         assert min(targets.values()) >=  0.0
 
         # Apply the target and penalties
@@ -177,9 +177,9 @@ class WatershedPrioritization(Analysis):
             except TypeError: 
                 total = 0.0
             target = total * targets[cf.pk]
-            penalty = penalties[cf.pk]
-            if target > 0:
-                cfs.append((cf.pk, target, penalty, cf.name))
+            penalty = penalties[cf.pk] * 10 #TODO scale
+            #if target > 0: # MUST include all species even if they are zero
+            cfs.append((cf.pk, target, penalty, cf.name))
 
         # Calc costs for each planning unit
         # Old way - no wieghting
@@ -360,16 +360,24 @@ class WatershedPrioritization(Analysis):
         ob = json.loads(self.output_best)
         wids = [int(x.strip()) for x in ob['best']]
         puc = json.loads(self.output_pu_count)
-        wshds = PlanningUnit.objects.filter(pk__in=wids)
+        # WARNING this only shows them if they were in the 'best' run!
+        # wshds = PlanningUnit.objects.filter(pk__in=wids)
+        # instead, do all
+        wshds = PlanningUnit.objects.all()
+
         kmls = []
-        #color = '9933ffdd'
-        color = "cc%02X%02X%02X" % (random.randint(0,255),random.randint(0,255),random.randint(0,255))
+        color = 'aa0000ff'
+        #color = "cc%02X%02X%02X" % (random.randint(0,255),random.randint(0,255),random.randint(0,255))
         for ws in wshds:
-            hits = puc[str(ws.pk)] 
+            try:
+                hits = puc[str(ws.pk)] 
+            except:
+                hits = 0
             numruns = settings.MARXAN_NUMREPS
             prop = float(hits)/numruns
-            scale = (1.2 * prop * prop) 
-            if scale < 0.2: scale = 0.2
+            scale = (1.4 * prop * prop) 
+            if scale > 0 and scale < 0.5: 
+                scale = 0.5
             kmls.append( """
             <Style id="style_%s">
                 <IconStyle>

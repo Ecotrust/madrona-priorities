@@ -378,7 +378,8 @@ class WatershedPrioritization(Analysis):
             scale = (1.4 * prop * prop) 
             if scale > 0 and scale < 0.5: 
                 scale = 0.5
-            kmls.append( """
+            if prop > 0:
+                kmls.append( """
             <Style id="style_%s">
                 <IconStyle>
                     <color>%s</color>

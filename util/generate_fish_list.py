@@ -14,7 +14,7 @@ from django.template.defaultfilters import slugify
 def output(level,val,crumbs, target=0.5, penalty=0.5):
     id = '---'.join([slugify(x) for x in crumbs])
     print "  "*level, '<span class="specieslabel">', val,'</span>'
-    print "  "*level, '''<span class="sliders">
+    print "  "*level, '''<span class="sliders" id="span---%(id)s">
     <table>
     <tr>
     <td class="treelabel">Proportion of Total Value</td>
@@ -34,8 +34,6 @@ def header():
 {% block title %}{{title}}{% endblock %}
 {% block panel %}
 <script type="text/javascript" charset="utf-8">
-    var tree_cascade_slider = true;
-
     lingcod.onShow(function(){
         var params_impute = function() {
             // If the input json is not null, 
@@ -62,18 +60,29 @@ def header():
                     $("#penalty---" + key).val(val);
                 });
 
-                // TODO Restore tree state
+                // Restore tree state
+                var already_done_clicks = [];
+                $.each(in_targets, function(key, val) {
+                    //remove the last '---blah' from the key
+                    b = key.split('---');
+                    b.pop();
+                    var id = b.join('---');
+
+                    // If not already done, do a click
+                    if (already_done_clicks.indexOf(id) == -1) {
+                        $('span#span---' + id).click();
+                        already_done_clicks.push(id);
+                    }
+                });
             };
         }; 
-        tree_cascade_slider = false;
-        params_impute();
-        tree_cascade_slider = true;
 
         lingcod.setupForm($('#featureform'));
         $("#focalspecies_tree").treeview({
             collapsed: true
         });
-        
+
+        params_impute();
        
         var params_collect = function() {
             var targets = {};

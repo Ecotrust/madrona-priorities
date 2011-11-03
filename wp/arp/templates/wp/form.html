@@ -2,8 +2,6 @@
 {% block title %}{{title}}{% endblock %}
 {% block panel %}
 <script type="text/javascript" charset="utf-8">
-    var tree_cascade_slider = true;
-
     lingcod.onShow(function(){
         var params_impute = function() {
             // If the input json is not null, 
@@ -30,18 +28,29 @@
                     $("#penalty---" + key).val(val);
                 });
 
-                // TODO Restore tree state
+                // Restore tree state
+                var already_done_clicks = [];
+                $.each(in_targets, function(key, val) {
+                    //remove the last '---blah' from the key
+                    b = key.split('---');
+                    b.pop();
+                    var id = b.join('---');
+
+                    // If not already done, do a click
+                    if (already_done_clicks.indexOf(id) == -1) {
+                        $('span#span---' + id).click();
+                        already_done_clicks.push(id);
+                    }
+                });
             };
         }; 
-        tree_cascade_slider = false;
-        params_impute();
-        tree_cascade_slider = true;
 
         lingcod.setupForm($('#featureform'));
         $("#focalspecies_tree").treeview({
             collapsed: true
         });
-        
+
+        params_impute();
        
         var params_collect = function() {
             var targets = {};
@@ -152,7 +161,7 @@
 <ul id='focalspecies_tree'>
   <li>
    <span class="specieslabel"> Locally endemic </span>
-   <span class="sliders">
+   <span class="sliders" id="span---locally-endemic">
     <table>
     <tr>
     <td class="treelabel">Proportion of Total Value</td>
@@ -169,7 +178,7 @@
   <ul>
     <li>
      <span class="specieslabel"> Sucker </span>
-     <span class="sliders">
+     <span class="sliders" id="span---locally-endemic---sucker">
     <table>
     <tr>
     <td class="treelabel">Proportion of Total Value</td>
@@ -186,7 +195,7 @@
     <ul>
       <li>
        <span class="specieslabel"> Mountain </span>
-       <span class="sliders">
+       <span class="sliders" id="span---locally-endemic---sucker---mountain">
     <table>
     <tr>
     <td class="treelabel">Proportion of Total Value</td>
@@ -203,7 +212,7 @@
       </li>
       <li>
        <span class="specieslabel"> Warner </span>
-       <span class="sliders">
+       <span class="sliders" id="span---locally-endemic---sucker---warner">
     <table>
     <tr>
     <td class="treelabel">Proportion of Total Value</td>
@@ -220,7 +229,7 @@
       </li>
       <li>
        <span class="specieslabel"> Lost River </span>
-       <span class="sliders">
+       <span class="sliders" id="span---locally-endemic---sucker---lost-river">
     <table>
     <tr>
     <td class="treelabel">Proportion of Total Value</td>
@@ -237,7 +246,7 @@
       </li>
       <li>
        <span class="specieslabel"> Shortnose </span>
-       <span class="sliders">
+       <span class="sliders" id="span---locally-endemic---sucker---shortnose">
     <table>
     <tr>
     <td class="treelabel">Proportion of Total Value</td>
@@ -256,7 +265,7 @@
   </li>
     <li>
      <span class="specieslabel"> Dace </span>
-     <span class="sliders">
+     <span class="sliders" id="span---locally-endemic---dace">
     <table>
     <tr>
     <td class="treelabel">Proportion of Total Value</td>
@@ -273,7 +282,7 @@
     <ul>
       <li>
        <span class="specieslabel"> Leopard </span>
-       <span class="sliders">
+       <span class="sliders" id="span---locally-endemic---dace---leopard">
     <table>
     <tr>
     <td class="treelabel">Proportion of Total Value</td>
@@ -290,7 +299,7 @@
       </li>
       <li>
        <span class="specieslabel"> Longnose </span>
-       <span class="sliders">
+       <span class="sliders" id="span---locally-endemic---dace---longnose">
     <table>
     <tr>
     <td class="treelabel">Proportion of Total Value</td>
@@ -309,7 +318,7 @@
   </li>
     <li>
      <span class="specieslabel"> Sculpin </span>
-     <span class="sliders">
+     <span class="sliders" id="span---locally-endemic---sculpin">
     <table>
     <tr>
     <td class="treelabel">Proportion of Total Value</td>
@@ -326,7 +335,7 @@
     <ul>
       <li>
        <span class="specieslabel"> Paiute </span>
-       <span class="sliders">
+       <span class="sliders" id="span---locally-endemic---sculpin---paiute">
     <table>
     <tr>
     <td class="treelabel">Proportion of Total Value</td>
@@ -343,7 +352,7 @@
       </li>
       <li>
        <span class="specieslabel"> Wood River </span>
-       <span class="sliders">
+       <span class="sliders" id="span---locally-endemic---sculpin---wood-river">
     <table>
     <tr>
     <td class="treelabel">Proportion of Total Value</td>
@@ -360,7 +369,7 @@
       </li>
       <li>
        <span class="specieslabel"> Shoshone </span>
-       <span class="sliders">
+       <span class="sliders" id="span---locally-endemic---sculpin---shoshone">
     <table>
     <tr>
     <td class="treelabel">Proportion of Total Value</td>
@@ -377,7 +386,7 @@
       </li>
       <li>
        <span class="specieslabel"> Margined </span>
-       <span class="sliders">
+       <span class="sliders" id="span---locally-endemic---sculpin---margined">
     <table>
     <tr>
     <td class="treelabel">Proportion of Total Value</td>
@@ -396,7 +405,7 @@
   </li>
     <li>
      <span class="specieslabel"> Chub </span>
-     <span class="sliders">
+     <span class="sliders" id="span---locally-endemic---chub">
     <table>
     <tr>
     <td class="treelabel">Proportion of Total Value</td>
@@ -413,7 +422,7 @@
     <ul>
       <li>
        <span class="specieslabel"> Blue </span>
-       <span class="sliders">
+       <span class="sliders" id="span---locally-endemic---chub---blue">
     <table>
     <tr>
     <td class="treelabel">Proportion of Total Value</td>
@@ -430,7 +439,7 @@
       </li>
       <li>
        <span class="specieslabel"> Northern leatherside </span>
-       <span class="sliders">
+       <span class="sliders" id="span---locally-endemic---chub---northern-leatherside">
     <table>
     <tr>
     <td class="treelabel">Proportion of Total Value</td>
@@ -447,7 +456,7 @@
       </li>
       <li>
        <span class="specieslabel"> Oregon </span>
-       <span class="sliders">
+       <span class="sliders" id="span---locally-endemic---chub---oregon">
     <table>
     <tr>
     <td class="treelabel">Proportion of Total Value</td>
@@ -464,7 +473,7 @@
       </li>
       <li>
        <span class="specieslabel"> Alvord </span>
-       <span class="sliders">
+       <span class="sliders" id="span---locally-endemic---chub---alvord">
     <table>
     <tr>
     <td class="treelabel">Proportion of Total Value</td>
@@ -481,7 +490,7 @@
       </li>
       <li>
        <span class="specieslabel"> Borax Lake </span>
-       <span class="sliders">
+       <span class="sliders" id="span---locally-endemic---chub---borax-lake">
     <table>
     <tr>
     <td class="treelabel">Proportion of Total Value</td>
@@ -500,7 +509,7 @@
   </li>
     <li>
      <span class="specieslabel"> Whitefish </span>
-     <span class="sliders">
+     <span class="sliders" id="span---locally-endemic---whitefish">
     <table>
     <tr>
     <td class="treelabel">Proportion of Total Value</td>
@@ -517,7 +526,7 @@
     <ul>
       <li>
        <span class="specieslabel"> Mountain </span>
-       <span class="sliders">
+       <span class="sliders" id="span---locally-endemic---whitefish---mountain">
     <table>
     <tr>
     <td class="treelabel">Proportion of Total Value</td>
@@ -534,7 +543,7 @@
       </li>
       <li>
        <span class="specieslabel"> Pygmy </span>
-       <span class="sliders">
+       <span class="sliders" id="span---locally-endemic---whitefish---pygmy">
     <table>
     <tr>
     <td class="treelabel">Proportion of Total Value</td>
@@ -551,7 +560,7 @@
       </li>
       <li>
        <span class="specieslabel"> Bear Lake </span>
-       <span class="sliders">
+       <span class="sliders" id="span---locally-endemic---whitefish---bear-lake">
     <table>
     <tr>
     <td class="treelabel">Proportion of Total Value</td>
@@ -570,7 +579,7 @@
   </li>
     <li>
      <span class="specieslabel"> Eulachon </span>
-     <span class="sliders">
+     <span class="sliders" id="span---locally-endemic---eulachon">
     <table>
     <tr>
     <td class="treelabel">Proportion of Total Value</td>
@@ -587,7 +596,7 @@
     <ul>
       <li>
        <span class="specieslabel"> Eulachon (smelt) </span>
-       <span class="sliders">
+       <span class="sliders" id="span---locally-endemic---eulachon---eulachon-smelt">
     <table>
     <tr>
     <td class="treelabel">Proportion of Total Value</td>
@@ -606,7 +615,7 @@
   </li>
     <li>
      <span class="specieslabel"> Lamprey </span>
-     <span class="sliders">
+     <span class="sliders" id="span---locally-endemic---lamprey">
     <table>
     <tr>
     <td class="treelabel">Proportion of Total Value</td>
@@ -623,7 +632,7 @@
     <ul>
       <li>
        <span class="specieslabel"> Miller Lake </span>
-       <span class="sliders">
+       <span class="sliders" id="span---locally-endemic---lamprey---miller-lake">
     <table>
     <tr>
     <td class="treelabel">Proportion of Total Value</td>
@@ -640,7 +649,7 @@
       </li>
       <li>
        <span class="specieslabel"> Pacific </span>
-       <span class="sliders">
+       <span class="sliders" id="span---locally-endemic---lamprey---pacific">
     <table>
     <tr>
     <td class="treelabel">Proportion of Total Value</td>
@@ -659,7 +668,7 @@
   </li>
     <li>
      <span class="specieslabel"> Olympic mudminnow </span>
-     <span class="sliders">
+     <span class="sliders" id="span---locally-endemic---olympic-mudminnow">
     <table>
     <tr>
     <td class="treelabel">Proportion of Total Value</td>
@@ -676,7 +685,7 @@
   </li>
     <li>
      <span class="specieslabel"> Burbot </span>
-     <span class="sliders">
+     <span class="sliders" id="span---locally-endemic---burbot">
     <table>
     <tr>
     <td class="treelabel">Proportion of Total Value</td>
@@ -695,7 +704,7 @@
   </li>
   <li>
    <span class="specieslabel"> Widespread </span>
-   <span class="sliders">
+   <span class="sliders" id="span---widespread">
     <table>
     <tr>
     <td class="treelabel">Proportion of Total Value</td>
@@ -712,7 +721,7 @@
   <ul>
     <li>
      <span class="specieslabel"> Trout </span>
-     <span class="sliders">
+     <span class="sliders" id="span---widespread---trout">
     <table>
     <tr>
     <td class="treelabel">Proportion of Total Value</td>
@@ -729,7 +738,7 @@
     <ul>
       <li>
        <span class="specieslabel"> Cutthroat </span>
-       <span class="sliders">
+       <span class="sliders" id="span---widespread---trout---cutthroat">
     <table>
     <tr>
     <td class="treelabel">Proportion of Total Value</td>
@@ -746,7 +755,7 @@
       <ul>
         <li>
          <span class="specieslabel"> Lahontan </span>
-         <span class="sliders">
+         <span class="sliders" id="span---widespread---trout---cutthroat---lahontan">
     <table>
     <tr>
     <td class="treelabel">Proportion of Total Value</td>
@@ -763,7 +772,7 @@
         </li>
         <li>
          <span class="specieslabel"> Yellowstone </span>
-         <span class="sliders">
+         <span class="sliders" id="span---widespread---trout---cutthroat---yellowstone">
     <table>
     <tr>
     <td class="treelabel">Proportion of Total Value</td>
@@ -780,7 +789,7 @@
         </li>
         <li>
          <span class="specieslabel"> Westslope </span>
-         <span class="sliders">
+         <span class="sliders" id="span---widespread---trout---cutthroat---westslope">
     <table>
     <tr>
     <td class="treelabel">Proportion of Total Value</td>
@@ -797,7 +806,7 @@
         </li>
         <li>
          <span class="specieslabel"> Coastal </span>
-         <span class="sliders">
+         <span class="sliders" id="span---widespread---trout---cutthroat---coastal">
     <table>
     <tr>
     <td class="treelabel">Proportion of Total Value</td>
@@ -814,7 +823,7 @@
         </li>
         <li>
          <span class="specieslabel"> Bonneville </span>
-         <span class="sliders">
+         <span class="sliders" id="span---widespread---trout---cutthroat---bonneville">
     <table>
     <tr>
     <td class="treelabel">Proportion of Total Value</td>
@@ -833,7 +842,7 @@
       </li>
       <li>
        <span class="specieslabel"> Bull </span>
-       <span class="sliders">
+       <span class="sliders" id="span---widespread---trout---bull">
     <table>
     <tr>
     <td class="treelabel">Proportion of Total Value</td>
@@ -850,7 +859,7 @@
       </li>
       <li>
        <span class="specieslabel"> Redband </span>
-       <span class="sliders">
+       <span class="sliders" id="span---widespread---trout---redband">
     <table>
     <tr>
     <td class="treelabel">Proportion of Total Value</td>
@@ -869,7 +878,7 @@
   </li>
     <li>
      <span class="specieslabel"> Lamprey </span>
-     <span class="sliders">
+     <span class="sliders" id="span---widespread---lamprey">
     <table>
     <tr>
     <td class="treelabel">Proportion of Total Value</td>
@@ -886,7 +895,7 @@
     <ul>
       <li>
        <span class="specieslabel"> Miller Lake </span>
-       <span class="sliders">
+       <span class="sliders" id="span---widespread---lamprey---miller-lake">
     <table>
     <tr>
     <td class="treelabel">Proportion of Total Value</td>
@@ -903,7 +912,7 @@
       </li>
       <li>
        <span class="specieslabel"> Pacific </span>
-       <span class="sliders">
+       <span class="sliders" id="span---widespread---lamprey---pacific">
     <table>
     <tr>
     <td class="treelabel">Proportion of Total Value</td>
@@ -922,7 +931,7 @@
   </li>
     <li>
      <span class="specieslabel"> Salmon </span>
-     <span class="sliders">
+     <span class="sliders" id="span---widespread---salmon">
     <table>
     <tr>
     <td class="treelabel">Proportion of Total Value</td>
@@ -939,7 +948,7 @@
     <ul>
       <li>
        <span class="specieslabel"> Sockeye </span>
-       <span class="sliders">
+       <span class="sliders" id="span---widespread---salmon---sockeye">
     <table>
     <tr>
     <td class="treelabel">Proportion of Total Value</td>
@@ -956,7 +965,7 @@
       <ul>
         <li>
          <span class="specieslabel"> Lake Pleasant Sockeye ESU </span>
-         <span class="sliders">
+         <span class="sliders" id="span---widespread---salmon---sockeye---lake-pleasant-sockeye-esu">
     <table>
     <tr>
     <td class="treelabel">Proportion of Total Value</td>
@@ -973,7 +982,7 @@
         </li>
         <li>
          <span class="specieslabel"> Okanogan River Sockeye ESU </span>
-         <span class="sliders">
+         <span class="sliders" id="span---widespread---salmon---sockeye---okanogan-river-sockeye-esu">
     <table>
     <tr>
     <td class="treelabel">Proportion of Total Value</td>
@@ -990,7 +999,7 @@
         </li>
         <li>
          <span class="specieslabel"> Ozette Lake Sockeye ESU </span>
-         <span class="sliders">
+         <span class="sliders" id="span---widespread---salmon---sockeye---ozette-lake-sockeye-esu">
     <table>
     <tr>
     <td class="treelabel">Proportion of Total Value</td>
@@ -1007,7 +1016,7 @@
         </li>
         <li>
          <span class="specieslabel"> Snake River Sockeye ESU </span>
-         <span class="sliders">
+         <span class="sliders" id="span---widespread---salmon---sockeye---snake-river-sockeye-esu">
     <table>
     <tr>
     <td class="treelabel">Proportion of Total Value</td>
@@ -1024,7 +1033,7 @@
         </li>
         <li>
          <span class="specieslabel"> Lake Wenatchee Sockeye ESU </span>
-         <span class="sliders">
+         <span class="sliders" id="span---widespread---salmon---sockeye---lake-wenatchee-sockeye-esu">
     <table>
     <tr>
     <td class="treelabel">Proportion of Total Value</td>
@@ -1041,7 +1050,7 @@
         </li>
         <li>
          <span class="specieslabel"> Quinalt Lake Sockeye ESU </span>
-         <span class="sliders">
+         <span class="sliders" id="span---widespread---salmon---sockeye---quinalt-lake-sockeye-esu">
     <table>
     <tr>
     <td class="treelabel">Proportion of Total Value</td>
@@ -1058,7 +1067,7 @@
         </li>
         <li>
          <span class="specieslabel"> Baker River Sockeye ESU </span>
-         <span class="sliders">
+         <span class="sliders" id="span---widespread---salmon---sockeye---baker-river-sockeye-esu">
     <table>
     <tr>
     <td class="treelabel">Proportion of Total Value</td>
@@ -1077,7 +1086,7 @@
       </li>
       <li>
        <span class="specieslabel"> Pink </span>
-       <span class="sliders">
+       <span class="sliders" id="span---widespread---salmon---pink">
     <table>
     <tr>
     <td class="treelabel">Proportion of Total Value</td>
@@ -1094,7 +1103,7 @@
       <ul>
         <li>
          <span class="specieslabel"> Even-year pink salmon ESU </span>
-         <span class="sliders">
+         <span class="sliders" id="span---widespread---salmon---pink---even-year-pink-salmon-esu">
     <table>
     <tr>
     <td class="treelabel">Proportion of Total Value</td>
@@ -1111,7 +1120,7 @@
         </li>
         <li>
          <span class="specieslabel"> Odd-year pink salmon ESU </span>
-         <span class="sliders">
+         <span class="sliders" id="span---widespread---salmon---pink---odd-year-pink-salmon-esu">
     <table>
     <tr>
     <td class="treelabel">Proportion of Total Value</td>
@@ -1130,7 +1139,7 @@
       </li>
       <li>
        <span class="specieslabel"> Coho </span>
-       <span class="sliders">
+       <span class="sliders" id="span---widespread---salmon---coho">
     <table>
     <tr>
     <td class="treelabel">Proportion of Total Value</td>
@@ -1147,7 +1156,7 @@
       <ul>
         <li>
          <span class="specieslabel"> Southern Oregon/Northern California Coho ESU </span>
-         <span class="sliders">
+         <span class="sliders" id="span---widespread---salmon---coho---southern-oregonnorthern-california-coho-esu">
     <table>
     <tr>
     <td class="treelabel">Proportion of Total Value</td>
@@ -1164,7 +1173,7 @@
         </li>
         <li>
          <span class="specieslabel"> Olympic Peninsula Coho ESU </span>
-         <span class="sliders">
+         <span class="sliders" id="span---widespread---salmon---coho---olympic-peninsula-coho-esu">
     <table>
     <tr>
     <td class="treelabel">Proportion of Total Value</td>
@@ -1181,7 +1190,7 @@
         </li>
         <li>
          <span class="specieslabel"> Puget Sound/Strait of Georgia Coho ESU </span>
-         <span class="sliders">
+         <span class="sliders" id="span---widespread---salmon---coho---puget-soundstrait-of-georgia-coho-esu">
     <table>
     <tr>
     <td class="treelabel">Proportion of Total Value</td>
@@ -1198,7 +1207,7 @@
         </li>
         <li>
          <span class="specieslabel"> Lower Columbia River Coho ESU </span>
-         <span class="sliders">
+         <span class="sliders" id="span---widespread---salmon---coho---lower-columbia-river-coho-esu">
     <table>
     <tr>
     <td class="treelabel">Proportion of Total Value</td>
@@ -1215,7 +1224,7 @@
         </li>
         <li>
          <span class="specieslabel"> Oregon Coast Coho ESU </span>
-         <span class="sliders">
+         <span class="sliders" id="span---widespread---salmon---coho---oregon-coast-coho-esu">
     <table>
     <tr>
     <td class="treelabel">Proportion of Total Value</td>
@@ -1232,7 +1241,7 @@
         </li>
         <li>
          <span class="specieslabel"> Southwest Washington Coho ESU </span>
-         <span class="sliders">
+         <span class="sliders" id="span---widespread---salmon---coho---southwest-washington-coho-esu">
     <table>
     <tr>
     <td class="treelabel">Proportion of Total Value</td>
@@ -1251,7 +1260,7 @@
       </li>
       <li>
        <span class="specieslabel"> Chum </span>
-       <span class="sliders">
+       <span class="sliders" id="span---widespread---salmon---chum">
     <table>
     <tr>
     <td class="treelabel">Proportion of Total Value</td>
@@ -1268,7 +1277,7 @@
       <ul>
         <li>
          <span class="specieslabel"> Columbia River Chum ESU </span>
-         <span class="sliders">
+         <span class="sliders" id="span---widespread---salmon---chum---columbia-river-chum-esu">
     <table>
     <tr>
     <td class="treelabel">Proportion of Total Value</td>
@@ -1285,7 +1294,7 @@
         </li>
         <li>
          <span class="specieslabel"> Hood Canal Summer-run Chum ESU </span>
-         <span class="sliders">
+         <span class="sliders" id="span---widespread---salmon---chum---hood-canal-summer-run-chum-esu">
     <table>
     <tr>
     <td class="treelabel">Proportion of Total Value</td>
@@ -1302,7 +1311,7 @@
         </li>
         <li>
          <span class="specieslabel"> Pacific Coast Chum ESU </span>
-         <span class="sliders">
+         <span class="sliders" id="span---widespread---salmon---chum---pacific-coast-chum-esu">
     <table>
     <tr>
     <td class="treelabel">Proportion of Total Value</td>
@@ -1319,7 +1328,7 @@
         </li>
         <li>
          <span class="specieslabel"> Puget Sound/Strait of Georgia Chum ESU </span>
-         <span class="sliders">
+         <span class="sliders" id="span---widespread---salmon---chum---puget-soundstrait-of-georgia-chum-esu">
     <table>
     <tr>
     <td class="treelabel">Proportion of Total Value</td>
@@ -1338,7 +1347,7 @@
       </li>
       <li>
        <span class="specieslabel"> Chinook </span>
-       <span class="sliders">
+       <span class="sliders" id="span---widespread---salmon---chinook">
     <table>
     <tr>
     <td class="treelabel">Proportion of Total Value</td>
@@ -1355,7 +1364,7 @@
       <ul>
         <li>
          <span class="specieslabel"> Lower Columbia River Chinook ESU </span>
-         <span class="sliders">
+         <span class="sliders" id="span---widespread---salmon---chinook---lower-columbia-river-chinook-esu">
     <table>
     <tr>
     <td class="treelabel">Proportion of Total Value</td>
@@ -1372,7 +1381,7 @@
         </li>
         <li>
          <span class="specieslabel"> Oregon Coast Chinook ESU </span>
-         <span class="sliders">
+         <span class="sliders" id="span---widespread---salmon---chinook---oregon-coast-chinook-esu">
     <table>
     <tr>
     <td class="treelabel">Proportion of Total Value</td>
@@ -1389,7 +1398,7 @@
         </li>
         <li>
          <span class="specieslabel"> Upper Willamette River Chinook ESU </span>
-         <span class="sliders">
+         <span class="sliders" id="span---widespread---salmon---chinook---upper-willamette-river-chinook-esu">
     <table>
     <tr>
     <td class="treelabel">Proportion of Total Value</td>
@@ -1406,7 +1415,7 @@
         </li>
         <li>
          <span class="specieslabel"> Upper Columbia River Spring-run Chinook ESU </span>
-         <span class="sliders">
+         <span class="sliders" id="span---widespread---salmon---chinook---upper-columbia-river-spring-run-chinook-esu">
     <table>
     <tr>
     <td class="treelabel">Proportion of Total Value</td>
@@ -1423,7 +1432,7 @@
         </li>
         <li>
          <span class="specieslabel"> Upper Columbia River summer/fall-run Chinook ESU </span>
-         <span class="sliders">
+         <span class="sliders" id="span---widespread---salmon---chinook---upper-columbia-river-summerfall-run-chinook-esu">
     <table>
     <tr>
     <td class="treelabel">Proportion of Total Value</td>
@@ -1440,7 +1449,7 @@
         </li>
         <li>
          <span class="specieslabel"> Middle Columbia River spring-run Chinook ESU </span>
-         <span class="sliders">
+         <span class="sliders" id="span---widespread---salmon---chinook---middle-columbia-river-spring-run-chinook-esu">
     <table>
     <tr>
     <td class="treelabel">Proportion of Total Value</td>
@@ -1457,7 +1466,7 @@
         </li>
         <li>
          <span class="specieslabel"> Puget Sound Chinook ESU </span>
-         <span class="sliders">
+         <span class="sliders" id="span---widespread---salmon---chinook---puget-sound-chinook-esu">
     <table>
     <tr>
     <td class="treelabel">Proportion of Total Value</td>
@@ -1474,7 +1483,7 @@
         </li>
         <li>
          <span class="specieslabel"> Snake River Fall-run Chinook ESU </span>
-         <span class="sliders">
+         <span class="sliders" id="span---widespread---salmon---chinook---snake-river-fall-run-chinook-esu">
     <table>
     <tr>
     <td class="treelabel">Proportion of Total Value</td>
@@ -1491,7 +1500,7 @@
         </li>
         <li>
          <span class="specieslabel"> Southern OR and Northern CA Coast Chinook ESU </span>
-         <span class="sliders">
+         <span class="sliders" id="span---widespread---salmon---chinook---southern-or-and-northern-ca-coast-chinook-esu">
     <table>
     <tr>
     <td class="treelabel">Proportion of Total Value</td>
@@ -1508,7 +1517,7 @@
         </li>
         <li>
          <span class="specieslabel"> Upper Klamath-Trinity Rivers Chinook ESU </span>
-         <span class="sliders">
+         <span class="sliders" id="span---widespread---salmon---chinook---upper-klamath-trinity-rivers-chinook-esu">
     <table>
     <tr>
     <td class="treelabel">Proportion of Total Value</td>
@@ -1525,7 +1534,7 @@
         </li>
         <li>
          <span class="specieslabel"> Washington Coast Chinook ESU </span>
-         <span class="sliders">
+         <span class="sliders" id="span---widespread---salmon---chinook---washington-coast-chinook-esu">
     <table>
     <tr>
     <td class="treelabel">Proportion of Total Value</td>
@@ -1542,7 +1551,7 @@
         </li>
         <li>
          <span class="specieslabel"> Deschutes River summer/fall-run ESU </span>
-         <span class="sliders">
+         <span class="sliders" id="span---widespread---salmon---chinook---deschutes-river-summerfall-run-esu">
     <table>
     <tr>
     <td class="treelabel">Proportion of Total Value</td>
@@ -1559,7 +1568,7 @@
         </li>
         <li>
          <span class="specieslabel"> Snake River Spring/Summer Run Chinook ESU </span>
-         <span class="sliders">
+         <span class="sliders" id="span---widespread---salmon---chinook---snake-river-springsummer-run-chinook-esu">
     <table>
     <tr>
     <td class="treelabel">Proportion of Total Value</td>
@@ -1580,7 +1589,7 @@
   </li>
     <li>
      <span class="specieslabel"> Steelhead </span>
-     <span class="sliders">
+     <span class="sliders" id="span---widespread---steelhead">
     <table>
     <tr>
     <td class="treelabel">Proportion of Total Value</td>
@@ -1597,7 +1606,7 @@
     <ul>
       <li>
        <span class="specieslabel"> Middle Columbia River Steelhead DPS </span>
-       <span class="sliders">
+       <span class="sliders" id="span---widespread---steelhead---middle-columbia-river-steelhead-dps">
     <table>
     <tr>
     <td class="treelabel">Proportion of Total Value</td>
@@ -1614,7 +1623,7 @@
       <ul>
         <li>
          <span class="specieslabel"> Middle Columbia River Steelhead DPS </span>
-         <span class="sliders">
+         <span class="sliders" id="span---widespread---steelhead---middle-columbia-river-steelhead-dps---middle-columbia-river-steelhead-dps">
     <table>
     <tr>
     <td class="treelabel">Proportion of Total Value</td>
@@ -1633,7 +1642,7 @@
       </li>
       <li>
        <span class="specieslabel"> Puget Sound Steelhead DPS </span>
-       <span class="sliders">
+       <span class="sliders" id="span---widespread---steelhead---puget-sound-steelhead-dps">
     <table>
     <tr>
     <td class="treelabel">Proportion of Total Value</td>
@@ -1650,7 +1659,7 @@
       <ul>
         <li>
          <span class="specieslabel"> Puget Sound Steelhead DPS </span>
-         <span class="sliders">
+         <span class="sliders" id="span---widespread---steelhead---puget-sound-steelhead-dps---puget-sound-steelhead-dps">
     <table>
     <tr>
     <td class="treelabel">Proportion of Total Value</td>
@@ -1669,7 +1678,7 @@
       </li>
       <li>
        <span class="specieslabel"> Upper Willamette River Steelhead DPS </span>
-       <span class="sliders">
+       <span class="sliders" id="span---widespread---steelhead---upper-willamette-river-steelhead-dps">
     <table>
     <tr>
     <td class="treelabel">Proportion of Total Value</td>
@@ -1686,7 +1695,7 @@
       <ul>
         <li>
          <span class="specieslabel"> Upper Willamette River Steelhead DPS </span>
-         <span class="sliders">
+         <span class="sliders" id="span---widespread---steelhead---upper-willamette-river-steelhead-dps---upper-willamette-river-steelhead-dps">
     <table>
     <tr>
     <td class="treelabel">Proportion of Total Value</td>
@@ -1705,7 +1714,7 @@
       </li>
       <li>
        <span class="specieslabel"> Upper Columbia River Steelhead DPS </span>
-       <span class="sliders">
+       <span class="sliders" id="span---widespread---steelhead---upper-columbia-river-steelhead-dps">
     <table>
     <tr>
     <td class="treelabel">Proportion of Total Value</td>
@@ -1722,7 +1731,7 @@
       <ul>
         <li>
          <span class="specieslabel"> Upper Columbia River Steelhead DPS </span>
-         <span class="sliders">
+         <span class="sliders" id="span---widespread---steelhead---upper-columbia-river-steelhead-dps---upper-columbia-river-steelhead-dps">
     <table>
     <tr>
     <td class="treelabel">Proportion of Total Value</td>
@@ -1741,7 +1750,7 @@
       </li>
       <li>
        <span class="specieslabel"> Olympic Peninsula Steelhead DPS </span>
-       <span class="sliders">
+       <span class="sliders" id="span---widespread---steelhead---olympic-peninsula-steelhead-dps">
     <table>
     <tr>
     <td class="treelabel">Proportion of Total Value</td>
@@ -1758,7 +1767,7 @@
       <ul>
         <li>
          <span class="specieslabel"> Olympic Peninsula Steelhead DPS </span>
-         <span class="sliders">
+         <span class="sliders" id="span---widespread---steelhead---olympic-peninsula-steelhead-dps---olympic-peninsula-steelhead-dps">
     <table>
     <tr>
     <td class="treelabel">Proportion of Total Value</td>
@@ -1777,7 +1786,7 @@
       </li>
       <li>
        <span class="specieslabel"> Snake River Basin Steelhead DPS </span>
-       <span class="sliders">
+       <span class="sliders" id="span---widespread---steelhead---snake-river-basin-steelhead-dps">
     <table>
     <tr>
     <td class="treelabel">Proportion of Total Value</td>
@@ -1794,7 +1803,7 @@
       <ul>
         <li>
          <span class="specieslabel"> Snake River Basin Steelhead DPS </span>
-         <span class="sliders">
+         <span class="sliders" id="span---widespread---steelhead---snake-river-basin-steelhead-dps---snake-river-basin-steelhead-dps">
     <table>
     <tr>
     <td class="treelabel">Proportion of Total Value</td>
@@ -1813,7 +1822,7 @@
       </li>
       <li>
        <span class="specieslabel"> Southwest Washington Steelhead DPS </span>
-       <span class="sliders">
+       <span class="sliders" id="span---widespread---steelhead---southwest-washington-steelhead-dps">
     <table>
     <tr>
     <td class="treelabel">Proportion of Total Value</td>
@@ -1830,7 +1839,7 @@
       <ul>
         <li>
          <span class="specieslabel"> Southwest Washington Steelhead DPS </span>
-         <span class="sliders">
+         <span class="sliders" id="span---widespread---steelhead---southwest-washington-steelhead-dps---southwest-washington-steelhead-dps">
     <table>
     <tr>
     <td class="treelabel">Proportion of Total Value</td>
@@ -1849,7 +1858,7 @@
       </li>
       <li>
        <span class="specieslabel"> Oregon Coast Steelhead DPS </span>
-       <span class="sliders">
+       <span class="sliders" id="span---widespread---steelhead---oregon-coast-steelhead-dps">
     <table>
     <tr>
     <td class="treelabel">Proportion of Total Value</td>
@@ -1866,7 +1875,7 @@
       <ul>
         <li>
          <span class="specieslabel"> Oregon Coast Steelhead DPS </span>
-         <span class="sliders">
+         <span class="sliders" id="span---widespread---steelhead---oregon-coast-steelhead-dps---oregon-coast-steelhead-dps">
     <table>
     <tr>
     <td class="treelabel">Proportion of Total Value</td>
@@ -1885,7 +1894,7 @@
       </li>
       <li>
        <span class="specieslabel"> Klamath Mountains Province Steelhead DPS </span>
-       <span class="sliders">
+       <span class="sliders" id="span---widespread---steelhead---klamath-mountains-province-steelhead-dps">
     <table>
     <tr>
     <td class="treelabel">Proportion of Total Value</td>
@@ -1902,7 +1911,7 @@
       <ul>
         <li>
          <span class="specieslabel"> Klamath Mountains Province Steelhead DPS </span>
-         <span class="sliders">
+         <span class="sliders" id="span---widespread---steelhead---klamath-mountains-province-steelhead-dps---klamath-mountains-province-steelhead-dps">
     <table>
     <tr>
     <td class="treelabel">Proportion of Total Value</td>
@@ -1921,7 +1930,7 @@
       </li>
       <li>
        <span class="specieslabel"> Lower Columbia River  Steelhead DPS </span>
-       <span class="sliders">
+       <span class="sliders" id="span---widespread---steelhead---lower-columbia-river-steelhead-dps">
     <table>
     <tr>
     <td class="treelabel">Proportion of Total Value</td>
@@ -1938,7 +1947,7 @@
       <ul>
         <li>
          <span class="specieslabel"> Lower Columbia River  Steelhead DPS </span>
-         <span class="sliders">
+         <span class="sliders" id="span---widespread---steelhead---lower-columbia-river-steelhead-dps---lower-columbia-river-steelhead-dps">
     <table>
     <tr>
     <td class="treelabel">Proportion of Total Value</td>

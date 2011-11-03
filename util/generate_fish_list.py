@@ -42,19 +42,19 @@ def header():
                 $('#id_input_penalties').val() && 
                 $('#id_input_relativecosts').val()) { 
                  
-                console.log("Restoring Costs slider state...");
+                //console.log("Restoring Costs slider state...");
                 var in_costs = JSON.parse($('#id_input_relativecosts').val());
                 $.each(in_costs, function(key, val) {
                     $("#cost---" + key).val(val);
                 });
 
-                console.log("Restoring Targets slider state...");
+                //console.log("Restoring Targets slider state...");
                 var in_targets = JSON.parse($('#id_input_targets').val());
                 $.each(in_targets, function(key, val) {
                     $("#target---" + key).val(val);
                 });
 
-                console.log("Restoring Penalties slider state...");
+                //console.log("Restoring Penalties slider state...");
                 var in_penalties = JSON.parse($('#id_input_penalties').val());
                 $.each(in_penalties, function(key, val) {
                     $("#penalty---" + key).val(val);

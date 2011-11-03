@@ -1,0 +1,18 @@
+Update procedure.
+Matt Perry
+11/03/2011
+
+When the shapefile or fish list is updated, 
+these procedures MUST be run.
+
+1.Move updated shapefile and fish list to production server into the /usr/local/apps/usfw/data/ dir. Masters on Terra:
+  a. G:\projects\projects2010\USFWS_Priorities\Util\tables\Tool_Inputs\PrioritySpeciesList_MASTER_FOR_WEB.xls
+  b. G:\projects\projects2010\USFWS_Priorities\Analysis\HUC8_FocalFish20111026.shp
+
+2. cd /usr/local/apps/usfw/watershed-priorities/util
+3. source /usr/local/apps/usfw/env/bin/activate
+4. edit import_fish_data.py to point to filepaths (if changed)
+5. run python import_fish_data.py (Populates the database)
+6. run go.sh (which calls generate_fish_list.py and regenerates fish list input form)
+7. touch ../wsgi.py (restart wsgi server)
+

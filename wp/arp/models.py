@@ -467,6 +467,11 @@ class WatershedPrioritization(Analysis):
                 select='single',
                 type='application/zip',
             ),
+            alternate('Input Files',
+                'arp.views.watershed_marxan',
+                select='single',
+                type='application/zip',
+            ),
         )
 
 @register

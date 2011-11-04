@@ -49,6 +49,10 @@ div .species { padding-left: 126px; }
   background-color: #cc3333; 
   color: white;
 }
+.na { 
+  background-color: white;
+  color: #cccccc; 
+}
 
 .hidden { display: none; }
 li.collapsable > span.sliders { display: none; }

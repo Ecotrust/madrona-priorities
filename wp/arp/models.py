@@ -253,6 +253,8 @@ class WatershedPrioritization(Analysis):
             starget = float(line[2])
             sheld = float(line[3])
             smpm = float(line[9])
+            if starget == 0:
+                smpm = 0.0
             smet = False
             if line[8] == 'yes' or smpm > 1.0:
                 smet = True
@@ -474,12 +476,7 @@ class Folder(FeatureCollection):
     class Options:
         verbose_name = 'Folder'
         valid_children = ( 
-                'arp.models.AOI', 
-                'arp.models.LOI', 
-                'arp.models.POI', 
                 'arp.models.Folder',
-                'arp.models.UserKml',
-                'arp.models.BufferPoint',
                 'arp.models.WatershedPrioritization',
                 )
         form = 'arp.forms.FolderForm'

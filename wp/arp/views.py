@@ -50,12 +50,21 @@ def watershed_shapefile(request, instances):
                 pus.bests += 1
             pus.save()
 
+    readme = """Watershed Prioritization Analysis
+contact: mperry@ecotrust.org
+
+Includes scenarios:
+    %s
+
+Contains HUC8s from Oregon, Washington, Idaho
+    'bests' contains the number of scenarios in which the subbasin was included in the best run
+    'hits' contains the number of times the subbasin was included in any run, cumulative across scenarios.
+    """ % ('\n    '.join([i.name for i in instances]), )
+
     allpus = PlanningUnitShapes.objects.filter(stamp=stamp)
-    print allpus
-    print stamp
-    shp_response = ShpResponder(allpus)
-    filename = '_'.join([slugify(i.name) for i in instances])
-    shp_response.file_name = slugify(filename[0:45])
+    shp_response = ShpResponder(allpus, readme=readme)
+    filename = '_'.join([slugify(i.pk) for i in instances])
+    shp_response.file_name = slugify('wp_' + filename)
     return shp_response()
 
 def watershed_marxan(request, instance):

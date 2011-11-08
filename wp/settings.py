@@ -26,7 +26,7 @@ TEMPLATE_DIRS = ( os.path.realpath(os.path.join(os.path.dirname(__file__), 'temp
 
 INSTALLED_APPS += ( 'arp', 
                     'djkombu',
-                    'django_extensions', 
+                    #'django_extensions', 
                     'lingcod.analysistools',
                     'django.contrib.humanize',) 
 

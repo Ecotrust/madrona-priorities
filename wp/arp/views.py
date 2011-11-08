@@ -12,7 +12,7 @@ def watershed_shapefile(request, instances):
     from arp.models import PlanningUnit, WatershedPrioritization, PlanningUnitShapes
 
     wshds = PlanningUnit.objects.all()
-    stamp = time.time()
+    stamp = int(time.time() * 1000.0)
 
     for instance in instances:
         viewable, response = instance.is_viewable(request.user)
@@ -48,10 +48,11 @@ def watershed_shapefile(request, instances):
             pus.hits += hits
             if best:
                 pus.bests += 1
-
             pus.save()
 
     allpus = PlanningUnitShapes.objects.filter(stamp=stamp)
+    print allpus
+    print stamp
     shp_response = ShpResponder(allpus)
     filename = '_'.join([slugify(i.name) for i in instances])
     shp_response.file_name = slugify(filename[0:45])

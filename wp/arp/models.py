@@ -472,7 +472,7 @@ class WatershedPrioritization(Analysis):
         links = (
             alternate('Shapefile',
                 'arp.views.watershed_shapefile',
-                select='single',
+                select='single multiple',
                 type='application/zip',
             ),
             alternate('Input Files',
@@ -500,3 +500,14 @@ class Folder(FeatureCollection):
         return """li.%(uid)s > .icon { 
         background: url('%(media)skmltree/dist/images/sprites/kml.png?1302821411') no-repeat -231px 0px ! important;
         } """ % { 'uid': klass.model_uid(), 'media': settings.MEDIA_URL }
+
+class PlanningUnitShapes(models.Model):
+    pu = models.ForeignKey(PlanningUnit)
+    stamp = models.FloatField()
+    bests = models.IntegerField(default=0) 
+    hits = models.IntegerField(default=0) 
+    fid = models.IntegerField(null=True)
+    name = models.CharField(max_length=99, null=True)
+    geometry = models.MultiPolygonField(srid=settings.GEOMETRY_DB_SRID, 
+    #geometry = models.PointField(srid=settings.GEOMETRY_DB_SRID, 
+            null=True, blank=True, verbose_name="Planning Unit Geometry")

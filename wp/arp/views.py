@@ -3,43 +3,58 @@ from lingcod.shapes.views import ShpResponder
 #from lingcod.features.views import get_object_for_viewing
 from django.http import HttpResponse
 from django.template.defaultfilters import slugify
+from django.contrib.gis.geos import MultiPolygon
 import os
 import json
+import time
 
-def watershed_shapefile(request, instance):
-    from arp.models import PlanningUnit, WatershedPrioritization
-    viewable, response = instance.is_viewable(request.user)
-    if not viewable:
-        return response
-    if not isinstance(instance, WatershedPrioritization):
-        return HttpResponse("Shapefile export for watershed prioritizations only", status=500)
+def watershed_shapefile(request, instances):
+    from arp.models import PlanningUnit, WatershedPrioritization, PlanningUnitShapes
 
-    ob = json.loads(instance.output_best)
-    wids = [int(x.strip()) for x in ob['best']]
-    puc = json.loads(instance.output_pu_count)
     wshds = PlanningUnit.objects.all()
+    stamp = time.time()
 
-#    from report.models import PlanningUnitShapes
-#    for ws in wshds:
-#        # create custom instances   
-#        pus, created = PlanningUnitShapes.objects.get_or_create(puid=ws.pk, wpid=instance.pk)
-#        if created or pus.date_modified < self.date_modified:
-#            try:
-#                hits = puc[str(ws.pk)] 
-#            except:
-#                hits = 0
-#            best = ws.pk in wids
-#            pus.name = self.name
-#            pus.mpa_id_num = self.pk
-#            pus.geometry = self.geometry_final
-#            pus.save()
+    for instance in instances:
+        viewable, response = instance.is_viewable(request.user)
+        if not viewable:
+            return response
+        if not isinstance(instance, WatershedPrioritization):
+            return HttpResponse("Shapefile export for watershed prioritizations only", status=500)
 
-    if len(wshds) == 0:
-        return HttpResponse( "Nothing in the query set; you don't want an empty shapefile", status=404)
+        ob = json.loads(instance.output_best)
+        wids = [int(x.strip()) for x in ob['best']]
+        puc = json.loads(instance.output_pu_count)
 
-    shp_response = ShpResponder(wshds)
-    filename = slugify(instance.name) 
-    shp_response.file_name = slugify(filename[0:8])
+        for ws in wshds:
+            # create custom model records
+            pus, created = PlanningUnitShapes.objects.get_or_create(pu=ws, stamp=stamp)
+
+            # Only do this on the first go 'round
+            if created and not pus.geometry:
+                pus.name = ws.name
+                pus.fid = ws.fid
+                p = ws.geometry.simplify(100)
+                if p.geom_type == 'Polygon':
+                    pus.geometry = MultiPolygon(p)
+                elif p.geom_type == 'MultiPolygon':
+                    pus.geometry = p
+
+            # Calculate hits and best
+            try:
+                hits = puc[str(ws.pk)] 
+            except:
+                hits = 0
+            best = ws.pk in wids
+            pus.hits += hits
+            if best:
+                pus.bests += 1
+
+            pus.save()
+
+    allpus = PlanningUnitShapes.objects.filter(stamp=stamp)
+    shp_response = ShpResponder(allpus)
+    filename = '_'.join([slugify(i.name) for i in instances])
+    shp_response.file_name = slugify(filename[0:45])
     return shp_response()
 
 def watershed_marxan(request, instance):

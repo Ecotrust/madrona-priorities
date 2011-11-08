@@ -45,7 +45,11 @@ def header():
                 //console.log("Restoring Costs slider state...");
                 var in_costs = JSON.parse($('#id_input_relativecosts').val());
                 $.each(in_costs, function(key, val) {
-                    $("#cost---" + key).val(val);
+                    if (val > 0) {
+                        $("#cost---" + key).attr('checked','checked')
+                    } else {
+                        $("#cost---" + key).removeAttr('checked')
+                    }
                 });
 
                 //console.log("Restoring Targets slider state...");
@@ -102,11 +106,17 @@ def header():
                 xid = xid.replace(/---$/,''); // Remove trailing ---
                 penalties[xid] = parseFloat($(id).val());
             });
-            $('.costvalue:visible').each( function(index) {
+            // Initialize costs to zero
+            $('input.costvalue[name="cost"]').each( function(index) {
                 var xid = $(this).attr("id");
-                var id = "#" + xid;
                 xid = xid.replace(/^cost---/,''); //  Remove preceding identifier
-                costs[xid] = parseFloat($(id).val());
+                costs[xid] = 0;
+            });
+            // Set the *checked* costs to 1
+            $('input.costvalue[name="cost"]:checked').each( function(index) {
+                var xid = $(this).attr("id");
+                xid = xid.replace(/^cost---/,''); //  Remove preceding identifier
+                costs[xid] = 1;
             });
             $('#id_input_targets').val( JSON.stringify(targets) ); 
             $('#id_input_penalties').val( JSON.stringify(penalties) );
@@ -116,11 +126,19 @@ def header():
         $('.slidervalue').each( function(index) {
             var id = $(this).attr("id");
             var slider_id = "slider_" + id;
+            var maxval = 1;
+            var minval = 0;
+            if (id == 'id_input_scalefactor') {
+                maxval = 40;
+                minval = 0.01;
+                console.log(id, slider_id);
+            }
+
             $('#' + slider_id).slider({
                 range: 'min',
-                min : 0, 
-                max : 1,
-                step : 0.01,
+                min : minval, 
+                max : maxval,
+                step : maxval/100.0,
                 change : function(event, ui) {
                     var theval = $(this).slider('value');
                     $('#' + id).val(theval);
@@ -156,17 +174,20 @@ def header():
                 {{ form.name.label_tag }}
                 {{ form.name.errors }}
                 {{ form.name }}
+                {{ form.input_penalties.errors }}
+                {{ form.input_targets.errors }}
+                {{ form.input_relativecosts.errors }}
+                {{ form.input_scalefactor.errors }}
             </div>
             <div class="hidden field required">
                 {{ form.input_penalties.label_tag }}
-                {{ form.input_penalties.errors }}
                 {{ form.input_penalties }}            
                 {{ form.input_targets.label_tag }}
-                {{ form.input_targets.errors }}
                 {{ form.input_targets }}            
                 {{ form.input_relativecosts.label_tag }}
-                {{ form.input_relativecosts.errors }}
                 {{ form.input_relativecosts }}            
+                {{ form.input_scalefactor.label_tag }}
+                {{ form.input_scalefactor }}            
             </div>
             <p><input type="submit" value="submit"></p>
     </form>
@@ -228,7 +249,7 @@ def footer():
     print """ 
     </form></div> <!-- End species tab -->
     <div id="coststab">
-        <h3>Set Relative Weights for Costs</h3>
+        <h3>Include the Following Costs:</h3>
         <br />
         <form action="#" id="costs_form">
            <div>
@@ -238,14 +259,26 @@ def footer():
         cname = slugify(c.name.lower())
         print """
                 <tr>
+                <td><input type="checkbox" class="costvalue" name="cost" id="cost---%(cname)s" value="%(cname)s" checked="checked"/></td>
                 <td><label for="cost---%(cname)s">%(full)s</label></td>
-                <td><input type="text" class="slidervalue costvalue" id="cost---%(cname)s" value="0.5"/></td>
-                <td><div class="slider" id="slider_cost---%(cname)s"></div></td>
                 </tr>
         """ % {'cname': cname, 'full': c.name}
 
     print """
              </table>
+           </div>
+           <div>
+             <table>
+                <tr>
+                <td><label>Penalty Scaling Factor</label></td>
+                <td><div class="slider" id="slider_id_input_scalefactor"></div></td>
+                </tr>
+             </table>
+             <p> 
+             <em>Lower values</em> indicate low penalties relative to fixed watershed costs which implies less watersheds being selected. <br/>
+             <em>Greater values</em> indicate higher penalties relative to fixed watershed costs which implies watersheds being selected.
+             </p>
+
            </div>
         </form>
     </div>

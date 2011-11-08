@@ -7,6 +7,7 @@ class FolderForm(FeatureForm):
         model = Folder
 
 class WatershedPrioritizationForm(FeatureForm):
+    input_scalefactor = forms.FloatField(widget=forms.TextInput(attrs={'class': 'slidervalue'}))
     class Meta(FeatureForm.Meta):
         model = WatershedPrioritization
         exclude = list(FeatureForm.Meta.exclude)

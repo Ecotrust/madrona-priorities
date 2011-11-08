@@ -111,12 +111,11 @@ class WatershedPrioritization(Analysis):
     input_targets = JSONField(verbose_name='Target Percentage of Habitat')
     input_penalties = JSONField(verbose_name='Penalties for Missing Targets') 
     input_relativecosts = JSONField(verbose_name='Relative Costs')
+    input_scalefactor = models.FloatField()
 
     # All output fields should be allowed to be Null/Blank
     output_best = JSONField(null=True, blank=True, verbose_name="Watersheds in Optimal Reserve")
     output_pu_count = JSONField(null=True, blank=True)
-    #output_geometry = models.MultiPolygonField(srid=settings.GEOMETRY_CLIENT_SRID, 
-    #        null=True, blank=True, verbose_name="Watersheds")
 
     @property
     def outdir(self):
@@ -177,9 +176,18 @@ class WatershedPrioritization(Analysis):
             except TypeError: 
                 total = 0.0
             target = total * targets[cf.pk]
-            penalty = penalties[cf.pk] * 10 #TODO scale
-            #if target > 0: # MUST include all species even if they are zero
+            penalty = penalties[cf.pk] * self.input_scalefactor
+            # MUST include all species even if they are zero
             cfs.append((cf.pk, target, penalty, cf.name))
+
+        # normalize cost weights to sum to 1.0
+        norm_cost_weights = {}
+        sum_weights = 0;
+        for k, v in cost_weights.items():
+            sum_weights += v 
+
+        for k, v in cost_weights.items():
+            norm_cost_weights[k] = float(v) / float(sum_weights)
 
         # Calc costs for each planning unit
         # Old way - no wieghting
@@ -191,7 +199,7 @@ class WatershedPrioritization(Analysis):
             weighted_cost = 0
             for c in puc:
                 costkey = slugify(c.cost.name.lower())
-                weighted_cost += cost_weights[costkey] * c.amount
+                weighted_cost += norm_cost_weights[costkey] * c.amount
             pucosts.append( (pu.pk, weighted_cost) )
 
         # Pull the puvscf table

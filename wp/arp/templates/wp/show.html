@@ -95,11 +95,13 @@ lingcod.beforeDestroy(function() {
              </table>
              <hr/>
              <table class="table">
-             <thead> <th>Cost</th><th>Relative Weighting</th></thead>
+             <thead> <th>Cost</th><th></th></thead>
              {%for k,v in results.costs.items %}
              <tr> <td><strong>{{k}}</strong></td><td>{{v}}</td></tr>
              {%endfor%}
              </table>
+             <br/><br/>
+             <p> Penalty Scaling Factor: {{instance.input_scalefactor}}</p>
             </div>
         </div>
         {% if instance.done %}

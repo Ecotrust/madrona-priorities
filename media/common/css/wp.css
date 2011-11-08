@@ -79,3 +79,5 @@ li.expandable > span.sliders { color: black; display: inline; }
     padding-left: 2px;
     text-shadow: 0 1px 0 #FCFAFF;
 }
+
+input.costvalue { top: 0px !important; }

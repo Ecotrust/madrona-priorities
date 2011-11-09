@@ -129,9 +129,8 @@ def header():
             var maxval = 1;
             var minval = 0;
             if (id == 'id_input_scalefactor') {
-                maxval = 40;
+                maxval = 20;
                 minval = 0.01;
-                console.log(id, slider_id);
             }
 
             $('#' + slider_id).slider({

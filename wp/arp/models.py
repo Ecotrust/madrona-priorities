@@ -1,6 +1,7 @@
 import os
 import glob
 import random
+import shutil
 from django import forms
 from django.conf import settings
 from django.contrib.gis.db import models
@@ -122,6 +123,14 @@ class WatershedPrioritization(Analysis):
         return os.path.realpath(os.path.join(settings.MARXAN_OUTDIR, "%s_" % (self.uid,) ))
         # TODO this is not asycn-safe!!!
         # slugify(self.date_modified))
+
+    def copy(self, user):
+        """ Override the copy method to make sure the marxan files get copied """
+        orig = self.outdir
+        copy = super(WatershedPrioritization, self).copy(user)
+        shutil.copytree(orig, copy.outdir, symlinks=True)
+        copy.save(rerun=False)
+        return copy
 
     def process_dict(self, d):
         """

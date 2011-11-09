@@ -4,6 +4,13 @@
 {% block title %}{% appname %}{% endblock title %}
 {% block toggle %}{% endblock toggle %}
 
+            {% block tabs %}
+            {% if user.is_authenticated %}
+            <li><a href="#MyShapes"><span>Scenarios</span></a></li>                
+            {% endif %}
+            <li><a href="#SharedShapes"><span>{% if user.is_authenticated %}Shared{% else %}Public Scenarios{% endif %}</span></a></li>
+            {% endblock tabs %}
+
             {% block metanavigation %}
             {% if user.is_authenticated %}
             <li>{{user.username}} | </li>

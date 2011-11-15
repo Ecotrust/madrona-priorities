@@ -263,12 +263,12 @@ def main():
         for val2 in L2:
             print "    <li>"
             output(2,val2,[val1,val2])
-            L3 = F.objects.filter(level2=val2).values_list('level3',flat=True).distinct().exclude(level3=None).exclude(level3='')
+            L3 = F.objects.filter(level1=val1, level2=val2).values_list('level3',flat=True).distinct().exclude(level3=None).exclude(level3='')
             if len(L3) > 0: print "    <ul>"
             for val3 in L3:
                 print "      <li>"
                 output(3,val3,[val1,val2,val3])
-                L4 = F.objects.filter(level3=val3).values_list('level4',flat=True).distinct().exclude(level4=None).exclude(level4='')
+                L4 = F.objects.filter(level1=val1, level2=val2, level3=val3).values_list('level4',flat=True).distinct().exclude(level4=None).exclude(level4='')
                 if len(L4) > 0: print "      <ul>"
                 for val4 in L4:
                     print "        <li>"

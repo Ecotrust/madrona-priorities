@@ -200,20 +200,20 @@ class WatershedPrioritization(Analysis):
                 final_cost_weights[costkey] = cost_weights[costkey]
             except KeyError:
                 final_cost_weights[costkey] = 0
-                if costkey == 'first-invasives' and cost_weights['invasives'] > 0: 
-                    # first-invasives turned on if
+                if costkey == 'watershed-condition-no-ais' and cost_weights['watershed-condition'] > 0: 
+                    # Use the `no AIS` version if
+                    #   - watershed-condition is checked
                     #   - invasives is checked
-                    #   - watershed condition is not checked
-                    if cost_weights['watershed-condition'] == 0: final_cost_weights[costkey] = 1
-                elif costkey == 'other-invasives' and cost_weights['invasives'] > 0: 
-                    # other-invasives turned on if
-                    #   - invasives is checked
-                    #   - watershed condition is checked
-                    if cost_weights['watershed-condition'] > 0: final_cost_weights[costkey] = 1
+                    if cost_weights['invasives'] > 0: 
+                        final_cost_weights[costkey] = 1
+                elif costkey == 'watershed-condition-with-ais' and cost_weights['watershed-condition'] > 0: 
+                    # Use the `AIS` version if
+                    #   - watershed-condition is checked
+                    #   - invasives is NOT checked
+                    if cost_weights['invasives'] == 0: 
+                        final_cost_weights[costkey] = 1
         if cost_weights['invasives'] > 0:
-            assert final_cost_weights['first-invasives'] != final_cost_weights['other-invasives']
-        print 'final_cost_weights'
-        print final_cost_weights
+            assert final_cost_weights['watershed-condition-with-ais'] != final_cost_weights['watershed-condition-no-ais']
 
         # Calc costs for each planning unit
         pucosts = []

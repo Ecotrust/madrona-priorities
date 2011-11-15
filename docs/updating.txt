@@ -7,7 +7,8 @@ these procedures MUST be run.
 
 1.Move updated shapefile and fish list to production server into the /usr/local/apps/usfw/data/ dir. Masters on Terra:
   a. G:\projects\projects2010\USFWS_Priorities\Util\tables\Tool_Inputs\PrioritySpeciesList_MASTER_FOR_WEB.xls
-  b. G:\projects\projects2010\USFWS_Priorities\Analysis\HUC8_FocalFish20111026.shp
+  b. G:\projects\projects2010\USFWS_Priorities\Analysis\HUC8_FocalFishxxxxxxxx.shp
+  c. Check them before uploading and edit accordingly
 
 2. cd /usr/local/apps/usfw/watershed-priorities/util
 3. source /usr/local/apps/usfw/env/bin/activate
@@ -16,3 +17,7 @@ these procedures MUST be run.
 6. run go.sh (which calls generate_fish_list.py and regenerates fish list input form)
 7. touch ../wsgi.py (restart wsgi server)
 
+
+-------
+to update KML, use Arc2Earth and upload to admin
+TODO where to back up on server?

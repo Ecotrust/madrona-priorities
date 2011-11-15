@@ -7,13 +7,21 @@ import settings
 setup_environ(settings)
 #==================================#
 from arp.models import ConservationFeature, PlanningUnit, Cost, PuVsCf, PuVsCost
+from django.contrib.gis.utils import LayerMapping
 
 #------------------------------------#
 # Config
-xls = "../data/local/input/PrioritySpeciesList_DRAFT_mp.xls" # NOT xlsx
-shp = "../data/local/input/HUC8_FocalSpecies.shp"
+xls = "../data/local/input/PrioritySpeciesList_MASTER_FOR_WEB.xls" # NOT xlsx
+shp = "../data/local/input/HUC8_FocalFish20111111.shp"
 backup = False
 import_shp = True
+mapping = {
+    'name' : 'SUBBASIN',
+    'fid' : 'HUC_8',
+    'area' : 'SqMi_orig',
+    'geometry' : 'MULTIPOLYGON',
+}
+
 #------------------------------------#
 
 modls = ['ConservationFeature',  'Cost', 'PuVsCf', 'PuVsCost']
@@ -111,14 +119,6 @@ ds = DataSource(shp)
 layer = ds[0]
 print "WARNING It is your responsibility to make sure the shapefile projection below matches srid %s" % settings.GEOMETRY_DB_SRID
 print layer.srs
-
-from django.contrib.gis.utils import LayerMapping
-mapping = {
-    'name' : 'SUBBASIN',
-    'fid' : 'OBJECTID',
-    'area' : 'SqMi_orig',
-    'geometry' : 'MULTIPOLYGON',
-}
 
 if "PlanningUnit" in modls:
     lm = LayerMapping(PlanningUnit, shp, mapping, transform=False, encoding='iso-8859-1')

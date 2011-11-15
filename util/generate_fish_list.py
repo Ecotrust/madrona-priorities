@@ -94,6 +94,12 @@ def header():
             collapsed: true
         });
 
+        $('input.slidervalue').click( function(e) {
+            // Prevent tree from expanding 
+            // when value input field is clicked
+            e.stopPropagation();
+        });
+
         params_impute();
        
         var params_collect = function() {

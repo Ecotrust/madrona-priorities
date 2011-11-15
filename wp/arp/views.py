@@ -7,6 +7,7 @@ from django.contrib.gis.geos import MultiPolygon
 import os
 import json
 import time
+import tempfile
 
 def watershed_shapefile(request, instances):
     from arp.models import PlanningUnit, WatershedPrioritization, PlanningUnitShapes

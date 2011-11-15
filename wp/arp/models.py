@@ -179,6 +179,7 @@ class WatershedPrioritization(Analysis):
         # Apply the target and penalties
         logger.debug("Apply the targets and penalties")
         cfs = []
+        sum_penalties = 0
         for cf in ConservationFeature.objects.annotate(Sum('puvscf__amount')):
             try:
                 total = float(cf.puvscf__amount__sum)
@@ -186,30 +187,57 @@ class WatershedPrioritization(Analysis):
                 total = 0.0
             target = total * targets[cf.pk]
             penalty = penalties[cf.pk] * self.input_scalefactor
+            if target > 0:
+                sum_penalties += penalty
             # MUST include all species even if they are zero
             cfs.append((cf.pk, target, penalty, cf.name))
 
-        # normalize cost weights to sum to 1.0
-        norm_cost_weights = {}
-        sum_weights = 0;
-        for k, v in cost_weights.items():
-            sum_weights += v 
-
-        for k, v in cost_weights.items():
-            norm_cost_weights[k] = float(v) / float(sum_weights)
+        # conditional .. turn invasives on/off depending
+        final_cost_weights = {}
+        for cost in Cost.objects.all():
+            costkey = slugify(cost.name.lower())
+            try:
+                final_cost_weights[costkey] = cost_weights[costkey]
+            except KeyError:
+                final_cost_weights[costkey] = 0
+                if costkey == 'first-invasives' and cost_weights['invasives'] > 0: 
+                    # first-invasives turned on if
+                    #   - invasives is checked
+                    #   - watershed condition is not checked
+                    if cost_weights['watershed-condition'] == 0: final_cost_weights[costkey] = 1
+                elif costkey == 'other-invasives' and cost_weights['invasives'] > 0: 
+                    # other-invasives turned on if
+                    #   - invasives is checked
+                    #   - watershed condition is checked
+                    if cost_weights['watershed-condition'] > 0: final_cost_weights[costkey] = 1
+        if cost_weights['invasives'] > 0:
+            assert final_cost_weights['first-invasives'] != final_cost_weights['other-invasives']
+        print 'final_cost_weights'
+        print final_cost_weights
 
         # Calc costs for each planning unit
-        # Old way - no wieghting
-        # pucosts = [(pu.pk, pu.puvscost__amount__sum) for pu in PlanningUnit.objects.annotate(Sum('puvscost__amount'))]
-        logger.debug("Calculate costs for each planning unit")
         pucosts = []
+        sum_costs = 0
+        # First loop, calc sum of costs 
         for pu in PlanningUnit.objects.all():
             puc = PuVsCost.objects.filter(pu=pu)
-            weighted_cost = 0
+            weighted_cost = 0.0 # 0.0001 Do we need some minimal constant cost?
             for c in puc:
                 costkey = slugify(c.cost.name.lower())
-                weighted_cost += norm_cost_weights[costkey] * c.amount
+                weighted_cost += final_cost_weights[costkey] * c.amount
+            sum_costs += weighted_cost
             pucosts.append( (pu.pk, weighted_cost) )
+
+
+        # Apply ratio to costs to 'pre-scale' the total costs to equal the total penalties
+        ##### Marxan has it's own cost scaling strategy so this won't work!
+        ##### SEE APPENDIX B-1.3 for 
+        #penalty_cost_ratio = float(sum_penalties) / float(sum_costs)
+        #new_pucosts = []
+        #for pucost in pucosts:
+        #    new_pucost = (pucost[0], pucost[1] * penalty_cost_ratio )# self.input_scalefactor)
+        #    new_pucosts.append(new_pucost)
+        #pucosts = new_pucosts
 
         # Pull the puvscf table
         # This takes and insanely long time and is not stable

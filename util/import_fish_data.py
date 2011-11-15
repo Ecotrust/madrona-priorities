@@ -135,11 +135,19 @@ cfs_with_fields = [x for x in cfs if x.dbf_fieldname is not None and x.dbf_field
 for feature in layer:
     pu = pus.get(fid=feature.get(mapping['fid']))
     for cf in cfs_with_fields:
-        obj = PuVsCf(pu=pu, cf=cf, amount=feature.get(cf.dbf_fieldname))
+        amt = feature.get(cf.dbf_fieldname)
+        if amt is None or amt < 0:
+            # DONT allow negative or null values
+            amt = 0
+        obj = PuVsCf(pu=pu, cf=cf, amount=amt)
         obj.save()
 
     for c in cs: 
-        obj = PuVsCost(pu=pu, cost=c, amount=feature.get(c.dbf_fieldname))
+        amt = feature.get(c.dbf_fieldname)
+        if amt is None or amt < 0:
+            # DONT allow negative or null values
+            amt = 0
+        obj = PuVsCost(pu=pu, cost=c, amount=amt)
         obj.save()
 
 assert len(PuVsCf.objects.all()) == len(pus) * len(cfs_with_fields)

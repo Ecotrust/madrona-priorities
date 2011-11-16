@@ -11,7 +11,7 @@ from arp.models import ConservationFeature as F
 from arp.models import Cost
 from django.template.defaultfilters import slugify
 
-def output(level,val,crumbs, target=0.5, penalty=0.5):
+def output(level,val,crumbs, target=0.0, penalty=0.0):
     id = '---'.join([slugify(x) for x in crumbs])
     print "  "*level, '<span class="specieslabel">', val,'</span>'
     print "  "*level, '''<span class="sliders" id="span---%(id)s">

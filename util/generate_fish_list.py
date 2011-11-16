@@ -185,6 +185,7 @@ def header():
 
             <div class="field required">
                 {{ form.name.errors }}
+                {{ form.desription.errors }}
                 {{ form.input_penalties.errors }}
                 {{ form.input_targets.errors }}
                 {{ form.input_relativecosts.errors }}
@@ -225,6 +226,10 @@ def header():
             <div class="field required">
                 {{ form.name.label_tag }}
                 {{ form.name }}            
+            </div>
+            <div class="field">
+                {{ form.description.label_tag }}
+                {{ form.description }}            
             </div>
             <p><input type="submit" value="submit"></p>
            <div>

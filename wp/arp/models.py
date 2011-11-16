@@ -113,6 +113,7 @@ class WatershedPrioritization(Analysis):
     input_penalties = JSONField(verbose_name='Penalties for Missing Targets') 
     input_relativecosts = JSONField(verbose_name='Relative Costs')
     input_scalefactor = models.FloatField()
+    description = models.TextField(default="", null=True, blank=True, verbose_name="Description/Notes")
 
     # All output fields should be allowed to be Null/Blank
     output_best = JSONField(null=True, blank=True, verbose_name="Watersheds in Optimal Reserve")

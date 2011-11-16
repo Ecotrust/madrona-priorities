@@ -96,17 +96,27 @@ lingcod.onShow(function(){
         </ul>
         <div id="Inputs">
             <div class="box">
+                <h5>Name</h5> 
+                <p>{{ instance.name }}</p>
+                {% if instance.description %}
+                <h5>Description/Notes</h5>
+                <p> {{instance.description}} </p>
+                {% endif %}
+            </div>
+
+            <div class="box">
              <table class="table">
              <thead> <th>Species Key</th><th>Goal Proportion of Habitat</th><th>Importance Weighting</th></thead>
              {% for k,v in results.targets_penalties.items %}
+             {% if v.target > 0 %}
              <tr> <td><strong>{{k}}</strong></td><td>{{v.target}} </td><td>{{v.penalty}}</td></tr>
+             {% endif %}
              {% endfor %}
              </table>
-             <hr/>
              <table class="table">
              <thead> <th>Cost</th><th></th></thead>
              {%for k,v in results.costs.items %}
-             <tr> <td><strong>{{k}}</strong></td><td>{{v}}</td></tr>
+             <tr> <td><strong>{{k}}</strong></td><td>{% if v > 0%}&#10003;{% endif %}</td></tr>
              {%endfor%}
              </table>
              <br/>

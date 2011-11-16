@@ -87,7 +87,7 @@ lingcod.beforeDestroy(function() {
         <div id="Inputs">
             <div class="box">
              <table class="table">
-             <thead> <th>Species Key</th><th>Proportion of Target</th><th>Importance Weighting</th></thead>
+             <thead> <th>Species Key</th><th>Goal Proportion of Habitat</th><th>Importance Weighting</th></thead>
              {% for k,v in results.targets_penalties.items %}
              <tr> <td><strong>{{k}}</strong></td><td>{{v.target}} </td><td>{{v.penalty}}</td></tr>
              {% endfor %}

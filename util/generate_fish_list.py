@@ -17,12 +17,12 @@ def output(level,val,crumbs, target=0.5, penalty=0.5):
     print "  "*level, '''<span class="sliders" id="span---%(id)s">
     <table>
     <tr>
-    <td class="treelabel">Proportion of Total Value</td>
+    <td class="treelabel">Goal proportion of habitat</td>
     <td><input type="text" class="slidervalue targetvalue" id="target---%(id)s" value="%(target)s"/></td>
     <td><div class="slider" id="slider_target---%(id)s"></div></td>
     </tr>
     <tr>
-    <td class="treelabel">Importance Weighting</td>
+    <td class="treelabel">Importance weighting</td>
     <td><input type="text" class="slidervalue penaltyvalue" id="penalty---%(id)s" value="%(penalty)s"/></td>
     <td><div class="slider" id="slider_penalty---%(id)s"></div></td>
     </tr>

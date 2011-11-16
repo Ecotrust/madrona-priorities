@@ -36,6 +36,7 @@ if MODE == 'query':
         r = w.results
         num_species.append(r['num_met'])
         num_units.append(r['num_units'])
+        w.kml
 
 if MODE == 'create':
     wp = WatershedPrioritization.objects.filter(name__startswith="Auto Test")

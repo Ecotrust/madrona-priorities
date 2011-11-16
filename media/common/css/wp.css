@@ -52,6 +52,7 @@ div .species { padding-left: 126px; }
 .na { 
   background-color: white;
   color: #cccccc; 
+  display: none; 
 }
 
 .hidden { display: none; }

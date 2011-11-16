@@ -292,9 +292,11 @@ class WatershedPrioritization(Analysis):
         num_met = 0
         for line in lines:
             sid = int(line[0])
-            sname = ConservationFeature.objects.get(pk=sid).name
-            sunits = ConservationFeature.objects.get(pk=sid).units
-            slevel1 = ConservationFeature.objects.get(pk=sid).level1
+            consfeat = ConservationFeature.objects.get(pk=sid)
+            sname = consfeat.name
+            sunits = consfeat.units
+            slevel1 = consfeat.level1
+            scode = consfeat.dbf_fieldname
             starget = float(line[2])
             sheld = float(line[3])
             smpm = float(line[9])
@@ -304,8 +306,8 @@ class WatershedPrioritization(Analysis):
             if line[8] == 'yes' or smpm > 1.0:
                 smet = True
                 num_met += 1
-            s = {'name': sname, 'id': sid, 'target': starget, 'units': sunits,
-                    'held': sheld, 'met': smet, 'pct_target': smpm, 'level1': slevel1 }
+            s = {'name': sname, 'id': sid, 'target': starget, 'units': sunits, 'code': scode, 
+                 'held': sheld, 'met': smet, 'pct_target': smpm, 'level1': slevel1 }
             species.append(s)      
 
         species.sort(key=lambda k:k['name'].lower())

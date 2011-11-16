@@ -55,8 +55,7 @@ lingcod.onShow(function(){
                 }
             });
         };
-    }
-
+    } 
     {{instance.uid}}_delay = 5000; // ms
     if (!{{instance.uid}}_running) {
         {{instance.uid}}_call_again = true;
@@ -135,17 +134,19 @@ lingcod.beforeDestroy(function() {
                 <thead>
                     <tr>
                     <th scope="col"> Species </th>
-                    <th scope="col"> Local or Widespread </th>
-                    <th scope="col"> Target Amount</th> 
-                    <th scope="col"> Current Reserve Amount</th>
-                    <th scope="col"> Percent of Target</th>
+                    <th scope="col"> Code </th>
+                    <!-- <th scope="col"> Local or Widespread </th> -->
+                    <th scope="col"> Goal Amount</th> 
+                    <th scope="col"> Best Reserve Amount</th>
+                    <th scope="col"> Percent of Goal Met</th>
                     <tr>
                 </thead>
                 <tbody>
                 {% for s in results.species %}
                 <tr{% if s.target == 0 %} class="na"{% else %}{% if not s.met %} class="miss"{% else %} class="hit"{% endif %}{% endif %}>
                     <td> <strong>{{s.name}}</strong> </td>
-                    <td> {{s.level1}} </td>
+                    <td> {{s.code}} </td>
+                    <!-- <td> {{s.level1}} </td> -->
                     <td> {{s.target|floatformat:2|intcomma}} </td>
                     <td> {{s.held|floatformat:2|intcomma}} </td> 
                     <td> {% if s.target == 0 %} -- {% else %} 
@@ -156,6 +157,14 @@ lingcod.beforeDestroy(function() {
                 {% endfor %}
                 </tbody>
             </table>
+            <a href="#" class="toggle_na_species" style="font-size:8pt;"><span class="showhide" style="display:inline">Show</span><span class="showhide" style="display:none">Hide</span> Species Without Goal Amount</a>
+            <script type="text/javascript">
+                $('a.toggle_na_species').live('click', function(e) {
+                        e.preventDefault();
+                        $('.na').toggle();
+                        $('.showhide').toggle();
+                });
+            </script>
         </div>
         </div>
         {% endif %}

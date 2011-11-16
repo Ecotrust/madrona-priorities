@@ -74,6 +74,16 @@ lingcod.beforeDestroy(function() {
 </script>
 
 {% endblock progress %}
+{% else %}
+<script type="text/javascript">
+lingcod.onShow(function(){
+    $('a.toggle_na_species').click( function(e) {
+        e.preventDefault();
+        $('.showhidelang').toggle();
+        $('tr.nogoal').toggle();
+    });
+});
+</script>
 {% endif %}
 
     {% set results = instance.results %}
@@ -143,7 +153,7 @@ lingcod.beforeDestroy(function() {
                 </thead>
                 <tbody>
                 {% for s in results.species %}
-                <tr{% if s.target == 0 %} class="na"{% else %}{% if not s.met %} class="miss"{% else %} class="hit"{% endif %}{% endif %}>
+                <tr{% if s.target == 0 %} class="nogoal" style="display:none;"{% else %}{% if not s.met %} class="miss"{% else %} class="hit"{% endif %}{% endif %}>
                     <td> <strong>{{s.name}}</strong> </td>
                     <td> {{s.code}} </td>
                     <!-- <td> {{s.level1}} </td> -->
@@ -157,14 +167,7 @@ lingcod.beforeDestroy(function() {
                 {% endfor %}
                 </tbody>
             </table>
-            <a href="#" class="toggle_na_species" style="font-size:8pt;"><span class="showhide" style="display:inline">Show</span><span class="showhide" style="display:none">Hide</span> Species Without Goal Amount</a>
-            <script type="text/javascript">
-                $('a.toggle_na_species').live('click', function(e) {
-                        e.preventDefault();
-                        $('.na').toggle();
-                        $('.showhide').toggle();
-                });
-            </script>
+            <a href="#" class="toggle_na_species" style="font-size:8pt;"><span class="showhidelang" style="display:inline">Show</span><span class="showhidelang" style="display:none">Hide</span> Species Without Goal Amount</a>
         </div>
         </div>
         {% endif %}

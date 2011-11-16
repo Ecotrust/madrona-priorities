@@ -49,10 +49,9 @@ div .species { padding-left: 126px; }
   background-color: #cc3333; 
   color: white;
 }
-.na { 
+.nogoal { 
   background-color: white;
   color: #cccccc; 
-  display: none; 
 }
 
 .hidden { display: none; }

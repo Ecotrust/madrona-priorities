@@ -222,10 +222,15 @@ class WatershedPrioritization(Analysis):
         # First loop, calc sum of costs 
         for pu in PlanningUnit.objects.all():
             puc = PuVsCost.objects.filter(pu=pu)
-            weighted_cost = 0.0 # 0.0001 Do we need some minimal constant cost?
+            weighted_cost = 0.0
             for c in puc:
                 costkey = slugify(c.cost.name.lower())
                 weighted_cost += final_cost_weights[costkey] * c.amount
+                # TODO CONSTANT ALERT
+                # Add 100 constant to each cost
+                # Effectively scales each cost from 100 to 200
+                # Assuming original costs are scaled 0 to 100
+                weighted_cost += final_cost_weights[costkey] * 100
             sum_costs += weighted_cost
             pucosts.append( (pu.pk, weighted_cost) )
 

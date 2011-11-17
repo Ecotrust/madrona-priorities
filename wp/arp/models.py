@@ -213,7 +213,7 @@ class WatershedPrioritization(Analysis):
                     #   - invasives is NOT checked
                     if cost_weights['invasives'] == 0: 
                         final_cost_weights[costkey] = 1
-        if cost_weights['invasives'] > 0:
+        if cost_weights['watershed-condition'] > 0:
             assert final_cost_weights['watershed-condition-with-ais'] != final_cost_weights['watershed-condition-no-ais']
 
         # Calc costs for each planning unit

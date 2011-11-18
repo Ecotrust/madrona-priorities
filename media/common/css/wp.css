@@ -81,3 +81,5 @@ li.expandable > span.sliders { color: black; display: inline; }
 }
 
 input.costvalue { top: 0px !important; }
+
+td.cost { vertical-align: top }

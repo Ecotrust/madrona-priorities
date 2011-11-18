@@ -305,17 +305,17 @@ def footer():
             <table>
 
                 <tr>
-                <td><input type="checkbox" class="costvalue" name="cost" id="cost---watershed-condition" value="watershed-condition" checked="checked"/></td>
+                <td class="cost"><input type="checkbox" class="costvalue" name="cost" id="cost---watershed-condition" value="watershed-condition" checked="checked"/></td>
                 <td><label for="cost---watershed-condition">Degree of Watershed Impairment</label><p>(favor unimpaired watersheds)</p></td>
                 </tr>
 
                 <tr>
-                <td><input type="checkbox" class="costvalue" name="cost" id="cost---invasives" value="invasives" checked="checked"/></td>
+                <td class="cost"><input type="checkbox" class="costvalue" name="cost" id="cost---invasives" value="invasives" checked="checked"/></td>
                 <td><label for="cost---invasives">Invasibility</label><p>(favor watersheds with low invasibility)</p></td>
                 </tr>
 
                 <tr>
-                <td><input type="checkbox" class="costvalue" name="cost" id="cost---climate" value="climate" checked="checked"/></td>
+                <td class="cost"><input type="checkbox" class="costvalue" name="cost" id="cost---climate" value="climate" checked="checked"/></td>
                 <td><label for="cost---climate">Climate Change Vulnerability</label><p>(favor watersheds resiliant to climate change)</p></td>
                 </tr>
     """

@@ -285,10 +285,17 @@ class WatershedPrioritization(Analysis):
         if not self.done:
             return {'targets_penalties': targets_penalties, 'costs': cost_weights}
 
-        best = json.loads(self.output_best)
-        best = [int(x) for x in best['best']]
-        best = PlanningUnit.objects.filter(pk__in=best)
-        sum_area = sum([x.area for x in best])
+        bestjson = json.loads(self.output_best)
+        bestpks = [int(x) for x in bestjson['best']]
+        bestpus = PlanningUnit.objects.filter(pk__in=bestpks)
+        best = []
+        for pu in bestpus:
+            bcosts = {}
+            for x in PuVsCost.objects.filter(pu=pu):
+                bcosts[x.cost.name.lower().replace(" ","")] = x.amount
+            best.append( {'name': pu.name, 'costs': bcosts})
+
+        sum_area = sum([x.area for x in bestpus])
 
         # Parse mvbest
         fh = open(os.path.join(self.outdir,"output","wp_mvbest.csv"), 'r')

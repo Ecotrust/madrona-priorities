@@ -114,7 +114,7 @@ lingcod.onShow(function(){
              {% endfor %}
              </table>
              <table class="table">
-             <thead> <th>Cost</th><th></th></thead>
+                 <thead> <th>Watershed Factors</th><th></th></thead>
              {%for k,v in results.costs.items %}
              <tr> <td><strong>{{k}}</strong></td><td>{% if v > 0%}&#10003;{% endif %}</td></tr>
              {%endfor%}
@@ -140,11 +140,28 @@ lingcod.onShow(function(){
         <div id="watersheds">
             <div class="box">
                 <p>The best (i.e. lowest "cost") watershed prioritization scenario includes {{results.num_units}} subbasins comprising a total of {{results.area|floatformat:1|intcomma}} km<sup>2</sup>. </p>
-                <ul>
+                <p> All variables scaled 0 to 100 </p>
+                <table>
+                <table class="table" summary="Subbasin Table">
+                <thead>
+                    <tr>
+                    <th scope="col"> Subbasin </th> 
+                    <th scope="col"> Climate Vulnerability</th> 
+                    <th scope="col"> Invasibility</th>
+                    <th scope="col"> Watershed Impairment (w/ AIS)</th>
+                    <tr>
+                </thead>
+                <tbody>
                 {% for w in results.units %}
-                    <li>{{w.name}}</li>
+                    <tr class="hit">
+                    <td>{{w.name}}</td>
+                    <td>{{w.costs.climate|floatformat:3}}</td>
+                    <td>{{w.costs.invasives|floatformat:3}}</td>
+                    <td>{{w.costs.watershedconditionnoais|floatformat:0}} ({{w.costs.watershedconditionwithais|floatformat:0}})</td>
+                    </tr>
                 {% endfor %}
-                </ul>
+                </tbody>
+                </table>
             </div>
         </div>
         <div id="species">

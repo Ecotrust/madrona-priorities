@@ -207,7 +207,7 @@ def header():
         </li>
         <li>
             <a href="#coststab">
-                <span>Costs</span>
+                <span>Watershed Factors</span>
             </a>
         </li>
     </ul>
@@ -298,7 +298,7 @@ def footer():
     print """ 
     </form></div> <!-- End species tab -->
     <div id="coststab">
-        <h3>Include the Following Costs:</h3>
+        <h3>In addition to focal fish species, prioritize watersheds based the following factors.  </h3>
         <br />
         <form action="#" id="costs_form">
            <div>
@@ -306,17 +306,17 @@ def footer():
 
                 <tr>
                 <td><input type="checkbox" class="costvalue" name="cost" id="cost---watershed-condition" value="watershed-condition" checked="checked"/></td>
-                <td><label for="cost---watershed-condition">Watershed Condition</label></td>
+                <td><label for="cost---watershed-condition">Degree of Watershed Impairment</label><p>(favor unimpaired watersheds)</p></td>
                 </tr>
 
                 <tr>
                 <td><input type="checkbox" class="costvalue" name="cost" id="cost---invasives" value="invasives" checked="checked"/></td>
-                <td><label for="cost---invasives">Invasives</label></td>
+                <td><label for="cost---invasives">Invasibility</label><p>(favor watersheds with low invasibility)</p></td>
                 </tr>
 
                 <tr>
                 <td><input type="checkbox" class="costvalue" name="cost" id="cost---climate" value="climate" checked="checked"/></td>
-                <td><label for="cost---climate">Climate</label></td>
+                <td><label for="cost---climate">Climate Change Vulnerability</label><p>(favor watersheds resiliant to climate change)</p></td>
                 </tr>
     """
 

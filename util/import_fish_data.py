@@ -12,7 +12,7 @@ from django.contrib.gis.utils import LayerMapping
 #------------------------------------#
 # Config
 xls = "../data/local/input/PrioritySpeciesList_MASTER_FOR_WEB.xls" # NOT xlsx
-shp = "../data/local/input/HUC8_FocalFish20111111.shp"
+shp = "../data/local/input/HUC8_20111116.shp"
 backup = False
 import_shp = True
 mapping = {

@@ -18,14 +18,12 @@ scalefactors = []
 num_species = []
 num_units = []
 
-factors = [0.1, 0.25, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0, 1.1, 1.25, 1.5, 2, 4, 8, 16, 32]
-factors = [x + 0.05 for x in factors]
-factors = [0.175, 0.2, 0.225]
+factors = [0.1, 0.2, 0.25, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0, 1.1, 1.25, 1.5, 2, 4, 8, 16, 32]
 
 settings.MARXAN_NUMREPS = 3
 
-#MODE = 'hardcoded' 
-MODE = 'query' 
+MODE = 'hardcoded' 
+#MODE = 'query' 
 #MODE = 'create'
 
 if MODE == 'query':
@@ -39,7 +37,7 @@ if MODE == 'query':
         w.kml
 
 if MODE == 'create':
-    wp = WatershedPrioritization.objects.filter(name__startswith="Auto Test")
+    wp = WatershedPrioritization.objects.filter(name__startswith="Auto Test Scale Factor")
     wp.delete()
 
     for sf in factors:
@@ -77,11 +75,10 @@ if MODE == 'create':
         num_units.append(r['num_units'])
 
 if MODE == 'hardcoded':
-    import math
-    scalefactors = [1.3, 0.25, 0.4, 1.55, 0.5, 0.1, 0.6, 0.7, 0.8, 0.9, 0.175, 0.2, 0.225, 1.0, 1.1, 1.25, 4.0, 1.5, 2.0, 8.0, 16.0, 32.0, 1.05, 1.15, 0.15, 0.65, 0.3, 0.45, 0.55, 0.75, 0.85, 0.95, 2.05, 4.05, 32.05, 8.05, 16.05]
-    #scalefactors = [math.log(x) for x in scalefactors]
-    num_units = [90, 17, 35, 90, 54, 3, 66, 76, 79, 82, 5, 9, 12, 86, 86, 89, 94, 90, 92, 97, 97, 97, 86, 89, 4, 69, 26, 44, 59, 78, 82, 83, 94, 96, 97, 98, 97]
-    num_species = num_units
+    scalefactors = [0.1, 0.2, 0.25, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0, 1.1, 1.25, 1.5, 2, 4, 8, 16, 32]
+    num_units = [0, 3, 9, 17, 46, 57, 63, 73, 76, 79, 81, 82, 82, 83, 85, 90, 92, 93, 91]
+    num_species = [0, 1, 4, 10, 27, 38, 37, 54, 57, 58, 63, 59, 62, 66, 66, 69, 71, 71, 71]
+
 
 
 assert len(scalefactors) == len(num_species) == len(num_units)
@@ -92,8 +89,8 @@ print num_species
 import matplotlib.pyplot as plt
 fig = plt.figure()
 plt.xlabel('Scale Factor')
-plt.ylabel('Number of Selected Watersheds')
+plt.ylabel('Number of Species Goals Met')
 ax = fig.add_subplot(111)
-ax.scatter(scalefactors, num_units)
+ax.scatter(scalefactors, num_species)
 ax.set_xscale('log')
 plt.show()

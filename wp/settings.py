@@ -68,3 +68,5 @@ from settings_local import *
 DATABASE_ENGINE = DATABASES['default']['ENGINE']
 DATABASE_NAME = DATABASES['default']['NAME']
 DATABASE_USER = DATABASES['default']['USER']
+
+TEMPLATE_DEBUG = False

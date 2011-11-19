@@ -153,13 +153,11 @@ class WatershedPrioritization(Analysis):
         ndict = {}
         for s in ConservationFeature.objects.all():
             levels = s.level_string
-            val = None
+            val = 0
             for k,v in d.items():
                 if levels.startswith(k.lower()):
                     val = v
                     break
-            if val is None:
-                raise Exception("Found no matching target for:  %s %s" % (s.name, s.level_string))
             ndict[s.pk] = val
         return ndict
 

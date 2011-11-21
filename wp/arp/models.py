@@ -2,6 +2,7 @@ import os
 import glob
 import random
 import shutil
+import math
 from django import forms
 from django.conf import settings
 from django.contrib.gis.db import models
@@ -175,6 +176,19 @@ class WatershedPrioritization(Analysis):
         assert max(targets.values()) <= 1.0
         assert min(targets.values()) >=  0.0
 
+        nonzero_pks = [k for k,v in targets.items() if v > 0] 
+        nonzero_targets = []
+        nonzero_penalties = []
+        for nz in nonzero_pks:
+            nonzero_targets.append(targets[nz])
+            nonzero_penalties.append(penalties[nz])
+        meantarget = sum(nonzero_targets) / float(len(nonzero_targets))
+        meanpenalty = sum(nonzero_penalties) / float(len(nonzero_penalties))
+        numspecies = len(nonzero_targets)
+        # Derived from a multiple regression technique 
+        predicted_scalefactor = math.exp((0.8 + 0.04 - (0.75*meanpenalty) + (0.075*meantarget) - (0.003*numspecies)) / 0.18)
+        self.input_scalefactor = predicted_scalefactor
+
         # Apply the target and penalties
         logger.debug("Apply the targets and penalties")
         cfs = []
@@ -185,7 +199,7 @@ class WatershedPrioritization(Analysis):
             except TypeError: 
                 total = 0.0
             target = total * targets[cf.pk]
-            penalty = penalties[cf.pk] * self.input_scalefactor
+            penalty = penalties[cf.pk] * self.input_scalefactor ####################################
             if target > 0:
                 sum_penalties += penalty
             # MUST include all species even if they are zero
@@ -300,6 +314,7 @@ class WatershedPrioritization(Analysis):
         lines = [x.strip().split(',') for x in fh.readlines()[1:]]
         fh.close()
         species = []
+        num_target_species = 0
         num_met = 0
         for line in lines:
             sid = int(line[0])
@@ -320,6 +335,8 @@ class WatershedPrioritization(Analysis):
             s = {'name': sname, 'id': sid, 'target': starget, 'units': sunits, 'code': scode, 
                  'held': sheld, 'met': smet, 'pct_target': smpm, 'level1': slevel1 }
             species.append(s)      
+            if starget > 0:
+                num_target_species += 1
 
         species.sort(key=lambda k:k['name'].lower())
 
@@ -329,7 +346,7 @@ class WatershedPrioritization(Analysis):
             'area': sum_area, 
             'num_units': len(best),
             'num_met': num_met,
-            'num_species': len(species),
+            'num_species': num_target_species, #len(species),
             'units': best,
             'species': species, 
         }
@@ -407,6 +424,17 @@ class WatershedPrioritization(Analysis):
     def mapnik_geomfield(self):
         return "output_geometry"
 
+    @property
+    def color(self):
+        # colors are ABGR
+        colors = [
+         'aa0000ff',
+         'aaff0000',
+         'aa00ffff',
+         'aa00a5ff',
+        ]
+        return colors[self.pk % len(colors)]
+
     @property 
     def kml_done(self):
         key = "watershed_kmldone_%s_%s" % (self.uid, slugify(self.date_modified))
@@ -420,24 +448,34 @@ class WatershedPrioritization(Analysis):
         ob = json.loads(self.output_best)
         wids = [int(x.strip()) for x in ob['best']]
         puc = json.loads(self.output_pu_count)
-        # WARNING this only shows them if they were in the 'best' run!
-        # wshds = PlanningUnit.objects.filter(pk__in=wids)
-        # instead, do all
-        wshds = PlanningUnit.objects.all()
+        method = "best" 
+        #method = "all"
+        if method == "best":
+            wshds = PlanningUnit.objects.filter(pk__in=wids)
+        elif method == "all":
+            wshds = PlanningUnit.objects.all()
 
         kmls = []
-        color = 'aa0000ff'
+        color = self.color
         #color = "cc%02X%02X%02X" % (random.randint(0,255),random.randint(0,255),random.randint(0,255))
         for ws in wshds:
             try:
                 hits = puc[str(ws.pk)] 
             except:
                 hits = 0
-            numruns = settings.MARXAN_NUMREPS
-            prop = float(hits)/numruns
-            scale = (1.4 * prop * prop) 
-            if scale > 0 and scale < 0.5: 
-                scale = 0.5
+
+            if method == "all":
+                numruns = settings.MARXAN_NUMREPS
+                prop = float(hits)/numruns
+                scale = (1.4 * prop * prop) 
+                if scale > 0 and scale < 0.5: 
+                    scale = 0.5
+                desc = "<description>Included in %s out of %s runs.</description>" % (hits, numruns)
+            else:
+                prop = 1.0
+                scale = 1.2
+                desc = ""
+
             if prop > 0:
                 kmls.append( """
             <Style id="style_%s">
@@ -456,11 +494,11 @@ class WatershedPrioritization(Analysis):
             <Placemark id="huc_%s">
                 <visibility>1</visibility>
                 <name>%s</name>
-                <description>Included in %s out of %s runs.</description>
+                %s
                 <styleUrl>style_%s</styleUrl>
                 %s
             </Placemark>
-            """ % (ws.fid, color, scale, ws.fid, ws.name, hits, numruns, ws.fid, asKml(ws.geometry.point_on_surface)))
+            """ % (ws.fid, color, scale, ws.fid, ws.name, desc, ws.fid, asKml(ws.geometry.point_on_surface)))
 
 
         fullkml = """%s

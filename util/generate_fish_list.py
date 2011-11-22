@@ -17,7 +17,7 @@ def output(level,val,crumbs, target=0.0, penalty=0.0):
     print "  "*level, '''<span class="sliders" id="span---%(id)s">
     <table>
     <tr>
-    <td class="treelabel">Goal proportion of habitat</td>
+    <td class="treelabel">Goal proportion</td>
     <td><input type="text" class="slidervalue targetvalue" id="target---%(id)s" value="%(target)s"/></td>
     <td><div class="slider" id="slider_target---%(id)s"></div></td>
     </tr>
@@ -181,28 +181,6 @@ def header():
                 {{ form.input_relativecosts.errors }}
             </div>
 
-
-<div class="tabs">
-    <ul>
-        <li>
-            <a href="#generaltab">
-                <span>General</span>
-            </a>
-        </li>
-
-        <li>
-            <a href="#speciestab">
-                <span>Species</span>
-            </a>
-        </li>
-        <li>
-            <a href="#coststab">
-                <span>Watershed Factors</span>
-            </a>
-        </li>
-    </ul>
-
-    <div id="generaltab">
     <form id="featureform" action="{{action}}" method="post"> 
             <div class="hidden field required">
                 {{ form.input_penalties.label_tag }}
@@ -228,7 +206,21 @@ def header():
            <div>
            </div>
     </form>
-    </div>
+
+<div class="tabs">
+    <ul>
+        <li>
+            <a href="#speciestab">
+                <span>Species of Interest</span>
+            </a>
+        </li>
+        <li>
+            <a href="#coststab">
+                <span>Prioritization Constraints</span>
+            </a>
+        </li>
+    </ul>
+
 
     <div id="speciestab">
     <h3>Set Proptions and Weights for Focal Fish Species</h3>
@@ -291,7 +283,7 @@ def footer():
 
                 <tr>
                 <td class="cost"><input type="checkbox" class="costvalue" name="cost" id="cost---climate" value="climate" checked="checked"/></td>
-                <td><label for="cost---climate">Climate Change Vulnerability</label><p>(favor watersheds resiliant to climate change)</p></td>
+                <td><label for="cost---climate">Climate Change Vulnerability</label><p>(favor watersheds with low vulnerability to climate change)</p></td>
                 </tr>
     """
 

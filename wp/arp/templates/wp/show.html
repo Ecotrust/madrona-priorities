@@ -106,7 +106,7 @@ lingcod.onShow(function(){
 
             <div class="box">
              <table class="table">
-             <thead> <th>Species Key</th><th>Goal Proportion of Habitat</th><th>Importance Weighting</th></thead>
+             <thead> <th>Species Key</th><th>Goal Proportion</th><th>Importance Weighting</th></thead>
              {% for k,v in results.targets_penalties.items %}
              {% if v.target > 0 %}
              <tr> <td><strong>{{k}}</strong></td><td>{{v.target}} </td><td>{{v.penalty}}</td></tr>
@@ -114,7 +114,7 @@ lingcod.onShow(function(){
              {% endfor %}
              </table>
              <table class="table">
-                 <thead> <th>Watershed Factors</th><th></th></thead>
+                 <thead> <th>Prioritization Constraints</th><th></th></thead>
              {%for k,v in results.costs.items %}
              <tr> <td><strong>{{k}}</strong></td><td>{% if v > 0%}&#10003;{% endif %}</td></tr>
              {%endfor%}
@@ -139,7 +139,6 @@ lingcod.onShow(function(){
         <div id="watersheds">
             <div class="box">
                 <p>The best (i.e. lowest "cost") watershed prioritization scenario includes {{results.num_units}} subbasins comprising a total of {{results.area|floatformat:1|intcomma}} km<sup>2</sup>. </p>
-                <p> All variables scaled 0 to 100 </p>
                 <table>
                 <table class="table" summary="Subbasin Table">
                 <thead>
@@ -161,6 +160,7 @@ lingcod.onShow(function(){
                 {% endfor %}
                 </tbody>
                 </table>
+                <p><em>All variables scaled 0 to 100 </em></p>
             </div>
         </div>
         <div id="species">

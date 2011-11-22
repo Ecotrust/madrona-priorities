@@ -186,7 +186,8 @@ class WatershedPrioritization(Analysis):
         meanpenalty = sum(nonzero_penalties) / float(len(nonzero_penalties))
         numspecies = len(nonzero_targets)
         # Derived from a multiple regression technique 
-        predicted_scalefactor = math.exp((0.8 + 0.04 - (0.75*meanpenalty) + (0.075*meantarget) - (0.003*numspecies)) / 0.18)
+        predictor = 0.65
+        predicted_scalefactor = math.exp((predictor + 0.04 - (0.75*meanpenalty) + (0.075*meantarget) - (0.003*numspecies)) / 0.18)
         self.input_scalefactor = predicted_scalefactor
 
         # Apply the target and penalties

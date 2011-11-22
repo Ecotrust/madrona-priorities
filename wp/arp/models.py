@@ -431,7 +431,7 @@ class WatershedPrioritization(Analysis):
          'aa0000ff',
          'aaff0000',
          'aa00ffff',
-         'aa00a5ff',
+         'aaff00ff',
         ]
         return colors[self.pk % len(colors)]
 

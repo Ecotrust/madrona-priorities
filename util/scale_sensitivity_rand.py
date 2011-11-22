@@ -78,8 +78,8 @@ if MODE == 'create':
             a = a[:-3]
         keys.append(a)
 
-    fh = open("/home/mperry/results.csv", 'w+')
-    fh.write('ncosts, nspecies, sumpenalties, meanpenalties, scalefactor, numspeciesmet, numplanningunits')
+    fh = open("./results_%s.csv" % time.time(), 'w+')
+    fh.write('ncosts, nspecies, sumpenalties, meanpenalties, scalefactor, meantarget, nspeciesmet, nplanningunits')
     fh.write('\n')
     fh.flush()
 
@@ -90,9 +90,9 @@ if MODE == 'create':
             numspecies = 'all'
         else:
             if random.choice([True,False]):
-                numspecies = random.randint(0,3)
+                numspecies = random.randint(1,3)
             else:
-                numspecies = random.randint(0,50)
+                numspecies = random.randint(1,50)
 
         try:
             n = int(numspecies)
@@ -142,6 +142,7 @@ if MODE == 'create':
             print "  ", wp.status_html
 
         inpenalties = json.loads(wp.input_penalties)
+        intargets = json.loads(wp.input_targets)
 
         if 'widespread' in inpenalties.keys():
             nspecies = 71
@@ -150,13 +151,14 @@ if MODE == 'create':
 
         r = wp.results
 
-        #'ncosts, nspecies, sumpenalties, meanpenalties, scalefactor, numspeciesmet, numplannningunits'
+        #'ncosts, nspecies, sumpenalties, meanpenalties, scalefactor, meantarget, numspeciesmet, numplannningunits'
         fh.write(','.join([str(x) for x in [
             sum(json.loads(wp.input_relativecosts).values()),
             nspecies,
             sum(inpenalties.values()),
             mean(inpenalties.values()),
             wp.input_scalefactor,
+            mean(intargets.values()),
             r['num_met'],
             r['num_units']
         ]]))

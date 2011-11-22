@@ -286,7 +286,7 @@ def footer():
 
                 <tr>
                 <td class="cost"><input type="checkbox" class="costvalue" name="cost" id="cost---invasives" value="invasives" checked="checked"/></td>
-                <td><label for="cost---invasives">Invasibility</label><p>(favor watersheds with low invasibility)</p></td>
+                <td><label for="cost---invasives">Vulnerability to Invasive Species</label><p>(favor watersheds with low vulnerability to invasion)</p></td>
                 </tr>
 
                 <tr>

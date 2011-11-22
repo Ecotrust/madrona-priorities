@@ -119,8 +119,7 @@ lingcod.onShow(function(){
              <tr> <td><strong>{{k}}</strong></td><td>{% if v > 0%}&#10003;{% endif %}</td></tr>
              {%endfor%}
              </table>
-             <br/>
-             <p> Scaling Factor = {{instance.input_scalefactor}}</p>
+             <p style="color:white">Estimated Scaling Factor = {{instance.input_scalefactor}}</p>
             </div>
         </div>
         {% if instance.done %}

@@ -38,10 +38,6 @@ def header():
 {% block panel %}
 <script type="text/javascript" charset="utf-8">
     lingcod.onShow(function(){
-        $('#toggle_doc_scalefactor').click( function(e) {
-            e.preventDefault();
-            $('#doc_scalefactor').toggle();
-        });
 
         var params_impute = function() {
             // If the input json is not null, 
@@ -143,11 +139,6 @@ def header():
             var maxval = 1;
             var minval = 0;
             stepval = 0.01;
-            if (id == 'id_input_scalefactor') {
-                maxval = 8;
-                minval = 0.1;
-                stepval = 0.01; 
-            }
 
             $('#' + slider_id).slider({
                 range: 'min',
@@ -188,7 +179,6 @@ def header():
                 {{ form.input_penalties.errors }}
                 {{ form.input_targets.errors }}
                 {{ form.input_relativecosts.errors }}
-                {{ form.input_scalefactor.errors }}
             </div>
 
 
@@ -221,6 +211,8 @@ def header():
                 {{ form.input_targets }}            
                 {{ form.input_relativecosts.label_tag }}
                 {{ form.input_relativecosts }}            
+                {{ form.input_scalefactor.label_tag}}
+                {{ form.input_scalefactor}}
             </div>
             <div class="field required">
                 {{ form.name.label_tag }}
@@ -234,23 +226,6 @@ def header():
             </div>
             <p><input type="submit" value="submit"></p>
            <div>
-             <table>
-                <tr>
-                <td><label>Scale Factor</label></td>
-                <td> {{ form.input_scalefactor}} </td>
-                <td><div class="slider" id="slider_id_input_scalefactor"></div></td>
-                </tr>
-             </table>
-             <br/>
-             <a href="#" id="toggle_doc_scalefactor">What's the scale factor?</a>
-             <div id="doc_scalefactor" class="hidden">
-             <p> The scale factor is a multiplier for your species importance weights. Adjusting the scale factor allows some control over the number of watersheds in the solution without having to fiddle with individual species weights.</p>
-             <p><em> As a rule of thumb, a lower scale factor yields a solution with fewer watersheds selected </em></p>
-             <h5> Guidelines </h5>
-             <p> Scaling Factor < 0.5 ... costs dominate the analysis ... fewer watersheds at the expense of meeting species viability goals.</p>
-             <p> 0.5 < Scaling Factor < 2.0  ... balanced ... more watersheds selected but may not meet <em>all</em> species viability goals.</p>
-             <p> Scaling Factor > 2.0 ... penalties dominate the analysis ... greatest number of watersheds selected ensuring species viability goals will <em> mostly </em> be met.</p>
-             </div>
            </div>
     </form>
     </div>

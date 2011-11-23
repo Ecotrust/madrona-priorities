@@ -186,8 +186,14 @@ class WatershedPrioritization(Analysis):
         meanpenalty = sum(nonzero_penalties) / float(len(nonzero_penalties))
         numspecies = len(nonzero_targets)
         # Derived from a multiple regression technique 
-        predictor = 0.65
-        predicted_scalefactor = math.exp((predictor + 0.04 - (0.75*meanpenalty) + (0.075*meantarget) - (0.003*numspecies)) / 0.18)
+        # predicted_scalefactor = math.exp((predictor + 0.04 - (0.75*meanpenalty) + (0.075*meantarget) - (0.003*numspecies)) / 0.18)
+        # However .... 
+        # SF needs to be independent of user-input penalties.
+        # So we can plug in a meanpenalty = 1 to set the upper range of importance slider. 
+        # That could correspond to, say, 0.9 on the predictor x axis. 
+        # The importance slider would then determine how many watersheds get chosen.
+        predictor = 0.95
+        predicted_scalefactor = math.exp((predictor + 0.04 - 0.75 + (0.075*meantarget) - (0.003*numspecies)) / 0.18)
         self.input_scalefactor = predicted_scalefactor
 
         # Apply the target and penalties

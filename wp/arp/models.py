@@ -241,7 +241,7 @@ class WatershedPrioritization(Analysis):
         # First loop, calc sum of costs 
         for pu in PlanningUnit.objects.all():
             puc = PuVsCost.objects.filter(pu=pu)
-            weighted_cost = 0.0
+            weighted_cost = 50.0
             for c in puc:
                 costkey = slugify(c.cost.name.lower())
                 weighted_cost += final_cost_weights[costkey] * c.amount

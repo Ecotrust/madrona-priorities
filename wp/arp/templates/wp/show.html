@@ -132,35 +132,58 @@ lingcod.onShow(function(){
 
         <div id="summary">
             <div class="box">
-                <p>The best (i.e. lowest "cost") watershed prioritization scenario includes {{results.num_units}} subbasins comprising a total of {{results.area|floatformat:1|intcomma}} km<sup>2</sup>. </p>
+                <p>The optimum watershed prioritization scenario includes {{results.num_units}} subbasins covering {{results.area|floatformat:1|intcomma}} km<sup>2</sup>. </p>
                 <p>Viability goals were met for {{results.num_met}} of {{results.num_species}} focal species.</p>
             </div>
         </div>
         <div id="watersheds">
             <div class="box">
-                <p>The best (i.e. lowest "cost") watershed prioritization scenario includes {{results.num_units}} subbasins comprising a total of {{results.area|floatformat:1|intcomma}} km<sup>2</sup>. </p>
+                <p>The optimum watershed prioritization scenario includes {{results.num_units}} subbasins covering {{results.area|floatformat:0|intcomma}} km<sup>2</sup>. </p>
                 <table>
                 <table class="table" summary="Subbasin Table">
                 <thead>
                     <tr>
                     <th scope="col"> Subbasin </th> 
-                    <th scope="col"> Climate Vulnerability</th> 
-                    <th scope="col"> Invasibility</th>
-                    <th scope="col"> Watershed Impairment (w/ AIS)</th>
+                    {%for k,v in results.costs.items %}
+                        {% if v > 0%}
+                            {% if k == "climate" %}
+                            <th scope="col"> Climate Change Vulnerability</th> 
+                            {% endif %}
+                            {% if k == "invasives" %}
+                            <th scope="col"> Vulnerability to Invasive Species</th>
+                            {% endif %}
+                            {% if k == "watershed-condition" %}
+                            <th scope="col"> Watershed Impairment</th>
+                            {% endif %}
+                        {% endif %}
+                    {%endfor%}
                     <tr>
                 </thead>
                 <tbody>
                 {% for w in results.units %}
                     <tr class="hit">
                     <td>{{w.name}}</td>
-                    <td>{{w.costs.climate|floatformat:3}}</td>
-                    <td>{{w.costs.invasives|floatformat:3}}</td>
-                    <td>{{w.costs.watershedconditionnoais|floatformat:0}} ({{w.costs.watershedconditionwithais|floatformat:0}})</td>
+                    {%for k,v in results.costs.items %}
+                        {% if v > 0 %}
+                            {% if k == "climate" %}
+                            <td class="{{w.costs.climate}}">{{w.costs.climate}}</td>
+                            {% endif %}
+                            {% if k == "invasives" %}
+                            <td class="{{w.costs.invasives}}">{{w.costs.invasives}}</td>
+                            {% endif %}
+                            {% if k == "watershed-condition" %}
+                                {% if results.costs.invasives > 0 %}
+                                <td class="{{w.costs.watershedconditionnoais}}">{{w.costs.watershedconditionnoais}}</td>
+                                {% else %}
+                                <td class="{{w.costs.watershedconditionwithais}}">{{w.costs.watershedconditionwithais}})</td>
+                                {% endif %}
+                            {% endif %}
+                        {% endif %}
+                    {% endfor %}
                     </tr>
                 {% endfor %}
                 </tbody>
                 </table>
-                <p><em>All variables scaled 0 to 100 </em></p>
             </div>
         </div>
         <div id="species">

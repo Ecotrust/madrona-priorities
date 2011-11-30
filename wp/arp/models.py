@@ -311,7 +311,22 @@ class WatershedPrioritization(Analysis):
         for pu in bestpus:
             bcosts = {}
             for x in PuVsCost.objects.filter(pu=pu):
-                bcosts[x.cost.name.lower().replace(" ","")] = x.amount
+                costname = x.cost.name.lower().replace(" ","")
+                amt = x.amount
+                # classify amount to high/med/low
+                cls = {
+                        'invasives': (8,18),
+                        'climate': (50,80),
+                        'watershedconditionwithais': (25, 45),
+                        'watershedconditionnoais': (30, 50)
+                }
+                if amt < cls[costname][0]: 
+                    rating = "low" 
+                elif amt > cls[costname][1]: 
+                    rating = "high" 
+                else: 
+                    rating = "med" 
+                bcosts[costname] = rating
             best.append( {'name': pu.name, 'costs': bcosts})
 
         sum_area = sum([x.area for x in bestpus])

@@ -83,3 +83,20 @@ li.expandable > span.sliders { color: black; display: inline; }
 input.costvalue { top: 0px !important; }
 
 td.cost { vertical-align: top }
+
+td.high { 
+    background-color: lightcoral; 
+    text-align: center !important;
+    text-transform: capitalize;
+}
+td.med { 
+    background-color: lemonchiffon; 
+    text-align: center !important;
+    text-transform: capitalize;
+}
+td.low { 
+    background-color: lightgreen; 
+    text-align: center !important;
+    text-transform: capitalize;
+}
+

@@ -188,28 +188,34 @@ lingcod.onShow(function(){
         </div>
         <div id="species">
             <div class="box">
-                <h3> Habitat by Species</h3>
+                <p>Viability goals were met for {{results.num_met}} of {{results.num_species}} focal species.</p>
                 <table class="table" id="species_table" summary="Species Table">
                 <thead>
                     <tr>
                     <th scope="col"> Species </th>
-                    <th scope="col"> Code </th>
-                    <!-- <th scope="col"> Local or Widespread </th> -->
+                    <!-- <th scope="col"> Code </th> -->
+                    <th scope="col"> Percent of Total </th>
+                    <th scope="col" width="50"> Units </th>
+                    <!--
                     <th scope="col"> Goal Amount</th> 
                     <th scope="col"> Best Reserve Amount</th>
-                    <th scope="col"> Percent of Goal Met</th>
+                    -->
+                    <th scope="col" width="80"> Goal Met?</th>
                     <tr>
                 </thead>
                 <tbody>
                 {% for s in results.species %}
-                <tr{% if s.target == 0 %} class="nogoal" style="display:none;"{% else %}{% if not s.met %} class="miss"{% else %} class="hit"{% endif %}{% endif %}>
-                    <td> <strong>{{s.name}}</strong> </td>
-                    <td> {{s.code}} </td>
-                    <!-- <td> {{s.level1}} </td> -->
+                <tr{% if s.target == 0 %} class="nogoal" style="display:none;"{% else %}class="hit"{% endif %}>
+                    <td> <strong>{{s.name}}</strong><br/>({{s.code}})</td>
+                    <!-- <td> {{s.code}} </td> -->
+                    <td style="text-align:right;"> {{s.pcttotal|percentage:1}} </td>
+                    <td> {{s.units}} </td>
+                    <!--
                     <td> {{s.target|floatformat:2|intcomma}} </td>
                     <td> {{s.held|floatformat:2|intcomma}} </td> 
-                    <td> {% if s.target == 0 %} -- {% else %} 
-                          {% if not s.met %} {{s.pct_target|percentage:1}} {% else %} &#8805; 98% {# see MISLEVEL in marxan.py or input.dat #}{% endif %} 
+                    -->
+                    <td style="text-align:center;"> {% if s.target == 0 %} -- {% else %} 
+                        {% if s.met %}&#10003;{% else %} NO<br/>(Goal was {{s.target_prop|percentage:0}}){% endif %} 
                          {% endif %}
                     </td>
                 </tr>

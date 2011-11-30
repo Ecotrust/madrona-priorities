@@ -301,6 +301,7 @@ class WatershedPrioritization(Analysis):
                 # this should never happen but just in case
                 targets_penalties[k] = {'target': None, 'penalty': v}
 
+        species_level_targets = self.process_dict(targets)
         if not self.done:
             return {'targets_penalties': targets_penalties, 'costs': cost_weights}
 
@@ -346,7 +347,10 @@ class WatershedPrioritization(Analysis):
             slevel1 = consfeat.level1
             scode = consfeat.dbf_fieldname
             starget = float(line[2])
+            starget_prop = species_level_targets[consfeat.pk]
+            stotal = float(starget/starget_prop)
             sheld = float(line[3])
+            spcttotal = sheld/stotal 
             smpm = float(line[9])
             if starget == 0:
                 smpm = 0.0
@@ -355,7 +359,8 @@ class WatershedPrioritization(Analysis):
                 smet = True
                 num_met += 1
             s = {'name': sname, 'id': sid, 'target': starget, 'units': sunits, 'code': scode, 
-                 'held': sheld, 'met': smet, 'pct_target': smpm, 'level1': slevel1 }
+                    'held': sheld, 'met': smet, 'pct_target': smpm, 'level1': slevel1, 
+                    'pcttotal': spcttotal, 'target_prop': starget_prop }
             species.append(s)      
             if starget > 0:
                 num_target_species += 1

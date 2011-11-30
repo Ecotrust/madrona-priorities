@@ -132,13 +132,14 @@ lingcod.onShow(function(){
 
         <div id="summary">
             <div class="box">
-                <p>The optimum watershed prioritization scenario includes {{results.num_units}} subbasins covering {{results.area|floatformat:1|intcomma}} km<sup>2</sup>. </p>
+                <p>The optimum watershed prioritization scenario includes {{results.num_units}} subbasins covering {{results.area|floatformat:0|intcomma}} km<sup>2</sup>. </p>
                 <p>Viability goals were met for {{results.num_met}} of {{results.num_species}} focal species.</p>
             </div>
         </div>
         <div id="watersheds">
             <div class="box">
                 <p>The optimum watershed prioritization scenario includes {{results.num_units}} subbasins covering {{results.area|floatformat:0|intcomma}} km<sup>2</sup>. </p>
+                <p> * Scores indicate <em>relative</em> ranking. See <a href="#">documentation</a> for more details. </p> 
                 <table>
                 <table class="table" summary="Subbasin Table">
                 <thead>
@@ -147,13 +148,13 @@ lingcod.onShow(function(){
                     {%for k,v in results.costs.items %}
                         {% if v > 0%}
                             {% if k == "climate" %}
-                            <th scope="col"> Climate Change Vulnerability</th> 
+                            <th scope="col"> Climate Change Vulnerability * </th> 
                             {% endif %}
                             {% if k == "invasives" %}
-                            <th scope="col"> Vulnerability to Invasive Species</th>
+                            <th scope="col"> Vulnerability to Invasive Species * </th>
                             {% endif %}
                             {% if k == "watershed-condition" %}
-                            <th scope="col"> Watershed Impairment</th>
+                            <th scope="col"> Watershed Impairment *</th>
                             {% endif %}
                         {% endif %}
                     {%endfor%}

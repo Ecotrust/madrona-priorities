@@ -4,6 +4,7 @@ from lingcod.shapes.views import ShpResponder
 from django.http import HttpResponse
 from django.template.defaultfilters import slugify
 from django.contrib.gis.geos import MultiPolygon
+from django.shortcuts import render_to_response
 import os
 import json
 import time
@@ -113,3 +114,6 @@ def test_params(request):
         return res
     else:
         return HttpResponse('POST required', status=404)
+
+def home(request):
+    return render_to_response('wp/index.html', {})

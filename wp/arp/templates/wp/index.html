@@ -1,0 +1,67 @@
+<html>
+<head>
+    <title> Watershed Priorities Tool</title>
+    <link href='/media/common/css/site.css' rel='stylesheet' type='text/css' />
+    <link href='/media/common/css/ecotrust.css' rel='stylesheet' type='text/css' />
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.5/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+    <script type="text/javascript">
+        $(document).ready(function(){
+            function show(name) {
+                var thediv = $('#content_' + name);
+                var thetab = $('#tab_' + name);
+                $('div.content').hide();
+                $('.tab').removeClass('selected');
+                thediv.show();
+                thetab.addClass('selected');
+            }
+
+            $('#tab_intro').click( function(e) {
+                e.preventDefault(); 
+                show('intro'); 
+            });
+            $('#tab_methods').click( function(e) {
+                e.preventDefault(); 
+                show('methods');
+            });
+            $('#tab_null').click( function(e) {
+                e.preventDefault();
+            });
+
+            $('#tab_intro').click();
+        });
+    </script>
+</head>
+<body>
+
+
+    <div id="content">
+        <div> 
+            <span> <h1>Watershed Priorities Tool</h1> </span>
+            <span class="float-right"><img src="http://www.ecotrust.org/images/ecotrust_logo08.gif"> </span>
+        </div>
+        <div id="topnav">
+            <ul id="tabnav">
+                <li class="tab1"><a href="#" class="tab" id="tab_intro">Introduction</a></li>
+                <li class="tab2"><a href="#" class="tab" id="tab_methods">Methods</a></li>
+                <li class="tab3"><a href="#" class="tab" id="tab_null">Tab Three</a></li>
+                <li class="tab4"><a href="#" class="tab" id="tab_null">Tab Four</a></li>
+            </ul>
+        </div>
+        <div class="content" id="content_intro">
+            <h3>Introduction</h3>
+            <p>The Whole Watershed Restoration Initiative is a public-private competitive grant program that 
+            focuses on salmon habitat restoration efforts in areas of high ecological importance in Oregon, Washington and Idaho.</p>
+        </div>
+        <div class="content" id="content_methods">
+            <h3>Methods</h3>
+            <p>Together the partners first identify Priority Basins and Focus Watersheds in the Pacific Northwest that have the 
+            highest ecological values and potential responsiveness to restoration efforts. We provide funding for projects in 
+            these areas that aim to restore and protect major ecological functions by removing risk factors and restoring 
+            damaged habitat-forming processes in the watershed. Once the work restoring major ecological processes is 
+            completed within an individual Focus Watershed, restoration efforts and funding will then be concentrated on 
+            other areas; thus the geographic focus will change over time. </p>
+        </div>
+    </div>
+
+</body>
+</html>

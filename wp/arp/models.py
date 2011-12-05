@@ -348,9 +348,13 @@ class WatershedPrioritization(Analysis):
             scode = consfeat.dbf_fieldname
             starget = float(line[2])
             starget_prop = species_level_targets[consfeat.pk]
-            stotal = float(starget/starget_prop)
             sheld = float(line[3])
-            spcttotal = sheld/stotal 
+            try:
+                stotal = float(starget/starget_prop)
+                spcttotal = sheld/stotal 
+            except ZeroDivisionError:
+                stotal = 0
+                spcttotal = 0
             smpm = float(line[9])
             if starget == 0:
                 smpm = 0.0

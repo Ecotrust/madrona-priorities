@@ -185,7 +185,7 @@ def header():
     <ul>
         <li>
             <a href="#generaltab">
-                <span>Step 1: Notes</span>
+                <span>Step 1: Name and <br/> Describe </span>
             </a>
         </li>
         <li>
@@ -202,6 +202,7 @@ def header():
 
 
     <div id="generaltab"> 
+    <p>Provide a name and (optionally) a description of the prioritization scenario.</p>
     <form id="featureform" action="{{action}}" method="post"> 
             <div class="hidden field required">
                 {{ form.input_penalties.label_tag }}

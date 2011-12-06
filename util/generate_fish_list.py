@@ -172,7 +172,7 @@ def header():
 <link rel="stylesheet" href="/media/common/js/treeview/jquery.treeview.css" />
 <link rel="stylesheet" href="/media/common/js/treeview/jquery-widgets.css" />
 
-    <h1>{{title}} input parameters</h1>
+    <h1>{{title}}</h1>
 
             <div class="field required">
                 {{ form.desription.errors }}
@@ -181,6 +181,27 @@ def header():
                 {{ form.input_relativecosts.errors }}
             </div>
 
+<div class="tabs">
+    <ul>
+        <li>
+            <a href="#generaltab">
+                <span>Step 1: Notes</span>
+            </a>
+        </li>
+        <li>
+            <a href="#speciestab">
+                <span>Step 2: Species <br/> of Interest</span>
+            </a>
+        </li>
+        <li>
+            <a href="#coststab">
+                <span>Step 3: Prioritization <br/> Constraints</span>
+            </a>
+        </li>
+    </ul>
+
+
+    <div id="generaltab"> 
     <form id="featureform" action="{{action}}" method="post"> 
             <div class="hidden field required">
                 {{ form.input_penalties.label_tag }}
@@ -206,21 +227,7 @@ def header():
            <div>
            </div>
     </form>
-
-<div class="tabs">
-    <ul>
-        <li>
-            <a href="#speciestab">
-                <span>Species of Interest</span>
-            </a>
-        </li>
-        <li>
-            <a href="#coststab">
-                <span>Prioritization Constraints</span>
-            </a>
-        </li>
-    </ul>
-
+    </div>
 
     <div id="speciestab">
     <h3>Set Proptions and Weights for Focal Fish Species</h3>

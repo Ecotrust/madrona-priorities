@@ -1,0 +1,66 @@
+{% extends 'common/panel.html' %}
+{% load appname %}
+{% block title %}{% appname %} Help{% endblock %}
+
+{% block panel %}
+
+<link rel="stylesheet" href="{{MEDIA_URL}}screencasts/css/screencasts.css" type="text/css" media="all" title="no title" charset="utf-8">
+<link rel="stylesheet" href="{{MEDIA_URL}}common/css/typography.css" type="text/css" media="all" title="no title" charset="utf-8">
+<style type="text/css">
+.helpstep {
+	text-decoration:none;
+	display: block;
+	padding: 2px; 
+    margin-bottom: 15px;
+    height: 180px; 
+}
+.helpstep img {
+	margin-right: 12px; 
+    border: 1px solid #444;
+}
+.helpstep p {
+	margin: 2px !important; 
+}
+
+p.step {
+    font-weight: bold;
+}
+</style>
+
+<div id="helptop"></div>
+<br/>
+<div>
+    <h1> Watershed Priorities Tutorial </h1>
+
+    <h2>Step 1: Sign In</h2>
+    <div class="helpstep">
+        <img src="/media/screenshots/step1_signin.png" width="240" align="left" />
+        <p>If you already have an account, <em>Sign In</em> and enter your username and password.</p>
+        <p>If you need an account, click <em>Register</em> and follow the instructions on screen.</p>
+    </div>
+
+    <h2>Step 2: Create a New Prioritization</h2>
+    <div class="helpstep">
+        <img src="/media/screenshots/step2_createnew.png" width="240" align="left" />
+        <p>Click <em>Create New</em> then <em>Watershed Prioritization Analysis</em> to define your prioritization scenario.</p>
+        <p>Follow the steps to define your focal species goals and prioritization constraints.</p>
+    </div>
+
+    <h2>Step 3: Review Results</h2>
+    <div class="helpstep">
+        <img src="/media/screenshots/step3_attributes.png" width="238" align="left" />
+        <p>Highlight your prioritization in the table of contents and click <em>Attributes</em>.</p>
+        <p>From here you can evaluate which watersheds were selected and how well species goals were met.</p>
+    </div>
+
+    <h2> Learn More </h2>
+    <div class="helpstep">
+        <p>There are many other aspects to the Watershed Priorities Tool to explore.
+        You can export scenarios to GIS, iteratively Edit them to fine-tune the prioritization, collaborate and share scenarios with others and view underlying data layers. </p>
+        <p> For further information, please refer to the <a href="/home/help.html" target="_blank">Complete Documentation</a>.</p>
+    </div>
+    
+
+</div>
+
+{% endblock panel %}

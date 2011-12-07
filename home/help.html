@@ -1,0 +1,316 @@
+
+<html>
+<head>
+<style>
+div {
+ height: 408 px;
+ margin-bottom: 15px; 
+}
+td{
+ padding-left: 12px;
+ vertical-align: top; 
+}
+img.screenshot { 
+ width: 660px;
+ height: 408px;
+ border: 1px solid black;
+}
+</style>
+</head>
+<body>
+<h1> Documentation for the <em>Watershed Priorities Tool</em> </h1>
+<h3> Table of Contents </h3>
+<ul>
+		<li> Logging In
+		    <ul>
+				<li> <a href="#public">Initial View</a> </li>
+				<li> <a href="#register">Register for an Account</a> </li>
+				<li> <a href="#signin">Sign In</a> </li>
+				<li> <a href="#profile">User Profile</a> </li>
+            </ul>
+        </li>
+        <li> Creating a Prioritization
+		    <ul>
+				<li> <a href="#create_new">Creating a new analysis</a> </li>
+				<li> <a href="#step1">Name and Describe</a> </li>
+				<li> <a href="#step2">Set Goals and Weights for Focal Species</a> </li>
+				<li> <a href="#step3">Set Prioritization Constraints</a> </li>
+				<li> <a href="#running">Running the Analysis</a> </li>
+				<li> <a href="#refresh">Refreshing the view</a> </li>
+				<li> <a href="#view">View Results</a> </li>
+            </ul>
+        </li>
+        <li> Evaluating the Results
+		    <ul>
+				<li> <a href="#attributes">Analysis Attributes</a> </li>
+				<li> <a href="#inputs">Input Parameters</a> </li>
+				<li> <a href="#subbasins">Selected Subbasins</a> </li>
+				<li> <a href="#results_species">Species Results</a> </li>
+            </ul>
+        </li>
+        <li> <a href="#folders">Organizing into Folders</a> </li>
+        <li> <a href="#edit_and_share">Editing and Sharing</a> </li>
+        <li> <a href="#sharing">Viewing Shared Data</a> </li>
+        <li> <a href="#download">Downloading and Exporting Data</a> </li>
+        <li> <a href="#data_layers">Viewing Underlying Data Layers</a> </li>
+        <li> <a href="#tools">Additional Tools</a> </li>
+    </ul>    <hr/>
+
+    <div id="public">
+        <table><tr>
+            <td><img src="./01-public.png" class="screenshot"/></td>
+            <td>
+            <h3>Initial View</h3>
+            When you first visit the watershed priorities tool, on the left you'll see a brief introduction to the tool. You can get back to this intro page at any time by clicking <em>about</em> in the upper-right. <br/><br/>
+            On the right you'll see a map of the Washington/Idaho/Oregon region. This is an interactive 3D map provided by the Google Earth plugin. To move around the map, use the navigation controls in the upper-right corner of the map. You can also use the mouse and/or keyboard to navigate. Take some time to get familiar with the map navigation before proceeding or visit the <a href=" http://earth.google.com/support/bin/answer.py?answer=176674#zoom_mouse">Google Earth documentation</a> for more info. 
+            </td>
+        </tr></table>
+    </div>
+    <hr/>
+    
+    <div id="register">
+        <table><tr>
+            <td><img src="./02-register.png" class="screenshot"/></td>
+            <td>
+            <h3>Register for an Account</h3>
+            If you don't already have an account with the site, you can register for one online. It only takes a minute! Click <em>register</em> in the upper-right, fill in the required information and hit submit. You'll receive an email with final instructions on how to activate your account.
+            </td>
+        </tr></table>
+    </div>
+    <hr/>
+    
+    <div id="signin">
+        <table><tr>
+            <td><img src="./03-signin.png" class="screenshot"/></td>
+            <td>
+            <h3>Sign In To Your Account</h3>
+            Once you have an account set up, you can click <em>sign in</em> in the upper-right. Enter your username and password and you will have full access to the tool. 
+            </td>
+        </tr></table>
+    </div>
+    <hr/>
+    
+    <div id="profile">
+        <table><tr>
+            <td><img src="./04-profile.png" class="screenshot"/></td>
+            <td>
+            <h3>User profile</h3>
+            If you want to manage your user account, you can click <em>my profile</em> once logged in. This allows you to 
+            <ul> 
+				<li>change first/last name</li>
+				<li>add a description</li>
+				<li>change your password</li>
+				<li>see what groups you belong to</li>
+			</ul>
+            </td>
+        </tr></table>
+    </div>
+    <hr/>
+    
+    <div id="create_new">
+        <table><tr>
+            <td><img src="./05-create_new.png" class="screenshot"/></td>
+            <td>
+            <h3>Watershed Prioritization Analysis</h3>
+            This feature is the heart of the watershed prioritization tool. It allows you to define your conservation goals and constraints and determines the optimal selection of Subbasins which attempt to meet those criteria. <br/><br/>
+            To start, click <em>Create New</em> then <em>Watershed Prioritization Analysis</em>. 
+            </td>
+        </tr></table>
+    </div>
+    <hr/>
+    
+    <div id="step1">
+        <table><tr>
+            <td><img src="./06-step1.png" class="screenshot"/></td>
+            <td>
+            <h3>Name and Describe the Analysis</h3>
+            This is where you articulate the goals of your prioritization. Providing a name is required while notes are optional. A succinct, descriptive name and detailed notes about species, goals, assumptions, etc. will go a long way towards keeping your work organized. 
+            </td>
+        </tr></table>
+    </div>
+    <hr/>
+    
+    <div id="step2">
+        <table><tr>
+            <td><img src="./07-step2.png" class="screenshot"/></td>
+            <td>
+            <h3>Set Goals and Weights for Focal Species</h3>
+            For your focal fish species, you need to set both a goal and an importance: The <strong>goal proportion</strong> is the proportion of the species viability score you want to represent in your scenario. The <strong>importance weighting</strong> is the subjective value of meeting that goal. 
+			<br/>
+			<br/>
+			The species are represented as a heirarchical tree. You can specify these values at the top level (i.e. "All `Locally Endemic` species should get an importance of 1.0") or the tree can be expanded as far as the individual species or ESU depending on the level of detail you need in your analysis.
+
+            </td>
+        </tr></table>
+    </div>
+    <hr/>
+    
+    <div id="step3">
+        <table><tr>
+            <td><img src="./08-step3.png" class="screenshot"/></td>
+            <td>
+            <h3>Set Prioritization Constraints</h3>
+            You may wish to avoid heavily impaired watersheds or watersheds with a high vulnerability to climate change or invasive species. These are your prioritization constraints and the analysis can optimize the selection accordingly. 
+            </td>
+        </tr></table>
+    </div>
+    <hr/>
+    
+    <div id="running">
+        <table><tr>
+            <td><img src="./09-running.png" class="screenshot"/></td>
+            <td>
+            <h3>Running the Analysis</h3>
+            When you've define the parameters of your analysis, you can click the <em>submit</em> button to start the process. <br/><br/>
+            Because the tool will need to evaluate millions of permutations, the processing step can take some time. As it runs, the progress will be reported in the progress bar. 
+            </td>
+        </tr></table>
+    </div>
+    <hr/>
+    
+    <div id="refresh">
+        <table><tr>
+            <td><img src="./10-refresh.png" class="screenshot"/></td>
+            <td>
+            <h3>Refreshing the view</h3>
+            When the analysis has completed, click the <em>Refresh</em> button to see the resulting map. 
+            </td>
+        </tr></table>
+    </div>
+    <hr/>
+    
+    <div id="view">
+        <table><tr>
+            <td><img src="./11-view.png" class="screenshot"/></td>
+            <td>
+            <h3>View Results</h3>
+            The completed analysis will show in Table of Contents in the left panel. In the right panel, you'll see a number of dots. These icons represent subbasins which were chosen as part of the optimal configuration to meet your priority goals and contraints. 
+            </td>
+        </tr></table>
+    </div>
+    <hr/>
+    
+    <div id="attributes">
+        <table><tr>
+            <td><img src="./12-attributes.png" class="screenshot"/></td>
+            <td>
+            <h3>Analysis Attributes</h3>
+            To delve into the results of the analysis, bring up the <em>Attributes</em> panel. You can do this in two ways:
+            <ul>
+              <li> Double-click the name of the analysis in the Table of Contents </li>
+              <li> Highlight (single-click) the name of the analysis and click <em>Attributes</em> above.</li>
+            </ul>
+            </td>
+        </tr></table>
+    </div>
+    <hr/>
+    
+    <div id="inputs">
+        <table><tr>
+            <td><img src="./13-inputs.png" class="screenshot"/></td>
+            <td>
+            <h3>Input Parameters</h3>
+            The first thing you'll see are the Input parameters. This is just a reminder of what you specified at the input stage. 
+            </td>
+        </tr></table>
+    </div>
+    <hr/>
+    
+    <div id="subbasins">
+        <table><tr>
+            <td><img src="./14-subbasins.png" class="screenshot"/></td>
+            <td>
+            <h3>Selected Subbasins</h3>
+            Click <em>Results</em> then <em>Subbasins</em> just below to see a complete list of the subbasins that were selected in your prioritization. The table shows how each subbasin ranks on the selected prioritization constraints.  
+            </td>
+        </tr></table>
+    </div>
+    <hr/>
+    
+    <div id="results_species">
+        <table><tr>
+            <td><img src="./15-results_species.png" class="screenshot"/></td>
+            <td>
+            <h3>Species Results</h3>
+             Click <em>Results</em> then <em>Species</em> just below to see a complete list of your focal fish species. The table shows, for each species, how much of the overall species viability score was captured, the units of measure and whether or not the goal was met.  
+            </td>
+        </tr></table>
+    </div>
+    <hr/>
+
+    <div id="folders">
+        <table><tr>
+            <td><img src="./05-create_new.png" class="screenshot"/></td>
+            <td>
+            <h3>Folders</h3>
+            Once you start creating multiple scenarios, you'll probably want to group them into Folders to keep them logically organized. 
+            To start, click <em>Create New</em> then <em>Folder</em>. Provide a name and click <em>Submit</em>. You'll see a folder with that name appear in the table of contents; you can now "drag and drop" analyses into the folder as you see fit.  
+            </td>
+        </tr></table>
+    </div>
+    <hr/>
+    
+    <div id="edit_and_share">
+        <table><tr>
+            <td><img src="./16a-edit_and_share.png" class="screenshot"/></td>
+            <td>
+            <h3>Editing and Sharing</h3>
+            Highlight (single-click) the name of the analysis and click <em>Edit</em> above. This brings up a menu of actions that can be applied to this analysis:
+            <ul>
+             <li><em>Edit</em> allows you tweak the input parameters and re-run the analysis, allowing you to interatively hone your prioritization(s). </li>
+             <li><em>Share</em> allows you send the analysis to your colleagues. Your group membership must be set up with our site administrator before this can used. </li>
+             <li><em>Copy</em> allows you to make a clone of the analysis to try different configurations and evaluate them side-by-side without starting a new one from scratch. </li>
+             <li><em>Delete</em> will erase the selected analysis from the system completely. There is no undo.</li>
+            </td>
+        </tr></table>
+    </div>
+    <hr/>
+    
+    <div id="sharing">
+        <table><tr>
+            <td><img src="./16b-sharing.png" class="screenshot"/></td>
+            <td>
+            <h3>Viewing Shared Data</h3>
+            If you are a member of a group within the tool, you can collaborate by sharing analyses with your group. To view scenarios that have been developed by your group members, click on <em>Shared</em> in the top left. There you will see a list of the groups you belong to and the scenarios that have been shared by individuals from that group. <br/><br/> Note that you can <em>Copy</em> analyses that have been shared with you and continue to tweak parameters. This iterative process of Create, Share and Copy allows truly collaborative solutions to develop within a team.<td>
+        </tr></table>
+    </div>
+    <hr/>
+    
+    <div id="download">
+        <table><tr>
+            <td><img src="./17-download.png" class="screenshot"/></td>
+            <td>
+            <h3>Downloading and Exporting Data</h3>
+            <ul>
+             <li><em>Shapefile</em> download allows you to obtain the polygon boundaries of the subbasins with the prioritization results contained in the attribute fields for use in a GIS. Note that multiple analyses can be selected (Ctl-click) and downloaded as a single aggregate dataset. </li>
+             <li><em>Input Files</em> allows you send the analysis to your colleagues. Your group membership must be set up with our site administrator before this can used. </li>
+             <li><em>KML and KMZ</em> export for use in an external geobrowser that supports KML (such as Google Earth). </li>
+            </td>
+            </td>
+        </tr></table>
+    </div>
+    <hr/>
+    
+    <div id="data_layers">
+        <table><tr>
+            <td><img src="./18-data_layers.png" class="screenshot"/></td>
+            <td>
+            <h3>Viewing Underlying Data Layers</h3>
+            The <em>data layers</em> icon on the top bar brings up a panel which allows you to adjust the base map layers to customize the map view. In addition to the standard layers provided by Google, you can view the underlying datasets which are used by the tool to determine species viability and prioritization constraints.            </td>
+        </tr></table>
+    </div>
+    <hr/>
+    
+    <div id="tools">
+        <table><tr>
+            <td><img src="./19-tools.png" class="screenshot"/></td>
+            <td>
+            <h3>Additional Tools</h3>
+            The <em>tools</em> icon on the top bar brings up some other generic tools which may be useful as you use the site. You can fly to a given destination (specified by name), measure areas and distances and configure map display options. 
+            </td>
+        </tr></table>
+    </div>
+    <hr/>
+    
+</body>
+</html>

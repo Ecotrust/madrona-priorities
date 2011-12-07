@@ -15,12 +15,12 @@
             {% if user.is_authenticated %}
             <li>{{user.username}} | </li>
             {% endif %}
-            <li><a href="#" id="news">news</a> | </li>
-            <li><a href="#" id="about">about</a> | </li>
-            {% block meta_navigation_list_insert %}{% endblock %}
             <!--
-            <li><a href="{% url help-main %}" target="_blank" id="help">help</a> | </li>
+            <li><a href="#" id="news">news</a> | </li>
             -->
+            {% block meta_navigation_list_insert %}{% endblock %}
+            <li><a href="#" id="about">about</a> | </li>
+            <li><a href="{% url help-main %}" target="_blank" id="help">help</a> | </li>
             {% if user.is_authenticated %}
             <li><a href="#" id="profile">my profile</a> | </li>
             <li><a href="{% url user_signout %}">sign out</a></li>

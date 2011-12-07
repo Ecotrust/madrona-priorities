@@ -780,19 +780,25 @@ padding-top: 4px; /* must change with respect to padding (X) above and below */
 
 ul#tabnav li a { /* settings for all tab links */
 padding: 3px 4px; /* set padding (tab size) as desired; FIRST number must change with respect to padding-top (X) above */
-border: 1px solid #6c6; /* set border COLOR as desired; usually matches border color specified in #tabnav */
-background-color: #cfc; /* set unselected tab background color as desired */
-color: #666; /* set unselected tab link color as desired */
+border: 1px solid #ccc; /* set border COLOR as desired; usually matches border color specified in #tabnav */
+/*background-color: #78a22f; /* set unselected tab background color as desired */
+/*color: #fff; /* set unselected tab link color as desired */
+background: #fff; /* set desired hover color */
+color: #78a22f; /* set selected tab link color as desired */
 margin-right: 0px; /* set additional spacing between tabs as desired */
 text-decoration: none;
 border-bottom: none;
 }
 
 ul#tabnav a:hover { /* settings for hover effect */
-background: #fff; /* set desired hover color */
+background-color: #78a22f; /* set unselected tab background color as desired */
+color: #fff; /* set unselected tab link color as desired */
 }
 
 ul#tabnav li a.selected { /* settings for hover effect */
-background: #fff; /* set desired hover color */
+/*background: #fff; /* set desired hover color */
+/*color: #185926; /* set selected tab link color as desired */
+background-color: #78a22f; /* set unselected tab background color as desired */
+color: #fff; /* set unselected tab link color as desired */
 }
 /* end css tabs */

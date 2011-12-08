@@ -613,12 +613,7 @@ class Folder(FeatureCollection):
                 )
         form = 'arp.forms.FolderForm'
         show_template = 'folder/show.html'
-
-    @classmethod
-    def css(klass):
-        return """li.%(uid)s > .icon { 
-        background: url('%(media)skmltree/dist/images/sprites/kml.png?1302821411') no-repeat -231px 0px ! important;
-        } """ % { 'uid': klass.model_uid(), 'media': settings.MEDIA_URL }
+        icon_url = 'common/images/folder.png'
 
 class PlanningUnitShapes(models.Model):
     pu = models.ForeignKey(PlanningUnit)

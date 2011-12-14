@@ -182,8 +182,14 @@ class WatershedPrioritization(Analysis):
         for nz in nonzero_pks:
             nonzero_targets.append(targets[nz])
             nonzero_penalties.append(penalties[nz])
-        meantarget = sum(nonzero_targets) / float(len(nonzero_targets))
-        meanpenalty = sum(nonzero_penalties) / float(len(nonzero_penalties))
+        try:
+            meantarget = sum(nonzero_targets) / float(len(nonzero_targets))
+        except ZeroDivisionError:
+            meantarget = 0
+        try:
+            meanpenalty = sum(nonzero_penalties) / float(len(nonzero_penalties))
+        except ZeroDivisionError:
+            meanpenalty = 0
         numspecies = len(nonzero_targets)
         # Derived from a multiple regression technique 
         # predicted_scalefactor = math.exp((predictor + 0.04 - (0.75*meanpenalty) + (0.075*meantarget) - (0.003*numspecies)) / 0.18)

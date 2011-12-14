@@ -70,12 +70,15 @@
             var targets = {};
             var penalties = {};
             var costs = {};
+            var totaltargets = 0;
+            var totalpenalties = 0;
             $('.targetvalue:visible').each( function(index) {
                 var xid = $(this).attr("id");
                 var id = "#" + xid;
                 xid = xid.replace(/^target---/,''); //  Remove preceding identifier
                 xid = xid.replace(/---$/,''); // Remove trailing ---
                 targets[xid] = parseFloat($(id).val());
+                totaltargets = parseFloat($(id).val());
             });
             $('.penaltyvalue:visible').each( function(index) {
                 var xid = $(this).attr("id");
@@ -83,6 +86,7 @@
                 xid = xid.replace(/^penalty---/,''); //  Remove preceding identifier
                 xid = xid.replace(/---$/,''); // Remove trailing ---
                 penalties[xid] = parseFloat($(id).val());
+                totalpenalties = parseFloat($(id).val());
             });
             // Initialize costs to zero
             $('input.costvalue[name="cost"]').each( function(index) {
@@ -99,6 +103,11 @@
             $('#id_input_targets').val( JSON.stringify(targets) ); 
             $('#id_input_penalties').val( JSON.stringify(penalties) );
             $('#id_input_relativecosts').val( JSON.stringify(costs) );
+            if (totalpenalties == 0 || totaltargets == 0) {
+                return false;
+            } else {
+                return true;
+            }
         };
 
         $('.slidervalue').each( function(index) {
@@ -130,9 +139,17 @@
             });
         });
 
+        // We need to do additional checking so unbind
+        $('.submit_button').die('click');
+        $('.submit_button').unbind('click');
+        // .. and rebind with a validation step
         $('.submit_button').click(function(event){ 
-            params_collect(); 
-            $('#wp_form').trigger('submit');
+            var proceed = params_collect(); 
+            if (proceed) {
+                $('#featureform').trigger('submit');
+            } else {
+                alert("Please specify goals and importance for a least one species of interest. (Step 2)");
+            }
         });
     });
 </script>
@@ -143,7 +160,6 @@
     <h1>{{title}}</h1>
 
             <div class="field required">
-                {{ form.desription.errors }}
                 {{ form.input_penalties.errors }}
                 {{ form.input_targets.errors }}
                 {{ form.input_relativecosts.errors }}

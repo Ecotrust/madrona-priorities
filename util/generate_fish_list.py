@@ -110,7 +110,7 @@ def header():
                 xid = xid.replace(/^target---/,''); //  Remove preceding identifier
                 xid = xid.replace(/---$/,''); // Remove trailing ---
                 targets[xid] = parseFloat($(id).val());
-                totaltargets = parseFloat($(id).val());
+                totaltargets += parseFloat($(id).val());
             });
             $('.penaltyvalue:visible').each( function(index) {
                 var xid = $(this).attr("id");
@@ -118,7 +118,7 @@ def header():
                 xid = xid.replace(/^penalty---/,''); //  Remove preceding identifier
                 xid = xid.replace(/---$/,''); // Remove trailing ---
                 penalties[xid] = parseFloat($(id).val());
-                totalpenalties = parseFloat($(id).val());
+                totalpenalties += parseFloat($(id).val());
             });
             // Initialize costs to zero
             $('input.costvalue[name="cost"]').each( function(index) {

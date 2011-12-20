@@ -114,3 +114,13 @@ def test_params(request):
         return res
     else:
         return HttpResponse('POST required', status=404)
+
+def home(request):
+    return render_to_response("wp/home.html")
+
+def tutorial(request):
+    return render_to_response("wp/tutorial.html")
+
+def docs(request):
+    return render_to_response("wp/docs.html")
+

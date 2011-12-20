@@ -2,6 +2,24 @@
 {% block panel %}
 
 <style>
+    .helpstep {
+        text-decoration:none;
+        display: block;
+        padding: 2px; 
+        margin-bottom: 15px;
+        height: 90px; 
+    }
+    .helpstep img {
+        margin-right: 12px; 
+        border: 1px solid #444;
+    }
+    .helpstep p {
+        margin: 2px !important; 
+    }
+
+    p.step {
+        font-weight: bold;
+    }
     div.about {
             font-family: "Lucida Grande","Lucida Sans Unicode",Arial,Verdana,sans-serif;
             font-size: 12px;
@@ -14,25 +32,44 @@
 </style>
 
 <div class="about">
-<h2>Watershed Priorities Tool</h2>
+<h2>Welcome to the Watershed Priorities Tool</h2>
 <h4>An aquatic habitat restoration decision support system for Oregon, Washington, and Idaho</h4>
-<p>
-Ecotrust and the Pacific Region of the U.S. Fish and Wildlife Service (USFWS) have partnered to develop an aquatic habitat restoration decision support system for Oregon, Washington, and Idaho. This system will enable USFWS to engage in strategic planning and program delivery of aquatic habitat conservation and restoration priorities in the Pacific Northwest.
-</p>
-<p>
-The decision support system will prioritize watersheds for conservation and restoration of freshwater habitats to ensure the long-term sustainability of the region’s fisheries resources by allowing evaluation of variables related to invasive species and climate change and how such variables affect regional priorities.
-</p>
-<h2> Using the Demo </h2>
-<p>
-    <li> <strong>Watershed Prioritization Tool</strong>. Go to 'Create New &gt; Watershed Prioritization' to start. From here you can enter:
- <ul class="subabout">
-     <li>The <strong>goal</strong> or proportion of habitat to conserve for each species.</li>
-     <li>The <strong>importance weighting</strong> which indicates the relative importance of each species.</li>
-     <li>The inclusion of <strong>prioritization constraints</strong> such as climate change, invasives and watershed impairment.</li>
-  </ul>
-  The process will run in the background; you can continue to use the application and will be notified when the processing is completed. At that time you can click the 'refresh' button to view the results of the analysis. Selecting the analysis and clicking 'Attributes' will provide the details of the analysis and the resulting reserve scenario. </li>
 
-  </ul>
-  </p>
+<div>
+    <h2>Step 1: Sign In</h2>
+    <div class="helpstep">
+        <img src="/media/screenshots/step1_signin.png" width="120" align="left" />
+        <p>If you already have an account, <em>Sign In</em> and enter your username and password.</p>
+        <p>If you need an account, click <em>Register</em> and follow the instructions on screen.</p>
+    </div>
+
+    <h2>Step 2: Review Regional Prioritizations</h2>
+    <div class="helpstep">
+        <img src="/media/screenshots/shared.png" width="119" align="left" />
+        <p>Click the <em>Shared</em> tab and find the Regional Prioritizations.</p>
+        <p>Click the checkbox to load the map and view the <em>Attributes</em> page to see detailed results.</p>
+    </div>
+
+    <h2>Step 3: Create a Custom Prioritization</h2>
+    <div class="helpstep">
+        <img src="/media/screenshots/step2_createnew.png" width="120" align="left" />
+        <p>Click <em>Create New</em> then <em>Watershed Prioritization Analysis</em> to define your prioritization scenario.</p>
+        <p>Follow the steps to define your focal species goals and prioritization constraints.</p>
+    </div>
+
+    <h2>Step 4: Review Results</h2>
+    <div class="helpstep">
+        <img src="/media/screenshots/step3_attributes.png" width="119" align="left" />
+        <p>Highlight your prioritization in the table of contents and click <em>Attributes</em>.</p>
+        <p>From here you can evaluate which watersheds were selected and how well species goals were met.</p>
+    </div>
+
+    <div>
+        Looking for more info? Click "help" in the upper-right for more documentation.
+    </div>
+
+
+</div>
+
 </div>
 {% endblock panel %}

@@ -337,14 +337,13 @@ table tr td { border:1px #ccc solid; padding:2px; }
     }
 
 #content {
-    float:left;
+    /*float:left;
     display: inline; /* seems necessary for IE 6 & 7 */
-    margin-left:120px; /* match width of leftbar */
+    margin-left: auto;/* 120px;  match width of leftbar */
+    margin-right: auto; /* match width of leftbar */
     padding: 15px 10px 10px 10px;
-    border-left:1px solid #ccc;
-    border-right:1px solid #ccc;
     overflow:visible;
-    width:808px; /* minus 2px for vert line borders */
+    width:67%;
     }
     
 #content2 {

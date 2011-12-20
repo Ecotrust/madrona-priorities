@@ -70,3 +70,5 @@ DATABASE_NAME = DATABASES['default']['NAME']
 DATABASE_USER = DATABASES['default']['USER']
 
 TEMPLATE_DEBUG = False
+LOGIN_REDIRECT_URL = '/tool/'
+HELP_EMAIL = 'mperry@ecotrust.org'

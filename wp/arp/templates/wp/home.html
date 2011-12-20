@@ -28,6 +28,14 @@
         $(document).ready(function(){
             $('.tab').removeClass('selected');
             $('#tab_intro').addClass('selected');
+            $('#proceed_button').click( function(e) {
+                var r = confirm("I have read and understand the purpose and limitations of the Watershed Priorities Tool. I'm ready to begin.");
+                console.log(r);
+                if (r!=true) {
+                    e.preventDefault();
+                }
+            });
+
         });
     </script>
 </head>

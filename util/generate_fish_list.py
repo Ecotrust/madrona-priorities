@@ -183,6 +183,33 @@ def header():
                 alert("Please specify goals and importance for a least one species of interest. (Step 2)");
             }
         });
+
+        $('#next_1to2').click( function(e) {
+            $('#a_step2').click();
+        });
+        $('#next_2to3').click( function(e) {
+            $('#a_step3').click();
+        });
+        $('#prev_2to1').click( function(e) {
+            $('#a_step1').click();
+        });
+        $('#prev_3to2').click( function(e) {
+            $('#a_step2').click();
+        });
+        $('#a_step1').click( function(e) {
+            $('.form_controls').hide();
+            $('#controls_step1').show();
+        });
+        $('#a_step2').click( function(e) {
+            $('.form_controls').hide();
+            $('#controls_step2').show();
+        });
+        $('#a_step3').click( function(e) {
+            $('.form_controls').hide();
+            $('#controls_step3').show();
+        });
+
+
     });
 </script>
 
@@ -200,17 +227,17 @@ def header():
 <div class="tabs">
     <ul>
         <li>
-            <a href="#generaltab">
+            <a href="#generaltab" id="a_step1">
                 <span>Step 1: Name and <br/> Describe </span>
             </a>
         </li>
         <li>
-            <a href="#speciestab">
+            <a href="#speciestab" id="a_step2">
                 <span>Step 2: Species <br/> of Interest</span>
             </a>
         </li>
         <li>
-            <a href="#coststab">
+            <a href="#coststab" id="a_step3">
                 <span>Step 3: Prioritization <br/> Constraints</span>
             </a>
         </li>
@@ -306,7 +333,7 @@ def footer():
 
                 <tr>
                 <td class="cost"><input type="checkbox" class="costvalue" name="cost" id="cost---watershed-condition" value="watershed-condition" checked="checked"/></td>
-                <td><label for="cost---watershed-condition">Degree of Watershed Impairment</label><p>(favor unimpaired watersheds)</p></td>
+                <td><label for="cost---watershed-condition">Watershed Condition</label><p>(favor unimpaired watersheds)</p></td>
                 </tr>
 
                 <tr>
@@ -338,8 +365,21 @@ def footer():
   </div>
 
     <br class="clear" />
-    <div class="form_controls">
+    <div class="form_controls" id="controls_step1">
+        <a href="#" class="button" onclick="this.blur(); return false;" id="next_1to2"><span>Next &gt;</span></a>
+        <a href="#" class="button" onclick="this.blur(); return false;"><span style="color:#ccc;">&lt; Prev </span></a>
+        <a href="#" class="cancel_button button red" onclick="this.blur(); return false;"><span>Cancel</span></a>
+        <br class="clear" />
+    </div>
+    <div class="form_controls" id="controls_step2" style="display:none;">
+        <a href="#" class="button" onclick="this.blur(); return false;" id="next_2to3"><span>Next &gt;</span></a>
+        <a href="#" class="button" onclick="this.blur(); return false;" id="prev_2to1"><span>&lt; Prev </span></a>
+        <a href="#" class="cancel_button button red" onclick="this.blur(); return false;"><span>Cancel</span></a>
+        <br class="clear" />
+    </div>
+    <div class="form_controls" id="controls_step3" style="display:none;">
         <a href="#" class="submit_button button" onclick="this.blur(); return false;"><span>Submit</span></a>
+        <a href="#" class="button" onclick="this.blur(); return false;" id="prev_3to2"><span>&lt; Prev </span></a>
         <a href="#" class="cancel_button button red" onclick="this.blur(); return false;"><span>Cancel</span></a>
         <br class="clear" />
     </div>

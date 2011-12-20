@@ -403,9 +403,7 @@ class WatershedPrioritization(Analysis):
     def status(self):
         url = self.get_absolute_url()
         if process_is_running(url):
-            status = """Analysis for <em>%s</em> is currently running.</p>
-            <p>%s of %s model runs completed.""" % (self.name,
-                     self.progress[0], self.progress[1])
+            status = """Analysis for <em>%s</em> is currently running. You can close this window and return later.</p>""" % (self.name,)
             code = 2
         elif process_is_complete(url):
             status = "%s processing is done. Refresh to see results." % self.name

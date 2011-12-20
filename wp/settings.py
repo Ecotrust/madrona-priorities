@@ -71,4 +71,4 @@ DATABASE_USER = DATABASES['default']['USER']
 
 TEMPLATE_DEBUG = False
 LOGIN_REDIRECT_URL = '/tool/'
-HELP_EMAIL = 'mperry@ecotrust.org'
+HELP_EMAIL = 'ksdev@ecotrust.org'

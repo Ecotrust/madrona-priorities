@@ -313,7 +313,7 @@ class WatershedPrioritization(Analysis):
 
         bestjson = json.loads(self.output_best)
         bestpks = [int(x) for x in bestjson['best']]
-        bestpus = PlanningUnit.objects.filter(pk__in=bestpks)
+        bestpus = PlanningUnit.objects.filter(pk__in=bestpks).order_by('name')
         best = []
         for pu in bestpus:
             bcosts = {}

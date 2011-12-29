@@ -2,6 +2,7 @@
 {% load humanize %}
 {% load set_var %}
 {% load percentage %}
+{% load sortcosts %}
 {% block title %}{{instance.name}}{% endblock title %}
 {% block panel %}
 <h1>Analysis results for {{instance.name}}</h1>
@@ -115,8 +116,16 @@ lingcod.onShow(function(){
              </table>
              <table class="table">
                  <thead> <th>Prioritization Constraints</th><th></th></thead>
-             {%for k,v in results.costs.items %}
-             <tr> <td><strong>{{k}}</strong></td><td>{% if v > 0%}&#10003;{% endif %}</td></tr>
+             {%for k,v in results.costs.items|sortcosts %}
+                {% if k == "watershed-condition" %}
+                <tr> <td><strong>Watershed Condition</strong></td><td>{% if v > 0%}&#10003;{% endif %}</td></tr>
+                {% endif %}
+                {% if k == "climate" %}
+                <tr> <td><strong>Climate Change Vulnerability</strong></td><td>{% if v > 0%}&#10003;{% endif %}</td></tr>
+                {% endif %}
+                {% if k == "invasives" %}
+                <tr> <td><strong>Vulnerability to Invasive Species</strong></td><td>{% if v > 0%}&#10003;{% endif %}</td></tr>
+                {% endif %}
              {%endfor%}
              </table>
              <p style="color:white">Estimated Scaling Factor = {{instance.input_scalefactor}}</p>
@@ -139,22 +148,22 @@ lingcod.onShow(function(){
         <div id="watersheds">
             <div class="box">
                 <p>The optimum watershed prioritization scenario includes {{results.num_units}} subbasins covering {{results.area|floatformat:0|intcomma}} km<sup>2</sup>. </p>
-                <p> * Scores indicate <em>relative</em> ranking. See <a href="#">documentation</a> for more details. </p> 
+                <p> * Scores indicate <em>relative</em> ranking. See <a href="/docs.html" target="_blank">documentation</a> for more details. </p> 
                 <table>
                 <table class="table" summary="Subbasin Table">
                 <thead>
                     <tr>
                     <th scope="col"> Subbasin </th> 
-                    {%for k,v in results.costs.items %}
+                    {%for k,v in results.costs.items|sortcosts %}
                         {% if v > 0%}
+                            {% if k == "watershed-condition" %}
+                            <th scope="col"> Watershed Condition</th>
+                            {% endif %}
                             {% if k == "climate" %}
-                            <th scope="col"> Climate Change Vulnerability * </th> 
+                            <th scope="col"> Climate Change Vulnerability</th> 
                             {% endif %}
                             {% if k == "invasives" %}
-                            <th scope="col"> Vulnerability to Invasive Species * </th>
-                            {% endif %}
-                            {% if k == "watershed-condition" %}
-                            <th scope="col"> Watershed Impairment *</th>
+                            <th scope="col"> Vulnerability to Invasive Species</th>
                             {% endif %}
                         {% endif %}
                     {%endfor%}
@@ -164,7 +173,7 @@ lingcod.onShow(function(){
                 {% for w in results.units %}
                     <tr class="hit">
                     <td>{{w.name}}</td>
-                    {%for k,v in results.costs.items %}
+                    {%for k,v in results.costs.items|sortcosts %}
                         {% if v > 0 %}
                             {% if k == "climate" %}
                             <td class="{{w.costs.climate}}">{{w.costs.climate}}</td>

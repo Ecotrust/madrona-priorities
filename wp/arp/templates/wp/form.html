@@ -153,7 +153,11 @@
         });
 
         $('#next_1to2').click( function(e) {
-            $('#a_step2').click();
+            if ($('input#id_name').val() == '') {
+                alert("Please provide a name for this watershed prioritization scenario. (Step 1)");
+            } else {
+                $('#a_step2').click();
+            }
         });
         $('#next_2to3').click( function(e) {
             $('#a_step3').click();

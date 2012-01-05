@@ -1,35 +1,13 @@
-<html>
-<head>
-    <title> Watershed Priorities Tool</title>
-    <link href='/media/common/css/site.css' rel='stylesheet' type='text/css' />
-    <link href='/media/common/css/ecotrust.css' rel='stylesheet' type='text/css' />
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.5/jquery.min.js" type="text/javascript" charset="utf-8"></script>
-    <style type="text/css">
-        div .box { 
-            -moz-box-shadow: 5px 5px 5px #bdc;
-            -webkit-box-shadow: 5px 5px 5px #bdc;
-            box-shadow: 5px 5px 5px #bdc; 
-            -moz-border-radius: 6px;
-            -webkit-border-radius: 6px;
-            -khtml-border-radius: 6px;
-            border-radius: 6px;
-            border: 1px #9c9 solid;
-            padding: 15px;
-            background-color: #efe; 
-            background-repeat: no-repeat;
-            width: 380px;
-            text-align: center;
-        }
-        div .footer {
-           margin-top: 25px; 
-        }
-    </style>
+{% extends 'wp/base.html' %}
+{% block title %}Watershed Priorities Tool{% endblock title %}
+
+    {% block js %}
     <script type="text/javascript">
         $(document).ready(function(){
             $('.tab').removeClass('selected');
             $('#tab_intro').addClass('selected');
             $('#proceed_button').click( function(e) {
-                var r = confirm("I have read and understand the purpose and limitations of the Watershed Priorities Tool. I'm ready to begin.");
+                var r = confirm("I understand the purpose and limitations of the Watershed Priorities Tool and am ready to begin.");
                 console.log(r);
                 if (r!=true) {
                     e.preventDefault();
@@ -38,21 +16,9 @@
 
         });
     </script>
-</head>
-<body>
+    {% endblock js %}
 
-
-    <div id="content">
-        <div> 
-            <div style="float:left; margin-bottom:15px;"> <h1>Watershed Priorities Tool</h1> </div>
-        </div>
-        <div id="topnav">
-            <ul id="tabnav">
-                <li class="tab1"><a href="#" class="tab" id="tab_intro">Introduction</a></li>
-                <li class="tab2"><a href="docs.html" class="tab" id="tab_docs">Documentation</a></li>
-            </ul>
-        </div>
-        <div class="content" id="content_intro">
+            {% block content %}
             <h2>Introduction</h2>
             <p>
             <a href="http://ecotrust.org">Ecotrust</a> and the <a href="http://www.fws.gov/pacific/">
@@ -72,23 +38,11 @@
             <div style="width:50%; margin-left:auto; margin-right:auto;">
             <a href="/tool/" id="proceed_button">
                 <div class="box">
-                    <img style="width:360px; border: 1px solid #555;" src="http://watershed-priorities.googlecode.com/hg/media/screenshots/results1.png?r=default"/>
+                    <img style="width:360px; border: 1px solid #555;" src="/media/screenshots/results1sm.png"/>
                     <h3>
                     Proceed to the Watershed Priorities Tool
                     </h3>
                 </div>
             </a>
             </div>
-
-        </div>
-        <div class="footer">
-            <span style="float:right;">
-                <img src="http://www.ecotrust.org/images/ecotrust_logo08.gif" style="margin-right: 15px;"/>
-                <img src="http://www.fws.gov/home/graphics/logo2005.gif"/>
-            </span>
-        </div>
-    </div>
-
-
-</body>
-</html>
+            {% endblock content %}

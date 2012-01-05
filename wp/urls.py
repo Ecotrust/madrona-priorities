@@ -16,6 +16,7 @@ urlpatterns += patterns('arp.views',
     url(r'^$', 'home', name='home'),
     url(r'^tutorial.html$', 'tutorial', name='tutorial'),
     url(r'^docs.html$', 'docs', name='docs'),
+    url(r'^tool_description.html$', 'tool_description', name='tool_description'),
 )
 urlpatterns += patterns('lingcod',
     (r'^accounts/', include('lingcod.openid.urls')),

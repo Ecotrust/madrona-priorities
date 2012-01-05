@@ -19,8 +19,8 @@
             <li><a href="#" id="news">news</a> | </li>
             -->
             {% block meta_navigation_list_insert %}{% endblock %}
-            <li><a href="#" id="about">about</a> | </li>
-            <li><a href="{% url help-main %}" target="_blank" id="help">help</a> | </li>
+            <li><a href="#" id="about">help</a> | </li>
+            <li><a href="{% url help-main %}" target="_blank" id="help">more info</a> | </li>
             {% if user.is_authenticated %}
             <li><a href="#" id="profile">my profile</a> | </li>
             <li><a href="{% url user_signout %}">sign out</a></li>
@@ -32,3 +32,13 @@
             {% endblock metanavigation %}
 
 {% block addToOptions %}options.show_panel='about';{% endblock addToOptions %}
+
+    {% block datalayers %}
+    <div id="DataLayers">
+        <h1>{% block dataLayersTitle %}Data Layers *{% endblock dataLayersTitle %}</h1>
+        <div id="datalayerstree"></div>
+        <hr/>
+        <p> * <em>For metadata and detailed information on these layers, <br/> please visit the <a href="/docs.html" target="_blank">data and methods documentation</a></em>.</p>
+
+    </div>
+    {% endblock datalayers %}

@@ -1,0 +1,22 @@
+{% extends 'wp/base.html' %}
+{% block title %}Description of Watershed Priorities Tool{% endblock title %}
+
+    {% block js %}
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $('.tab').removeClass('selected');
+            $('#tab_tool').addClass('selected');
+        });
+    </script>
+    {% endblock js %}
+
+            {% block content %}
+            <h2>Description of the Watersheds Priorities Software </h2>
+            <h4> Purpose </h4>
+            <p> This tool was designed as a web interface to solve the question, "<em>Given a set of constraints, which subbasins should I focus on to maximize conservation objectives.</em>" Typically, solving these problems, compiling the data and analyzing it is prohibitively complex and too time-consuming for the majority of potential users. 
+            We have created a suite of GIS datasets and an analytical approach, packaged as web-based tool, to facilitate iterative and collaborative exploration of conservation objectives. </p>
+            <h4> Architecture </h4>
+            <p> The software was built on many successful and proven technologies including <a href="http://code.google.com/apis/earth/">Google Earth</a>, <a href="http://www.uq.edu.au/marxan/">Marxan</a>, <a href="https://www.djangoproject.com/">Django</a> and <a href="http://marinemap.org/">MarineMap</a>. The source code is open source and is available to view or download at <a href="http://code.google.com/p/watershed-priorities/">the watershed-priorites code site</a>. </p>
+            <h4> Tutorial </h4>
+            <p> For a complete walk-through of all software features, please visit the <a href="tutorial.html">tutorial</a>.
+            {% endblock content %}

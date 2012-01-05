@@ -124,3 +124,5 @@ def tutorial(request):
 def docs(request):
     return render_to_response("wp/docs.html")
 
+def tool_description(request):
+    return render_to_response("wp/tool_description.html")

@@ -6,12 +6,14 @@ html {
     }
 
 body {
-    margin:0;
+    align:center;
     padding:0;
     font-family:Verdana, Arial, Helvetica, sans-serif;
     font-size: 76%;
     color: #333;
     background-color: #fff;
+    text-align:center;
+    margin:0 auto;
 }
 
 
@@ -336,9 +338,11 @@ table tr td { border:1px #ccc solid; padding:2px; }
     clear:both;
     }
 
+
 #content {
     /*float:left;
     display: inline; /* seems necessary for IE 6 & 7 */
+    text-align:left;
     margin-left: auto;/* 120px;  match width of leftbar */
     margin-right: auto; /* match width of leftbar */
     padding: 15px 10px 10px 10px;

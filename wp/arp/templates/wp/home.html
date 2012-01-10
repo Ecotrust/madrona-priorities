@@ -8,9 +8,12 @@
             $('#tab_intro').addClass('selected');
             $('#proceed_button').click( function(e) {
                 var r = confirm("I understand the purpose and limitations of the Watershed Priorities Tool and am ready to begin.");
-                console.log(r);
-                if (r!=true) {
+                if (r) {
+                    document.location = this.href;
+                    return true;
+                } else {
                     e.preventDefault();
+                    return false
                 }
             });
 
@@ -35,6 +38,7 @@
             Watershed priorities are determined at the HUC 8 (Subbasin) scale. 
             </p>
 
+            <div style="text-align:center">
             <div style="width:50%; margin-left:auto; margin-right:auto;">
             <a href="/tool/" id="proceed_button">
                 <div class="box">
@@ -44,5 +48,6 @@
                     </h3>
                 </div>
             </a>
+            </div>
             </div>
             {% endblock content %}

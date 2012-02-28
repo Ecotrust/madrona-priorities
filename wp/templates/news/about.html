@@ -33,21 +33,16 @@
 
 <div class="about">
 <h2>Welcome to the Watershed Priorities Tool</h2>
-<h4>An aquatic habitat restoration decision support system for Oregon, Washington, and Idaho</h4>
+<p>An aquatic habitat restoration decision support system for Oregon, Washington, and Idaho</p>
 
+{% if user.is_authenticated %}
 <div>
-    <h2> Sign In</h2>
-    <div class="helpstep">
-        <img src="/media/screenshots/step1_signin.png" width="120" align="left" />
-        <p>If you already have an account, <em>Sign In</em> and enter your username and password.</p>
-        <p>If you need an account, click <em>Register</em> and follow the instructions on screen.</p>
-    </div>
 
     <h2> Review Regional Prioritizations</h2>
     <div class="helpstep">
         <img src="/media/screenshots/shared.png" width="119" align="left" />
-        <p>Click the <em>Shared</em> tab and find the Regional Prioritizations.</p>
-        <p>Click the checkbox to load the map and view the <em>Attributes</em> page to see detailed results.</p>
+        <p>Click the <em>Data & Priorities</em> tab to find the Regional Prioritization data layers.</p>
+        <p>Click the arrow next to Regional Prioritizations to see the potential maps.  Check on the desired layer and navigate on the map to explore the data. You can click on each subbasin in the map for more info.</p>
     </div>
 
     <h2> Create a Custom Prioritization</h2>
@@ -65,12 +60,17 @@
         <p>From here you can evaluate which watersheds were selected and how well species goals were met.</p>
     </div>
 
-    <div>
-        Looking for more info? Click "help" in the upper-right for more documentation.
+</div>
+{% else %}
+<h3> Review Regional Watershed Prioritizations</h3>
+    <div class="helpstep">
+        <!-- <img src="/media/screenshots/shared.png" width="119" align="left" /> -->
+        <p> ... Introductory paragraph/sentence ... </p>
+        <p>Click the arrow next to Regional Prioritizations to see the potential maps.  Check on the desired layer and navigate on the map to explore the data. You can click on each subbasin in the map for more info.</p>
     </div>
+{% endif %}
 
 
 </div>
 
-</div>
 {% endblock panel %}

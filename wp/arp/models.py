@@ -588,7 +588,7 @@ class WatershedPrioritization(Analysis):
 
     class Options:
         form = 'arp.forms.WatershedPrioritizationForm'
-        verbose_name = 'Watershed Prioritization Analysis'
+        verbose_name = 'Watershed Prioritization Scenario' 
         show_template = 'wp/show.html'
         form_template = 'wp/form.html'
         icon_url = 'common/images/watershed.png'

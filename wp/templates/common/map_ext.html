@@ -77,13 +77,12 @@
     {% endblock datalayers %}
 
         {% block layersConfig %}
-            {% if is_studyregion %}
-                lingcod.addLayer('/publickml/regional_priorities.kml');
-            {% endif %}
-            {% if is_studyregion %}
-                //lingcod.addLayer('{% url studyregion-kml %}', {setExtent: true});            
-            {% endif %}
+            lingcod.addLayer('/publickml/regional_priorities.kml', {setExtent: true});
+            /* 
+            Don't include study region
+            lingcod.addLayer('{% url studyregion-kml %}', {setExtent: true});            
+            */
             {% if is_public_layers %}        
-                lingcod.addLayer('{% url public-data-layers %}');            
+            lingcod.addLayer('{% url public-data-layers %}');            
             {% endif %}
         {% endblock layersConfig %}

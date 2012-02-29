@@ -1,0 +1,12 @@
+# To change the site URL:
+
+* copy the current apache config, change domain and a2ensite 
+
+* make the old vhost config like so:
+
+    <VirtualHost *:80>
+    ServerName usfw.labs.ecotrust.org
+    Redirect permanent / http://aquatic-priorities.labs.ecotrust.org
+    </VirtualHost>
+
+* python manage.py site aquatic-priorities.labs.ecotrust.org

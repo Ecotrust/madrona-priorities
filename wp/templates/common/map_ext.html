@@ -81,7 +81,7 @@
                 lingcod.addLayer('/publickml/regional_priorities.kml');
             {% endif %}
             {% if is_studyregion %}
-                lingcod.addLayer('{% url studyregion-kml %}', {setExtent: true});            
+                //lingcod.addLayer('{% url studyregion-kml %}', {setExtent: true});            
             {% endif %}
             {% if is_public_layers %}        
                 lingcod.addLayer('{% url public-data-layers %}');            

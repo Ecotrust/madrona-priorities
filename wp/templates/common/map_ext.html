@@ -77,12 +77,10 @@
     {% endblock datalayers %}
 
         {% block layersConfig %}
-            lingcod.addLayer('/publickml/regional_priorities.kml', {setExtent: true});
-            /* 
-            Don't include study region
-            lingcod.addLayer('{% url studyregion-kml %}', {setExtent: true});            
-            */
-            {% if is_public_layers %}        
+            lingcod.addLayer('/publickml/regional_priorities_netlink.kml', {setExtent: true});
             lingcod.addLayer('{% url public-data-layers %}');            
+
+            {% if user.is_authenticated %}
+            lingcod.addLayer('/publickml/USFW_unpublished.kml');
             {% endif %}
         {% endblock layersConfig %}

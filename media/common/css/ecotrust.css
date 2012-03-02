@@ -208,7 +208,7 @@ a[href*="://"]:not([href*="ecotrust.org"]):hover {
     */
     
 a[href $='.pdf'] { 
-    background-image: url(/images/icon_pdf.gif);
+    background-image: url(/media/common/images/icon_pdf.gif);
     background-position:center right;
     background-repeat:no-repeat;
     padding-right: 16px;

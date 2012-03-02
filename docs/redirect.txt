@@ -1,4 +1,4 @@
-# To change the site URL:
+To change the site URL:
 
 * copy the current apache config, change domain and a2ensite 
 

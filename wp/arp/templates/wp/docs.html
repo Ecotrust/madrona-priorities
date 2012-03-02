@@ -11,8 +11,66 @@
     {% endblock js %}
 
             {% block content %}
-            <h2>Documentation, Methods and Data </h2>
+
+            <h2>USFWS Regional Aquatic Prioritization – Data and Methods</h2>
             <br/>
-            <br/>
-            <p> For complete detail on the methodology used for the regional prioritizations, download the <a href="/publickml/methods.pdf">methodology document.</a>(<em>xxMB pdf</em>) </p>
+
+            <p>
+            The regional priorities and mapping tool presented here are a result of an 18 month long process that included an extensive data collection, manipulation and analysis process as well development of the tool itself.  The inputs into the tool as well as the prioritization modeling process include: Compilation of existing data specific to aquatic species of interest;  review of existing climate change research pertaining to effects to aquatic species and determination of vulnerability to climate change at the 4th field sub-basin scale; review of watershed condition mapping approaches and analysis of watershed condition at the 4th field scale; compilation of aquatic invasive species and development of methods pertaining to mapping invasibility at the 4th field scale and;  implementation of a decision support model, coupled with the development of the on-line tool.  Each of these processes is briefly described below with links to more detailed documentation describing step by step methodologies.  For a detailed description of the tool please click on the tool tab at the top of this page.
+            </p>
+
+            <h3>Aquatic species data development</h3>
+             <p>
+             Core to the prioritization process is the set of aquatic species for which we are prioritizing.  As such, we included a wide variety of fish species distribution data in the tool, from wide-ranging northwest flagship species to locally endemic fishes found in a single sub-basin.   These data were collected from a variety of sources, at varying scales and units of analyses.  Please see the <a href="/home/data_dictionary.pdf">data dictionary</a> for a detailed list of species data collected, sources, and metrics used for the prioritization process.
+            </p>
+
+
+            <h3>Climate change vulnerability analysis</h3>
+             <p>
+             Climate change has the potential to alter freshwater habitat in complex ways science has yet to fully understand. These changes will greatly affect the health and distribution of fish species, particularly those adapted to cold water.  To address these effects, we identified vulnerability to climate change based on projected changes in air temperature, flow, and wildfire risk .  Areas that are relatively more vulnerable to climate change then are avoided (if possible) in the prioritization process (when climate change vulnerability is considered).  See the detailed documentation on <a href="/home/climate_change.pdf">climate change vulnerability</a> for additional information.
+            </p>
+
+
+             <h3>Mapping of watershed condition</h3>
+             <p>
+             Healthy, functioning watersheds are essential for sustaining fish populations as well as fundamental ecosystem services.  We relied on common indicators of watershed impairment, including water quality and development, to classify the relative ecological condition of each sub-basin.  The subsequent relative watershed condition scores, if used in the prioritization process, will drive priorities toward the less impaired sub-basins.  We developed our watershed condition index based on an amalgamation of well vetted existing approaches.  Please see the detailed documentation for a description of our approach to <a href="/home/watershed_condition.pdf">watershed condition</a> mapping.
+            </p>
+
+
+             <h3>Aquatic invasibility analysis</h3>
+             <p>
+             The introduction of non-native species is a major threat to the biodiversity of aquatic ecosystems, second only to habitat loss to development.  An understanding of current and potential invasion is essential for conservation planning efforts. In this tool, we modeled vulnerability to invasion using current non-native species distribution, water quality, and the distribution of common sources of invasion.  Please see the detailed description of our <a href="/home/aquatic_invasives.pdf">aquatic invasibility analysis</a> for additional information.
+            </p>
+
+
+             <h3>Prioritization process</h3>
+             <p>
+             We used a multi-objective decision support model based on computational heuristics to identify regional priorities at the 4th field, sub-basin scale.  The heuristic draws on a simulated annealing algorithm to approximate an optimal configuration (or prioritization schematic) given a mathematically defined set of objectives (referred to as an objective function).  This target based approach allows for the selection of a set of priority sub-basins based on avoiding those areas that have poor watershed condition, or are highly vulnerable to climate change effects or aquatic invasives, subject to the condition that targets for all species included in the analysis are met.  Please see the detailed description of the <a href="/home/prioritization_process.pdf">prioritization process</a> for additional information.
+             </p>
+
+
+             <h3>Regional aquatic priorities</h3>
+             <p>
+             Once inputs and the prioritization model were incorporated into the tool, Ecotrust and USFWS developed the set of regional priorities.  Using the tool, an array of priority scenarios were developed using varying levels of proportional goals for all species (please see detailed documentation on the <a href="/home/priorities_approach.pdf">prioritization process</a> for a description of setting goal proportions and importance weighting).  These goals were set equally for all species and were modified after each scenario was developed (starting with a goal proportion of 10% and incrementally increasing the goal to 100%). Because of the stochastic nature of the analytical process, multiple runs for each scenario are conducted.  Watersheds that are selected in all runs are considered highly important for meeting the specified goals for each species.  Watersheds selected in less runs are less important.  Sub-basins with poor relative watershed condition, high relative climate change vulnerability and high relative invasibility were all considered as constraints (ie. these sub-basins were avoided if possible).  After all scenarios were created, each resulting data layer was merged and an aggregate score representing the sum of the number of times any given sub-basin was selected for all model runs was used to create categories of the degree of relative prioritization.  The following table represents the number of times any given sub-basin was selected and the respective priority category:
+             </p>
+
+
+
+            <p>
+            <table class="table">
+                <tr><td style="padding:5px;">Number of times <br/>sub-basin was selected</td><td style="padding:5px;">Relative importance</td></tr>
+                <tr><td>0 - 26</td><td>low priority</td></tr>
+                <tr><td>27 - 43</td><td>medium low</td></tr>
+                <tr><td>44 - 59</td><td>medium</td></tr>
+                <tr><td>60 - 79</td><td>medium high</td></tr>
+                <tr><td>80 - 100</td><td>high priority</td></tr>
+            </table>
+            </p>
+
+
+            <p>
+             These regional priorities can be viewed by launching the tool. Using the tool, click  the “data and priorities” tab at the top of the welcome page and there you will see the priorities layer at the top of the tree view under the “Regional Priorities” heading. You can click on each sub-basin in the map for additional information specific to the level of importance, sub-basin name and area and prioritization constraints such as vulnerability to climate change, watershed condition and vulnerability to aquatic invasives.
+             </p>
+
+
             {% endblock content %}

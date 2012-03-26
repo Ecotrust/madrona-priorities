@@ -1,6 +1,6 @@
 import os
 from django.conf import settings
-from lingcod.common.utils import get_logger
+from madrona.common.utils import get_logger
 from shutil import copyfile
 log = get_logger()
 

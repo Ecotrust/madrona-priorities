@@ -21,7 +21,7 @@ var {{instance.uid}}_call_again;
 var update_progress_info_{{instance.uid}};
 var {{instance.uid}}_done_panel;
 
-lingcod.onShow(function(){
+madrona.onShow(function(){
     $(function() {
         $( "#{{instance.uid}}_progressbar" ).progressbar({ value: 0 });
     });
@@ -47,7 +47,7 @@ lingcod.onShow(function(){
                             {{instance.uid}}_call_again = true;
                         } else {
                             {{instance.uid}}_running = false;
-                            {{instance.uid}}_done_panel = lingcod.panel({appendTo: $('#panel-holder'), 
+                            {{instance.uid}}_done_panel = madrona.panel({appendTo: $('#panel-holder'), 
                                 showCloseButton: true});
                             {{instance.uid}}_done_panel.showUrl(
                             '/analysistools/{{instance.uid}}/progress.html', { showClose: true });
@@ -68,7 +68,7 @@ lingcod.onShow(function(){
 
 });
 
-lingcod.beforeDestroy(function() {
+madrona.beforeDestroy(function() {
     // {{instance.uid}}_delay = 20000;
     {{instance.uid}}_running = false;
 });
@@ -77,7 +77,7 @@ lingcod.beforeDestroy(function() {
 {% endblock progress %}
 {% else %}
 <script type="text/javascript">
-lingcod.onShow(function(){
+madrona.onShow(function(){
     $('a.toggle_na_species').click( function(e) {
         e.preventDefault();
         $('.showhidelang').toggle();

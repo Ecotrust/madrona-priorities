@@ -77,10 +77,10 @@
     {% endblock datalayers %}
 
         {% block layersConfig %}
-            lingcod.addLayer('/publickml/regional_priorities_netlink.kml', {setExtent: true});
-            lingcod.addLayer('{% url public-data-layers %}');            
+            madrona.addLayer('/publickml/regional_priorities_netlink.kml', {setExtent: true});
+            madrona.addLayer('{% url public-data-layers %}');            
 
             {% if user.is_authenticated %}
-            lingcod.addLayer('/publickml/USFW_unpublished.kml');
+            madrona.addLayer('/publickml/USFW_unpublished.kml');
             {% endif %}
         {% endblock layersConfig %}

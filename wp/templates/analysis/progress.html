@@ -14,9 +14,9 @@ to see the results on the map.
 <p> To view the detailed results, click the watershed priortization in the table of contents then click <em>Attributes</em>. </p>  
 
 <script>
-lingcod.onShow(function(){
+madrona.onShow(function(){
     $('#refresh_{{progress.uid}}').click( function() {
-        var myshps = lingcod.editors[0];
+        var myshps = madrona.editors[0];
         myshps.tree.clearSelection();
         myshps.refresh( function() {
             var anode = myshps.tree.getNodesById('{{progress.uid}}');

@@ -10,22 +10,22 @@ from django.contrib.gis.geos import GEOSGeometry
 from django.core.cache import cache
 from django.template.defaultfilters import slugify
 from django.utils.html import escape
-from lingcod.features.models import PointFeature, LineFeature, PolygonFeature, FeatureCollection
-from lingcod.features import register, alternate
-from lingcod.layers.models import PrivateLayerList
-from lingcod.unit_converter.models import area_in_display_units
-from lingcod.analysistools.models import Analysis
-from lingcod.analysistools.widgets import SliderWidget
-from lingcod.common.utils import get_class
-from lingcod.features import register
-from lingcod.common.utils import asKml
-from lingcod.async.ProcessHandler import *
-from lingcod.common.utils import get_logger
+from madrona.features.models import PointFeature, LineFeature, PolygonFeature, FeatureCollection
+from madrona.features import register, alternate
+from madrona.layers.models import PrivateLayerList
+from madrona.unit_converter.models import area_in_display_units
+from madrona.analysistools.models import Analysis
+from madrona.analysistools.widgets import SliderWidget
+from madrona.common.utils import get_class
+from madrona.features import register
+from madrona.common.utils import asKml
+from madrona.async.ProcessHandler import *
+from madrona.common.utils import get_logger
 from arp.tasks import marxan_start
 from arp.marxan import MarxanError
 from django.core.serializers.json import DjangoJSONEncoder
 from django.utils import simplejson as json
-from lingcod.common.models import KmlCache
+from madrona.common.models import KmlCache
 
 logger = get_logger()
 

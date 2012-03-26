@@ -1,6 +1,6 @@
-from lingcod.common import utils
-from lingcod.shapes.views import ShpResponder
-#from lingcod.features.views import get_object_for_viewing
+from madrona.common import utils
+from madrona.shapes.views import ShpResponder
+#from madrona.features.views import get_object_for_viewing
 from django.http import HttpResponse
 from django.template.defaultfilters import slugify
 from django.contrib.gis.geos import MultiPolygon
@@ -78,7 +78,7 @@ def watershed_marxan(request, instance):
     if not isinstance(instance, WatershedPrioritization):
         return HttpResponse("Shapefile export for watershed prioritizations only", status=500)
 
-    from lingcod.common.utils import KMZUtil
+    from madrona.common.utils import KMZUtil
     zu = KMZUtil()
     filename = os.path.join(tempfile.gettempdir(), '%s_%s.zip' % (slugify(instance.name),slugify(instance.date_modified)))
     directory = instance.outdir 

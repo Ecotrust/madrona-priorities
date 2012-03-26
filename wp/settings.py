@@ -1,5 +1,5 @@
 # Django settings for omm project.
-from lingcod.common.default_settings import *
+from madrona.common.default_settings import *
 
 APP_NAME = "Regional Aquatic Prioritization and Mapping Tool"
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -27,7 +27,7 @@ TEMPLATE_DIRS = ( os.path.realpath(os.path.join(os.path.dirname(__file__), 'temp
 INSTALLED_APPS += ( 'arp', 
                     'djkombu',
                     #'django_extensions', 
-                    'lingcod.analysistools',
+                    'madrona.analysistools',
                     'django.contrib.humanize',) 
 
 COMPRESS_JS['application']['source_filenames'] += (
@@ -42,7 +42,7 @@ KML_UNATTACHED_NAME = 'Areas of Inquiry'
 
 KML_ALTITUDEMODE_DEFAULT = 'clampToGround'
 
-#These two variables are used to determine the extent of the zoomed in image in lingcod.staticmap
+#These two variables are used to determine the extent of the zoomed in image in madrona.staticmap
 #If one or both are set to None or deleted entirely than zoom will default to a dynamic zoom generator
 STATICMAP_WIDTH_BUFFER = None
 STATICMAP_HEIGHT_BUFFER = None

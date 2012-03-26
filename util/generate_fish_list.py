@@ -37,7 +37,7 @@ def header():
 {% block title %}{{title}}{% endblock %}
 {% block panel %}
 <script type="text/javascript" charset="utf-8">
-    lingcod.onShow(function(){
+    madrona.onShow(function(){
 
         var params_impute = function() {
             // If the input json is not null, 
@@ -85,7 +85,7 @@ def header():
             };
         }; 
 
-        lingcod.setupForm($('#featureform'));
+        madrona.setupForm($('#featureform'));
         $("#focalspecies_tree").treeview({
             collapsed: true
         });

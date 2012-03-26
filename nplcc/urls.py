@@ -8,11 +8,11 @@ urlpatterns = patterns('madrona.common.views',
 )
 
 urlpatterns += patterns('',
-    (r'^arp/', include('arp.urls')),
+    (r'^seak/', include('seak.urls')),
     (r'^analysistools/', include('madrona.analysistools.urls')),
 )
 
-urlpatterns += patterns('arp.views',
+urlpatterns += patterns('seak.views',
     url(r'^$', 'home', name='home'),
     url(r'^tutorial.html$', 'tutorial', name='tutorial'),
     url(r'^docs.html$', 'docs', name='docs'),

@@ -9,7 +9,7 @@ class MarxanError(Exception):
 
 class MarxanAnalysis(object):
 
-    def __init__(self, pucosts, cfs, outdir, name="wp"):
+    def __init__(self, pucosts, cfs, outdir, name="nplcc"):
         self.outdir = os.path.realpath(outdir)
         self.marxan_bin = os.path.realpath(settings.MARXAN_BIN)
         if not os.path.exists(self.marxan_bin):
@@ -56,7 +56,7 @@ class MarxanAnalysis(object):
             from django.conf import settings
             query = """
                 COPY (SELECT cf_id as species, pu_id as pu, amount 
-                    FROM arp_puvscf
+                    FROM seak_puvscf
                     ORDER BY pu)
                 TO '%s'
                 WITH DELIMITER ','

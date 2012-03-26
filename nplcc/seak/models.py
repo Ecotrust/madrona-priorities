@@ -21,8 +21,8 @@ from madrona.features import register
 from madrona.common.utils import asKml
 from madrona.async.ProcessHandler import *
 from madrona.common.utils import get_logger
-from arp.tasks import marxan_start
-from arp.marxan import MarxanError
+from seak.tasks import marxan_start
+from seak.marxan import MarxanError
 from django.core.serializers.json import DjangoJSONEncoder
 from django.utils import simplejson as json
 from madrona.common.models import KmlCache
@@ -163,7 +163,7 @@ class WatershedPrioritization(Analysis):
         return ndict
 
     def run(self):
-        from arp.marxan import MarxanAnalysis
+        from seak.marxan import MarxanAnalysis
         from django.db.models import Sum
          
         # create the target and penalties
@@ -285,7 +285,7 @@ class WatershedPrioritization(Analysis):
 
     @property
     def progress(self):
-        path = os.path.join(self.outdir,"output","wp_r*.csv")
+        path = os.path.join(self.outdir,"output","nplcc_r*.csv")
         outputs = glob.glob(path)
         if len(outputs) == settings.MARXAN_NUMREPS:
             if not self.done:
@@ -339,7 +339,7 @@ class WatershedPrioritization(Analysis):
         sum_area = sum([x.area for x in bestpus])
 
         # Parse mvbest
-        fh = open(os.path.join(self.outdir,"output","wp_mvbest.csv"), 'r')
+        fh = open(os.path.join(self.outdir,"output","nplcc_mvbest.csv"), 'r')
         lines = [x.strip().split(',') for x in fh.readlines()[1:]]
         fh.close()
         species = []
@@ -429,7 +429,7 @@ class WatershedPrioritization(Analysis):
             wshds = PlanningUnit.objects.filter(pk__in=chosen)
             self.output_best = json.dumps({'best': [str(x.pk) for x in wshds]})
             ssoln = [x.strip().split(',') for x in 
-                     open(os.path.join(self.outdir,"output","wp_ssoln.csv"),'r').readlines()][1:]
+                     open(os.path.join(self.outdir,"output","nplcc_ssoln.csv"),'r').readlines()][1:]
             selected = {}
             for s in ssoln:
                 num = int(s[1])
@@ -587,19 +587,19 @@ class WatershedPrioritization(Analysis):
         """
 
     class Options:
-        form = 'arp.forms.WatershedPrioritizationForm'
+        form = 'seak.forms.WatershedPrioritizationForm'
         verbose_name = 'Watershed Prioritization Scenario' 
-        show_template = 'wp/show.html'
-        form_template = 'wp/form.html'
+        show_template = 'nplcc/show.html'
+        form_template = 'nplcc/form.html'
         icon_url = 'common/images/watershed.png'
         links = (
             alternate('Shapefile',
-                'arp.views.watershed_shapefile',
+                'seak.views.watershed_shapefile',
                 select='single multiple',
                 type='application/zip',
             ),
             alternate('Input Files',
-                'arp.views.watershed_marxan',
+                'seak.views.watershed_marxan',
                 select='single',
                 type='application/zip',
             ),
@@ -612,10 +612,10 @@ class Folder(FeatureCollection):
     class Options:
         verbose_name = 'Folder'
         valid_children = ( 
-                'arp.models.Folder',
-                'arp.models.WatershedPrioritization',
+                'seak.models.Folder',
+                'seak.models.WatershedPrioritization',
                 )
-        form = 'arp.forms.FolderForm'
+        form = 'seak.forms.FolderForm'
         show_template = 'folder/show.html'
         icon_url = 'common/images/folder.png'
 

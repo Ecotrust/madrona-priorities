@@ -1,7 +1,7 @@
 [
     {
         "pk": 1, 
-        "model": "arp.focalspecies", 
+        "model": "seak.focalspecies", 
         "fields": {
             "species_name": "Lampetra tridentata  (Entosphenus tridentatus)", 
             "level1": "Widespread", 
@@ -13,7 +13,7 @@
     }, 
     {
         "pk": 2, 
-        "model": "arp.focalspecies", 
+        "model": "seak.focalspecies", 
         "fields": {
             "species_name": "Lampetra ayresii", 
             "level1": "Widespread", 
@@ -25,7 +25,7 @@
     }, 
     {
         "pk": 3, 
-        "model": "arp.focalspecies", 
+        "model": "seak.focalspecies", 
         "fields": {
             "species_name": "Lampetra richardsoni", 
             "level1": "Widespread", 
@@ -37,7 +37,7 @@
     }, 
     {
         "pk": 4, 
-        "model": "arp.focalspecies", 
+        "model": "seak.focalspecies", 
         "fields": {
             "species_name": "Oncorhynchus tshawytscha", 
             "level1": "Widespread", 
@@ -50,7 +50,7 @@
     }, 
     {
         "pk": 5, 
-        "model": "arp.focalspecies", 
+        "model": "seak.focalspecies", 
         "fields": {
             "species_name": "Oncorhynchus tshawytscha", 
             "level1": "Widespread", 
@@ -63,7 +63,7 @@
     }, 
     {
         "pk": 6, 
-        "model": "arp.focalspecies", 
+        "model": "seak.focalspecies", 
         "fields": {
             "species_name": "Oncorhynchus tshawytscha", 
             "level1": "Widespread", 
@@ -76,7 +76,7 @@
     }, 
     {
         "pk": 7, 
-        "model": "arp.focalspecies", 
+        "model": "seak.focalspecies", 
         "fields": {
             "species_name": "Oncorhynchus tshawytscha", 
             "level1": "Widespread", 
@@ -89,7 +89,7 @@
     }, 
     {
         "pk": 8, 
-        "model": "arp.focalspecies", 
+        "model": "seak.focalspecies", 
         "fields": {
             "species_name": "Oncorhynchus tshawytscha", 
             "level1": "Widespread", 
@@ -102,7 +102,7 @@
     }, 
     {
         "pk": 9, 
-        "model": "arp.focalspecies", 
+        "model": "seak.focalspecies", 
         "fields": {
             "species_name": "Oncorhynchus tshawytscha", 
             "level1": "Widespread", 
@@ -115,7 +115,7 @@
     }, 
     {
         "pk": 10, 
-        "model": "arp.focalspecies", 
+        "model": "seak.focalspecies", 
         "fields": {
             "species_name": "Oncorhynchus tshawytscha", 
             "level1": "Widespread", 
@@ -128,7 +128,7 @@
     }, 
     {
         "pk": 11, 
-        "model": "arp.focalspecies", 
+        "model": "seak.focalspecies", 
         "fields": {
             "species_name": "Oncorhynchus tshawytscha", 
             "level1": "Widespread", 
@@ -141,7 +141,7 @@
     }, 
     {
         "pk": 12, 
-        "model": "arp.focalspecies", 
+        "model": "seak.focalspecies", 
         "fields": {
             "species_name": "Oncorhynchus tshawytscha", 
             "level1": "Widespread", 
@@ -154,7 +154,7 @@
     }, 
     {
         "pk": 13, 
-        "model": "arp.focalspecies", 
+        "model": "seak.focalspecies", 
         "fields": {
             "species_name": "Oncorhynchus tshawytscha", 
             "level1": "Widespread", 
@@ -167,7 +167,7 @@
     }, 
     {
         "pk": 14, 
-        "model": "arp.focalspecies", 
+        "model": "seak.focalspecies", 
         "fields": {
             "species_name": "Oncorhynchus tshawytscha", 
             "level1": "Widespread", 
@@ -180,7 +180,7 @@
     }, 
     {
         "pk": 15, 
-        "model": "arp.focalspecies", 
+        "model": "seak.focalspecies", 
         "fields": {
             "species_name": "Oncorhynchus tshawytscha", 
             "level1": "Widespread", 
@@ -193,7 +193,7 @@
     }, 
     {
         "pk": 16, 
-        "model": "arp.focalspecies", 
+        "model": "seak.focalspecies", 
         "fields": {
             "species_name": "Oncorhynchus tshawytscha", 
             "level1": "Widespread", 
@@ -206,7 +206,7 @@
     }, 
     {
         "pk": 17, 
-        "model": "arp.focalspecies", 
+        "model": "seak.focalspecies", 
         "fields": {
             "species_name": "Oncorhynchus keta", 
             "level1": "Widespread", 
@@ -219,7 +219,7 @@
     }, 
     {
         "pk": 18, 
-        "model": "arp.focalspecies", 
+        "model": "seak.focalspecies", 
         "fields": {
             "species_name": "Oncorhynchus keta", 
             "level1": "Widespread", 
@@ -232,7 +232,7 @@
     }, 
     {
         "pk": 19, 
-        "model": "arp.focalspecies", 
+        "model": "seak.focalspecies", 
         "fields": {
             "species_name": "Oncorhynchus keta", 
             "level1": "Widespread", 
@@ -245,7 +245,7 @@
     }, 
     {
         "pk": 20, 
-        "model": "arp.focalspecies", 
+        "model": "seak.focalspecies", 
         "fields": {
             "species_name": "Oncorhynchus keta", 
             "level1": "Widespread", 
@@ -258,7 +258,7 @@
     }, 
     {
         "pk": 21, 
-        "model": "arp.focalspecies", 
+        "model": "seak.focalspecies", 
         "fields": {
             "species_name": "Oncorhynchus kisutch", 
             "level1": "Widespread", 
@@ -271,7 +271,7 @@
     }, 
     {
         "pk": 22, 
-        "model": "arp.focalspecies", 
+        "model": "seak.focalspecies", 
         "fields": {
             "species_name": "Oncorhynchus kisutch", 
             "level1": "Widespread", 
@@ -284,7 +284,7 @@
     }, 
     {
         "pk": 23, 
-        "model": "arp.focalspecies", 
+        "model": "seak.focalspecies", 
         "fields": {
             "species_name": "Oncorhynchus kisutch", 
             "level1": "Widespread", 
@@ -297,7 +297,7 @@
     }, 
     {
         "pk": 24, 
-        "model": "arp.focalspecies", 
+        "model": "seak.focalspecies", 
         "fields": {
             "species_name": "Oncorhynchus kisutch", 
             "level1": "Widespread", 
@@ -310,7 +310,7 @@
     }, 
     {
         "pk": 25, 
-        "model": "arp.focalspecies", 
+        "model": "seak.focalspecies", 
         "fields": {
             "species_name": "Oncorhynchus kisutch", 
             "level1": "Widespread", 
@@ -323,7 +323,7 @@
     }, 
     {
         "pk": 26, 
-        "model": "arp.focalspecies", 
+        "model": "seak.focalspecies", 
         "fields": {
             "species_name": "Oncorhynchus kisutch", 
             "level1": "Widespread", 
@@ -336,7 +336,7 @@
     }, 
     {
         "pk": 27, 
-        "model": "arp.focalspecies", 
+        "model": "seak.focalspecies", 
         "fields": {
             "species_name": "Oncorhynchus gorbuscha", 
             "level1": "Widespread", 
@@ -349,7 +349,7 @@
     }, 
     {
         "pk": 28, 
-        "model": "arp.focalspecies", 
+        "model": "seak.focalspecies", 
         "fields": {
             "species_name": "Oncorhynchus gorbuscha", 
             "level1": "Widespread", 
@@ -362,7 +362,7 @@
     }, 
     {
         "pk": 29, 
-        "model": "arp.focalspecies", 
+        "model": "seak.focalspecies", 
         "fields": {
             "species_name": "Oncorhynchus nerka", 
             "level1": "Widespread", 
@@ -375,7 +375,7 @@
     }, 
     {
         "pk": 30, 
-        "model": "arp.focalspecies", 
+        "model": "seak.focalspecies", 
         "fields": {
             "species_name": "Oncorhynchus nerka", 
             "level1": "Widespread", 
@@ -388,7 +388,7 @@
     }, 
     {
         "pk": 31, 
-        "model": "arp.focalspecies", 
+        "model": "seak.focalspecies", 
         "fields": {
             "species_name": "Oncorhynchus nerka", 
             "level1": "Widespread", 
@@ -401,7 +401,7 @@
     }, 
     {
         "pk": 32, 
-        "model": "arp.focalspecies", 
+        "model": "seak.focalspecies", 
         "fields": {
             "species_name": "Oncorhynchus nerka", 
             "level1": "Widespread", 
@@ -414,7 +414,7 @@
     }, 
     {
         "pk": 33, 
-        "model": "arp.focalspecies", 
+        "model": "seak.focalspecies", 
         "fields": {
             "species_name": "Oncorhynchus nerka", 
             "level1": "Widespread", 
@@ -427,7 +427,7 @@
     }, 
     {
         "pk": 34, 
-        "model": "arp.focalspecies", 
+        "model": "seak.focalspecies", 
         "fields": {
             "species_name": "Oncorhynchus nerka", 
             "level1": "Widespread", 
@@ -440,7 +440,7 @@
     }, 
     {
         "pk": 35, 
-        "model": "arp.focalspecies", 
+        "model": "seak.focalspecies", 
         "fields": {
             "species_name": "Oncorhynchus nerka", 
             "level1": "Widespread", 
@@ -453,7 +453,7 @@
     }, 
     {
         "pk": 36, 
-        "model": "arp.focalspecies", 
+        "model": "seak.focalspecies", 
         "fields": {
             "species_name": "Oncorhynchus mykiss", 
             "level1": "Widespread", 
@@ -465,7 +465,7 @@
     }, 
     {
         "pk": 37, 
-        "model": "arp.focalspecies", 
+        "model": "seak.focalspecies", 
         "fields": {
             "species_name": "Oncorhynchus mykiss", 
             "level1": "Widespread", 
@@ -477,7 +477,7 @@
     }, 
     {
         "pk": 38, 
-        "model": "arp.focalspecies", 
+        "model": "seak.focalspecies", 
         "fields": {
             "species_name": "Oncorhynchus mykiss", 
             "level1": "Widespread", 
@@ -489,7 +489,7 @@
     }, 
     {
         "pk": 39, 
-        "model": "arp.focalspecies", 
+        "model": "seak.focalspecies", 
         "fields": {
             "species_name": "Oncorhynchus mykiss", 
             "level1": "Widespread", 
@@ -501,7 +501,7 @@
     }, 
     {
         "pk": 40, 
-        "model": "arp.focalspecies", 
+        "model": "seak.focalspecies", 
         "fields": {
             "species_name": "Oncorhynchus mykiss", 
             "level1": "Widespread", 
@@ -513,7 +513,7 @@
     }, 
     {
         "pk": 41, 
-        "model": "arp.focalspecies", 
+        "model": "seak.focalspecies", 
         "fields": {
             "species_name": "Oncorhynchus mykiss", 
             "level1": "Widespread", 
@@ -525,7 +525,7 @@
     }, 
     {
         "pk": 42, 
-        "model": "arp.focalspecies", 
+        "model": "seak.focalspecies", 
         "fields": {
             "species_name": "Oncorhynchus mykiss", 
             "level1": "Widespread", 
@@ -537,7 +537,7 @@
     }, 
     {
         "pk": 43, 
-        "model": "arp.focalspecies", 
+        "model": "seak.focalspecies", 
         "fields": {
             "species_name": "Oncorhynchus mykiss", 
             "level1": "Widespread", 
@@ -549,7 +549,7 @@
     }, 
     {
         "pk": 44, 
-        "model": "arp.focalspecies", 
+        "model": "seak.focalspecies", 
         "fields": {
             "species_name": "Oncorhynchus mykiss", 
             "level1": "Widespread", 
@@ -561,7 +561,7 @@
     }, 
     {
         "pk": 45, 
-        "model": "arp.focalspecies", 
+        "model": "seak.focalspecies", 
         "fields": {
             "species_name": "Oncorhynchus mykiss", 
             "level1": "Widespread", 
@@ -573,7 +573,7 @@
     }, 
     {
         "pk": 46, 
-        "model": "arp.focalspecies", 
+        "model": "seak.focalspecies", 
         "fields": {
             "species_name": "Oncorhynchus mykiss", 
             "level1": "Widespread", 
@@ -585,7 +585,7 @@
     }, 
     {
         "pk": 47, 
-        "model": "arp.focalspecies", 
+        "model": "seak.focalspecies", 
         "fields": {
             "species_name": "Salvelinus confluentus", 
             "level1": "Widespread", 
@@ -597,7 +597,7 @@
     }, 
     {
         "pk": 48, 
-        "model": "arp.focalspecies", 
+        "model": "seak.focalspecies", 
         "fields": {
             "species_name": "Oncorhynchus clarki utah", 
             "level1": "Widespread", 
@@ -610,7 +610,7 @@
     }, 
     {
         "pk": 49, 
-        "model": "arp.focalspecies", 
+        "model": "seak.focalspecies", 
         "fields": {
             "species_name": "Oncorhynchus clarki clarki", 
             "level1": "Widespread", 
@@ -623,7 +623,7 @@
     }, 
     {
         "pk": 50, 
-        "model": "arp.focalspecies", 
+        "model": "seak.focalspecies", 
         "fields": {
             "species_name": "Oncorhynchus clarki henshawi", 
             "level1": "Widespread", 
@@ -636,7 +636,7 @@
     }, 
     {
         "pk": 51, 
-        "model": "arp.focalspecies", 
+        "model": "seak.focalspecies", 
         "fields": {
             "species_name": "Oncorhynchus clarki lewisi", 
             "level1": "Widespread", 
@@ -649,7 +649,7 @@
     }, 
     {
         "pk": 52, 
-        "model": "arp.focalspecies", 
+        "model": "seak.focalspecies", 
         "fields": {
             "species_name": "Onchorhynchus clarki bouvieri", 
             "level1": "Widespread", 
@@ -662,7 +662,7 @@
     }, 
     {
         "pk": 53, 
-        "model": "arp.focalspecies", 
+        "model": "seak.focalspecies", 
         "fields": {
             "species_name": "Oncorhynchus mykiss gairdnerii", 
             "level1": "Widespread", 
@@ -674,7 +674,7 @@
     }, 
     {
         "pk": 54, 
-        "model": "arp.focalspecies", 
+        "model": "seak.focalspecies", 
         "fields": {
             "common_name": "Burbot", 
             "level1": "Locally endemic", 
@@ -685,7 +685,7 @@
     }, 
     {
         "pk": 55, 
-        "model": "arp.focalspecies", 
+        "model": "seak.focalspecies", 
         "fields": {
             "species_name": "Gila alvordensis", 
             "level1": "Locally endemic", 
@@ -697,7 +697,7 @@
     }, 
     {
         "pk": 56, 
-        "model": "arp.focalspecies", 
+        "model": "seak.focalspecies", 
         "fields": {
             "species_name": "Gila coerulea", 
             "level1": "Locally endemic", 
@@ -709,7 +709,7 @@
     }, 
     {
         "pk": 57, 
-        "model": "arp.focalspecies", 
+        "model": "seak.focalspecies", 
         "fields": {
             "species_name": "Gila boraxobius", 
             "level1": "Locally endemic", 
@@ -721,7 +721,7 @@
     }, 
     {
         "pk": 58, 
-        "model": "arp.focalspecies", 
+        "model": "seak.focalspecies", 
         "fields": {
             "species_name": "Lepidomeda copei", 
             "level1": "Locally endemic", 
@@ -733,7 +733,7 @@
     }, 
     {
         "pk": 59, 
-        "model": "arp.focalspecies", 
+        "model": "seak.focalspecies", 
         "fields": {
             "species_name": "Oregonichthys crameri", 
             "level1": "Locally endemic", 
@@ -745,7 +745,7 @@
     }, 
     {
         "pk": 60, 
-        "model": "arp.focalspecies", 
+        "model": "seak.focalspecies", 
         "fields": {
             "species_name": "Gila atraria", 
             "level1": "Locally endemic", 
@@ -757,7 +757,7 @@
     }, 
     {
         "pk": 61, 
-        "model": "arp.focalspecies", 
+        "model": "seak.focalspecies", 
         "fields": {
             "species_name": "Rhinichthys falcatus", 
             "level1": "Locally endemic", 
@@ -769,7 +769,7 @@
     }, 
     {
         "pk": 62, 
-        "model": "arp.focalspecies", 
+        "model": "seak.focalspecies", 
         "fields": {
             "species_name": "Rhinichthys cataractae", 
             "level1": "Locally endemic", 
@@ -781,7 +781,7 @@
     }, 
     {
         "pk": 63, 
-        "model": "arp.focalspecies", 
+        "model": "seak.focalspecies", 
         "fields": {
             "species_name": "Rhinichthys umatilla", 
             "level1": "Locally endemic", 
@@ -793,7 +793,7 @@
     }, 
     {
         "pk": 64, 
-        "model": "arp.focalspecies", 
+        "model": "seak.focalspecies", 
         "fields": {
             "common_name": "Eulachon (smelt)", 
             "level1": "Locally endemic", 
@@ -804,7 +804,7 @@
     }, 
     {
         "pk": 65, 
-        "model": "arp.focalspecies", 
+        "model": "seak.focalspecies", 
         "fields": {
             "species_name": "Lampetra minima", 
             "level1": "Locally endemic", 
@@ -816,7 +816,7 @@
     }, 
     {
         "pk": 66, 
-        "model": "arp.focalspecies", 
+        "model": "seak.focalspecies", 
         "fields": {
             "common_name": "Olympic mudminnow", 
             "level1": "Locally endemic", 
@@ -827,7 +827,7 @@
     }, 
     {
         "pk": 67, 
-        "model": "arp.focalspecies", 
+        "model": "seak.focalspecies", 
         "fields": {
             "common_name": "pygmy whitefish", 
             "level1": "Locally endemic", 
@@ -838,7 +838,7 @@
     }, 
     {
         "pk": 68, 
-        "model": "arp.focalspecies", 
+        "model": "seak.focalspecies", 
         "fields": {
             "species_name": "Cottus bendirei", 
             "level1": "Locally endemic", 
@@ -850,7 +850,7 @@
     }, 
     {
         "pk": 69, 
-        "model": "arp.focalspecies", 
+        "model": "seak.focalspecies", 
         "fields": {
             "species_name": "Cottus marginatus", 
             "level1": "Locally endemic", 
@@ -862,7 +862,7 @@
     }, 
     {
         "pk": 70, 
-        "model": "arp.focalspecies", 
+        "model": "seak.focalspecies", 
         "fields": {
             "species_name": "Cottus beldingii", 
             "level1": "Locally endemic", 
@@ -874,7 +874,7 @@
     }, 
     {
         "pk": 71, 
-        "model": "arp.focalspecies", 
+        "model": "seak.focalspecies", 
         "fields": {
             "species_name": "Cottus greenei", 
             "level1": "Locally endemic", 
@@ -886,7 +886,7 @@
     }, 
     {
         "pk": 72, 
-        "model": "arp.focalspecies", 
+        "model": "seak.focalspecies", 
         "fields": {
             "species_name": "Cottus leiopomus", 
             "level1": "Locally endemic", 
@@ -898,7 +898,7 @@
     }, 
     {
         "pk": 73, 
-        "model": "arp.focalspecies", 
+        "model": "seak.focalspecies", 
         "fields": {
             "species_name": "Catostomus snyderi", 
             "level1": "Locally endemic", 
@@ -910,7 +910,7 @@
     }, 
     {
         "pk": 74, 
-        "model": "arp.focalspecies", 
+        "model": "seak.focalspecies", 
         "fields": {
             "species_name": "Deltistes luxatus", 
             "level1": "Locally endemic", 
@@ -922,7 +922,7 @@
     }, 
     {
         "pk": 75, 
-        "model": "arp.focalspecies", 
+        "model": "seak.focalspecies", 
         "fields": {
             "species_name": "Catostomus microps", 
             "level1": "Locally endemic", 
@@ -934,7 +934,7 @@
     }, 
     {
         "pk": 76, 
-        "model": "arp.focalspecies", 
+        "model": "seak.focalspecies", 
         "fields": {
             "species_name": "Catostomus platyrhynchus", 
             "level1": "Locally endemic", 
@@ -946,7 +946,7 @@
     }, 
     {
         "pk": 77, 
-        "model": "arp.focalspecies", 
+        "model": "seak.focalspecies", 
         "fields": {
             "species_name": "Chasmistes brevirostris", 
             "level1": "Locally endemic", 
@@ -958,7 +958,7 @@
     }, 
     {
         "pk": 78, 
-        "model": "arp.focalspecies", 
+        "model": "seak.focalspecies", 
         "fields": {
             "species_name": "Catostomus warnerensis", 
             "level1": "Locally endemic", 
@@ -970,7 +970,7 @@
     }, 
     {
         "pk": 79, 
-        "model": "arp.focalspecies", 
+        "model": "seak.focalspecies", 
         "fields": {
             "species_name": "Prosopium abyssicola", 
             "level1": "Locally endemic", 
@@ -982,7 +982,7 @@
     }, 
     {
         "pk": 80, 
-        "model": "arp.focalspecies", 
+        "model": "seak.focalspecies", 
         "fields": {
             "species_name": "Prosopium williamsoni", 
             "level1": "Locally endemic", 
@@ -994,7 +994,7 @@
     }, 
     {
         "pk": 81, 
-        "model": "arp.focalspecies", 
+        "model": "seak.focalspecies", 
         "fields": {
             "common_name": "kokanee", 
             "level1": "Locally endemic", 
@@ -1005,7 +1005,7 @@
     }, 
     {
         "pk": 82, 
-        "model": "arp.focalspecies", 
+        "model": "seak.focalspecies", 
         "fields": {
             "species_name": "Catostomus occidentalis lacusanserinus", 
             "level1": "Locally endemic", 

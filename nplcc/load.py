@@ -8,7 +8,7 @@ setup_environ(settings)
 
 #===================================#
 from django.contrib.gis.utils import LayerMapping
-from arp.models import Watershed
+from seak.models import Watershed
 
 a = Watershed.objects.all()
 for i in a:

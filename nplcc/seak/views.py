@@ -11,7 +11,7 @@ import time
 import tempfile
 
 def watershed_shapefile(request, instances):
-    from arp.models import PlanningUnit, WatershedPrioritization, PlanningUnitShapes
+    from seak.models import PlanningUnit, WatershedPrioritization, PlanningUnitShapes
 
     wshds = PlanningUnit.objects.all()
     stamp = int(time.time() * 1000.0)
@@ -66,11 +66,11 @@ Contains HUC8s from Oregon, Washington, Idaho
     allpus = PlanningUnitShapes.objects.filter(stamp=stamp)
     shp_response = ShpResponder(allpus, readme=readme)
     filename = '_'.join([slugify(i.pk) for i in instances])
-    shp_response.file_name = slugify('wp_' + filename)
+    shp_response.file_name = slugify('nplcc_' + filename)
     return shp_response()
 
 def watershed_marxan(request, instance):
-    from arp.models import PlanningUnit, WatershedPrioritization
+    from seak.models import PlanningUnit, WatershedPrioritization
     viewable, response = instance.is_viewable(request.user)
     if not viewable:
         return response
@@ -95,19 +95,19 @@ def watershed_marxan(request, instance):
     return response
 
 def test_params(request):
-    from arp.models import WatershedPrioritization
+    from seak.models import WatershedPrioritization
     from django.contrib.auth.models import User
     from django.utils import simplejson as json
   
     if request.method == 'POST':
         user = User.objects.get(username='mperry')
-        wp = WatershedPrioritization(input_targets = request.POST['input_targets'], 
+        nplcc = WatershedPrioritization(input_targets = request.POST['input_targets'], 
                 input_penalties = request.POST['input_penalties'],
                 input_relativecosts='[]', 
                 name="Test", user=user)
-        wp.save()
-        t = wp.process_dict(wp.input_targets)
-        p = wp.process_dict(wp.input_penalties)
+        nplcc.save()
+        t = nplcc.process_dict(nplcc.input_targets)
+        p = nplcc.process_dict(nplcc.input_penalties)
         a = json.dumps([t,p])
         res = HttpResponse(a, 200)
         res['Content-Type'] = 'application/json'
@@ -116,13 +116,13 @@ def test_params(request):
         return HttpResponse('POST required', status=404)
 
 def home(request):
-    return render_to_response("wp/home.html")
+    return render_to_response("nplcc/home.html")
 
 def tutorial(request):
-    return render_to_response("wp/tutorial.html")
+    return render_to_response("nplcc/tutorial.html")
 
 def docs(request):
-    return render_to_response("wp/docs.html")
+    return render_to_response("nplcc/docs.html")
 
 def tool_description(request):
-    return render_to_response("wp/tool_description.html")
+    return render_to_response("nplcc/tool_description.html")

@@ -1,5 +1,5 @@
 from django.contrib.gis.db import models
-from arp.models import *
+from seak.models import *
 from django.contrib import admin
 
 admin.site.register(Folder)

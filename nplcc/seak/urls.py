@@ -1,7 +1,7 @@
 from django.conf.urls.defaults import *
-from arp.views import *
+from seak.views import *
 
 urlpatterns = patterns('',
-    url(r'^test_params/$', test_params, name="arp-test_params"),
+    url(r'^test_params/$', test_params, name="seak-test_params"),
 )
 

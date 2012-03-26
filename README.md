@@ -11,3 +11,7 @@ For more details, see:
 * Madrona [documentation](http://ecotrust.github.com/madrona/docs/)
 * Madrona [code](https://github.com/Ecotrust/madrona)
 * [Ecotrust](http://ecotrust.org)
+
+# Important Note
+
+This code IS not in production nor has it been tested in it's current configuration. It is not longer being maintained and it here for archival purposes only.

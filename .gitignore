@@ -22,9 +22,7 @@ mediaroot/*
 cache/*
 marxan_output/*
 Marxan.exe
-celeryd*log
-apache*log
-wp.log
+*.log
 *.o
 *.so
 *rand.c

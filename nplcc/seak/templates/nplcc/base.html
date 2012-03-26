@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html>
 <head>
     <title>{% block title %}Documentation for Regional Aquatic Prioritization and Mapping Tool{% endblock title %}</title>
@@ -14,14 +15,8 @@
             -khtml-border-radius: 6px;
             border-radius: 6px;
             border: 1px #9c9 solid;
-            padding: 15px;
             background-color: #efe; 
             background-repeat: no-repeat;
-            width: 380px;
-            text-align: center;
-        }
-        div .footer {
-           margin-top: 25px; 
         }
     </style>
     {% block js %}
@@ -38,24 +33,22 @@
 
     <div id="content">
         <div> 
-            <div style="float:left; margin-bottom:15px;"> <h1>Regional Aquatic Prioritization and Mapping Tool</h1> </div>
+            <div style="float:left; margin-bottom:15px;"><h1> North Pacific Landscape Conservation Cooperative Prioritization Tool</h1> </div>
         </div>
         <div id="topnav">
             <ul id="tabnav">
                 <li class="tab1"><a href="/" class="tab" id="tab_intro">Introduction</a></li>
+                <!-- 
                 <li class="tab2"><a href="/docs.html" class="tab" id="tab_docs">Data and Methods</a></li>
                 <li class="tab2"><a href="/tool_description.html" class="tab" id="tab_tool">Tool Description</a></li>
+                -->
             </ul>
         </div>
         <div class="content">
+
             {% block content %}
             {% endblock content %}
-        </div>
-        <div class="footer">
-            <span style="float:right;">
-                <img src="http://www.ecotrust.org/images/ecotrust_logo08.gif" style="margin-right: 15px;"/>
-                <img src="http://www.fws.gov/home/graphics/logo2005.gif"/>
-            </span>
+
         </div>
     </div>
 

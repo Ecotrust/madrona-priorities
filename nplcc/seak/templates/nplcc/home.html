@@ -1,56 +1,117 @@
 {% extends 'nplcc/base.html' %}
-{% block title %}Regional Aquatic Prioritization and Mapping Tool{% endblock title %}
+{% block title %}North Pacific Landscape Conservation Cooperative Prioritization Tool{% endblock title %}
 
-    {% block js %}
-    <script type="text/javascript">
-        $(document).ready(function(){
-            $('.tab').removeClass('selected');
-            $('#tab_intro').addClass('selected');
-            $('#proceed_button').click( function(e) {
-                var r = confirm("I understand the purpose and limitations of the Regional Aquatic Prioritization and Mapping Tool and am ready to begin.");
-                if (r) {
-                    document.location = this.href;
-                    return true;
-                } else {
-                    e.preventDefault();
-                    return false
+{% block js %}
+<link rel="stylesheet" href="http://openlayers.org/dev/theme/default/style.css" type="text/css">
+<!-- <link rel="stylesheet" href="http://openlayers.org/dev/examples/style.css" type="text/css">  -->
+<style>
+.smallmap {
+width: 512px;
+height: 512px;
+border: 1px solid #CCC;
+}
+</style>
+{% endblock js %}
+
+{% block content %}
+<h2>Introduction</h2>
+<div style="width:960px;">
+    <div style="width:512px;">
+        <p>
+        The North Pacific Landscape Conservation Cooperative is a shared management-science partnership between the 
+        U.S. Fish and Wildlife Service, the United States Geological Survey, states, and British Columbia, Canadian 
+        and federal resource management agencies, tribes, NGOs, universities and other entities within a geographic area. 
+        </p>
+    </div>
+
+    <div id="attrs" style="position:relative; left: 224px; top: 48px; z-index: 9999999; padding:7px; text-align:center; height:25px; width: 256px;" class="box"></div>
+    <div id="map" class="smallmap"></div>
+</div>
+
+<img src="http://www.ecotrust.org/images/ecotrust_logo08.gif" style="margin-right: 15px;"/>
+
+<script src="http://openlayers.org/dev/OpenLayers.js" />
+<script type="text/javascript">
+    console.log("test");
+</script>
+
+<script type="text/javascript">
+
+    var tiles = new OpenLayers.Layer.XYZ(
+        "MapBox Streets",
+        "/media/tiles/nplcc/${z}/${x}/${y}.png",
+        {
+            sphericalMercator: true,
+            transitionEffect: "resize",
+            buffer: 1,
+            numZoomLevels: 16
+        }
+    );
+
+    var utfgrid = new OpenLayers.Layer.UTFGrid({
+        url: "/media/tiles/nplcc/${z}/${x}/${y}.json",
+        utfgridResolution: 4, // default is 2
+        displayInLayerSwitcher: false
+    });
+
+    var map = new OpenLayers.Map({
+        div: "map", 
+        projection: "EPSG:900913",
+        layers: [tiles, utfgrid],
+        center: [-15300000, 7000000],
+        zoom: 4
+    });
+
+    var proj = new OpenLayers.Projection("EPSG:4326");
+    var extent = new OpenLayers.Bounds(-157.8516, 33.7243, -112.8516, 65.0721);
+    extent.transform(proj, map.getProjectionObject());
+    map.setOptions({restrictedExtent: extent});
+
+    var callback = function(infoLookup) {
+        var msg = "Select a project..";
+        if (infoLookup) {
+            var info;
+            for (var idx in infoLookup) {
+                // idx can be used to retrieve layer from map.layers[idx]
+                info = infoLookup[idx];
+                if (info && info.data) {
+                    if (info.id == 1) {
+                        msg = "Southeast Alaska Prioritization Tool"; 
+                    }
                 }
-            });
+            }
+        }
+        document.getElementById("attrs").innerHTML = msg;
+    };
 
-        });
-    </script>
-    {% endblock js %}
+    var click_callback = function(infoLookup) {
+        var msg = "";
+        if (infoLookup) {
+            var info;
+            for (var idx in infoLookup) {
+                info = infoLookup[idx];
+                if (info && info.data) {
+                    // Assumes only one demo app
+                    if (info.id == 1) {
+                        window.location = "/tool/";
+                    }
+                }
+            }
+        }
+    };
+        
+    var move = new OpenLayers.Control.UTFGrid({
+        callback: callback,
+        handlerMode: "move"
+    })
 
-            {% block content %}
-            <h2>Introduction</h2>
-            <br/>
-            <p>
-            Welcome to the Regional Aquatic Prioritization and Mapping Tool - An aquatic priorities decision support system for Oregon, Washington, and Idaho developed by Ecotrust and the US Fish and Wildlife Service.
-            </p>
+    var click = new OpenLayers.Control.UTFGrid({
+        callback: click_callback,
+        handlerMode: "click"
+    })
 
-            <p>
-            Starting in July of 2010, Ecotrust partnered with the U.S. Fish and Wildlife Pacific Regional Office to develop this regional aquatic priorities decision-support tool for Oregon, Washington, and Idaho.  The decision support system was developed to prioritize sub-basins to focus conservation and restoration of freshwater habitats to ensure the long-term sustainability of the region's aquatic and fisheries resources while considering how factors such as watershed condition, climate change and aquatic invasive species affect regional priorities. Using this tool Ecotrust and USFWS evaluated a wide variety of watershed priorities at the 4th field sub-basin scale.
-            </p>
+    map.addControl(move);
+    map.addControl(click);
 
-            <p>
-            In developing this tool, Ecotrust and U.S. Fish and Wildlife collaborated with partners already involved with strategic, regional-scale aquatic habitat restoration, including USDA Forest Service, NOAA Fisheries, and the Oregon Watershed Enhancement Board among others.  Rather than duplicating work that’s already been conducted, this work has built on existing efforts and supplements gaps in previous work while incorporating aspects of climate change impacts and the spread of invasive species.  The result is an automated analytical tool that is used to evaluate a wide array of watershed priorities given different species of concern and priority constraints such as climate change, aquatic invasives and watershed condition.
-            </p>
-
-            <p>
-            While you must be a registered user to use the tool to create priority scenarios, a public facing version of the tool was created to allow interested individuals, organizations or agencies to map and explore the priorities identified by Ecotrust and USFWS, as well as visualize the many datasets that support the analysis.  The tool itself is an open source, online mapping application that allows users to zoom in, pan and query a wide variety of mapped data.  At its core is the intuitive and easy to use Google earth interface.  As such, in order to run the tool, you must have the Google earth plugin for web browsers installed on your computer.   For a detailed description of input data, analytical processes and the tool itself, please see the supporting documentation using the tabs at the top of this page.  To launch the tool click on the image below.
-            </p>
-             
-
-            <div style="text-align:center">
-            <div style="width:50%; margin-left:auto; margin-right:auto;">
-            <a href="/tool/" id="proceed_button">
-                <div class="box">
-                    <img style="width:360px; border: 1px solid #555;" src="/media/screenshots/results1sm.png"/>
-                    <h3>
-                    Proceed to the Regional Aquatic Prioritization and Mapping Tool 
-                    </h3>
-                </div>
-            </a>
-            </div>
-            </div>
-            {% endblock content %}
+</script>
+{% endblock content %}

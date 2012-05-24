@@ -55,15 +55,12 @@ class JSONField(models.TextField):
         return super(JSONField, self).get_db_prep_save(value, *args, **kwargs)
 
 class ConservationFeature(models.Model):
-    sci_name = models.CharField(max_length=99)
-    common_name = models.CharField(max_length=99)
     name = models.CharField(max_length=99)
     level1 = models.CharField(max_length=99)
     level2 = models.CharField(max_length=99,null=True,blank=True)
     level3 = models.CharField(max_length=99,null=True,blank=True)
     level4 = models.CharField(max_length=99,null=True,blank=True)
     level5 = models.CharField(max_length=99,null=True,blank=True)
-    esu_dps = models.CharField(max_length=99, null=True, blank=True)
     dbf_fieldname = models.CharField(max_length=15,null=True,blank=True)
     units = models.CharField(max_length=90, null=True, blank=True)
 
@@ -85,11 +82,14 @@ class Cost(models.Model):
 
 class PlanningUnit(models.Model):
     fid = models.IntegerField()
-    area = models.FloatField()
     name = models.CharField(max_length=99)
     geometry = models.MultiPolygonField(srid=settings.GEOMETRY_DB_SRID, 
             null=True, blank=True, verbose_name="Planning Unit Geometry")
     objects = models.GeoManager()
+
+    @property
+    def area(self):
+        return self.geometry.area
 
     def __unicode__(self):
         return u'%s' % self.name

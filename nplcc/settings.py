@@ -1,7 +1,7 @@
 # Django settings for omm project.
 from madrona.common.default_settings import *
 
-APP_NAME = "Southeast Alaska Prioritization Tool"
+APP_NAME = "NPLCC Prioritization Tool"
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 DATABASES = {
@@ -11,7 +11,7 @@ DATABASES = {
         'USER': 'postgres', }
 }
 
-GEOMETRY_DB_SRID = 99997
+GEOMETRY_DB_SRID = 3857
 
 TIME_ZONE = 'America/Vancouver'
 LANGUAGE_CODE = 'en-us'

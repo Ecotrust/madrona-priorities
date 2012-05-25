@@ -17,11 +17,13 @@
     border: 1px solid #ccc;
 }
     </style>
-    <!-- <script src="http://openlayers.org/dev/OpenLayers.js"></script> -->
+    <!-- 
     <script src="http://dev.openlayers.org/releases/OpenLayers-2.11/lib/OpenLayers.js"></script>
+    -->
+    <script src="http://openlayers.org/dev/OpenLayers.js"></script>
     <script type="text/javascript">
         var map, drawControls;
-        OpenLayers.Feature.Vector.style['default']['strokeWidth'] = '2';
+        OpenLayers.Feature.Vector.style['default']['strokeWidth'] = '0.5';
         function init(){
             map = new OpenLayers.Map({
                 div: "map",
@@ -29,24 +31,28 @@
                 displayProjection: "EPSG:4326",
                 numZoomLevels: 18
             });
-
             var osm = new OpenLayers.Layer.OSM( "Simple OSM Map");
-            var terrain = new OpenLayers.Layer.XYZ(
-                "Terrain",
-                "http://tile.stamen.com/terrain-background/${z}/${x}/${y}.jpg",
-                {
-                    sphericalMercator: true,
-                    transitionEffect: "resize",
-                    buffer: 1,
-                    numZoomLevels: 16
-                }
-            );
-
+            var myStyles = new OpenLayers.StyleMap({
+                "default": new OpenLayers.Style({
+                    fillColor: "#ffffff",
+                    fillOpacity: 0.4,
+                    strokeColor: "#339933",
+                    strokeWidth: 1,
+                    graphicZIndex: 1
+                }),
+                "select": new OpenLayers.Style({
+                    fillColor: "#ffff00",
+                    fillOpacity: 0.6,
+                    graphicZIndex: 2
+                })
+            });
+            
             // allow testing of specific renderers via "?renderer=Canvas", etc
             var renderer = OpenLayers.Util.getParameters(window.location.href).renderer;
             renderer = (renderer) ? [renderer] : OpenLayers.Layer.Vector.prototype.renderers;
 
             var vectors = new OpenLayers.Layer.Vector("Vector Layer", {
+                styleMap: myStyles,
                 renderers: renderer
             });
             function update_counter(vl) {
@@ -76,7 +82,6 @@
                vectors.addFeatures(feats);
             });
 
-
             map.addLayers([osm, vectors]);
             map.addControl(new OpenLayers.Control.LayerSwitcher());
             
@@ -101,7 +106,6 @@
                 map.addControl(drawControls[key]);
             }
             map.setCenter(new OpenLayers.LonLat(-13600000, 6700000), 4);
-
         }
 
         function toggleControl(element) {

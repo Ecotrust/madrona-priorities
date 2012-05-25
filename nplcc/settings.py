@@ -27,13 +27,15 @@ INSTALLED_APPS += ( 'seak',
                     'madrona.analysistools',
                     'django.contrib.humanize',) 
 
-COMPRESS_JS['application']['source_filenames'] += (
+COMPRESS_CSS['application']['source_filenames'] = (
+    'seak/css/seak.css',
+)
+
+COMPRESS_JS['application']['source_filenames'] = (
+    'seak/js/seak.js',
     'common/js/treeview/jquery.treeview.js',
 )
 
-COMPRESS_CSS['application']['source_filenames'] += (
-    'common/css/nplcc.css',
-)
 # The following is used to assign a name to the default folder under My Shapes 
 KML_UNATTACHED_NAME = 'Areas of Inquiry'
 

@@ -1,86 +1,170 @@
-{% extends 'common/map.html' %}
-{% load appname %}
-{% block pagetitle %}{% appname %}{% endblock pagetitle %}
-{% block title %}{% appname %}{% endblock title %}
-{% block toggle %}{% endblock toggle %}
+{% extends 'common/base.html' %}
+{% load flatblock_tags %}
 
-            {% block tabs %}
-            {% if user.is_authenticated %}
-            <li><a href="#MyShapes"><span>Scenarios</span></a></li>                
-            {% endif %}
-            <li><a href="#SharedShapes"><span>Data &amp; Priorities</span></a></li>
-            {% endblock tabs %}
+{% block content %}
+   <!-- this should go into a partial -->
+        <div class="row-fluid">
+          <div class="span6">
+            <ul id="breadcrumbs" class="breadcrumb" data-bind="foreach: breadcrumbs">
+              <li data-bind="visible: ! $parent.isLast($data)">
+                <a data-bind="text: name, click: action"></a>
+                  <span class="divider">/</span>
+              </li>
+              <li class="active" data-bind="visible: $parent.isLast($data)">
+                <span data-bind="text: name"></span>
+              </li>
+            </ul>
 
-            {% block metanavigation %}
             {% if user.is_authenticated %}
-            <li>{{user.username}} | </li>
-            {% endif %}
-
-            {% block meta_navigation_list_insert %}{% endblock %}
-            {% if user.is_authenticated %}
-            <li><a href="#" id="about">help</a> | </li>
-            <li><a href="{% url help-main %}" target="_blank" id="help">more info</a> | </li>
-            <li><a href="#" id="profile">my profile</a> | </li>
-            <li><a href="{% url user_signout %}">sign out</a></li>
+            <!-- these are all scenario pages -->
+            <div id="scenario-html" class="well" data-bind="visible: showScenarioPanels, if: showScenarioPanels">
+              <div class="row-fluid">
+                <div data-bind="visible: showScenarioList">
+                  <div data-bind="if: scenarioList().length > 0">
+                  <div class="row-fluid">
+                    <div class="span3">
+                      <h3>Scenario List</h3>
+                      <button href="#" class="btn" data-bind="click: addScenarioStart">
+                          <i class="icon-plus-sign"></i>
+                          Add Scenario
+                      </button>
+                      <ul class="nav nav-tabs nav-stacked" data-bind="foreach: scenarioListPaginated">
+                        <li data-bind="click: $parent.selectFeature, css: { active: $data === $parent.selectedFeature() }">
+                          <a href="#" data-bind="text: name"></a>
+                        </li>
+                      </ul>
+                    </div>
+                    <div class="span9" data-bind="if: selectedFeature">
+                      <div class="scenario-detail" data-bind="with: selectedFeature">
+                        <div class="row-fluid">
+                          <h3>Scenario Details</h3>
+                          <div class="btn-group pull-right">
+                            <a href="#" class="btn" data-bind="click: $parent.showDeleteDialog"><i class="icon-remove"></i> Delete</a>
+                            <a href="#" class="btn" data-bind="click: $parent.editScenario"><i class="icon-edit"></i> Edit</a>
+                            <a href="#" class="btn" data-bind="click: $parent.shareScenario"><i class="icon-retweet"></i> Share</a>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  </div>
+                  <div data-bind="if: scenarioList().length, visible: scenarioList().length > 10">
+                    <div class="pagination">
+                      <ul data-bind="foreach: paginationList">
+                        <li data-bind="click: $parent.setListIndex, css: { 'active': $parent.listStart() === listIndex, 'disabled': displayIndex === '...' }">
+                          <a href="#" data-bind="text: displayIndex, attr: { title: listIndex }"></a>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div> <!-- no properties -->
+              <div class="row-fluid" data-bind="visible: showScenarioFormPanel">
+                <h3>Input Parameters</h3>
+                <div id="scenarios-form-container" class="form-panel"></div>
+                <div class="pull-right">
+                  <button href="#" class="btn" data-bind="click: cancelAddScenario">Cancel</button>
+                  <button href="#" class="btn btn-primary" data-bind="click: saveScenarioForm">Save Scenario</button>
+                </div>
+              </div>
+              <div class="modal" id="scenario-delete-dialog" style="display:none">
+                <div class="modal-header">
+                  <a class="close" data-dismiss="modal">×</a>
+                  <h3>Delete Scenario</h3>
+                </div>
+                <div class="modal-body">
+                  <div data-bind="if: selectedFeature()">
+                   Are you sure you want to delete "<span data-bind="text: selectedFeature().name"></span>"?
+                  </div>
+                </div>
+                <div class="modal-footer">
+                  <a href="#" class="btn" data-bind="click: closeDialog">cancel</a>
+                  <a href="#" class="btn btn-danger" data-bind="click: deleteFeature">Delete Scenario</a>
+                </div>
+              </div>
+            </div>
+            <!-- end of scenario pages -->
             {% else %}
-            <li><a href="#" id="about">help</a> | </li>
-            <li><a href="#" id="signin">sign in</a></li>
-            {% endif %}                
-            {% endblock metanavigation %}
-
-        {% block tabscontents %}
-        {% if user.is_authenticated %}
-        <div id="MyShapes">
-            <h2> My Scenarios </h2>
-            <div class="box" style="font-size:1em;" id="myshapestree"></div>
-            <h2> Shared Scenarios </h2>
-            <div class="box" style="font-size:1em;" id="sharedshapestree"></div>
-        </div>            
-        {% endif %}
-        <div id="SharedShapes"> 
-            <h2>{% block dataLayersTitle %}Data Layers{% endblock dataLayersTitle %}</h2>
-            <br/>
-            <div id="datalayerstree"></div>
-            <hr/>
-            <p style="font-size:85%; font-style: italic;"> For metadata and detailed information on these layers, <br/> 
-                please visit the <a href="/docs.html" target="_blank">data and methods documentation</a>.</p>
-        </div>            
-        {% endblock tabscontents %}
-
-    {% block menu_icons %}
-    <ul class="menu_items" id="header_buttons">
-        <li class="divider"><img src="{{MEDIA_URL}}/common/images/header_divider.gif" height="32" width="46" /></li>
-
-        <li id="bookmarks_menu" class="item item_trigger">
-            <span>
-                <a title="Bookmark" href="#Bookmark"><img src="{{MEDIA_URL}}/common/images/transparent.gif" width="44" height="48" /></a>
-            </span>
-        </li>
-
-        <li class="divider"><img src="{{MEDIA_URL}}/common/images/header_divider.gif" height="32" width="2" /></li>
-
-        <li id="tools_menu" class="item item_trigger">
-            <span>
-                <a title="Tools" href="#tools"><img src="{{MEDIA_URL}}/common/images/transparent.gif" width="44" height="48" /></a>
-            </span>
-        </li>
-        <li class="divider"><img src="{{MEDIA_URL}}/common/images/header_divider.gif" height="32" width="2" /></li>
-    </ul>
-    {% endblock menu_icons %}
-    {% block addToOptions %}
-    options.show_panel='about';
-    options.rememberMapExtent = false;
-    {% endblock addToOptions %}
-
-    {% block datalayers %}
-    <div id="DataLayers"> </div>
-    {% endblock datalayers %}
-
-        {% block layersConfig %}
-            madrona.addLayer('/publickml/regional_priorities_netlink.kml', {setExtent: true});
-            madrona.addLayer('{% url public-data-layers %}');            
-
-            {% if user.is_authenticated %}
-            madrona.addLayer('/publickml/USFW_unpublished.kml');
+              <div class="well"> 
+               <div class="row-fluid">
+                {% flatblock "home_text" %}
+                <p><em>You currently not logged in to the {% flatblock "title" %}.</em></p>
+                <ul>
+                    <li><a href="{% url registration_register %}" id="register">Register</a> for an account <br/> or</li>
+                  <li><a href="{% url user_signin %}" id="signin">Sign In</a> to begin creating scenarios</li>                
+                </ul>. 
+              </div><!-- end of no properties -->
+            </div>
             {% endif %}
-        {% endblock layersConfig %}
+          </div>
+          <div class="span6">
+            <div class="outermap">
+              <div id="map"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- end partial -->
+  
+    <script type="text/javascript">
+
+    // namespace for app
+    var app = {
+      scenarios: {},
+      properties: {}
+    };
+
+    {% if user.is_authenticated %}
+        $.get('/features/{{user.username}}/workspace-owner.json', function (data) {
+        app.workspace = data;
+        });
+    {% else %}
+        $.get('/features/workspace-public.json', function (data) {
+        app.workspace = data;
+        });
+    {% endif %}
+
+
+    app.onResize = function () {
+      $("#map").height($(window).height() * .85);
+      map.render('map');
+    };
+
+    /*
+    app.properties = {
+      viewModel: new scenariosViewModel()
+    }
+    */
+    
+    $(document).ready(function () {
+      app.onResize();
+
+      /*
+      app.properties.viewModel.init()
+        .done(function () {
+          // apply the viewmodel
+          ko.applyBindings(app.properties.viewModel, document.getElementById('property-html'));
+
+        })
+        .fail(function () {
+          //map.zoomToExtent(OpenLayers.Bounds.fromArray([-13954802.50397, 5681411.4375898, -13527672.389972, 5939462.8450446]));
+          ko.applyBindings(app.viewModel);
+        });
+      */
+      
+      $(window).resize(app.onResize);
+    });
+
+    </script>
+{% endblock content %}
+
+{% block scripts %}
+    <script src="{{ MEDIA_URL }}seak/js/scenario.js"></script>
+    <script type="text/javascript">
+      var madrona = {
+        features: {}
+      }
+    </script>
+    <script type="text/javascript" src="{{MEDIA_URL}}features/js/workspace.js"></script>
+    <script src="http://openlayers.org/dev/OpenLayers.js"></script>
+{% endblock scripts %}

@@ -1,0 +1,74 @@
+{% load flatblock_tags %}<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>{% flatblock "title" %}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <!--  ################# CSS -->
+    <link href="{{MEDIA_URL}}support/bootstrap/css/bootstrap.css" rel="stylesheet">
+    <link href="{{MEDIA_URL}}theme/default/style.css" rel="stylesheet">
+    <link href="{{MEDIA_URL}}bootstrap/css/bootstrap-responsive.css" rel="stylesheet"> 
+    {% load compressed %}{% compressed_css 'application' %}
+
+    <!--  ################# Javascript -->
+    <script type="text/javascript" src="{{MEDIA_URL}}bootstrap/js/jquery.js"></script>
+    <script type="text/javascript" src="{{MEDIA_URL}}bootstrap/js/bootstrap-tooltip.js"></script>
+    <script type="text/javascript" src="{{MEDIA_URL}}bootstrap/js/bootstrap-popover.js"></script>
+    <script type="text/javascript" src="{{MEDIA_URL}}bootstrap/js/bootstrap-modal.js"></script>
+    <script type="text/javascript" src="{{MEDIA_URL}}common/js/knockout-2.0.0.js"></script>
+    <script type="text/javascript" src="{{MEDIA_URL}}common/js/knockout.mapping-latest.js"></script>
+    <script type="text/javascript" src="{{MEDIA_URL}}support/amplify.js"></script>
+    {% block scripts %}{% endblock scripts %}
+    {% load compressed %} {% compressed_js 'application' %}
+    <!-- IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link rel="shortcut icon" href="/media/common/img/favicon.ico">
+  </head>
+
+  <body>
+
+
+    <div class="navbar navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container-fluid">
+          <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </a>
+          <a class="brand" href="/">{% flatblock "title" %}</a>
+          <div class="nav-collapse">
+            <ul class="nav">
+              <li><a href="/manage/">Manage</a></li>
+              <li><a href="/collaborate/">Collaborate</a></li>
+              <li><a href="/about/">Learn More</a></li>
+              <li><a href="/help/">Get Help</a></li>
+            </ul>
+           <ul class="nav secondary-nav pull-right">
+              {% if user.is_authenticated %}
+              <li><a href="{% url user_profile-form user.username %}" class="load-in-panel" id="profile">{{ user.username }} </a></li>
+              <li><a href="{% url user_signout %}">Sign Out</a></li>
+              {% else %}
+              <li><a href="{% url registration_register %}" id="register">Register</a></li>
+              <li><a href="{% url user_signin %}" id="signin"> Sign In</a></li>
+              {% endif %}                
+            </ul>
+          </div><!--/.nav-collapse -->
+        </div>
+      </div>
+    </div>
+
+    <div class="container-fluid">
+      {% block content %}{% endblock content %}
+    </div>
+
+    <!-- page wide js -->
+    <script src="{{ MEDIA_URL }}common/js/breadcrumbs.js"></script>
+
+  </body>
+</html>

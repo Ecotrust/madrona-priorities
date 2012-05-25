@@ -1,9 +1,9 @@
-{# extends "authopenid/base.html" #}
-{% extends 'common/panel.html' %}
+{% extends "common/base.html" %}
+
 {% load appname %}
 {% block title %}Sign In{% endblock title %}
 
-{% block panel %}
+{% block content %}
 {% if msg %}
 <br />
 	<p class="warning">{{ msg }}</p>
@@ -53,7 +53,7 @@
 <hr/>
 <p style="font-size:85%; font-style: italic;"> If you would like to sign in to develop your own prioritization scenarios, you must have a registered account. </p>
 </div>	
-{% endblock panel %}
+{% endblock content %}
 
 
 

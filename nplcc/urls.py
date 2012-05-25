@@ -4,7 +4,7 @@ from django.conf import settings
 admin.autodiscover()
 
 urlpatterns = patterns('madrona.common.views',
-    url(r'^tool/$', 'map', name='map'),
+    url(r'^$', 'map', name='map'),
 )
 
 urlpatterns += patterns('',
@@ -12,12 +12,8 @@ urlpatterns += patterns('',
     (r'^analysistools/', include('madrona.analysistools.urls')),
 )
 
-urlpatterns += patterns('seak.views',
-    url(r'^$', 'home', name='home'),
-    url(r'^tutorial.html$', 'tutorial', name='tutorial'),
-    url(r'^docs.html$', 'docs', name='docs'),
-    url(r'^tool_description.html$', 'tool_description', name='tool_description'),
-)
+# urlpatterns += patterns('seak.views', url(r'^$', 'home', name='home'),)
+
 urlpatterns += patterns('madrona',
     (r'^accounts/', include('madrona.openid.urls')),
     (r'^accounts/profile/', include('madrona.user_profile.urls')),

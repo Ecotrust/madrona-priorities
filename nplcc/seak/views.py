@@ -124,5 +124,32 @@ def tutorial(request):
 def docs(request):
     return render_to_response("nplcc/docs.html")
 
-def tool_description(request):
-    return render_to_response("nplcc/tool_description.html")
+def test(request):
+    return render_to_response("seak/test.html")
+
+from django.views.decorators.cache import cache_page
+# 2 hr cache
+@cache_page(60 * 120)
+def planning_units_geojson(request):
+    from seak.models import PlanningUnit
+    import json
+    def get_feature_json(geom_json, prop_json):
+        return """{
+            "type": "Feature",
+            "geometry": %s, 
+            "properties": %s
+        }""" % (geom_json, prop_json)
+
+    feature_jsons = []
+    for pu in PlanningUnit.objects.all():
+        fgj = get_feature_json(pu.geometry.json, json.dumps(
+            {'name': pu.name, 'fid': pu.fid, 'area': pu.area}
+        )) 
+        feature_jsons.append(fgj)
+
+    geojson = """{ 
+      "type": "FeatureCollection",
+      "features": [ %s ]
+    }""" % (', \n'.join(feature_jsons),)
+
+    return HttpResponse(geojson)

@@ -109,7 +109,7 @@ class PuVsCost(models.Model):
         unique_together = ("pu", "cost")
 
 @register
-class WatershedPrioritization(Analysis):
+class Scenario(Analysis):
     input_targets = JSONField(verbose_name='Target Percentage of Habitat')
     input_penalties = JSONField(verbose_name='Penalties for Missing Targets') 
     input_relativecosts = JSONField(verbose_name='Relative Costs')
@@ -291,6 +291,15 @@ class WatershedPrioritization(Analysis):
             if not self.done:
                 return (0,settings.MARXAN_NUMREPS)
         return (len(outputs), settings.MARXAN_NUMREPS)
+
+    @property
+    def geojson(self):
+        serializable = {
+            "type": "Feature",
+            "geometry": None,
+            "properties": {'uid': self.uid, 'name': self.name, 'test': [1,2,3]}
+        }
+        return json.dumps(serializable)
 
     @property
     def results(self):
@@ -587,8 +596,8 @@ class WatershedPrioritization(Analysis):
         """
 
     class Options:
-        form = 'seak.forms.WatershedPrioritizationForm'
-        verbose_name = 'Watershed Prioritization Scenario' 
+        form = 'seak.forms.ScenarioForm'
+        verbose_name = 'Prioritization Scenario' 
         show_template = 'nplcc/show.html'
         form_template = 'nplcc/form.html'
         icon_url = 'common/images/watershed.png'

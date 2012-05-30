@@ -1,4 +1,5 @@
 from madrona.common import utils
+from madrona.common.utils import load_session, get_logger
 from madrona.shapes.views import ShpResponder
 #from madrona.features.views import get_object_for_viewing
 from django.http import HttpResponse
@@ -11,7 +12,7 @@ import time
 import tempfile
 
 def watershed_shapefile(request, instances):
-    from seak.models import PlanningUnit, WatershedPrioritization, PlanningUnitShapes
+    from seak.models import PlanningUnit, Scenario, PlanningUnitShapes
 
     wshds = PlanningUnit.objects.all()
     stamp = int(time.time() * 1000.0)
@@ -132,7 +133,6 @@ from django.views.decorators.cache import cache_page
 @cache_page(60 * 120)
 def planning_units_geojson(request):
     from seak.models import PlanningUnit
-    import json
     def get_feature_json(geom_json, prop_json):
         return """{
             "type": "Feature",
@@ -152,4 +152,21 @@ def planning_units_geojson(request):
       "features": [ %s ]
     }""" % (', \n'.join(feature_jsons),)
 
-    return HttpResponse(geojson)
+    return HttpResponse(geojson, content_type='application/json')
+
+def user_scenarios_geojson(request):
+    from seak.models import Scenario
+
+    # WHy not use @login_required? That just redirects instead of giving proper Http Response code of 401
+    user = request.user
+    if user.is_anonymous() or not user.is_authenticated:
+        return HttpResponse("You must be logged in to view your scenarios.", status=401)
+
+    scenarios = Scenario.objects.filter(user=user) #, content_type=None, object_id=None)
+
+    geojson = """{ 
+      "type": "FeatureCollection",
+      "features": [ %s ]
+    }""" % (', \n'.join([s.geojson for s in scenarios]),)
+
+    return HttpResponse(geojson, content_type='application/json')

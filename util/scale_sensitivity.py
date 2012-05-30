@@ -1,12 +1,12 @@
 from django.core.management import setup_environ
 import os
 import sys
-sys.path.append(os.path.dirname(os.path.join('..','wp',__file__)))
+sys.path.append(os.path.dirname(os.path.join('..','nplcc',__file__)))
 
 import settings
 setup_environ(settings)
 #==================================#
-from arp.models import WatershedPrioritization, ConservationFeature, PlanningUnit, Cost, PuVsCf, PuVsCost
+from seak.models import Scenario, ConservationFeature, PlanningUnit, Cost, PuVsCf, PuVsCost
 from django.contrib.auth.models import User
 from django.utils import simplejson as json
 from django.conf import settings
@@ -17,18 +17,18 @@ def mean(alist):
     floatNums = [float(x) for x in alist]
     return sum(floatNums) / len(alist)
 
-user, created = User.objects.get_or_create(username='tester')
+user, created = User.objects.get_or_create(username='mperry')
 
 scalefactors = []
 num_species = []
 num_units = []
 
-factors = [0.2, 0.5, 0.75, 1.0, 1.25, 2, 4, 8]
-numspecies = ['all', 'all', 1, 2, 4, 8, 16, 32]
-numcosts = [1,2,3]
+factors = [1.25]
+numspecies = ['all', '1']
+numcosts = [2]
 # these are random
-targets = [0.25, 0.5, 0.75]
-penalties = [0.01, 0.25, 0.5, 0.75, 1.0]
+targets = [0.5]
+penalties = [0.5]
 
 settings.MARXAN_NUMREPS = 3
 
@@ -37,7 +37,7 @@ settings.MARXAN_NUMREPS = 3
 MODE = 'create'
 
 if MODE == 'query':
-    wp = WatershedPrioritization.objects.filter(name__startswith="Auto Test Scale Factor")
+    wp = Scenario.objects.filter(name__startswith="Auto Test Scale Factor")
     for w in wp:
         print "Querying", w.name, w
         scalefactors.append(w.input_scalefactor)
@@ -51,7 +51,7 @@ COUNT = 0
 def create_wp(target_dict, penalties_dict, costs_dict, sf):
     global COUNT
     COUNT += 1
-    wp = WatershedPrioritization(input_targets = json.dumps( 
+    wp = Scenario(input_targets = json.dumps( 
            target_dict
         ), 
         input_penalties = json.dumps(
@@ -67,7 +67,7 @@ def create_wp(target_dict, penalties_dict, costs_dict, sf):
 
 
 if MODE == 'create':
-    wp = WatershedPrioritization.objects.filter(name__startswith="Auto Test Scale Factor")
+    wp = Scenario.objects.filter(name__startswith="Auto Test Scale Factor")
     wp.delete()
 
     cfs =  ConservationFeature.objects.all()

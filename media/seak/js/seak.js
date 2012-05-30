@@ -1,13 +1,6 @@
-$(document).ready(function() {
-    init();
-});
+var map;
 
-var map, controls;
-var stands;
-var currentStep = 1;
-var steps = [undefined]; // start with a blank to make it 1-indexed
-
-function init() {
+function init_map() {
     map = new OpenLayers.Map({
         div: "map",
         projection: "EPSG:900913",
@@ -15,7 +8,7 @@ function init() {
         numZoomLevels: 18
     });
     map.addControl(new OpenLayers.Control.LayerSwitcher());
-    //map.addControl(new OpenLayers.Control.Zoom());
+
     var osm = new OpenLayers.Layer.OSM( "Simple OSM Map");
     var myStyles = new OpenLayers.StyleMap({
         "default": new OpenLayers.Style({
@@ -31,9 +24,6 @@ function init() {
             graphicZIndex: 2
         })
     });
-    
-
-    map.addLayers([osm]);
 
     // allow testing of specific renderers via "?renderer=Canvas", etc
     var renderer = OpenLayers.Util.getParameters(window.location.href).renderer;
@@ -51,6 +41,7 @@ function init() {
         $('area').innerHTML = area / 2589988.11; // convert to sq mi 
         $('counter').innerHTML = vl.selectedFeatures.length;
     };
+
     vectors.events.on({
         'featureselected': function(feature) {
             update_counter(this);
@@ -89,27 +80,4 @@ function init() {
         map.addControl(drawControls[key]);
     }
     map.setCenter(new OpenLayers.LonLat(-13600000, 6700000), 4);
-
-    // new app methods
-    app.cleanupForm = function ($form) {
-      // remove the submit button, strip out the geometry
-      $form
-        .find('input:submit').remove().end()
-        .find('#id_geometry_final').closest('.field').remove();
-
-      // put the form in a well and focus the first field
-      $form.addClass('well');
-      $form.find('.field').each(function () {
-        var $this = $(this);
-        // add the bootstrap classes
-        $this.addClass('control-group');
-        $this.find('label').addClass('control-label');
-        $this.find('input').wrap($('<div/>', { "class": "controls"}));
-        $this.find('.controls').append($('<p/>', { "class": "help-block"}));
-
-      });
-      $form.find('input:visible').first().focus();
-      
-    }
-}; //end init
-
+}

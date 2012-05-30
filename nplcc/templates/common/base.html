@@ -8,8 +8,8 @@
     <meta name="author" content="">
 
     <!--  ################# CSS -->
-    <link href="{{MEDIA_URL}}support/bootstrap/css/bootstrap.css" rel="stylesheet">
     <link href="{{MEDIA_URL}}theme/default/style.css" rel="stylesheet">
+    <link href="{{MEDIA_URL}}bootstrap/css/bootstrap{% flatblock 'theme' %}.css" rel="stylesheet">
     <link href="{{MEDIA_URL}}bootstrap/css/bootstrap-responsive.css" rel="stylesheet"> 
     {% load compressed %}{% compressed_css 'application' %}
 
@@ -18,16 +18,19 @@
     <script type="text/javascript" src="{{MEDIA_URL}}bootstrap/js/bootstrap-tooltip.js"></script>
     <script type="text/javascript" src="{{MEDIA_URL}}bootstrap/js/bootstrap-popover.js"></script>
     <script type="text/javascript" src="{{MEDIA_URL}}bootstrap/js/bootstrap-modal.js"></script>
+    <script type="text/javascript" src="{{MEDIA_URL}}bootstrap/js/bootstrap-tab.js"></script>
     <script type="text/javascript" src="{{MEDIA_URL}}common/js/knockout-2.0.0.js"></script>
     <script type="text/javascript" src="{{MEDIA_URL}}common/js/knockout.mapping-latest.js"></script>
-    <script type="text/javascript" src="{{MEDIA_URL}}support/amplify.js"></script>
-    {% block scripts %}{% endblock scripts %}
+
+    <!-- <script type="text/javascript" src="{{MEDIA_URL}}support/amplify.js"></script> -->
     {% load compressed %} {% compressed_js 'application' %}
+    {% block scripts %}{% endblock scripts %}
     <!-- IE6-8 support of HTML5 elements -->
     <!--[if lt IE 9]>
       <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
     <link rel="shortcut icon" href="/media/common/img/favicon.ico">
+    <script type="text/javascript" src="{{MEDIA_URL}}seak/js/seak.js"></script>
   </head>
 
   <body>
@@ -44,9 +47,9 @@
           <a class="brand" href="/">{% flatblock "title" %}</a>
           <div class="nav-collapse">
             <ul class="nav">
-              <li><a href="/manage/">Manage</a></li>
-              <li><a href="/collaborate/">Collaborate</a></li>
-              <li><a href="/about/">Learn More</a></li>
+              <li><a href="/#manage">Manage</a></li>
+              <li><a href="/#collaborate">Collaborate</a></li>
+              <li><a href="/news/about/">Learn More</a></li>
               <li><a href="/help/">Get Help</a></li>
             </ul>
            <ul class="nav secondary-nav pull-right">
@@ -66,9 +69,6 @@
     <div class="container-fluid">
       {% block content %}{% endblock content %}
     </div>
-
-    <!-- page wide js -->
-    <script src="{{ MEDIA_URL }}common/js/breadcrumbs.js"></script>
 
   </body>
 </html>

@@ -32,7 +32,6 @@ COMPRESS_CSS['application']['source_filenames'] = (
 )
 
 COMPRESS_JS['application']['source_filenames'] = (
-    'seak/js/seak.js',
     'common/js/treeview/jquery.treeview.js',
 )
 

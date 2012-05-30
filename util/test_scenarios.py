@@ -23,9 +23,9 @@ scalefactors = []
 num_species = []
 num_units = []
 
-factors = [1.25]
-numspecies = ['all', '1']
-numcosts = [2]
+factors = [0.75, 1.25, 3]
+numspecies = [2]
+numcosts = [1]
 # these are random
 targets = [0.5]
 penalties = [0.5]
@@ -37,7 +37,7 @@ settings.MARXAN_NUMREPS = 3
 MODE = 'create'
 
 if MODE == 'query':
-    wp = Scenario.objects.filter(name__startswith="Auto Test Scale Factor")
+    wp = Scenario.objects.filter(name__startswith="Test Scale Factor")
     for w in wp:
         print "Querying", w.name, w
         scalefactors.append(w.input_scalefactor)
@@ -51,6 +51,11 @@ COUNT = 0
 def create_wp(target_dict, penalties_dict, costs_dict, sf):
     global COUNT
     COUNT += 1
+    print target_dict
+    print penalties_dict
+    print costs_dict
+    print sf
+
     wp = Scenario(input_targets = json.dumps( 
            target_dict
         ), 
@@ -61,7 +66,7 @@ def create_wp(target_dict, penalties_dict, costs_dict, sf):
             costs_dict
         ), 
         input_scalefactor=sf,
-        name="Auto Test Scale Factor %s" % sf, user=user)
+        name="Test Scale Factor %s" % sf, user=user)
 
     return wp
 
@@ -114,10 +119,10 @@ if MODE == 'create':
                         p = random.choice(penalties)
                         t2 = random.choice(targets)
                         p2 = random.choice(penalties)
-                        target_dict = { "locally-endemic":t, "widespread":t2 } 
-                        penalty_dict = { "locally-endemic":p, "widespread":p2 } 
+                        target_dict = { "coordinate":t, "uids":t2 } 
+                        penalty_dict = { "coordinate":p, "uids":p2 } 
 
-                    costs_dict = { "watershed-condition":0, "invasives":0, "climate":0 } 
+                    costs_dict = { "Area":0 } 
                     for a in random.sample(costs_dict.keys(), nc):
                         costs_dict[a] = 1
                     sf = f
@@ -130,9 +135,11 @@ if MODE == 'create':
                     print 'costs', wp.input_relativecosts
 
                     wp.save()
-                    while not wp.done:
-                        time.sleep(2)
-                        print "  ", wp.status_html
+                    continue 
+                    # TODO
+                    #while not wp.done:
+                    #    time.sleep(2)
+                    #    print "  ", wp.status_html
 
                     inpenalties = json.loads(wp.input_penalties)
 
@@ -164,7 +171,7 @@ if MODE == 'hardcoded':
 
 assert len(scalefactors) == len(num_species) == len(num_units)
 print scalefactors
-print num_units
+print num_unit
 print num_species
 
 #import matplotlib.pyplot as plt

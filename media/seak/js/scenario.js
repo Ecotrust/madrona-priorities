@@ -18,7 +18,7 @@ function scenariosViewModel() {
   // pagination config will display x items 
   // from this zero based index
   self.listStart = ko.observable(0);
-  self.listDisplayCount = 12;
+  self.listDisplayCount = 9;
 
   // paginated list
   self.scenarioListPaginated = ko.computed(function () {
@@ -38,7 +38,7 @@ function scenariosViewModel() {
       list.push({'displayIndex': '»', 'listIndex': null });
 
     }
-    if (self.listStart() > 10) {
+    if (self.listStart() > self.listDisplayCount) {
       list.shift({'displayIndex': '&laquo;', 'listIndex': null });      
     }
     return list;
@@ -55,8 +55,8 @@ function scenariosViewModel() {
   }
 
   self.addScenarioStart = function() {
-    self.showScenarioList(false);
     self.showScenarioForm('create');
+    self.showScenarioList(false);
   }
 
   self.showScenarioForm = function(action, uid) {
@@ -172,16 +172,6 @@ function scenariosViewModel() {
     $("#scenario-delete-dialog").modal("hide");
   }
 
-
-  // pagination config will display x items 
-  // from this zero based index
-  self.listStart = ko.observable(0);
-  self.listDisplayCount = 12;
-  // paginated list
-  self.scenarioListPaginated = ko.computed(function () {
-    return self.scenarioList.slice(self.listStart(), self.listDisplayCount+self.listStart());
-  });
-
   self.deleteFeature = function () {
     var url = "/features/generic-links/links/delete/{uid}/".replace("{uid}", self.selectedFeature().uid());
     $('#scenario-delete-dialog').modal('hide');
@@ -189,7 +179,7 @@ function scenariosViewModel() {
       url: url,
       type: "DELETE",
       success: function (data, textStatus, jqXHR) {
-        self.scenario_layer.removeFeatures(self.scenario_layer.getFeaturesByAttribute("uid", self.selectedFeature().uid()));
+        self.selectedFeature(false);
         self.scenarioList.remove(self.selectedFeature());
       }  
     });
@@ -207,19 +197,28 @@ function scenariosViewModel() {
   }
 
   self.selectControl = {
+      /*
+       * Controls the map and display panel 
+       * when features are selected
+       */
       unselectAll: function () { 
-         //console.log("unselect all"); 
+          // ?
       },
-      select: function (x) {
-         console.log("select"); 
+      select: function (uid) {
+        var showUrl = app.workspace["feature-classes"][0]["link-relations"]["self"]["uri-template"]; 
+        showUrl = showUrl.replace('{uid}', uid);
+
+        $.get(showUrl, function(data) {
+          $('#scenario-show-container').empty().append(data);
+        })
       }
    }
 
   self.selectFeature = function(feature, event) {
+    var uid = feature.uid(); 
     self.selectControl.unselectAll();
-    var uid = "seak_scenario_4"; // TODO hardcoded test
     self.selectControl.select(uid);
-    self.selectedFeature(self.scenarioList()[0]);
+    self.selectedFeature(feature); 
   }
 
   self.selectFeatureById = function (id) {
@@ -237,22 +236,18 @@ function scenariosViewModel() {
     self.scenario_layer.removeAllFeatures();
     self.scenarioList.removeAll();
     self.property_layer.removeAllFeatures();
-    map.addLayer(self.property_layer);
-    map.addLayer(self.scenario_layer);
     self.loadScenarios(property);
     self.showScenarioList(true);
     app.selectFeature.deactivate();
-    self.progressBarWidth("0%");
     self.showProgressBar(false);
   }
 
   self.loadViewModel = function (data) {
     self.scenarioList($.map(data.features, function (feature, i) {
-      console.log(feature);
       return ko.mapping.fromJS(feature.properties);
     }));
-    console.log(self.scenarioList());
-    self.selectFeature(self.scenarioList()[0]);
+    // Don't bother selecting the first feature
+    //self.selectFeature(self.scenarioList()[0]);
   }
 
   self.loadScenarios = function(property) {

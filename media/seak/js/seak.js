@@ -9,13 +9,20 @@ function init_map() {
     });
     map.addControl(new OpenLayers.Control.LayerSwitcher());
 
-    var osm = new OpenLayers.Layer.OSM( "Simple OSM Map");
+    //var osm = new OpenLayers.Layer.OSM("Open Street Map"); 
+    //"http://acetate.geoiq.com/tiles/acetate/${z}/${x}/${y}.png");
+ 
+    var osm = new OpenLayers.Layer.Google(
+        "Google Physical",
+        {type: google.maps.MapTypeId.TERRAIN, opacity: 0.6}
+    );
+
     var myStyles = new OpenLayers.StyleMap({
         "default": new OpenLayers.Style({
             fillColor: "#ffffff",
             fillOpacity: 0.4,
-            strokeColor: "#339933",
-            strokeWidth: 1,
+            strokeColor: "#003300",
+            strokeWidth: 0.3,
             graphicZIndex: 1
         }),
         "select": new OpenLayers.Style({

@@ -226,20 +226,6 @@ class Scenario(Analysis):
                 final_cost_weights[costkey] = cost_weights[costkey]
             except KeyError:
                 final_cost_weights[costkey] = 0
-                if costkey == 'watershed-condition-no-ais' and cost_weights['watershed-condition'] > 0: 
-                    # Use the `no AIS` version if
-                    #   - watershed-condition is checked
-                    #   - invasives is checked
-                    if cost_weights['invasives'] > 0: 
-                        final_cost_weights[costkey] = 1
-                elif costkey == 'watershed-condition-with-ais' and cost_weights['watershed-condition'] > 0: 
-                    # Use the `AIS` version if
-                    #   - watershed-condition is checked
-                    #   - invasives is NOT checked
-                    if cost_weights['invasives'] == 0: 
-                        final_cost_weights[costkey] = 1
-        if cost_weights['watershed-condition'] > 0:
-            assert final_cost_weights['watershed-condition-with-ais'] != final_cost_weights['watershed-condition-no-ais']
 
         # Calc costs for each planning unit
         pucosts = []
@@ -294,10 +280,14 @@ class Scenario(Analysis):
 
     @property
     def geojson(self):
+        # TODO
+        hardcoded_fids = [261972, 147008, 448914, 317358, 30069, 357667]
+        import random
+        selected_fids = random.sample(hardcoded_fids, 3)
         serializable = {
             "type": "Feature",
             "geometry": None,
-            "properties": {'uid': self.uid, 'name': self.name, 'test': [1,2,3]}
+            "properties": {'uid': self.uid, 'name': self.name, 'test': selected_fids}
         }
         return json.dumps(serializable)
 

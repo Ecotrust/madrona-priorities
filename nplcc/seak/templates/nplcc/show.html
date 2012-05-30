@@ -3,15 +3,18 @@
 {% load set_var %}
 {% load percentage %}
 {% load sortcosts %}
+{% load flatblock_tags %}
 {% block title %}{{instance.name}}{% endblock title %}
 {% block panel %}
-<h1>Analysis results for {{instance.name}}</h1>
 
 {% if not instance.done %}
 {% block progress %}
-<h4 id="{{instance.uid}}_progress_html">{{ instance.status_html|safe }}</h4>
+
+<div class="alert alert-info">
+<p id="{{instance.uid}}_progress_html">{{ instance.status_html|safe }}</p>
+</div>
+
 <div id="{{instance.uid}}_progressbar" class="progressbar"></div> 
-<br/>
 
 <script>
 // Make sure this only gets run once; check if the function is undefined
@@ -21,6 +24,7 @@ var {{instance.uid}}_call_again;
 var update_progress_info_{{instance.uid}};
 var {{instance.uid}}_done_panel;
 
+/*
 madrona.onShow(function(){
     $(function() {
         $( "#{{instance.uid}}_progressbar" ).progressbar({ value: 0 });
@@ -72,11 +76,13 @@ madrona.beforeDestroy(function() {
     // {{instance.uid}}_delay = 20000;
     {{instance.uid}}_running = false;
 });
+*/
 </script>
 
 {% endblock progress %}
 {% else %}
 <script type="text/javascript">
+/*
 madrona.onShow(function(){
     $('a.toggle_na_species').click( function(e) {
         e.preventDefault();
@@ -84,18 +90,22 @@ madrona.onShow(function(){
         $('tr.nogoal').toggle();
     });
 });
+*/
 </script>
 {% endif %}
 
+<div class="tabbable">
+    <ul class="nav nav-tabs" style="margin-bottom:0px;">
+        <li class="active"><a href="#Inputs" data-toggle="tab"><span>{% flatblock 'show-inputs' %}</span></a></li>
+        <li><a href="#summary" data-toggle="tab"><span>{% flatblock 'show-results-summary' %}</span></a></li>
+        <li><a href="#species" data-toggle="tab"><span>{% flatblock 'show-conservation-features' %}</span></a></li>
+        <li><a href="#watersheds" data-toggle="tab"><span>{% flatblock 'show-planning-units' %}</span></a></li>
+    </ul>
+
     {% set results = instance.results %}
-    <div class="tabs">
-        <ul>
-            <li><a href="#Inputs"><span>Inputs</span></a></li>
-            {% if instance.done %}
-            <li><a href="#results"><span>Results</span></a></li>
-            {% endif %}
-        </ul>
-        <div id="Inputs">
+    <div class="tab-content">
+
+        <div id="Inputs" class="tab-pane active">
             <div class="box">
                 <h5>Name</h5> 
                 <p>{{ instance.name }}</p>
@@ -131,21 +141,14 @@ madrona.onShow(function(){
              <p style="color:white">Estimated Scaling Factor = {{instance.input_scalefactor}}</p>
             </div>
         </div>
-        {% if instance.done %}
-        <div id="results" class="tabs">
-        <ul>
-            <li><a href="#summary"><span>Summary</span></a></li>
-            <li><a href="#watersheds"><span>Subbasins</span></a></li>
-            <li><a href="#species"><span>Species</span></a></li>
-        </ul>
 
-        <div id="summary">
+        <div id="summary" class="tab-pane">
             <div class="box">
                 <p>The optimum watershed prioritization scenario includes {{results.num_units}} subbasins covering {{results.area|floatformat:0|intcomma}} km<sup>2</sup>. </p>
                 <p>Goals were met for {{results.num_met}} of {{results.num_species}} focal species.</p>
             </div>
         </div>
-        <div id="watersheds">
+        <div id="watersheds" class="tab-pane">
             <div class="box">
                 <p>The optimum watershed prioritization scenario includes {{results.num_units}} subbasins covering {{results.area|floatformat:0|intcomma}} km<sup>2</sup>. </p>
                 <p>Ranking of prioritization constraints is <em>relative</em>. See <a href="/docs.html" target="_blank">data and methods</a> for more details. </p> 
@@ -196,7 +199,7 @@ madrona.onShow(function(){
                 </table>
             </div>
         </div>
-        <div id="species">
+        <div id="species" class="tab-pane">
             <div class="box">
                 <p>Goals were met for {{results.num_met}} of {{results.num_species}} focal species.</p>
                 <table class="table" id="species_table" summary="Species Table">
@@ -235,7 +238,6 @@ madrona.onShow(function(){
             <a href="#" class="toggle_na_species" style="font-size:8pt;"><span class="showhidelang" style="display:inline">Show</span><span class="showhidelang" style="display:none">Hide</span> Species Without Goal Amount</a>
         </div>
         </div>
-        {% endif %}
     </div>
 
 {% endblock panel %}

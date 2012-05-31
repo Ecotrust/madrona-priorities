@@ -1,4 +1,6 @@
 var map;
+var hilites;
+var pu_layer;
 
 function init_map() {
     map = new OpenLayers.Map({
@@ -35,10 +37,12 @@ function init_map() {
     // allow testing of specific renderers via "?renderer=Canvas", etc
     var renderer = OpenLayers.Util.getParameters(window.location.href).renderer;
     renderer = (renderer) ? [renderer] : OpenLayers.Layer.Vector.prototype.renderers;
-    var vectors = new OpenLayers.Layer.Vector("Vector Layer", {
+    pu_layer = new OpenLayers.Layer.Vector("Planning Units", {
         styleMap: myStyles,
         renderers: renderer
     });
+
+
     function update_counter(vl) {
         var area = 0;
         for (i in vl.selectedFeatures) {
@@ -49,7 +53,7 @@ function init_map() {
         $('counter').innerHTML = vl.selectedFeatures.length;
     };
 
-    vectors.events.on({
+    pu_layer.events.on({
         'featureselected': function(feature) {
             update_counter(this);
         },
@@ -63,14 +67,20 @@ function init_map() {
     OpenLayers.loadURL(url, {}, null, function (response) {
         var gformat = new OpenLayers.Format.GeoJSON();
         var feats = gformat.read(response.responseText);
-        vectors.addFeatures(feats);
+        pu_layer.addFeatures(feats);
     });
 
-    map.addLayers([osm, vectors]);
+    map.addLayers([osm, pu_layer]);
     
+    var highlight_style = { fillColor:'#99CCFF', strokeColor:'#3399FF', fillOpacity:0.7 };
+    hilites = new OpenLayers.Layer.Vector("Highlighted",
+        {isBaseLayer:false, features:[], visibility:true, style:highlight_style}
+    );
+    map.addLayer(hilites);
+
     drawControls = {
         select: new OpenLayers.Control.SelectFeature(
-            vectors,
+            pu_layer,
             {
                 clickout: true, 
                 toggle: false,

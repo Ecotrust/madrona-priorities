@@ -179,8 +179,9 @@ function scenariosViewModel() {
       url: url,
       type: "DELETE",
       success: function (data, textStatus, jqXHR) {
-        self.selectedFeature(false);
         self.scenarioList.remove(self.selectedFeature());
+        self.selectedFeature(false);
+        self.selectControl.unselectAll();
       }  
     });
   };
@@ -196,28 +197,37 @@ function scenariosViewModel() {
     self.showScenarioList(true);
   }
 
+
   self.selectControl = {
       /*
        * Controls the map and display panel 
        * when features are selected
        */
-      unselectAll: function () { 
-          // ?
+      unselectAll: function() { 
+        hilites.removeAllFeatures();
       },
-      select: function (uid) {
+      select: function(feature) {
+
+        var uid = feature.uid(); 
         var showUrl = app.workspace["feature-classes"][0]["link-relations"]["self"]["uri-template"]; 
         showUrl = showUrl.replace('{uid}', uid);
 
         $.get(showUrl, function(data) {
           $('#scenario-show-container').empty().append(data);
         })
+        
+        hilites.removeAllFeatures();
+        var selected_units = [];
+        $.each(feature.test(), function (i, fid) {
+            selected_units.push(pu_layer.getFeaturesByAttribute("fid",fid)[0].clone());
+        });
+        hilites.addFeatures(selected_units);
       }
    }
 
   self.selectFeature = function(feature, event) {
-    var uid = feature.uid(); 
     self.selectControl.unselectAll();
-    self.selectControl.select(uid);
+    self.selectControl.select(feature);
     self.selectedFeature(feature); 
   }
 

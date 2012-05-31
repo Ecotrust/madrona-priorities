@@ -1,32 +1,7 @@
 {% extends 'common/base.html' %}
+{% load flatblock_tags %}
 {% load appname %}
-{% block title %}{% appname %} Help{% endblock %}
-
 {% block content %}
-
-<link rel="stylesheet" href="{{MEDIA_URL}}screencasts/css/screencasts.css" type="text/css" media="all" title="no title" charset="utf-8">
-<link rel="stylesheet" href="{{MEDIA_URL}}common/css/typography.css" type="text/css" media="all" title="no title" charset="utf-8">
-<style type="text/css">
-.helpstep {
-	text-decoration:none;
-	display: block;
-	padding: 2px; 
-    margin-bottom: 15px;
-    height: 180px; 
-}
-.helpstep img {
-	margin-right: 12px; 
-    border: 1px solid #444;
-}
-.helpstep p {
-	margin: 2px !important; 
-}
-
-p.step {
-    font-weight: bold;
-}
-</style>
-
 <div>
     <h2> Using the Tool to create custom prioritizations </h2>
     <p>
@@ -56,6 +31,5 @@ p.step {
     </div>
 
 </div>    
-
 
 {% endblock content %}

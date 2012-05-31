@@ -5,11 +5,11 @@
 {% load sortcosts %}
 {% load flatblock_tags %}
 {% block title %}{{instance.name}}{% endblock title %}
+
 {% block panel %}
-
 {% if not instance.done %}
-{% block progress %}
 
+{% block progress %}
 <div class="alert alert-info">
 <p id="{{instance.uid}}_progress_html">{{ instance.status_html|safe }}</p>
 </div>
@@ -97,9 +97,11 @@ madrona.onShow(function(){
 <div class="tabbable">
     <ul class="nav nav-tabs" style="margin-bottom:0px;">
         <li class="active"><a href="#Inputs" data-toggle="tab"><span>{% flatblock 'show-inputs' %}</span></a></li>
+        {% if instance.done %}
         <li><a href="#summary" data-toggle="tab"><span>{% flatblock 'show-results-summary' %}</span></a></li>
         <li><a href="#species" data-toggle="tab"><span>{% flatblock 'show-conservation-features' %}</span></a></li>
         <li><a href="#watersheds" data-toggle="tab"><span>{% flatblock 'show-planning-units' %}</span></a></li>
+        {% endif %}
     </ul>
 
     {% set results = instance.results %}
@@ -142,12 +144,14 @@ madrona.onShow(function(){
             </div>
         </div>
 
+        {% if instance.done %}
         <div id="summary" class="tab-pane">
             <div class="box">
                 <p>The optimum watershed prioritization scenario includes {{results.num_units}} subbasins covering {{results.area|floatformat:0|intcomma}} km<sup>2</sup>. </p>
                 <p>Goals were met for {{results.num_met}} of {{results.num_species}} focal species.</p>
             </div>
         </div>
+
         <div id="watersheds" class="tab-pane">
             <div class="box">
                 <p>The optimum watershed prioritization scenario includes {{results.num_units}} subbasins covering {{results.area|floatformat:0|intcomma}} km<sup>2</sup>. </p>
@@ -237,6 +241,7 @@ madrona.onShow(function(){
             </table>
             <a href="#" class="toggle_na_species" style="font-size:8pt;"><span class="showhidelang" style="display:inline">Show</span><span class="showhidelang" style="display:none">Hide</span> Species Without Goal Amount</a>
         </div>
+        {% endif %}
         </div>
     </div>
 

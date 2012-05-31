@@ -9,13 +9,19 @@ function init_map() {
         displayProjection: "EPSG:4326",
         numZoomLevels: 18
     });
-    map.addControl(new OpenLayers.Control.LayerSwitcher());
+    map.addControl(new OpenLayers.Control.LayerSwitcher({
+        'div': OpenLayers.Util.getElement('layerswitcher')
+    }));
 
-    //var osm = new OpenLayers.Layer.OSM("Open Street Map"); 
-    //"http://acetate.geoiq.com/tiles/acetate/${z}/${x}/${y}.png");
+    var osm = new OpenLayers.Layer.OSM();
+
+    var terrain = new OpenLayers.Layer.OSM("Terrain", 
+        "http://tile.stamen.com/terrain/${z}/${x}/${y}.jpg",
+        {'attribution': '<a id="home-link" target="_top" href="../">Map tiles</a> by <a target="_top" href="http://stamen.com">Stamen Design</a>, under <a target="_top" href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a>. Data by <a target="_top" href="http://openstreetmap.org">OpenStreetMap</a>, under <a target="_top" href="http://creativecommons.org/licenses/by-sa/3.0">CC BY SA</a>.'}
+    );
  
-    var osm = new OpenLayers.Layer.Google(
-        "Google Physical",
+    var google_terrain = new OpenLayers.Layer.Google(
+        "Google Terrain",
         {type: google.maps.MapTypeId.TERRAIN, opacity: 0.6}
     );
 
@@ -70,11 +76,10 @@ function init_map() {
         pu_layer.addFeatures(feats);
     });
 
-    map.addLayers([osm, pu_layer]);
+    map.addLayers([osm, google_terrain, terrain, pu_layer]);
     
     var highlight_style = { fillColor:'#99CCFF', strokeColor:'#3399FF', fillOpacity:0.7 };
-    hilites = new OpenLayers.Layer.Vector("Highlighted",
-        {isBaseLayer:false, features:[], visibility:true, style:highlight_style}
+    hilites = new OpenLayers.Layer.Vector("Highlighted", {isBaseLayer:false, features:[], visibility:true, style:highlight_style}
     );
     map.addLayer(hilites);
 

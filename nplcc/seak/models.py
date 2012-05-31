@@ -287,7 +287,12 @@ class Scenario(Analysis):
         serializable = {
             "type": "Feature",
             "geometry": None,
-            "properties": {'uid': self.uid, 'name': self.name, 'test': selected_fids}
+            "properties": {
+               'uid': self.uid, 
+               'name': self.name, 
+               'done': True, #self.done, 
+               'test': selected_fids
+            }
         }
         return json.dumps(serializable)
 

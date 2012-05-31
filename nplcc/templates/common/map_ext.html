@@ -37,11 +37,18 @@
                       <div class="scenario-detail" data-bind="with: selectedFeature">
                         <div class="row-fluid">
                           <div class="btn-group pull-right">
-                            <a href="#" class="btn btn-mini" data-bind="click: $parent.editScenario"><i class="icon-edit"></i> Edit</a>
-                            <a href="#" class="btn btn-mini" data-bind="click: $parent.copyScenario"><i class="icon-tags"></i> Copy</a>
-                            <a href="#" class="btn btn-mini" data-bind="click: $parent.downloadScenario"><i class="icon-download-alt"></i> Download</a>
-                            <a href="#" class="btn btn-mini" data-bind="click: $parent.shareScenario"><i class="icon-retweet"></i> Share</a>
-                            <a href="#" class="btn btn-mini" data-bind="click: $parent.showDeleteDialog"><i class="icon-remove"></i> Delete</a>
+                            <!-- ko if: done -->
+                            <a href="#" class="btn btn-mini" data-bind="click: $parent.editScenario">
+                              <i class="icon-edit"></i> Edit </a>
+                            <a href="#" class="btn btn-mini" data-bind="click: $parent.copyScenario">
+                              <i class="icon-tags"></i> Copy </a>
+                            <a href="#" class="btn btn-mini" data-bind="click: $parent.downloadScenario">
+                              <i class="icon-download-alt"></i> Download</a>
+                            <a href="#" class="btn btn-mini" data-bind="click: $parent.shareScenario">
+                              <i class="icon-retweet"></i> Share</a>
+                            <!-- /ko -->
+                            <a href="#" class="btn btn-mini" data-bind="click: $parent.showDeleteDialog">
+                              <i class="icon-remove"></i> Delete</a>
                           </div>
                           <h3><span data-bind="text: name"></span></h3>
                         </div>
@@ -66,6 +73,7 @@
                   </div>
                 </div>
               </div> <!-- no properties -->
+
               <div class="modal" id="scenario-delete-dialog" style="display:none">
                 <div class="modal-header">
                   <a class="close" data-dismiss="modal">×</a>
@@ -81,6 +89,20 @@
                   <a href="#" class="btn btn-danger" data-bind="click: deleteFeature">Delete Scenario</a>
                 </div>
               </div>
+
+              <div class="modal" id="layerswitcher-dialog" style="display:none">
+                <div class="modal-header">
+                  <a class="close" data-dismiss="modal">×</a>
+                  <h3>Change Map Layers</h3>
+                </div>
+                <div class="modal-body">
+                   <div id="layerswitcher"></div>
+                </div>
+                <div class="modal-footer">
+                  <a href="#" class="btn" data-dismiss="modal">Close</a>
+                </div>
+              </div>
+
             </div>
             <!-- end of scenario pages -->
             {% else %}
@@ -92,21 +114,23 @@
                     <li><a class="btn btn-mini" href="{% url registration_register %}" id="register">Register</a> for an account <br/> or</li>
                   <li><a class="btn btn-mini" href="{% url user_signin %}" id="signin">Sign In</a> to begin creating scenarios</li>                
                 </ul>. 
-              </div><!-- end of no properties -->
+              </div>
             </div>
             {% endif %}
           </div>
           <div class="span6">
             <div class="outermap well">
+                <div id="datalayerswitcher">
+                <a href="#" class="btn btn-mini" data-bind="click: showLayerSwitcherDialog">
+                <i class="icon-align-justify"></i> Data Layers</a>
+                </div>
               <div id="map"></div>
             </div>
           </div>
         </div>
       </div>
-      <!-- end partial -->
   
     <script type="text/javascript">
-
     // namespace for app
     var app = {
       scenarios: {
@@ -127,10 +151,11 @@
     app.onResize = function () {
       $("#map").height($(window).height() * .85);
       map.render('map');
+
     };
     
     $(document).ready(function () {
-      ko.applyBindings(app.scenarios.viewModel, document.getElementById('scenario-html'));
+      ko.applyBindings(app.scenarios.viewModel); //, document.getElementById('scenario-html'));
       app.scenarios.viewModel.loadScenarios();
       init_map();
       app.onResize();

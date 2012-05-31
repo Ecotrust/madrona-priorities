@@ -14,6 +14,8 @@ function scenariosViewModel() {
   self.showScenarioList = ko.observable(true);
   // list of all scenarios, primary viewmodel
   self.scenarioList = ko.observableArray();
+  // display mode
+  self.dataMode = ko.observable('manage');
 
   // pagination config will display x items 
   // from this zero based index
@@ -166,6 +168,10 @@ function scenariosViewModel() {
 
   self.showDeleteDialog = function () {
     $("#scenario-delete-dialog").modal("show");
+  };
+
+  self.showLayerSwitcherDialog = function () {
+    $("#layerswitcher-dialog").modal("show");
   };
 
   self.closeDialog = function () {

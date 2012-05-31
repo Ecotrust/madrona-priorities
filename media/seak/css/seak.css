@@ -33,7 +33,7 @@
 }
 
 .well {
-  marin-bottom: 4px;
+  margin-bottom: 4px !important;
 }
 
 .stand-detail div, .stand-detail table {
@@ -80,7 +80,7 @@
 }
 
 body {
-padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
+  padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
 }
 .olControlAttribution {
     bottom: 2px !important;
@@ -91,13 +91,8 @@ img.olTileImage {
 }
 label.olButton {
     display: inline;
-    float: none;
     padding: 9px 10px 11px;
-    line-height: 19px;
-    color: white;
-    text-decoration: none;
-    text-shadow: 0 2px 0 rgba(0, 0, 0, 0.25);
-    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    line-height: 24px; 
 }
 #customZoom {
     z-index: 1001;
@@ -122,4 +117,13 @@ label.olButton {
 }
 #customZoomOut {
     top: 25px;
+}
+
+#datalayerswitcher {
+    position: relative; 
+    top: 12px; 
+    left: -12px; 
+    text-align:right; 
+    z-index: 99999;
+    height: 0px;
 }

@@ -69,6 +69,10 @@ class ConservationFeature(models.Model):
         levels = [self.level1, self.level2, self.level3, self.level4, self.level5]
         return '---'.join([slugify(x.lower()) for x in levels])
 
+    @property
+    def id_string(self):
+        return '---'.join([self.level_string, slugify(self.name.lower())])
+
     def __unicode__(self):
         return u'%s' % self.name
 
@@ -264,25 +268,40 @@ class Scenario(Analysis):
         logger.debug("Creating the MarxanAnalysis object")
         m = MarxanAnalysis(pucosts, cfs, self.outdir)
 
-        logger.debug("Firing off the asycn process")
+        logger.debug("Firing off the process")
         check_status_or_begin(marxan_start, task_args=(m,), polling_url=self.get_absolute_url())
         self.process_results()
         return True
 
     @property
+    def numreps(self):
+        try:
+            with open(os.path.join(self.outdir,"input.dat")) as fh:
+                for line in fh:
+                    if line.startswith('NUMREPS'):
+                        return int(line.strip().replace("NUMREPS ",""))
+        except IOError:
+            # probably hasn't started processing yet
+            return settings.MARXAN_NUMREPS
+
+    @property
     def progress(self):
         path = os.path.join(self.outdir,"output","nplcc_r*.csv")
         outputs = glob.glob(path)
-        if len(outputs) == settings.MARXAN_NUMREPS:
+        numreps = self.numreps
+        if len(outputs) == numreps:
             if not self.done:
-                return (0,settings.MARXAN_NUMREPS)
-        return (len(outputs), settings.MARXAN_NUMREPS)
+                return (0, numreps)
+        return (len(outputs), numreps)
 
     @property
     def geojson(self):
-        fids = [x.fid for x in PlanningUnit.objects.all()]
-        import random
-        selected_fids = random.sample(fids, 10)
+        rs = self.results
+        if 'units' in rs:
+            selected_fids = [r['fid'] for r in rs['units']]
+        else:
+            selected_fids = []
+
         serializable = {
             "type": "Feature",
             "geometry": None,
@@ -290,11 +309,12 @@ class Scenario(Analysis):
                'uid': self.uid, 
                'name': self.name, 
                'done': True, #self.done, 
-               'test': selected_fids
+               'selected_fids': selected_fids
             }
         }
         return json.dumps(serializable)
 
+    # TODO Cache
     @property
     def results(self):
         targets = json.loads(self.input_targets)
@@ -323,7 +343,8 @@ class Scenario(Analysis):
             for x in PuVsCost.objects.filter(pu=pu):
                 costname = x.cost.name.lower().replace(" ","")
                 amt = x.amount
-                # classify amount to high/med/low
+                # TODO classify amount to high/med/low
+                """
                 cls = {
                         'invasives': (8,18),
                         'climate': (50,80),
@@ -336,8 +357,10 @@ class Scenario(Analysis):
                     rating = "high" 
                 else: 
                     rating = "med" 
+                """
+                rating = "med"
                 bcosts[costname] = rating
-            best.append( {'name': pu.name, 'costs': bcosts})
+            best.append( {'name': pu.name, 'costs': bcosts, 'fid': pu.fid })
 
         sum_area = sum([x.area for x in bestpus])
 
@@ -406,10 +429,10 @@ class Scenario(Analysis):
     def status(self):
         url = self.get_absolute_url()
         if process_is_running(url):
-            status = """Analysis for <em>%s</em> is currently running. You can close this window and return later.</p>""" % (self.name,)
+            status = """Analysis for <em>%s</em> is currently running.""" % (self.name,)
             code = 2
         elif process_is_complete(url):
-            status = "%s processing is done. Refresh to see results." % self.name
+            status = "%s processing is done." % self.name
             code = 3
         elif process_is_pending(url):
             status = "%s is in the queue but not yet running." % self.name

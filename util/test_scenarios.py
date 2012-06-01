@@ -23,14 +23,14 @@ scalefactors = []
 num_species = []
 num_units = []
 
-factors = [0.75, 1.25, 3]
-numspecies = [2]
+factors = [0.75, 1.25, 2]
+numspecies = [3]
 numcosts = [1]
 # these are random
-targets = [0.5]
-penalties = [0.5]
+targets = [0.1, 0.15, 0.2, 0.05]
+penalties = [0.4, 0.1, 0.8]
 
-settings.MARXAN_NUMREPS = 3
+settings.MARXAN_NUMREPS = 30
 
 #MODE = 'hardcoded' 
 #MODE = 'query' 
@@ -56,6 +56,9 @@ def create_wp(target_dict, penalties_dict, costs_dict, sf):
     print costs_dict
     print sf
 
+    with open(os.path.join(os.path.dirname(__file__), 'random_words.txt'),'r') as fh:
+        name = ' '.join([x.strip() for x in random.sample(fh.readlines(), 2)])
+
     wp = Scenario(input_targets = json.dumps( 
            target_dict
         ), 
@@ -66,13 +69,13 @@ def create_wp(target_dict, penalties_dict, costs_dict, sf):
             costs_dict
         ), 
         input_scalefactor=sf,
-        name="Test Scale Factor %s" % sf, user=user)
+        name= name, user=user)
 
     return wp
 
 
 if MODE == 'create':
-    wp = Scenario.objects.filter(name__startswith="Auto Test Scale Factor")
+    wp = Scenario.objects.all() #filter(name__startswith="Auto Test Scale Factor")
     wp.delete()
 
     cfs =  ConservationFeature.objects.all()
@@ -80,6 +83,7 @@ if MODE == 'create':
     for c in cfs:
         a = c.level_string
         while a.endswith('---'):
+            print a
             a = a[:-3]
         keys.append(a)
 
@@ -91,7 +95,7 @@ if MODE == 'create':
     for f in factors:
         for nc in numcosts:
             for n in numspecies:
-                for i in range(2):
+                for i in range(3):
                     try:
                         n = int(n)
                         target_dict = {}
@@ -128,7 +132,6 @@ if MODE == 'create':
                     sf = f
                     wp = create_wp(target_dict, penalty_dict, costs_dict, sf)
 
-                    ############
                     print "####################################"
                     print 'targets', wp.input_targets
                     print 'penalties', wp.input_penalties
@@ -136,7 +139,6 @@ if MODE == 'create':
 
                     wp.save()
                     continue 
-                    # TODO
                     #while not wp.done:
                     #    time.sleep(2)
                     #    print "  ", wp.status_html
@@ -149,6 +151,9 @@ if MODE == 'create':
                         nspecies = len(inpenalties.keys())
 
                     r = wp.results
+                    print '----------------'
+                    print r
+                    print '----------------'
 
                     #'ncosts, nspecies, sumpenalties, meanpenalties, scalefactor, numspeciesmet, numplannningunits'
                     fh.write(','.join([str(x) for x in [
@@ -167,12 +172,6 @@ if MODE == 'hardcoded':
     scalefactors = [0.1, 0.2, 0.25, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0, 1.1, 1.25, 1.5, 2, 4, 8, 16, 32]
     num_units = [0, 3, 9, 17, 46, 57, 63, 73, 76, 79, 81, 82, 82, 83, 85, 90, 92, 93, 91]
     num_species = [0, 1, 4, 10, 27, 38, 37, 54, 57, 58, 63, 59, 62, 66, 66, 69, 71, 71, 71]
-
-
-assert len(scalefactors) == len(num_species) == len(num_units)
-print scalefactors
-print num_unit
-print num_species
 
 #import matplotlib.pyplot as plt
 #fig = plt.figure()

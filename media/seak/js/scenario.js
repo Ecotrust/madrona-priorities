@@ -1,3 +1,43 @@
+function progressViewModel() {
+  var self = this;
+
+  self.progressHtml = ko.observable();
+  self.done = ko.observable(false);
+  self.progressBarWidth = ko.observable("0%");
+  self.triggerDone = function() {
+    self.done(true);
+    clearInterval(app.timer);
+    app.timer = null;
+  }
+  self.checkTimer = function() {
+    var checkProgress = function () {
+        var url = $('#selected_progress_url').attr('value');
+        var elem = $('#scenario_progress_html'); 
+        if (elem.length == 0){ 
+            self.triggerDone();
+            return false; 
+        };
+        if (!self.done()) {
+            $.get(url, function(data) {
+                self.progressHtml(data.html);
+                var pct = parseInt((data.complete / data.total) * 100.0, 10);
+                self.progressBarWidth(pct + "%");
+                if (pct >= 100) {
+                    self.triggerDone();
+                }
+            })
+        }
+    }
+    if (!app.timer) {
+        checkProgress();
+        app.timer = setInterval(checkProgress, 5000);
+    } else {
+        console.log("Warning: app.timer is set and checkTimer was called!");
+    }
+ }
+  
+  return self;
+}
 
 function scenariosViewModel() {
   var self = this;
@@ -176,7 +216,7 @@ function scenariosViewModel() {
 
   self.closeDialog = function () {
     $("#scenario-delete-dialog").modal("hide");
-  }
+  };
 
   self.deleteFeature = function () {
     var url = "/features/generic-links/links/delete/{uid}/".replace("{uid}", self.selectedFeature().uid());
@@ -203,7 +243,6 @@ function scenariosViewModel() {
     self.showScenarioList(true);
   }
 
-
   self.selectControl = {
       /*
        * Controls the map and display panel 
@@ -211,6 +250,7 @@ function scenariosViewModel() {
        */
       unselectAll: function() { 
         hilites.removeAllFeatures();
+        // $('#scenario-show-container').empty();
       },
       select: function(feature) {
 
@@ -219,13 +259,28 @@ function scenariosViewModel() {
         showUrl = showUrl.replace('{uid}', uid);
 
         $.get(showUrl, function(data) {
+          var elem = document.getElementById('scenario-show-container');
+          ko.cleanNode(elem);
           $('#scenario-show-container').empty().append(data);
+          app.scenarios.progressViewModel = null;
+          clearInterval(app.timer);
+          app.timer = null;
+          app.scenarios.progressViewModel = new progressViewModel();
+
+          ko.applyBindings(app.scenarios.progressViewModel, elem);
+          app.scenarios.progressViewModel.checkTimer();
         })
         
         hilites.removeAllFeatures();
         var selected_units = [];
-        $.each(feature.test(), function (i, fid) {
-            selected_units.push(pu_layer.getFeaturesByAttribute("fid",fid)[0].clone());
+        var unit;
+        $.each(feature.selected_fids(), function (i, fid) {
+            unit = pu_layer.getFeaturesByAttribute("fid",fid)[0].clone();
+            if (unit) {
+                selected_units.push(unit);
+            } else {
+                console.log("warning: fid " + fid + " is not valid");
+            }
         });
         hilites.addFeatures(selected_units);
       }
@@ -249,13 +304,9 @@ function scenariosViewModel() {
   }
 
   self.reloadScenarios = function(property) {
-    self.scenario_layer.removeAllFeatures();
+    console.log("reloadScenarios");
     self.scenarioList.removeAll();
-    self.property_layer.removeAllFeatures();
-    self.loadScenarios(property);
-    self.showScenarioList(true);
-    app.selectFeature.deactivate();
-    self.showProgressBar(false);
+    self.loadScenarios();
   }
 
   self.loadViewModel = function (data) {
@@ -266,7 +317,7 @@ function scenariosViewModel() {
     //self.selectFeature(self.scenarioList()[0]);
   }
 
-  self.loadScenarios = function(property) {
+  self.loadScenarios = function() {
     var process = function(data) {
       if (data.features && data.features.length) {
         self.loadViewModel(data);

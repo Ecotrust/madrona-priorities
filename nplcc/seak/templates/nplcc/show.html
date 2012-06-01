@@ -5,94 +5,23 @@
 {% load sortcosts %}
 {% load flatblock_tags %}
 {% block title %}{{instance.name}}{% endblock title %}
-
 {% block panel %}
-{% if not instance.done %}
 
 {% block progress %}
-<div class="alert alert-info">
-<p id="{{instance.uid}}_progress_html">{{ instance.status_html|safe }}</p>
+<input type="hidden" id="selected_progress_url" value="{% url analysis-progress instance.uid %}" />
+{% if not instance.done %}
+<div class="alert alert-info" data-bind="visible: !done()">
+    <div id="scenario_progress_html">
+        <p data-bind="html: progressHtml"><!-- {{ instance.status_html|safe }} --></p>
+    </div>
+    <div class="progress progress-info progress-striped active">
+        <div class="bar" data-bind="style: { width: progressBarWidth() }"></div>
+    </div>
 </div>
-
-<div id="{{instance.uid}}_progressbar" class="progressbar"></div> 
-
 <script>
-// Make sure this only gets run once; check if the function is undefined
-var {{instance.uid}}_running;
-var {{instance.uid}}_delay;
-var {{instance.uid}}_call_again;
-var update_progress_info_{{instance.uid}};
-var {{instance.uid}}_done_panel;
-
-/*
-madrona.onShow(function(){
-    $(function() {
-        $( "#{{instance.uid}}_progressbar" ).progressbar({ value: 0 });
-    });
-
-    // This should only happen the first time the panel is loaded
-    if (typeof(update_progress_info_{{instance.uid}}) == "undefined") {
-        {{instance.uid}}_running = false;
-
-        update_progress_info_{{instance.uid}} = function() {
-            $.getJSON('{% url analysis-progress instance.uid %}' , function(data, status){
-                if (data) {
-                    var progress = parseInt(data.complete) / parseInt(data.total);
-                    var error = parseInt(data.error);
-                    var progress_html = data.html;
-                    $('#{{instance.uid}}_progressbar').progressbar( "option", "value", progress*100 );
-                    $('#{{instance.uid}}_progress_html').html(progress_html);
-                    if (error < 1) {
-                        if (progress < 1.0) {
-                            {{instance.uid}}_running = true;
-                            if ({{instance.uid}}_call_again) {
-                                window.setTimeout(update_progress_info_{{instance.uid}}, {{instance.uid}}_delay);
-                            }
-                            {{instance.uid}}_call_again = true;
-                        } else {
-                            {{instance.uid}}_running = false;
-                            {{instance.uid}}_done_panel = madrona.panel({appendTo: $('#panel-holder'), 
-                                showCloseButton: true});
-                            {{instance.uid}}_done_panel.showUrl(
-                            '/analysistools/{{instance.uid}}/progress.html', { showClose: true });
-                        }
-                    }
-                }
-            });
-        };
-    } 
-    {{instance.uid}}_delay = 5000; // ms
-    if (!{{instance.uid}}_running) {
-        {{instance.uid}}_call_again = true;
-    } else {
-        // This avoids calling off mulitple rounds of self-calling funcitons
-        {{instance.uid}}_call_again = false;
-    }
-    update_progress_info_{{instance.uid}}();
-
-});
-
-madrona.beforeDestroy(function() {
-    // {{instance.uid}}_delay = 20000;
-    {{instance.uid}}_running = false;
-});
-*/
-</script>
-
-{% endblock progress %}
-{% else %}
-<script type="text/javascript">
-/*
-madrona.onShow(function(){
-    $('a.toggle_na_species').click( function(e) {
-        e.preventDefault();
-        $('.showhidelang').toggle();
-        $('tr.nogoal').toggle();
-    });
-});
-*/
 </script>
 {% endif %}
+{% endblock progress %}
 
 <div class="tabbable">
     <ul class="nav nav-tabs" style="margin-bottom:0px;">

@@ -280,10 +280,9 @@ class Scenario(Analysis):
 
     @property
     def geojson(self):
-        # TODO
-        hardcoded_fids = [261972, 147008, 448914, 317358, 30069, 357667]
+        fids = [x.fid for x in PlanningUnit.objects.all()]
         import random
-        selected_fids = random.sample(hardcoded_fids, 3)
+        selected_fids = random.sample(fids, 10)
         serializable = {
             "type": "Feature",
             "geometry": None,

@@ -20,6 +20,16 @@ function init_map() {
         {'attribution': '<a id="home-link" target="_top" href="../">Map tiles</a> by <a target="_top" href="http://stamen.com">Stamen Design</a>, under <a target="_top" href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a>. Data by <a target="_top" href="http://openstreetmap.org">OpenStreetMap</a>, under <a target="_top" href="http://creativecommons.org/licenses/by-sa/3.0">CC BY SA</a>.'}
     );
  
+    var esri_physical = new OpenLayers.Layer.XYZ( "ESRI World Physical Map",
+        "http://server.arcgisonline.com/ArcGIS/rest/services/World_Physical_Map/MapServer/tile/${z}/${y}/${x}",
+        {sphericalMercator: true} 
+    );
+
+    var esri_shade = new OpenLayers.Layer.XYZ( "ESRI Shaded Relief Map",
+        "http://server.arcgisonline.com/ArcGIS/rest/services/World_Shaded_Relief/MapServer/tile/${z}/${y}/${x}",
+        {sphericalMercator: true} 
+    );
+
     var google_terrain = new OpenLayers.Layer.Google(
         "Google Terrain",
         {type: google.maps.MapTypeId.TERRAIN, opacity: 0.6}
@@ -48,7 +58,6 @@ function init_map() {
         renderers: renderer
     });
 
-
     function update_counter(vl) {
         var area = 0;
         for (i in vl.selectedFeatures) {
@@ -76,9 +85,9 @@ function init_map() {
         pu_layer.addFeatures(feats);
     });
 
-    map.addLayers([osm, google_terrain, terrain, pu_layer]);
+    map.addLayers([esri_shade, esri_physical, osm, google_terrain, terrain, pu_layer]);
     
-    var highlight_style = { fillColor:'#99CCFF', strokeColor:'#3399FF', fillOpacity:0.7 };
+    var highlight_style = { fillColor:'#FFFF00', strokeColor:'#CCCC33', fillOpacity:0.7 };
     hilites = new OpenLayers.Layer.Vector("Highlighted", {isBaseLayer:false, features:[], visibility:true, style:highlight_style}
     );
     map.addLayer(hilites);

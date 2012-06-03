@@ -59,6 +59,8 @@ USE_CACHE = False
 
 MEDIA_ROOT =  os.path.realpath(os.path.join(os.path.dirname(__file__), '..', 'mediaroot'))
 
+ENFORCE_SUPPORTED_BROWSER = False
+
 # ecotrust.org
 GOOGLE_API_KEY = 'ABQIAAAAIcPbR_l4h09mCMF_dnut8RQbjMqOReB17GfUbkEwiTsW0KzXeRQ-3JgvCcGix8CM65XAjBAn6I0bAQ'
 

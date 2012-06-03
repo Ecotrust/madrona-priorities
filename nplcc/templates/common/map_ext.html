@@ -157,8 +157,10 @@
     };
     
     $(document).ready(function () {
+    {% if user.is_authenticated %}
       ko.applyBindings(app.scenarios.viewModel); //, document.getElementById('scenario-html'));
       app.scenarios.viewModel.loadScenarios();
+    {% endif %}
       init_map();
       app.onResize();
       $(window).resize(app.onResize);

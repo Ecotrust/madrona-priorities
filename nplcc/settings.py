@@ -57,6 +57,8 @@ LOG_FILE =  os.path.realpath(os.path.join(os.path.dirname(__file__), '..', 'nplc
 LOGFILE =  os.path.realpath(os.path.join(os.path.dirname(__file__), '..', 'nplcc.log'))
 USE_CACHE = False
 
+MEDIA_ROOT =  os.path.realpath(os.path.join(os.path.dirname(__file__), '..', 'mediaroot'))
+
 # ecotrust.org
 GOOGLE_API_KEY = 'ABQIAAAAIcPbR_l4h09mCMF_dnut8RQbjMqOReB17GfUbkEwiTsW0KzXeRQ-3JgvCcGix8CM65XAjBAn6I0bAQ'
 
@@ -64,9 +66,18 @@ TEMPLATE_DEBUG = False
 LOGIN_REDIRECT_URL = '/tool/'
 HELP_EMAIL = 'ksdev@ecotrust.org'
 
-from settings_local import *
+try:
+    from settings_local import *
+except ImportError:
+    pass
 
 # makes djcelery and djkombu happy?
 DATABASE_ENGINE = DATABASES['default']['ENGINE']
 DATABASE_NAME = DATABASES['default']['NAME']
 DATABASE_USER = DATABASES['default']['USER']
+
+if not os.path.exists(MEDIA_ROOT):
+    os.makedirs(MEDIA_ROOT)
+
+if not os.path.exists(MARXAN_TEMPLATEDIR):
+    os.makedirs(MARXAN_TEMPLATEDIR)

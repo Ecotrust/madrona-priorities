@@ -439,13 +439,16 @@ class Scenario(Analysis):
             res = get_process_result(url)
             code = 1
             if res is not None:
-                status += "... "
+                status += ".. "
                 status += str(res)
         else:
-            status = "An error occured while running this analysis..."
+            status = "An error occured while running this analysis."
             code = 0
             res = get_process_result(url)
-            status += str(res)
+            if res is not None:
+                status += "..<br/> "
+                status += str(res)
+            status += "<br/>Please edit the scenario and try again. If the problem persists, please contact us."
 
         return (code, "<p>%s</p>" % status)
 

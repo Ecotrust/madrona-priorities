@@ -295,6 +295,7 @@ function scenariosViewModel() {
     self.selectControl.unselectAll();
     self.selectControl.select(feature);
     self.selectedFeature(feature); 
+    self.showScenarioList(false);
   };
 
   self.selectFeatureById = function (id) {
@@ -331,6 +332,11 @@ function scenariosViewModel() {
       }
     };
     $.get('/seak/scenarios.geojson', process);
+  };
+
+  self.backToScenarioList = function() {
+    self.selectedFeature(false);
+    self.showScenarioList(true);
   };
 
   return self;

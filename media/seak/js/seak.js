@@ -58,16 +58,6 @@ function init_map() {
         renderers: renderer
     });
 
-    function update_counter(vl) {
-        var area = 0;
-        for (i in vl.selectedFeatures) {
-            sf = vl.selectedFeatures[i];
-            area += sf.data.area;
-        }
-        $('area').innerHTML = area / 2589988.11; // convert to sq mi 
-        $('counter').innerHTML = vl.selectedFeatures.length;
-    };
-
     pu_layer.events.on({
         'featureselected': function(feature) {
             update_counter(this);
@@ -104,7 +94,7 @@ function init_map() {
                 multipleKey: "shiftKey", // shift key adds to selection
                 box: true
             }
-        ),
+        )
     };
     
     for(var key in drawControls) {

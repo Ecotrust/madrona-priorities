@@ -9,15 +9,15 @@ function progressViewModel() {
     self.done(true);
     clearInterval(app.timer);
     app.timer = null;
-  }
+  };
   self.checkTimer = function() {
     var checkProgress = function () {
         var url = $('#selected_progress_url').attr('value');
         var elem = $('#scenario_progress_html'); 
-        if (elem.length == 0){ 
+        if (elem.length === 0) { 
             self.triggerDone();
             return false; 
-        };
+        }
         if (!self.done()) {
             $.get(url, function(data) {
                 self.progressHtml(data.html);
@@ -32,16 +32,16 @@ function progressViewModel() {
                 if (pct >= 100) {
                     self.triggerDone();
                 }
-            })
+            });
         }
-    }
+    };
     if (!app.timer) {
         checkProgress();
         app.timer = setInterval(checkProgress, 5000);
     } else {
         console.log("Warning: app.timer is set and checkTimer was called!");
     }
- }
+ };
   
   return self;
 }
@@ -76,14 +76,14 @@ function scenariosViewModel() {
 
   // this list is model for pagination controls 
   self.paginationList = ko.computed(function () {
-    var list = [], listIndex = 0, displayIndex = 1, listIndex = 0;
+    var list = [], listIndex = 0, displayIndex = 1;
     for (listIndex=0; listIndex < self.scenarioList().length; listIndex++) {
       if (listIndex % self.listDisplayCount === 0 && Math.abs(listIndex - self.listStart()) < 5 * self.listDisplayCount) {
         list.push({'displayIndex': 1 + (listIndex/self.listDisplayCount), 'listIndex': listIndex });
       }
     }
     if (list.length < self.scenarioList().length / self.listDisplayCount) {
-      list.push({'displayIndex': '...', 'listIndex': null })
+      list.push({'displayIndex': '...', 'listIndex': null });
       list.push({'displayIndex': '»', 'listIndex': null });
 
     }
@@ -101,12 +101,12 @@ function scenariosViewModel() {
     self.listStart(button.listIndex);
     }
     self.selectFeature(self.scenarioList()[button.listIndex || self.listStart()]);
-  }
+  };
 
   self.addScenarioStart = function() {
     self.showScenarioForm('create');
     self.showScenarioList(false);
-  }
+  };
 
   self.showScenarioForm = function(action, uid) {
     // get the form
@@ -128,15 +128,13 @@ function scenariosViewModel() {
       $form.bind('submit', function(event) {
         event.preventDefault();
       });
-    })
-   
-  }
+    });
+  };
 
   self.updateScenario = function(scenario_id, isNew) {
     var updateUrl = '/features/generic-links/links/geojson/{uid}/'.replace('{uid}', scenario_id);
     $.get(updateUrl, function(data) {
       if (isNew) {
-        //self.scenario_layer.addFeatures(app.geojson_format.read(data));
         self.scenarioList.unshift(ko.mapping.fromJS(data.features[0].properties));
         self.selectedFeature(self.scenarioList()[0]);
       } else {
@@ -145,7 +143,7 @@ function scenariosViewModel() {
         self.showScenarioList(true);
       }
     });
-  }
+  };
 
   self.associateScenario = function(scenario_id, property_id) {
     var url = "/features/folder/{folder_uid}/add/{scenario_uid}";
@@ -159,12 +157,12 @@ function scenariosViewModel() {
         app.scenarios.viewModel.showScenarioList(true);
         app.new_features.removeAllFeatures();
       }
-    })
-
-  }
+    });
+  };
 
   self.saveScenarioForm = function(self, event) {
-  }
+      // pass
+  };
 
   self.OLDsaveScenarioForm = function(self, event) {
     var isNew, $dialog = $('#scenarios-form-container'),
@@ -248,7 +246,7 @@ function scenariosViewModel() {
   self.cancelAddScenario = function () {
     self.showScenarioFormPanel(false);
     self.showScenarioList(true);
-  }
+  };
 
   self.selectControl = {
       /*
@@ -276,7 +274,7 @@ function scenariosViewModel() {
 
           ko.applyBindings(app.scenarios.progressViewModel, elem);
           app.scenarios.progressViewModel.checkTimer();
-        })
+        });
         
         hilites.removeAllFeatures();
         var selected_units = [];
@@ -291,13 +289,13 @@ function scenariosViewModel() {
         });
         hilites.addFeatures(selected_units);
       }
-   }
+   };
 
   self.selectFeature = function(feature, event) {
     self.selectControl.unselectAll();
     self.selectControl.select(feature);
     self.selectedFeature(feature); 
-  }
+  };
 
   self.selectFeatureById = function (id) {
     var pageSize = self.scenarioList().length / self.listDisplayCount;
@@ -308,13 +306,13 @@ function scenariosViewModel() {
         self.selectedFeature(this);
       }
     });
-  }
+  };
 
   self.reloadScenarios = function(property) {
     console.log("reloadScenarios");
     self.scenarioList.removeAll();
     self.loadScenarios();
-  }
+  };
 
   self.loadViewModel = function (data) {
     self.scenarioList($.map(data.features, function (feature, i) {
@@ -322,7 +320,7 @@ function scenariosViewModel() {
     }));
     // Don't bother selecting the first feature
     //self.selectFeature(self.scenarioList()[0]);
-  }
+  };
 
   self.loadScenarios = function() {
     var process = function(data) {
@@ -333,7 +331,7 @@ function scenariosViewModel() {
       }
     };
     $.get('/seak/scenarios.geojson', process);
-  }
+  };
 
   return self;
 }

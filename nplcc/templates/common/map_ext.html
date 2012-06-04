@@ -10,18 +10,19 @@
                 <div>
                   <div class="row-fluid" id="row-scenarios-list">
                     <div class="span6 well" data-bind="visible: showScenarioList">
-                      <p data-bind="visible: scenarioList().length == 0"> {% flatblock "new_explain_scenario" %} </p>
                       <button href="#" class="btn" data-bind="click: addScenarioStart">
                           <i class="icon-plus-sign"></i> Add Scenario
                       </button>
-                      <br/>
-                      <br/>
-                      <h4><p data-bind="visible: scenarioList().length > 0">Scenario List</p></h4>
-                      <ul class="nav nav-tabs nav-stacked" data-bind="foreach: scenarioListPaginated">
-                        <li data-bind="click: $parent.selectFeature, css: { active: $data === $parent.selectedFeature() }">
-                          <a href="#" data-bind="text: name"></a>
-                        </li>
-                      </ul>
+                      <hr/>
+                      <p data-bind="if: scenarioList().length == 0"> {% flatblock "new_explain_scenario" %} </p>
+                      <div data-bind="if: scenarioList().length > 0">
+                        <h4>Scenario List</h4>
+                        <ul class="nav nav-tabs nav-stacked" data-bind="foreach: scenarioListPaginated">
+                          <li data-bind="click: $parent.selectFeature, css: {'active': $data === $parent.selectedFeature() }">
+                            <a href="#" data-bind="text: name"></a>
+                          </li>
+                        </ul>
+                      </div>
                       <div data-bind="if: scenarioList().length, visible: scenarioList().length > listDisplayCount">
                          <div class="pagination">
                             <ul data-bind="foreach: paginationList">

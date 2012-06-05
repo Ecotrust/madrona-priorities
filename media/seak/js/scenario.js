@@ -276,6 +276,7 @@ function scenariosViewModel() {
           app.scenarios.progressViewModel.checkTimer();
         });
         
+        selectFeature.unselectAll();
         $.each(feature.selected_fids(), function (i, fid) {
             var f = pu_layer.getFeaturesByAttribute("fid",fid)[0];
             if (!f) {

@@ -276,18 +276,13 @@ function scenariosViewModel() {
           app.scenarios.progressViewModel.checkTimer();
         });
         
-        hilites.removeAllFeatures();
-        var selected_units = [];
-        var unit;
         $.each(feature.selected_fids(), function (i, fid) {
-            unit = pu_layer.getFeaturesByAttribute("fid",fid)[0].clone();
-            if (unit) {
-                selected_units.push(unit);
-            } else {
+            var f = pu_layer.getFeaturesByAttribute("fid",fid)[0];
+            if (!f) {
                 console.log("warning: fid " + fid + " is not valid");
             }
+            selectFeature.select(f);
         });
-        hilites.addFeatures(selected_units);
       }
    };
 
@@ -295,6 +290,10 @@ function scenariosViewModel() {
     self.selectControl.unselectAll();
     self.selectControl.select(feature);
     self.selectedFeature(feature); 
+    bbox = feature.bbox();
+    if (bbox && bbox.length === 4) {
+        map.zoomToExtent(bbox);
+    }
     self.showScenarioList(false);
   };
 

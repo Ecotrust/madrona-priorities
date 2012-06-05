@@ -1,6 +1,7 @@
 var map;
 var hilites;
 var pu_layer;
+var selectFeature;
 
 function init_map() {
     map = new OpenLayers.Map({
@@ -60,10 +61,10 @@ function init_map() {
 
     pu_layer.events.on({
         'featureselected': function(feature) {
-            update_counter(this);
+            console.log("SELECT ", feature);
         },
         'featureunselected': function(feature) {
-            update_counter(this);
+            console.log("UNSELECT ", feature);
         }
     });
 
@@ -82,23 +83,19 @@ function init_map() {
     );
     map.addLayer(hilites);
 
-    drawControls = {
-        select: new OpenLayers.Control.SelectFeature(
-            pu_layer,
-            {
-                clickout: true, 
-                toggle: false,
-                multiple: true, 
-                hover: false,
-                toggleKey: "ctrlKey", // ctrl key removes from selection
-                multipleKey: "shiftKey", // shift key adds to selection
-                box: true
-            }
-        )
-    };
-    
-    for(var key in drawControls) {
-        map.addControl(drawControls[key]);
-    }
+    selectFeature = new OpenLayers.Control.SelectFeature(
+        pu_layer,
+        {
+            clickout: true, 
+            toggle: false,
+            multiple: true, 
+            hover: false,
+            toggleKey: "ctrlKey", // ctrl key removes from selection
+            multipleKey: "shiftKey", // shift key adds to selection
+            box: true
+        }
+    )
+    map.addControl(selectFeature);
+
     map.setCenter(new OpenLayers.LonLat(-13600000, 6700000), 4);
 }

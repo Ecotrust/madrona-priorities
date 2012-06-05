@@ -193,7 +193,7 @@
     <h4>{{title}}</h4>
     <br/>
 
-            <div class="field required">
+           <div class="field required">
                 {{ form.input_penalties.errors }}
                 {{ form.input_targets.errors }}
                 {{ form.input_relativecosts.errors }}
@@ -227,7 +227,13 @@
     <div class="tab-content">
 
     <div id="geographytab" class="tab-pane active"> 
-    <h4>Using the map, select the watersheds the define your geographic region</h4>
+        <p>Draw a box or click on the map to <strong>select the watersheds the define your geographic region</strong></p>
+        <p>To navigate, use the keyboard controls.</p>
+        <div id="currentGeographySelection">
+            You've selected <span id="geographySelectionCount">0</span> watersheds.
+        </div>
+
+           
     <div id="counter"></div>
     <div id="area"></div>
     </div>

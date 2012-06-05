@@ -9,8 +9,7 @@ function init_map() {
         div: "map",
         projection: "EPSG:900913",
         displayProjection: "EPSG:4326",
-        minResolution: 305.74811309814453
-        //numZoomLevels: 9
+        numZoomLevels: 18
     });
     map.addControl(new OpenLayers.Control.LayerSwitcher({
         'div': OpenLayers.Util.getElement('layerswitcher')
@@ -81,9 +80,14 @@ function init_map() {
     selectFeatureControl = new OpenLayers.Control.SelectFeature(
         pu_layer,
         {
-            multiple: true, 
+            multiple: true
         }
     )
+
+    var geographySelectCallback = function(){ 
+        $('#geographySelectionCount').html(pu_layer.selectedFeatures.length);
+    };
+
     selectGeographyControl = new OpenLayers.Control.SelectFeature(
         pu_layer,
         {
@@ -94,7 +98,9 @@ function init_map() {
             toggleKey: "ctrlKey", // ctrl key removes from selection
             multipleKey: "shiftKey", // shift key adds to selection
             renderIntent: "select_geography",
-            box: true
+            box: true,
+            onSelect: geographySelectCallback,
+            onUnselect: geographySelectCallback
         }
     )
     selectFeatureControl.deactivate();

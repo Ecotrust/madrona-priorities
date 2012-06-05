@@ -2,6 +2,7 @@ var map;
 var hilites;
 var pu_layer;
 var selectFeature;
+var selectGeography;
 
 function init_map() {
     map = new OpenLayers.Map({
@@ -48,6 +49,11 @@ function init_map() {
             fillColor: "#ffff00",
             fillOpacity: 0.6,
             graphicZIndex: 2
+        }),
+        "select_geography": new OpenLayers.Style({
+            fillColor: "#3333ff",
+            fillOpacity: 0.6,
+            graphicZIndex: 3
         })
     });
 
@@ -57,15 +63,6 @@ function init_map() {
     pu_layer = new OpenLayers.Layer.Vector("Planning Units", {
         styleMap: myStyles,
         renderers: renderer
-    });
-
-    pu_layer.events.on({
-        'featureselected': function(feature) {
-            console.log("SELECT ", feature);
-        },
-        'featureunselected': function(feature) {
-            console.log("UNSELECT ", feature);
-        }
     });
 
     var url = "/seak/planning_units.geojson";
@@ -86,16 +83,25 @@ function init_map() {
     selectFeature = new OpenLayers.Control.SelectFeature(
         pu_layer,
         {
+            multiple: true, 
+        }
+    )
+    selectGeography = new OpenLayers.Control.SelectFeature(
+        pu_layer,
+        {
             clickout: true, 
             toggle: false,
             multiple: true, 
             hover: false,
             toggleKey: "ctrlKey", // ctrl key removes from selection
             multipleKey: "shiftKey", // shift key adds to selection
+            renderIntent: "select_geography",
             box: true
         }
     )
-    map.addControl(selectFeature);
+    selectFeature.deactivate();
+    selectGeography.deactivate();
+    map.addControls([selectFeature, selectGeography]);
 
     map.setCenter(new OpenLayers.LonLat(-13600000, 6700000), 4);
 }

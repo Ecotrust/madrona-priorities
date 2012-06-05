@@ -1,25 +1,28 @@
 var map;
 var hilites;
 var pu_layer;
-var selectFeature;
-var selectGeography;
+var selectFeatureControl;
+var selectGeographyControl;
 
 function init_map() {
     map = new OpenLayers.Map({
         div: "map",
         projection: "EPSG:900913",
         displayProjection: "EPSG:4326",
-        numZoomLevels: 18
+        minResolution: 305.74811309814453
+        //numZoomLevels: 9
     });
     map.addControl(new OpenLayers.Control.LayerSwitcher({
         'div': OpenLayers.Util.getElement('layerswitcher')
     }));
 
+    map.addControl(new OpenLayers.Control.KeyboardDefaults() );
+
     var osm = new OpenLayers.Layer.OSM();
 
     var terrain = new OpenLayers.Layer.OSM("Terrain", 
         "http://tile.stamen.com/terrain/${z}/${x}/${y}.jpg",
-        {'attribution': '<a id="home-link" target="_top" href="../">Map tiles</a> by <a target="_top" href="http://stamen.com">Stamen Design</a>, under <a target="_top" href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a>. Data by <a target="_top" href="http://openstreetmap.org">OpenStreetMap</a>, under <a target="_top" href="http://creativecommons.org/licenses/by-sa/3.0">CC BY SA</a>.'}
+        {sphericalMercator: true} 
     );
  
     var esri_physical = new OpenLayers.Layer.XYZ( "ESRI World Physical Map",
@@ -75,18 +78,13 @@ function init_map() {
 
     map.addLayers([esri_shade, esri_physical, osm, google_terrain, terrain, pu_layer]);
     
-    var highlight_style = { fillColor:'#FFFF00', strokeColor:'#CCCC33', fillOpacity:0.7 };
-    hilites = new OpenLayers.Layer.Vector("Highlighted", {isBaseLayer:false, features:[], visibility:true, style:highlight_style}
-    );
-    map.addLayer(hilites);
-
-    selectFeature = new OpenLayers.Control.SelectFeature(
+    selectFeatureControl = new OpenLayers.Control.SelectFeature(
         pu_layer,
         {
             multiple: true, 
         }
     )
-    selectGeography = new OpenLayers.Control.SelectFeature(
+    selectGeographyControl = new OpenLayers.Control.SelectFeature(
         pu_layer,
         {
             clickout: true, 
@@ -99,9 +97,9 @@ function init_map() {
             box: true
         }
     )
-    selectFeature.deactivate();
-    selectGeography.deactivate();
-    map.addControls([selectFeature, selectGeography]);
+    selectFeatureControl.deactivate();
+    selectGeographyControl.deactivate();
+    map.addControls([selectFeatureControl, selectGeographyControl]);
 
     map.setCenter(new OpenLayers.LonLat(-13600000, 6700000), 4);
 }

@@ -103,10 +103,6 @@ function scenariosViewModel() {
     self.selectFeature(self.scenarioList()[button.listIndex || self.listStart()]);
   };
 
-  self.addScenarioStart = function() {
-    self.showScenarioForm('create');
-    self.showScenarioList(false);
-  };
 
   self.showScenarioForm = function(action, uid) {
     // get the form
@@ -239,13 +235,37 @@ function scenariosViewModel() {
 
   // start the scenario editing process
   self.editScenario = function() {
-    self.showScenarioList(false);
     self.showScenarioForm("edit", self.selectedFeature().uid());
+    // TODO geography control -> select the selectedFeature's possible_fids
+    selectFeatureControl.unselectAll();
+    selectGeographyControl.activate();
+    self.selectedFeature(false);
+    self.showScenarioList(false);
+  };
+
+  self.addScenarioStart = function() {
+    selectFeatureControl.unselectAll();
+    selectGeographyControl.activate();
+    self.showScenarioForm('create');
+    self.showScenarioList(false);
   };
 
   self.cancelAddScenario = function () {
+    selectGeographyControl.unselectAll();
+    selectGeographyControl.deactivate();
     self.showScenarioFormPanel(false);
     self.showScenarioList(true);
+  };
+
+  self.mode = function(m) {
+    switch (m) {
+        case 'scenarioList':
+            break;
+        case 'scenarioDetail':
+            break;
+        case 'scenarioEdit':
+            break;
+    }
   };
 
   self.selectControl = {
@@ -254,7 +274,6 @@ function scenariosViewModel() {
        * when features are selected
        */
       unselectAll: function() { 
-        hilites.removeAllFeatures();
         // $('#scenario-show-container').empty();
       },
       select: function(feature) {
@@ -276,13 +295,13 @@ function scenariosViewModel() {
           app.scenarios.progressViewModel.checkTimer();
         });
         
-        selectFeature.unselectAll();
+        selectFeatureControl.unselectAll();
         $.each(feature.selected_fids(), function (i, fid) {
             var f = pu_layer.getFeaturesByAttribute("fid",fid)[0];
             if (!f) {
                 console.log("warning: fid " + fid + " is not valid");
             }
-            selectFeature.select(f);
+            selectFeatureControl.select(f);
         });
       }
    };
@@ -335,6 +354,7 @@ function scenariosViewModel() {
   };
 
   self.backToScenarioList = function() {
+    selectFeatureControl.unselectAll();
     self.selectedFeature(false);
     self.showScenarioList(true);
   };

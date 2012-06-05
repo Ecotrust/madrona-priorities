@@ -68,6 +68,14 @@ TEMPLATE_DEBUG = False
 LOGIN_REDIRECT_URL = '/'
 HELP_EMAIL = 'ksdev@ecotrust.org'
 
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+        'LOCATION': 'nplcc-cache'
+    }
+}
+USE_CACHE = True
+
 try:
     from settings_local import *
 except ImportError:

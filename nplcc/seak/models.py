@@ -166,10 +166,19 @@ class Scenario(Analysis):
             ndict[s.pk] = val
         return ndict
 
+    def invalidate_cache(self):
+        keys = ["%s_results",]
+        cache.delete_many(keys)
+        for key in keys:
+            assert cache.get(key) == None
+        return True
+
     def run(self):
         from seak.marxan import MarxanAnalysis
         from django.db.models import Sum
          
+        self.invalidate_cache()
+
         # create the target and penalties
         logger.debug("Create targets and penalties")
         targets = self.process_dict(json.loads(self.input_targets))
@@ -277,7 +286,6 @@ class Scenario(Analysis):
     def numreps(self):
         try:
             with open(os.path.join(self.outdir,"input.dat")) as fh:
-                for line in fh:
                     if line.startswith('NUMREPS'):
                         return int(line.strip().replace("NUMREPS ",""))
         except IOError:
@@ -304,9 +312,11 @@ class Scenario(Analysis):
 
         serializable = {
             "type": "Feature",
+            "bbox": rs['bbox'],
             "geometry": None,
             "properties": {
                'uid': self.uid, 
+               'bbox': rs['bbox'],
                'name': self.name, 
                'done': True, #self.done, 
                'selected_fids': selected_fids
@@ -314,9 +324,14 @@ class Scenario(Analysis):
         }
         return json.dumps(serializable)
 
-    # TODO Cache
     @property
     def results(self):
+        key = "%s_results" % self.uid
+        if settings.USE_CACHE:
+            cached_result = cache.get(key)
+            if cached_result:
+                return cached_result
+
         targets = json.loads(self.input_targets)
         penalties = json.loads(self.input_penalties)
         cost_weights = json.loads(self.input_relativecosts)
@@ -337,6 +352,9 @@ class Scenario(Analysis):
         bestjson = json.loads(self.output_best)
         bestpks = [int(x) for x in bestjson['best']]
         bestpus = PlanningUnit.objects.filter(pk__in=bestpks).order_by('name')
+        bbox = None
+        if bestpus:
+            bbox = bestpus.extent()
         best = []
         for pu in bestpus:
             bcosts = {}
@@ -412,7 +430,10 @@ class Scenario(Analysis):
             'num_species': num_target_species, #len(species),
             'units': best,
             'species': species, 
+            'bbox': bbox,
         }
+        if settings.USE_CACHE:
+            cache.set(key, res, timeout=3600)
         return res
         
     @property

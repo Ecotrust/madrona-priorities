@@ -6,14 +6,18 @@ from django.http import HttpResponse
 from django.template.defaultfilters import slugify
 from django.contrib.gis.geos import MultiPolygon
 from django.shortcuts import render_to_response
+from django.core.cache import cache
+from django.conf import settings
+from seak.models import PlanningUnit
 import os
 import json
 import time
 import tempfile
 
-def watershed_shapefile(request, instances):
-    from seak.models import PlanningUnit, Scenario, PlanningUnitShapes
+logger = get_logger()
 
+def watershed_shapefile(request, instances):
+    from seak.models import PlanningUnit
     wshds = PlanningUnit.objects.all()
     stamp = int(time.time() * 1000.0)
 
@@ -128,11 +132,13 @@ def docs(request):
 def test(request):
     return render_to_response("seak/test.html")
 
-from django.views.decorators.cache import cache_page
-# 2 hr cache
-@cache_page(60 * 120)
 def planning_units_geojson(request):
-    from seak.models import PlanningUnit
+    key = "seak_planning_units_geojson"
+    if settings.USE_CACHE:
+        cached = cache.get(key)
+        if cached:
+            return HttpResponse(cached, content_type='application/json')
+
     def get_feature_json(geom_json, prop_json):
         return """{
             "type": "Feature",
@@ -143,7 +149,9 @@ def planning_units_geojson(request):
     feature_jsons = []
     for pu in PlanningUnit.objects.all():
         fgj = get_feature_json(pu.geometry.json, json.dumps(
-            {'name': pu.name, 'fid': pu.fid, 'area': pu.area}
+            {'name': pu.name, 
+             'fid': pu.fid, 
+             'area': pu.area}
         )) 
         feature_jsons.append(fgj)
 
@@ -151,6 +159,11 @@ def planning_units_geojson(request):
       "type": "FeatureCollection",
       "features": [ %s ]
     }""" % (', \n'.join(feature_jsons),)
+
+    if settings.USE_CACHE:
+        cache.set(key, geojson, timeout=(60 * 60 * 24))
+        if cache.get(key) != geojson:
+            raise RuntimeError("USE_CACHE is true but cache is not setting/getting properly")
 
     return HttpResponse(geojson, content_type='application/json')
 

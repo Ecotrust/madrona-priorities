@@ -69,11 +69,20 @@ function init_map() {
 
     var url = "/seak/planning_units.geojson";
 
-    OpenLayers.loadURL(url, {}, null, function (response) {
+    var jqxhr = $.get(url, function(data) {
         var gformat = new OpenLayers.Format.GeoJSON();
-        var feats = gformat.read(response.responseText);
-        pu_layer.addFeatures(feats);
-    });
+        try {
+            var feats = gformat.read(data); 
+            pu_layer.addFeatures(feats);
+        } catch(err) {
+            console.log(err.message);
+            app.scenarios.viewModel.planningUnitsLoadError(true);
+        }
+    }, 'json')
+    .error(function() { app.scenarios.viewModel.planningUnitsLoadError(true); })
+    .complete(function() { app.scenarios.viewModel.planningUnitsLoadComplete(true); })
+
+
 
     map.addLayers([esri_shade, esri_physical, osm, google_terrain, terrain, pu_layer]);
     

@@ -61,6 +61,10 @@ function scenariosViewModel() {
   self.showScenarioList = ko.observable(true);
   self.scenarioLoadError = ko.observable(false);
   self.scenarioLoadComplete = ko.observable(false);
+  self.planningUnitsLoadError = ko.observable(false);
+  self.planningUnitsLoadComplete = ko.observable(false);
+  self.formLoadError = ko.observable(false);
+  self.formLoadComplete = ko.observable(true);
   // list of all scenarios, primary viewmodel
   self.scenarioList = ko.observableArray();
   // display mode
@@ -116,7 +120,7 @@ function scenariosViewModel() {
       formUrl = formUrl.replace('{uid}', uid);
     }
     // clean up and show the form
-    $.get(formUrl, function(data) {
+    var jqxhr = $.get(formUrl, function(data) {
       var $form = $(data).find('form');
       $form.find('input:submit').remove();
       // app.cleanupForm($form);
@@ -126,7 +130,17 @@ function scenariosViewModel() {
       $form.bind('submit', function(event) {
         event.preventDefault();
       });
-    });
+    })
+    .success( function() {
+        selectFeatureControl.unselectAll();
+        selectGeographyControl.activate();
+        self.showScenarioList(false);
+        // TODO geography control -> if edit, select the selectedFeature's possible_fids
+        self.selectedFeature(false);
+        self.showScenarioList(false);
+    })
+    .error( function() { self.formLoadError(true); } )
+    .complete( function() { self.formLoadComplete(true); } )
   };
 
   self.updateScenario = function(scenario_id, isNew) {
@@ -237,20 +251,23 @@ function scenariosViewModel() {
 
   // start the scenario editing process
   self.editScenario = function() {
+    self.formLoadError(false);
+    self.formLoadComplete(false);
     self.showScenarioForm("edit", self.selectedFeature().uid());
-    // TODO geography control -> select the selectedFeature's possible_fids
-    selectFeatureControl.unselectAll();
-    selectGeographyControl.activate();
-    self.selectedFeature(false);
-    self.showScenarioList(false);
   };
 
   self.addScenarioStart = function() {
+    self.formLoadError(false);
+    self.formLoadComplete(false);
+    self.showScenarioForm('create');
+    /*
+     * Do this only on success
     selectFeatureControl.unselectAll();
     selectGeographyControl.activate();
-    self.showScenarioForm('create');
     self.showScenarioList(false);
+    */
   };
+
 
   self.cancelAddScenario = function () {
     selectGeographyControl.unselectAll();

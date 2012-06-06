@@ -12,15 +12,26 @@
                     <div class="span6 well" data-bind="visible: showScenarioList">
                       <button href="#" class="btn" data-bind="click: addScenarioStart">
                           <i class="icon-plus-sign"></i> Add Scenario
+                          <span data-bind="visible: !formLoadComplete()"><img src="/media/img/ajax-loader.gif"/></span>
                       </button>
                       <hr/>
-                      <div data-bind="if: !scenarioLoadComplete()"> <h4>loading...</h4> </div>
+                      <div data-bind="if: !scenarioLoadComplete()" style="text-align: center"> 
+                          <img src="/media/img/ajax-loader.gif"/> 
+                      </div>
                       <div data-bind="if: scenarioLoadComplete() && scenarioList().length == 0"> 
                           <p>{% flatblock "new_explain_scenario" %}</p>
                       </div>
                       <div class="alert alert-error" data-bind="visible: scenarioLoadError">
-                          <p><strong> Could not fetch scenario list!</strong></p>
-                          <p> The scenario list failed to load. Please try again... if the error persists, please contact us.</p>
+                          <p><strong> Could not load scenario list!</strong></p>
+                          <p>Please try again... if the error persists, please contact us.</p>
+                      </div>
+                      <div class="alert alert-error" data-bind="visible: planningUnitsLoadError">
+                          <p><strong> Could not load planning units!</strong></p>
+                          <p> Please try again... if the error persists, please contact us.</p>
+                      </div>
+                      <div class="alert alert-error" data-bind="visible: formLoadError">
+                          <p><strong> Could not load the scenario form!</strong></p>
+                          <p> Please try again... if the error persists, please contact us.</p>
                       </div>
                       <div data-bind="if: scenarioList().length > 0">
                         <h4>Scenario List</h4>
@@ -48,6 +59,10 @@
                           <div class="btn-group pull-left">
                             <a href="#" class="btn btn-mini" data-bind="click: $parent.backToScenarioList">
                                 <i class="icon-backward"></i> Return to List </a>
+                          </div>
+                          <div style="height:16px;">
+                            <img style="padding-left: 12px;" data-bind="visible: !$parent.formLoadComplete()" 
+                                 src="/media/img/ajax-loader.gif" />
                           </div>
                           <div class="btn-group pull-right">
                             <!-- ko if: done -->
@@ -137,8 +152,11 @@
           <div class="span6">
             <div class="outermap well">
                 <div id="datalayerswitcher">
-                <a href="#" class="btn btn-mini" data-bind="click: showLayerSwitcherDialog">
-                <i class="icon-align-justify"></i> Data Layers</a>
+                    <a href="#" class="btn btn-mini" data-bind="click: showLayerSwitcherDialog">
+                    <i class="icon-align-justify"></i> Data Layers</a>
+                </div>
+                <div data-bind="if: !planningUnitsLoadComplete()" id="map-loading"> 
+                    <img src="/media/img/ajax-loader.gif"/> 
                 </div>
               <div id="map"></div>
             </div>

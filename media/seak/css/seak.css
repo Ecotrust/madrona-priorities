@@ -113,6 +113,16 @@ label.olButton {
     z-index: 99999;
     height: 0px;
 }
+#map-loading {
+    position: relative; 
+    top: 100px; 
+    text-align: center; 
+    z-index: 99999;
+    height: 0px;
+}
+h4 {
+    margin-bottom: 12px;
+}
 .container-fluid {
     padding-right: 6px;
     padding-left: 8px;

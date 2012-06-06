@@ -227,8 +227,21 @@
     <div class="tab-content">
 
     <div id="geographytab" class="tab-pane active"> 
-        <p>Draw a box or click on the map to <strong>select the watersheds the define your geographic region</strong></p>
+        <p>Draw a box or click on the map to <strong>select the watersheds that define your geographic region</strong></p>
         <p>To navigate, use the keyboard controls.</p>
+        <!-- TODO animated gif -->
+        <a href="javascript:$('#step1Movie').toggle();" class="btn btn-mini">Need Help <i class="icon-question-sign"></i></a>
+        <br/>
+        <div id="step1Movie" style="display:none;">
+            <object style="width: 397px; height: 370px;" type="application/x-shockwave-flash" data="/media/seak/swf/select.swf">
+                <param name="movie" value="select.swf" />
+                <param name="quality" value="high" />
+                <param name="bgcolor" value="#ffffff" />
+                <p>You do not have the latest version of Flash installed. Please visit this link to download it: <a href="http://www.adobe.com/products/flashplayer/">http://www.adobe.com/products/flashplayer/</a></p>
+            </object>
+        </div>
+        <br/>
+
         <div id="currentGeographySelection">
             You've selected <span id="geographySelectionCount">0</span> watersheds.
         </div>

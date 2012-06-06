@@ -310,13 +310,18 @@ class Scenario(Analysis):
         else:
             selected_fids = []
 
+        try:
+            bbox = rs['bbox']
+        except:
+            bbox = None
+
         serializable = {
             "type": "Feature",
-            "bbox": rs['bbox'],
+            "bbox": bbox,
             "geometry": None,
             "properties": {
                'uid': self.uid, 
-               'bbox': rs['bbox'],
+               'bbox': bbox,
                'name': self.name, 
                'done': True, #self.done, 
                'selected_fids': selected_fids

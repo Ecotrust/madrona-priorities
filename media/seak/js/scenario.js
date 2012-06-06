@@ -59,6 +59,8 @@ function scenariosViewModel() {
   self.showScenarioFormPanel = ko.observable(false);
   // display list of scenarios
   self.showScenarioList = ko.observable(true);
+  self.scenarioLoadError = ko.observable(false);
+  self.scenarioLoadComplete = ko.observable(false);
   // list of all scenarios, primary viewmodel
   self.scenarioList = ko.observableArray();
   // display mode
@@ -348,9 +350,15 @@ function scenariosViewModel() {
         self.loadViewModel(data);
       } else {
         console.log("NO DATA");
+        self.scenarioLoadError(true);
       }
     };
-    $.get('/seak/scenarios.geojson', process);
+    var jqhxr = $.get('/seak/scenarios.geojson', 
+        process
+    )
+    .error(function() { self.scenarioLoadError(true); })
+    .complete(function() { self.scenarioLoadComplete(true); })
+
   };
 
   self.backToScenarioList = function() {

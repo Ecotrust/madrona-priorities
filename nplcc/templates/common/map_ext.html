@@ -14,7 +14,14 @@
                           <i class="icon-plus-sign"></i> Add Scenario
                       </button>
                       <hr/>
-                      <p data-bind="if: scenarioList().length == 0"> {% flatblock "new_explain_scenario" %} </p>
+                      <div data-bind="if: !scenarioLoadComplete()"> <h4>loading...</h4> </div>
+                      <div data-bind="if: scenarioLoadComplete() && scenarioList().length == 0"> 
+                          <p>{% flatblock "new_explain_scenario" %}</p>
+                      </div>
+                      <div class="alert alert-error" data-bind="visible: scenarioLoadError">
+                          <p><strong> Could not fetch scenario list!</strong></p>
+                          <p> The scenario list failed to load. Please try again... if the error persists, please contact us.</p>
+                      </div>
                       <div data-bind="if: scenarioList().length > 0">
                         <h4>Scenario List</h4>
                         <ul class="nav nav-tabs nav-stacked" data-bind="foreach: scenarioListPaginated">

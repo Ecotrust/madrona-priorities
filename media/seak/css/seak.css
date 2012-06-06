@@ -14,13 +14,14 @@
     -webkit-border-radius: 0 0 4px 4px;
     -moz-border-radius: 0 0 4px 4px;
     border-radius: 0 0 4px 4px;
-    border-top: 0;
 
     /* Inspect the nav-tabs element of the current theme and copy */
-    background-color: #EDEDED;
+    background-color: white;
     border: 1px solid #DDD;
     cursor: default;
     /* end copy */
+
+    border-top: 0;
 }
 .well {
   margin-bottom: 4px !important;

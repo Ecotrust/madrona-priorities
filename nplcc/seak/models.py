@@ -93,7 +93,8 @@ class PlanningUnit(models.Model):
 
     @property
     def area(self):
-        return self.geometry.area
+        # assume storing meters and returning km^2
+        return self.geometry.area / float(1000*1000)
 
     def __unicode__(self):
         return u'%s' % self.name

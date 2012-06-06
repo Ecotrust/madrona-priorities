@@ -10,11 +10,10 @@
                 <div>
                   <div class="row-fluid" id="row-scenarios-list">
                     <div class="span6 well" data-bind="visible: showScenarioList">
-                      <button href="#" class="btn" data-bind="click: addScenarioStart">
+                      <button style="margin-bottom:12px;" href="#" class="btn" data-bind="click: addScenarioStart">
                           <i class="icon-plus-sign"></i> Add Scenario
                           <span data-bind="visible: !formLoadComplete()"><img src="/media/img/ajax-loader.gif"/></span>
                       </button>
-                      <hr/>
                       <div data-bind="if: !scenarioLoadComplete()" style="text-align: center"> 
                           <img src="/media/img/ajax-loader.gif"/> 
                       </div>
@@ -80,9 +79,10 @@
                           </div>
                         </div>
                         <div class="row-fluid">
-                          <hr/>
                           <h3><div data-bind="text: name"></div></h3>
-                          <div id="scenario-show-container" style="margin-top: 18px;"></div>
+                          <div id="scenario-show-container" style="margin-top: 18px;">
+                              <img src="/media/img/ajax-loader.gif" />
+                          </div>
                         </div>
                       </div>
                     </div>

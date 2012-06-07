@@ -675,8 +675,12 @@ class Scenario(Analysis):
 # Post-delete hooks to remove the marxan files
 @receiver(post_delete, sender=Scenario)
 def _scenario_delete(sender, instance, **kwargs):
-    shutil.rmtree(instance.outdir)
-    logger.debug("Deleting %s at %s" % (instance.uid, instance.outdir))
+    if os.path.exists(instance.outdir):
+        try:
+            shutil.rmtree(instance.outdir)
+            logger.debug("Deleting %s at %s" % (instance.uid, instance.outdir))
+        except OSError:
+            logger.debug("Can't deleting %s; forging ahead anyway..." % (instance.uid, instance.outdir))
 
 @register
 class Folder(FeatureCollection):

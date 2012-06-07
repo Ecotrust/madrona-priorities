@@ -3,7 +3,7 @@ from django.contrib import admin
 from django.conf import settings
 admin.autodiscover()
 
-urlpatterns = patterns('madrona.common.views',
+urlpatterns = patterns( 'seak.views',
     url(r'^$', 'map', name='map'),
 )
 
@@ -11,8 +11,6 @@ urlpatterns += patterns('',
     (r'^seak/', include('seak.urls')),
     (r'^analysistools/', include('madrona.analysistools.urls')),
 )
-
-# urlpatterns += patterns('seak.views', url(r'^$', 'home', name='home'),)
 
 urlpatterns += patterns('madrona',
     (r'^accounts/', include('madrona.openid.urls')),

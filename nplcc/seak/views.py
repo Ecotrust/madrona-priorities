@@ -8,6 +8,7 @@ from django.contrib.gis.geos import MultiPolygon
 from django.shortcuts import render_to_response
 from django.core.cache import cache
 from django.conf import settings
+from django.template import RequestContext
 from seak.models import PlanningUnit
 import os
 import json
@@ -15,6 +16,17 @@ import time
 import tempfile
 
 logger = get_logger()
+
+def map(request, template_name='common/map_ext.html', extra_context={}):
+    """
+    Main application window
+    """
+    context = RequestContext(request,{
+        'api_key':settings.GOOGLE_API_KEY, 
+        'session_key': request.session.session_key,
+    })
+    context.update(extra_context)
+    return render_to_response(template_name, context)
 
 def watershed_shapefile(request, instances):
     from seak.models import PlanningUnit

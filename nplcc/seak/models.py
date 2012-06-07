@@ -287,6 +287,7 @@ class Scenario(Analysis):
     def numreps(self):
         try:
             with open(os.path.join(self.outdir,"input.dat")) as fh:
+                for line in fh.readlines():
                     if line.startswith('NUMREPS'):
                         return int(line.strip().replace("NUMREPS ",""))
         except IOError:
@@ -397,7 +398,11 @@ class Scenario(Analysis):
         num_met = 0
         for line in lines:
             sid = int(line[0])
-            consfeat = ConservationFeature.objects.get(pk=sid)
+            try:
+                consfeat = ConservationFeature.objects.get(pk=sid)
+            except ConservationFeature.DoesNotExist:
+                logger.error("ConservationFeature %s doesn't exist; refers to an old scenario?" % sid)
+                continue
             sname = consfeat.name
             sunits = consfeat.units
             slevel1 = consfeat.level1

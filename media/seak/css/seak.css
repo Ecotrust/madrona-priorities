@@ -105,13 +105,29 @@ label.olButton {
 #customZoomOut {
     top: 25px;
 }
-#datalayerswitcher {
+#layerswitcher-container {
     position: relative; 
     top: 12px; 
     left: -12px; 
     text-align:right; 
+    float:right; 
     z-index: 99999;
     height: 0px;
+}
+#layerswitcher-list {
+    width: 240px;
+    float:right;
+}
+#layerswitcher {
+    float:right;
+    text-align:left;
+    margin-top: 2px;
+    background:#FFF; /* fallback for browser that not support rgba */
+    background: rgba(255,255,255, .5); /* Works on all modern browsers */
+}
+div.dataLbl, div.baseLbl {
+    padding-top: 12px;
+    padding-bottom: 8px;
 }
 #map-loading {
     position: relative; 

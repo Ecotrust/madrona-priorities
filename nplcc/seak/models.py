@@ -10,6 +10,8 @@ from django.contrib.gis.geos import GEOSGeometry
 from django.core.cache import cache
 from django.template.defaultfilters import slugify
 from django.utils.html import escape
+from django.db.models.signals import post_delete
+from django.dispatch.dispatcher import receiver
 from madrona.features.models import PointFeature, LineFeature, PolygonFeature, FeatureCollection
 from madrona.features import register, alternate
 from madrona.layers.models import PrivateLayerList
@@ -128,8 +130,8 @@ class Scenario(Analysis):
     @property
     def outdir(self):
         return os.path.realpath(os.path.join(settings.MARXAN_OUTDIR, "%s_" % (self.uid,) ))
-        # TODO this is not asycn-safe!!!
-        # slugify(self.date_modified))
+        # This is not asycn-safe! A new modificaiton will clobber the old. 
+        # What happens if new and old are both still running - small chance of a corrupted mix of output files? 
 
     def copy(self, user):
         """ Override the copy method to make sure the marxan files get copied """
@@ -665,6 +667,12 @@ class Scenario(Analysis):
                 type='application/zip',
             ),
         )
+
+# Post-delete hooks to remove the marxan files
+@receiver(post_delete, sender=Scenario)
+def _scenario_delete(sender, instance, **kwargs):
+    shutil.rmtree(instance.outdir)
+    logger.debug("Deleting %s at %s" % (instance.uid, instance.outdir))
 
 @register
 class Folder(FeatureCollection):

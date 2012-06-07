@@ -227,8 +227,8 @@
     <div class="tab-content">
 
     <div id="geographytab" class="tab-pane active"> 
-        <h4>{% flatblock 'form-geography-header' %}</h4>
-        <p>Using the map, draw a box or click {% flatblock 'planning-units' %} to select. To navigate, use the keyboard controls.</p>
+        <h4>{% flatblock 'form-geography-header' 3600 %}</h4>
+        <p>Using the map, draw a box or click {% flatblock 'planning-units' 3600 %} to select. To navigate, use the keyboard controls.</p>
         <!-- TODO this doesnt work in IE, use  -->
         <a href="javascript:$('#step1Movie').toggle();" class="btn btn-mini">Need Help <i class="icon-question-sign"></i></a>
         <br/>
@@ -244,7 +244,7 @@
         <br/>
 
         <div id="currentGeographySelection">
-            You've selected <span id="geographySelectionCount">0</span> {% flatblock 'planning-units' %}.
+            You've selected <span id="geographySelectionCount">0</span> {% flatblock 'planning-units' 3600 %}.
         </div>
 
            
@@ -282,8 +282,8 @@
     </div>
 
     <div id="speciestab" class="tab-pane">
-        <h4>{% flatblock 'form-conservationfeature-header' %}</h4>
-        <div> {% flatblock 'form-conservationfeature-description' %}</div>
+        <h4>{% flatblock 'form-conservationfeature-header' 3600 %}</h4>
+        <div> {% flatblock 'form-conservationfeature-description' 3600 %}</div>
         <hr/>
         <form action="#" id="focalspecies_form">
 
@@ -291,8 +291,8 @@
     </div> <!-- End species tab -->
 
     <div id="coststab" class="tab-pane">
-        <h4>{% flatblock 'form-costs-header' %}</h4>
-        <div> {% flatblock 'form-costs-description' %}</div>
+        <h4>{% flatblock 'form-costs-header' 3600 %}</h4>
+        <div> {% flatblock 'form-costs-description' 3600 %}</div>
         <hr/>
         <form action="#" id="costs_form">
            <div>

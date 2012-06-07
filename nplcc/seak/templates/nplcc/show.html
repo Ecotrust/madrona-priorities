@@ -26,11 +26,11 @@
 
 <div class="tabbable">
     <ul class="nav nav-tabs" style="margin-bottom:0px;">
-        <li class="active"><a href="#Inputs" data-toggle="tab"><span>{% flatblock 'show-inputs' %}</span></a></li>
+        <li class="active"><a href="#Inputs" data-toggle="tab"><span>{% flatblock 'show-inputs' 3600 %}</span></a></li>
         {% if instance.done %}
-        <li><a href="#summary" data-toggle="tab"><span>{% flatblock 'show-results-summary' %}</span></a></li>
-        <li><a href="#species" data-toggle="tab"><span>{% flatblock 'show-conservation-features' %}</span></a></li>
-        <li><a href="#watersheds" data-toggle="tab"><span>{% flatblock 'show-planning-units' %}</span></a></li>
+        <li><a href="#summary" data-toggle="tab"><span>{% flatblock 'show-results-summary' 3600 %}</span></a></li>
+        <li><a href="#species" data-toggle="tab"><span>{% flatblock 'show-conservation-features' 3600 %}</span></a></li>
+        <li><a href="#watersheds" data-toggle="tab"><span>{% flatblock 'show-planning-units' 3600 %}</span></a></li>
         {% endif %}
     </ul>
 

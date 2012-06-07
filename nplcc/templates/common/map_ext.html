@@ -18,7 +18,7 @@
                           <img src="/media/img/ajax-loader.gif"/> 
                       </div>
                       <div data-bind="if: scenarioLoadComplete() && scenarioList().length == 0"> 
-                          <p>{% flatblock "new_explain_scenario" %}</p>
+                          <p>{% flatblock "new_explain_scenario" 3600 %}</p>
                       </div>
                       <div class="alert alert-error" data-bind="visible: scenarioLoadError">
                           <p><strong> Could not load scenario list!</strong></p>
@@ -133,8 +133,8 @@
             {% else %}
               <div class="well"> 
                <div class="row-fluid">
-                {% flatblock "home_text" %}
-                <p><em>You currently not logged in to {% flatblock "title" %}.</em></p>
+                {% flatblock "home_text" 3600 %}
+                <p><em>You currently not logged in to {% flatblock "title" 3600 %}.</em></p>
                 <ul>
                   <li><a class="btn btn-mini" href="{% url registration_register %}" id="register">Register</a> for an account</li>
                   <li><a class="btn btn-mini" href="{% url user_signin %}" id="signin">Sign In</a> to begin creating scenarios</li>                

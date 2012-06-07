@@ -2,13 +2,13 @@
 {% load flatblock_tags %}
 {% block content %}
 <div class="about">
-    <h2>{% flatblock "about-header" %}</h2>
+    <h2>{% flatblock "about-header" 3600 %}</h2>
 <p>
-{% flatblock "about-intro" %}
+{% flatblock "about-intro" 3600 %}
 </p>
 <hr/>
 
-{% flatblock "about-content" %}
+{% flatblock "about-content" 3600 %}
 
 </div>
 

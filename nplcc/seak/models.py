@@ -339,7 +339,10 @@ class Scenario(Analysis):
         if settings.USE_CACHE:
             cached_result = cache.get(key)
             if cached_result:
+                logger.debug("Using cache for scenario results")
                 return cached_result
+
+        logger.debug("cache miss for scenario results; recalculating")
 
         targets = json.loads(self.input_targets)
         penalties = json.loads(self.input_penalties)
@@ -366,6 +369,7 @@ class Scenario(Analysis):
             bbox = bestpus.extent()
         best = []
         for pu in bestpus:
+            logger.debug("looping through bestpus queryset")
             bcosts = {}
             for x in PuVsCost.objects.filter(pu=pu):
                 costname = x.cost.name.lower().replace(" ","")

@@ -242,6 +242,7 @@ function scenariosViewModel() {
       success: function (data, textStatus, jqXHR) {
         self.scenarioList.remove(self.selectedFeature());
         self.selectedFeature(false);
+        self.showScenarioList(true);
         self.selectControl.unselectAll();
       }  
     });

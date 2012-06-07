@@ -83,7 +83,13 @@
                         <div class="row-fluid">
                           <h3><div data-bind="text: name"></div></h3>
                           <div id="scenario-show-container" style="margin-top: 18px;">
-                              <img src="/media/img/ajax-loader.gif" />
+                              <span data-bind="visible: !$parent.reportLoadComplete()">
+                                  <img src="/media/img/ajax-loader.gif" />
+                              </span>
+                              <div class="alert alert-error" data-bind="visible: $parent.reportLoadError">
+                                <p><strong> Could not load the scenario report!</strong></p>
+                                <p> Please try again... if the error persists, please contact us.</p>
+                              </div>
                           </div>
                         </div>
                       </div>

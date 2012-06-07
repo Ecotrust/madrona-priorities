@@ -61,6 +61,8 @@ function scenariosViewModel() {
   self.showScenarioList = ko.observable(true);
   self.scenarioLoadError = ko.observable(false);
   self.scenarioLoadComplete = ko.observable(false);
+  self.reportLoadError = ko.observable(false);
+  self.reportLoadComplete = ko.observable(false);
   self.planningUnitsLoadError = ko.observable(false);
   self.planningUnitsLoadComplete = ko.observable(false);
   self.formLoadError = ko.observable(false);
@@ -227,10 +229,6 @@ function scenariosViewModel() {
     $("#scenario-delete-dialog").modal("show");
   };
 
-  self.showLayerSwitcherDialog = function () {
-    $("#layerswitcher-dialog").modal("show");
-  };
-
   self.closeDialog = function () {
     $("#scenario-delete-dialog").modal("hide");
   };
@@ -301,7 +299,9 @@ function scenariosViewModel() {
         var showUrl = app.workspace["feature-classes"][0]["link-relations"]["self"]["uri-template"]; 
         showUrl = showUrl.replace('{uid}', uid);
 
-        $.get(showUrl, function(data) {
+        self.reportLoadError(false);
+        self.reportLoadComplete(false);
+        var jqxhr = $.get(showUrl, function(data) {
           var elem = document.getElementById('scenario-show-container');
           ko.cleanNode(elem);
           $('#scenario-show-container').empty().append(data);
@@ -312,7 +312,9 @@ function scenariosViewModel() {
 
           ko.applyBindings(app.scenarios.progressViewModel, elem);
           app.scenarios.progressViewModel.checkTimer();
-        });
+        })
+        .error(function() { self.reportLoadError(true); })
+        .complete(function() { self.reportLoadComplete(true); })
         
         selectFeatureControl.unselectAll();
         $.each(feature.selected_fids(), function (i, fid) {

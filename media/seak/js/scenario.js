@@ -368,10 +368,7 @@ function scenariosViewModel() {
     var process = function(data) {
       if (data.features && data.features.length) {
         self.loadViewModel(data);
-      } else {
-        console.log("NO DATA");
-        self.scenarioLoadError(true);
-      }
+      } 
     };
     var jqhxr = $.get('/seak/scenarios.geojson', 
         process

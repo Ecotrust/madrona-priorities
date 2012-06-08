@@ -12,10 +12,10 @@
                     <div class="span6 well" data-bind="visible: showScenarioList">
                       <button style="margin-bottom:12px;" href="#" class="btn" data-bind="click: addScenarioStart">
                           <i class="icon-plus-sign"></i> Add Scenario
-                          <span data-bind="visible: !formLoadComplete()"><img src="/media/img/ajax-loader.gif"/></span>
+                          <span data-bind="visible: !formLoadComplete()"><img alt="loading" src="/media/img/ajax-loader.gif"/></span>
                       </button>
                       <div data-bind="if: !scenarioLoadComplete()" style="text-align: center"> 
-                          <img src="/media/img/ajax-loader.gif"/> 
+                          <img alt="loading" src="/media/img/ajax-loader.gif"/> 
                       </div>
                       <div data-bind="if: scenarioLoadComplete() && scenarioList().length == 0"> 
                           <p>{% flatblock "new_explain_scenario" 3600 %}</p>
@@ -61,7 +61,7 @@
                           </div>
                           <div style="height:16px;">
                             <img style="padding-left: 12px;" data-bind="visible: !$parent.formLoadComplete()" 
-                                 src="/media/img/ajax-loader.gif" />
+                                 alt="loading" src="/media/img/ajax-loader.gif" />
                           </div>
                           <div class="btn-group pull-right">
                             <!-- ko if: done -->
@@ -84,7 +84,7 @@
                           <h3><div data-bind="text: name"></div></h3>
                           <div id="scenario-show-container" style="margin-top: 18px;">
                               <span data-bind="visible: !$parent.reportLoadComplete()">
-                                  <img src="/media/img/ajax-loader.gif" />
+                                  <img alt="loading" src="/media/img/ajax-loader.gif" />
                               </span>
                               <div class="alert alert-error" data-bind="visible: $parent.reportLoadError">
                                 <p><strong> Could not load the scenario report!</strong></p>
@@ -148,7 +148,7 @@
           <div class="span6">
             <div class="outermap well">
                 <div id="layerswitcher-container">
-                    <button id="layerswitcher-button" href="#" class="btn btn-mini" 
+                    <button id="layerswitcher-button" class="btn btn-mini" 
                         data-toggle="collapse" data-target="#layerswitcher-list">
                         <i class="icon-align-justify"></i> Data Layers
                     </button>
@@ -159,13 +159,12 @@
                     <div class="clearfix"></div>
                 </div>
                 <div data-bind="if: !planningUnitsLoadComplete()" id="map-loading"> 
-                    <img src="/media/img/ajax-loader.gif"/> 
+                    <img alt="loading" src="/media/img/ajax-loader.gif"/> 
                 </div>
               <div id="map"></div>
             </div>
           </div>
         </div>
-      </div>
   
     <script type="text/javascript">
     var app = {

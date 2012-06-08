@@ -168,7 +168,6 @@
       </div>
   
     <script type="text/javascript">
-    // namespace for app
     var app = {
       scenarios: {
         viewModel: new scenariosViewModel(),
@@ -176,17 +175,15 @@
         timer: null
       }
     };
-
     {% if user.is_authenticated %}
-        $.get('/features/{{user.username}}/workspace-owner.json', function (data) {
+    $.get('/features/{{user.username}}/workspace-owner.json', function (data) {
         app.workspace = data;
-        });
+    });
     {% else %}
-        $.get('/features/workspace-public.json', function (data) {
+    $.get('/features/workspace-public.json', function (data) {
         app.workspace = data;
-        });
+    });
     {% endif %}
-
     app.onResize = function () {
       $("#map").height($(window).height() * .85);
       map.render('map');
@@ -200,18 +197,7 @@
       app.onResize();
       $(window).resize(app.onResize);
     });
-
     </script>
 {% endblock content %}
 
-{% block scripts %}
-    <script src="{{ MEDIA_URL }}seak/js/scenario.js"></script>
-    <script type="text/javascript">
-      // Fake it
-      var madrona = {
-        features: {}
-      }
-    </script>
-    <script type="text/javascript" src="{{MEDIA_URL}}features/js/workspace.js"></script>
-    <script src="http://openlayers.org/dev/OpenLayers.js"></script>
-{% endblock scripts %}
+{% block scripts %}<script src="{{MEDIA_URL}}OpenLayers.js"></script>{% endblock scripts %}

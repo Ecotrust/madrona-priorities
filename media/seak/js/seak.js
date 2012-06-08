@@ -62,6 +62,7 @@ function init_map() {
     // allow testing of specific renderers via "?renderer=Canvas", etc
     var renderer = OpenLayers.Util.getParameters(window.location.href).renderer;
     renderer = (renderer) ? [renderer] : OpenLayers.Layer.Vector.prototype.renderers;
+    console.log(renderer);
     pu_layer = new OpenLayers.Layer.Vector("Planning Units", {
         styleMap: myStyles,
         renderers: renderer

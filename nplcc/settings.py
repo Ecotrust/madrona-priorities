@@ -29,10 +29,13 @@ INSTALLED_APPS += ( 'seak',
 
 COMPRESS_CSS['application']['source_filenames'] = (
     'seak/css/seak.css',
+    'theme/default/style.css',
 )
 
 COMPRESS_JS['application']['source_filenames'] = (
-    'common/js/treeview/jquery.treeview.js',
+    'seak/js/seak.js',
+    'seak/js/scenario.js',
+    'features/js/workspace.js',
 )
 
 # The following is used to assign a name to the default folder under My Shapes 

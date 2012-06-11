@@ -9,21 +9,19 @@ function init_map() {
         div: "map",
         projection: "EPSG:900913",
         displayProjection: "EPSG:4326",
+        controls: [
+            new OpenLayers.Control.Navigation(),
+            new OpenLayers.Control.Zoom(),
+            new OpenLayers.Control.KeyboardDefaults(),
+            new OpenLayers.Control.LayerSwitcher({
+                'div': OpenLayers.Util.getElement('layerswitcher')
+            })
+        ],
         numZoomLevels: 18
     });
-    map.addControl(new OpenLayers.Control.LayerSwitcher({
-        'div': OpenLayers.Util.getElement('layerswitcher')
-    }));
-
-    map.addControl(new OpenLayers.Control.KeyboardDefaults() );
 
     var osm = new OpenLayers.Layer.OSM();
 
-    var terrain = new OpenLayers.Layer.OSM("Terrain", 
-        "http://tile.stamen.com/terrain/${z}/${x}/${y}.jpg",
-        {sphericalMercator: true} 
-    );
- 
     var esri_physical = new OpenLayers.Layer.XYZ( "ESRI World Physical Map",
         "http://server.arcgisonline.com/ArcGIS/rest/services/World_Physical_Map/MapServer/tile/${z}/${y}/${x}",
         {sphericalMercator: true} 
@@ -83,9 +81,7 @@ function init_map() {
     .error(function() { app.scenarios.viewModel.planningUnitsLoadError(true); })
     .complete(function() { app.scenarios.viewModel.planningUnitsLoadComplete(true); })
 
-
-
-    map.addLayers([esri_shade, esri_physical, osm, google_terrain, terrain, pu_layer]);
+    map.addLayers([esri_shade, esri_physical, osm, google_terrain, pu_layer]);
     
     selectFeatureControl = new OpenLayers.Control.SelectFeature(
         pu_layer,

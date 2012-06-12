@@ -3,222 +3,33 @@
 {% block title %}{{title}}{% endblock %}
 {% block panel %}
 
-<script type="text/javascript" charset="utf-8">
-    /*
-    madrona.onShow(function(){
-
-        var params_impute = function() {
-            // If the input json is not null, 
-            // Use them to restore the state of the tree
-            if ($('#id_input_targets').val() && 
-                $('#id_input_penalties').val() && 
-                $('#id_input_relativecosts').val()) { 
-                 
-                //console.log("Restoring Costs slider state...");
-                var in_costs = JSON.parse($('#id_input_relativecosts').val());
-                $.each(in_costs, function(key, val) {
-                    if (val > 0) {
-                        $("#cost---" + key).attr('checked','checked')
-                    } else {
-                        $("#cost---" + key).removeAttr('checked')
-                    }
-                });
-
-                //console.log("Restoring Targets slider state...");
-                var in_targets = JSON.parse($('#id_input_targets').val());
-                $.each(in_targets, function(key, val) {
-                    $("#target---" + key).val(val);
-                });
-
-                //console.log("Restoring Penalties slider state...");
-                var in_penalties = JSON.parse($('#id_input_penalties').val());
-                $.each(in_penalties, function(key, val) {
-                    $("#penalty---" + key).val(val);
-                });
-
-                // Restore tree state
-                var already_done_clicks = [];
-                $.each(in_targets, function(key, val) {
-                    //remove the last '---blah' from the key
-                    b = key.split('---');
-                    b.pop();
-                    var id = b.join('---');
-
-                    // If not already done, do a click
-                    if (already_done_clicks.indexOf(id) == -1) {
-                        $('span#span---' + id).click();
-                        already_done_clicks.push(id);
-                    }
-                });
-            };
-        }; 
-
-        madrona.setupForm($('#featureform'));
-        $("#focalspecies_tree").treeview({
-            collapsed: true
-        });
-
-        $('input.slidervalue').click( function(e) {
-            // Prevent tree from expanding 
-            // when value input field is clicked
-            e.stopPropagation();
-        });
-
-        params_impute();
-       
-        var params_collect = function() {
-            var targets = {};
-            var penalties = {};
-            var costs = {};
-            var totaltargets = 0;
-            var totalpenalties = 0;
-            $('.targetvalue:visible').each( function(index) {
-                var xid = $(this).attr("id");
-                var id = "#" + xid;
-                xid = xid.replace(/^target---/,''); //  Remove preceding identifier
-                xid = xid.replace(/---$/,''); // Remove trailing ---
-                targets[xid] = parseFloat($(id).val());
-                totaltargets += parseFloat($(id).val());
-            });
-            $('.penaltyvalue:visible').each( function(index) {
-                var xid = $(this).attr("id");
-                var id = "#" + xid;
-                xid = xid.replace(/^penalty---/,''); //  Remove preceding identifier
-                xid = xid.replace(/---$/,''); // Remove trailing ---
-                penalties[xid] = parseFloat($(id).val());
-                totalpenalties += parseFloat($(id).val());
-            });
-            // Initialize costs to zero
-            $('input.costvalue[name="cost"]').each( function(index) {
-                var xid = $(this).attr("id");
-                xid = xid.replace(/^cost---/,''); //  Remove preceding identifier
-                costs[xid] = 0;
-            });
-            // Set the *checked* costs to 1
-            $('input.costvalue[name="cost"]:checked').each( function(index) {
-                var xid = $(this).attr("id");
-                xid = xid.replace(/^cost---/,''); //  Remove preceding identifier
-                costs[xid] = 1;
-            });
-            $('#id_input_targets').val( JSON.stringify(targets) ); 
-            $('#id_input_penalties').val( JSON.stringify(penalties) );
-            $('#id_input_relativecosts').val( JSON.stringify(costs) );
-            if (totalpenalties == 0 || totaltargets == 0) {
-                return false;
-            } else {
-                return true;
-            }
-        };
-
-        $('.slidervalue').each( function(index) {
-            var id = $(this).attr("id");
-            var slider_id = "slider_" + id;
-            var maxval = 1;
-            var minval = 0;
-            stepval = 0.01;
-
-            $('#' + slider_id).slider({
-                range: 'min',
-                min : minval, 
-                max : maxval,
-                step : stepval,
-                change : function(event, ui) {
-                    var theval = $(this).slider('value');
-                    $('#' + id).val(theval);
-                    $('div.slider[id^="' + slider_id + '---"]').each( function() {
-                        $(this).slider('value', theval);
-                    });
-                },
-                slide : function(event, ui) {
-                    $('#' + id).val($(this).slider('value'));
-                }
-            });
-            $('#' + slider_id).slider('value', $('#' + id).val());
-            $('#' + id).change( function(){
-                $('#' + slider_id).slider('value', $('#' + id).val());
-            });
-        });
-
-        // We need to do additional checking so unbind
-        $('.submit_button').die('click');
-        $('.submit_button').unbind('click');
-        // .. and rebind with a validation step
-        $('.submit_button').click(function(event){ 
-            var proceed = params_collect(); 
-            if (proceed) {
-                $('#featureform').trigger('submit');
-            } else {
-                alert("Please specify goals and importance for a least one species of interest. (Step 2)");
-            }
-        });
-
-        $('#next_1to2').click( function(e) {
-            if ($('input#id_name').val() == '') {
-                alert("Please provide a name for this watershed prioritization scenario. (Step 1)");
-            } else {
-                $('#a_step2').click();
-            }
-        });
-        $('#next_2to3').click( function(e) {
-            $('#a_step3').click();
-        });
-        $('#prev_2to1').click( function(e) {
-            $('#a_step1').click();
-        });
-        $('#prev_3to2').click( function(e) {
-            $('#a_step2').click();
-        });
-        $('#a_step1').click( function(e) {
-            $('.form_controls').hide();
-            $('#controls_step1').show();
-        });
-        $('#a_step2').click( function(e) {
-            $('.form_controls').hide();
-            $('#controls_step2').show();
-        });
-        $('#a_step3').click( function(e) {
-            $('.form_controls').hide();
-            $('#controls_step3').show();
-        });
-
-
-    });
-   */
-</script>
-
-<!--
-<link rel="stylesheet" href="/media/common/js/treeview/jquery.treeview.css" />
-<link rel="stylesheet" href="/media/common/js/treeview/jquery-widgets.css" />
--->
-
     <h4>{{title}}</h4>
     <br/>
-
-           <div class="field required">
-                {{ form.input_penalties.errors }}
-                {{ form.input_targets.errors }}
-                {{ form.input_relativecosts.errors }}
-            </div>
+    <div class="field required">
+        {{ form.input_penalties.errors }}
+        {{ form.input_targets.errors }}
+        {{ form.input_relativecosts.errors }}
+    </div>
 
 <div class="tabbable">
     <ul class="nav nav-tabs" style="margin-bottom:0px;">
         <li class="active">
             <a href="#geographytab" data-toggle="tab">
-                <span>Step 1: Define <br/> Geography</span>
+                <span>Step 1: Geography</span>
             </a> </li>
         <li>
             <a href="#generaltab" data-toggle="tab">
-                <span>Step 2: Name and <br/> Describe </span>
+                <span>Step 2: Describe </span>
             </a>
         </li>
         <li>
             <a href="#speciestab" data-toggle="tab">
-                <span>Step 3: Species <br/> of Interest</span>
+                <span>Step 3: Targets</span>
             </a>
         </li>
         <li>
             <a href="#coststab" data-toggle="tab">
-                <span>Step 4: Prioritization <br/> Constraints</span>
+                <span>Step 4: Constraints</span>
             </a>
         </li>
     </ul>
@@ -284,39 +95,88 @@
     <div id="speciestab" class="tab-pane">
         <h4>{% flatblock 'form-conservationfeature-header' 3600 %}</h4>
         <div> {% flatblock 'form-conservationfeature-description' 3600 %}</div>
-        <hr/>
-        <form action="#" id="focalspecies_form">
-
+        <br/>
+        <br/>
+        <form action="#" id="form-targets">
+          <table class="table table-condensed">
+            {% for cf in cfs %}
+            <tr>
+                <td> {{cf.name}}: {{cf.id_string}} </td>
+                <td><input type="text" class="slidervalue targetvalue" id="target---{{cf.id_string}}" value="0.5"/></td>
+                <td><input type="text" class="slidervalue penaltyvalue" id="penalty---{{cf.id_string}}" value="0.5"/></td>
+            </tr>
+            {% endfor %}
+          </table>
         </form>
     </div> <!-- End species tab -->
 
     <div id="coststab" class="tab-pane">
         <h4>{% flatblock 'form-costs-header' 3600 %}</h4>
         <div> {% flatblock 'form-costs-description' 3600 %}</div>
-        <hr/>
-        <form action="#" id="costs_form">
-           <div>
-            <table>
-                <tr>
-                <td class="cost">
-                        <input type="checkbox" class="costvalue" name="cost" id="cost---watershed-condition" value="watershed-condition" checked="checked"/></td>
-                <td><label for="cost---watershed-condition">Watershed Condition <em>(favor unimpaired watersheds)</em></label></td>
-                </tr>
-
-                <tr>
-                <td class="cost"><input type="checkbox" class="costvalue" name="cost" id="cost---climate" value="climate" checked="checked"/></td>
-                <td><label for="cost---climate">Climate Change Vulnerability <em>(favor watersheds with low vulnerability to climate change)</em></label></td>
-                </tr>
-
-                <tr>
-                <td class="cost"><input type="checkbox" class="costvalue" name="cost" id="cost---invasives" value="invasives" checked="checked"/></td>
-                <td><label for="cost---invasives">Vulnerability to Invasive Species <em>(favor watersheds with low vulnerability to invasion)</em></label></td>
-                </tr>
-             </table>
-           </div>
+        <br/>
+        <br/>
+        <form action="#" id="form-costs">
+          <table class="table table-condensed">
+            {% for cost in costs %}
+            <tr>
+                <td><input type="checkbox" class="slidervalue costvalue" id="cost---{{cost.name}}" checked="1"/></td>
+                <td> {{cost.name}} </td>
+                <td> (<em>Avoid planning units with large values of {{cost.name}})</em> </td>
+            </tr>
+            {% endfor %}
+          </table>
         </form>
     </div>
     </div>
   </div>
+ 
+  <script>
+    $(function() {
+        var costs = $("#form-costs");
+        var targets = $("#form-targets");
+        if ($('#id_input_targets').val() && 
+            $('#id_input_penalties').val() && 
+            $('#id_input_relativecosts').val()) { 
+                
+             
+            console.log("Reseting to `off` default...");
+            $.each( $('.targetvalue'), function(k, target) {
+                 $(target).val(0);
+            });
+            $.each( $('.penaltyvalue'), function(k, penalty) {
+                 $(penalty).val(0);
+            });
+            $.each( $('.costvalue'), function(k, cost) {
+                 $(cost).removeAttr('checked');
+            });
+
+            console.log("Restoring Costs slider state...");
+            var in_costs = JSON.parse($('#id_input_relativecosts').val());
+            $.each(in_costs, function(key, val) {
+                console.log(key, val);
+                if (val > 0) {
+                    $("#cost---" + key).attr('checked','checked')
+                } else {
+                    $("#cost---" + key).removeAttr('checked')
+                }
+            });
+
+            console.log("Restoring Targets slider state...");
+            var in_targets = JSON.parse($('#id_input_targets').val());
+            $.each(in_targets, function(key, val) {
+                console.log(key, val);
+                $("#target---" + key).val(val);
+            });
+
+            console.log("Restoring Penalties slider state...");
+            var in_penalties = JSON.parse($('#id_input_penalties').val());
+            $.each(in_penalties, function(key, val) {
+                $("#penalty---" + key).val(val);
+            });
+       };
+
+    });
+  </script>
+
 
 {% endblock panel %}

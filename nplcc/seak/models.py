@@ -66,14 +66,17 @@ class ConservationFeature(models.Model):
     dbf_fieldname = models.CharField(max_length=15,null=True,blank=True)
     units = models.CharField(max_length=90, null=True, blank=True)
 
-    @ property
+    @property
     def level_string(self):
+        """ All levels concatenated with --- delim """
         levels = [self.level1, self.level2, self.level3, self.level4, self.level5]
         return '---'.join([slugify(x.lower()) for x in levels])
 
     @property
     def id_string(self):
-        return '---'.join([self.level_string, slugify(self.name.lower())])
+        """ Relevant levels concatenated with --- delim """
+        levels = [self.level1, self.level2, self.level3, self.level4, self.level5]
+        return '---'.join([slugify(x.lower()) for x in levels if x not in ['', None]])
 
     def __unicode__(self):
         return u'%s' % self.name
@@ -658,6 +661,10 @@ class Scenario(Analysis):
         verbose_name = 'Prioritization Scenario' 
         show_template = 'nplcc/show.html'
         form_template = 'nplcc/form.html'
+        form_context = {
+            'cfs': ConservationFeature.objects.all(),
+            'costs': Cost.objects.all(),
+        }
         icon_url = 'common/images/watershed.png'
         links = (
             alternate('Shapefile',

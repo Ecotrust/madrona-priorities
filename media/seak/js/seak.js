@@ -36,7 +36,8 @@ function init_map() {
         "/media/tiles/nplcc/${z}/${x}/${y}.png",
         {
          sphericalMercator: true,
-         isBaseLayer: false
+         isBaseLayer: false,
+         visibility: false
         } 
     );
 
@@ -105,7 +106,7 @@ function init_map() {
     .error(function() { app.scenarios.viewModel.planningUnitsLoadError(true); })
     .complete(function() { app.scenarios.viewModel.planningUnitsLoadComplete(true); })
 
-    map.addLayers([esri_shade, esri_physical, osm, google_terrain, pu_layer, pu_tiles, pu_utfgrid]); // nplcc
+    map.addLayers([esri_shade, esri_physical, osm, google_terrain, pu_layer, pu_tiles, pu_utfgrid, nplcc]);
     
     selectFeatureControl = new OpenLayers.Control.SelectFeature(
         pu_layer,

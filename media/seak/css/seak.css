@@ -125,6 +125,16 @@ label.olButton {
     background:#FFF; /* fallback for browser that not support rgba */
     background: rgba(255,255,255, .5); /* Works on all modern browsers */
 }
+#info {
+    float:right;
+    float: bottom;
+    text-align:left;
+    font-size: 85%;
+    width: 184px;
+    margin-top: 2px;
+    background:#FFF; /* fallback for browser that not support rgba */
+    background: rgba(255,255,255, .5); /* Works on all modern browsers */
+}
 div.dataLbl, div.baseLbl {
     padding-top: 12px;
     padding-bottom: 8px;

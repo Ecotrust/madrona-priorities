@@ -39,6 +39,15 @@ function init_map() {
          isBaseLayer: false
         } 
     );
+
+    var pu_utfgrid = new OpenLayers.Layer.UTFGrid({
+         url: "/media/tiles/planning_units/${z}/${x}/${y}.json",
+         utfgridResolution: 4,
+         sphericalMercator: true,
+         displayInLayerSwitcher: false
+        } 
+    );
+
     var pu_tiles = new OpenLayers.Layer.OSM( "Planning Units",
         "/media/tiles/planning_units/${z}/${x}/${y}.png",
         {
@@ -96,7 +105,7 @@ function init_map() {
     .error(function() { app.scenarios.viewModel.planningUnitsLoadError(true); })
     .complete(function() { app.scenarios.viewModel.planningUnitsLoadComplete(true); })
 
-    map.addLayers([esri_shade, esri_physical, osm, google_terrain, pu_layer, pu_tiles]); // nplcc
+    map.addLayers([esri_shade, esri_physical, osm, google_terrain, pu_layer, pu_tiles, pu_utfgrid]); // nplcc
     
     selectFeatureControl = new OpenLayers.Control.SelectFeature(
         pu_layer,
@@ -126,7 +135,33 @@ function init_map() {
     )
     selectFeatureControl.deactivate();
     selectGeographyControl.deactivate();
+
     map.addControls([selectFeatureControl, selectGeographyControl]);
+
+    var callback = function(infoLookup) {
+        var msg = ""; 
+        if (infoLookup) {
+            var info;
+            for (var idx in infoLookup) {
+                info = infoLookup[idx];
+                if (info && info.data) {
+                    msg = "<table>";
+                    $.each(info.data, function(idx, val) {
+                        msg += "<tr><th>"+ idx + "</th><td>" + val + "</td></tr>";
+                    });
+                    msg += "</table>";
+                }
+            }
+        }
+        document.getElementById("info").innerHTML = msg;
+    };
+
+    var ctl = new OpenLayers.Control.UTFGrid({
+        callback: callback,
+        handlerMode: "move"
+    });
+
+    map.addControl(ctl);
 
     map.setCenter(new OpenLayers.LonLat(-13600000, 6700000), 4);
 }

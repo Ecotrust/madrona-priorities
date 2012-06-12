@@ -136,6 +136,8 @@ function scenariosViewModel() {
     .success( function() {
         selectFeatureControl.unselectAll();
         selectGeographyControl.activate();
+        pu_layer.styleMap.styles.default.defaultStyle.display = true;
+        //pu_layer.redraw();
         self.showScenarioList(false);
         // TODO geography control -> if edit, select the selectedFeature's possible_fids
         self.selectedFeature(false);
@@ -271,6 +273,7 @@ function scenariosViewModel() {
   self.cancelAddScenario = function () {
     selectGeographyControl.unselectAll();
     selectGeographyControl.deactivate();
+    pu_layer.styleMap.styles.default.defaultStyle.display = "none";
     self.showScenarioFormPanel(false);
     self.showScenarioList(true);
   };

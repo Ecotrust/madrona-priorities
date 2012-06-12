@@ -32,6 +32,21 @@ function init_map() {
         {sphericalMercator: true} 
     );
 
+    var nplcc = new OpenLayers.Layer.OSM( "North Pacific LCC",
+        "/media/tiles/nplcc/${z}/${x}/${y}.png",
+        {
+         sphericalMercator: true,
+         isBaseLayer: false
+        } 
+    );
+    var pu_tiles = new OpenLayers.Layer.OSM( "Planning Units",
+        "/media/tiles/planning_units/${z}/${x}/${y}.png",
+        {
+         sphericalMercator: true,
+         isBaseLayer: false
+        } 
+    );
+
     var google_terrain = new OpenLayers.Layer.Google(
         "Google Terrain",
         {type: google.maps.MapTypeId.TERRAIN, opacity: 0.6}
@@ -39,31 +54,31 @@ function init_map() {
 
     var myStyles = new OpenLayers.StyleMap({
         "default": new OpenLayers.Style({
-            fillColor: "#ffffff",
-            fillOpacity: 0.4,
-            strokeColor: "#003300",
-            strokeWidth: 0.3,
-            graphicZIndex: 1
+            display: "none",  /* needs to be set temporarily to true for selection to work */
+            strokeWidth: 0,
+            fillOpacity: 0,
         }),
         "select": new OpenLayers.Style({
+            display: true,
+            strokeWidth: 0,
             fillColor: "#ffff00",
-            fillOpacity: 0.6,
+            fillOpacity: 0.5,
             graphicZIndex: 2
         }),
         "select_geography": new OpenLayers.Style({
+            display: true,
             fillColor: "#3333ff",
             fillOpacity: 0.6,
-            graphicZIndex: 3
         })
     });
 
     // allow testing of specific renderers via "?renderer=Canvas", etc
     var renderer = OpenLayers.Util.getParameters(window.location.href).renderer;
     renderer = (renderer) ? [renderer] : OpenLayers.Layer.Vector.prototype.renderers;
-    console.log(renderer);
     pu_layer = new OpenLayers.Layer.Vector("Planning Units", {
         styleMap: myStyles,
-        renderers: renderer
+        renderers: renderer,
+        displayInLayerSwitcher: false
     });
 
     var url = "/seak/planning_units.geojson";
@@ -81,7 +96,7 @@ function init_map() {
     .error(function() { app.scenarios.viewModel.planningUnitsLoadError(true); })
     .complete(function() { app.scenarios.viewModel.planningUnitsLoadComplete(true); })
 
-    map.addLayers([esri_shade, esri_physical, osm, google_terrain, pu_layer]);
+    map.addLayers([esri_shade, esri_physical, osm, google_terrain, pu_layer, pu_tiles]); // nplcc
     
     selectFeatureControl = new OpenLayers.Control.SelectFeature(
         pu_layer,

@@ -143,3 +143,7 @@ h4 {
     padding-right: 6px;
     padding-left: 8px;
 }
+.olImageLoadError { 
+    /* when OL encounters a 404, don't display the pink image */
+    display: none !important;
+} 

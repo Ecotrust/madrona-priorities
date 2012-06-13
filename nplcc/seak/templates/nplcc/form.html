@@ -67,13 +67,10 @@
         <h4>Provide a name and (optionally) a description of the prioritization scenario.</h4>
     <form id="featureform" action="{{action}}" method="post"> 
             <div class="hidden field required">
-                {{ form.input_penalties.label_tag }}
                 {{ form.input_penalties }}            
-                {{ form.input_targets.label_tag }}
                 {{ form.input_targets }}            
-                {{ form.input_relativecosts.label_tag }}
                 {{ form.input_relativecosts }}            
-                {{ form.input_scalefactor.label_tag}}
+                {{ form.input_geography}}
                 {{ form.input_scalefactor}}
             </div>
             <div class="field required">
@@ -97,7 +94,7 @@
         <div> {% flatblock 'form-conservationfeature-description' 3600 %}</div>
         <br/>
         <br/>
-        <form action="#" id="form-targets">
+        <form action="#" id="form-cfs">
           <table class="table table-condensed">
             {% for cf in cfs %}
             <tr>
@@ -132,28 +129,30 @@
  
   <script>
     $(function() {
-        var costs = $("#form-costs");
-        var targets = $("#form-targets");
+        // If we're in EDIT mode, set the form values 
         if ($('#id_input_targets').val() && 
             $('#id_input_penalties').val() && 
-            $('#id_input_relativecosts').val()) { 
+            $('#id_input_relativecosts').val() && 
+            $('#id_input_geography').val()) { 
                 
-             
-            console.log("Reseting to `off` default...");
-            $.each( $('.targetvalue'), function(k, target) {
-                 $(target).val(0);
-            });
-            $.each( $('.penaltyvalue'), function(k, penalty) {
-                 $(penalty).val(0);
-            });
-            $.each( $('.costvalue'), function(k, cost) {
-                 $(cost).removeAttr('checked');
-            });
+            // Reset to zeros 
+            $.each( $('.targetvalue'), function(k, target) { $(target).val(0); });
+            $.each( $('.penaltyvalue'), function(k, penalty) { $(penalty).val(0); });
+            $.each( $('.costvalue'), function(k, cost) { $(cost).removeAttr('checked'); });
 
-            console.log("Restoring Costs slider state...");
+            // Select and apply geography
+            var in_geog = JSON.parse($('#id_input_geography').val());
+            $.each(in_geog, function (i, fid) {
+                var f = pu_layer.getFeaturesByAttribute("fid",fid)[0];
+                if (!f) {
+                    console.log("warning: fid " + fid + " is not valid");
+                }
+                selectFeatureControl.select(f);
+            });
+             
+            // Apply Costs
             var in_costs = JSON.parse($('#id_input_relativecosts').val());
             $.each(in_costs, function(key, val) {
-                console.log(key, val);
                 if (val > 0) {
                     $("#cost---" + key).attr('checked','checked')
                 } else {
@@ -161,20 +160,17 @@
                 }
             });
 
-            console.log("Restoring Targets slider state...");
+            // Apply Targets and Penalties
             var in_targets = JSON.parse($('#id_input_targets').val());
             $.each(in_targets, function(key, val) {
-                console.log(key, val);
                 $("#target---" + key).val(val);
             });
-
-            console.log("Restoring Penalties slider state...");
             var in_penalties = JSON.parse($('#id_input_penalties').val());
             $.each(in_penalties, function(key, val) {
                 $("#penalty---" + key).val(val);
             });
-       };
-
+            
+       }; // end EDIT mode
     });
   </script>
 

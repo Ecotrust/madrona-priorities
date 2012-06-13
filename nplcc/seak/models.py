@@ -123,6 +123,7 @@ class Scenario(Analysis):
     input_targets = JSONField(verbose_name='Target Percentage of Habitat')
     input_penalties = JSONField(verbose_name='Penalties for Missing Targets') 
     input_relativecosts = JSONField(verbose_name='Relative Costs')
+    input_geography = JSONField(verbose_name='Input Geography fids')
     input_scalefactor = models.FloatField()
     description = models.TextField(default="", null=True, blank=True, verbose_name="Description/Notes")
 
@@ -174,9 +175,11 @@ class Scenario(Analysis):
 
     def invalidate_cache(self):
         keys = ["%s_results",]
+        keys = [x % self.uid for x in keys]
         cache.delete_many(keys)
         for key in keys:
             assert cache.get(key) == None
+        logger.debug("invalidating cache for %s" % str(keys))
         return True
 
     def run(self):
@@ -342,10 +345,10 @@ class Scenario(Analysis):
         if settings.USE_CACHE:
             cached_result = cache.get(key)
             if cached_result:
-                logger.debug("Using cache for scenario results")
+                logger.debug("cache HIT for scenario results")
                 return cached_result
 
-        logger.debug("cache miss for scenario results; recalculating")
+        logger.debug("cache MISS for scenario results; recalculating")
 
         targets = json.loads(self.input_targets)
         penalties = json.loads(self.input_penalties)
@@ -507,7 +510,7 @@ class Scenario(Analysis):
                     selected[int(s[0])] = num
             self.output_pu_count = json.dumps(selected) 
             super(Analysis, self).save() # save without calling save()
-            #first_run = self.marxan
+            self.invalidate_cache()
 
     @property
     def done(self):

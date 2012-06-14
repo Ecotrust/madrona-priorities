@@ -192,7 +192,7 @@
     
     $(document).ready(function () {
       ko.applyBindings(app.scenarios.viewModel); //, document.getElementById('scenario-html'));
-      {% if user.is_authenticated %}app.scenarios.viewModel.loadScenarios();{% endif %}
+      app.scenarios.viewModel.loadScenarios();
       init_map();
       app.onResize();
       $(window).resize(app.onResize);

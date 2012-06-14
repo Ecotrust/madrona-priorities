@@ -5,10 +5,14 @@ function progressViewModel() {
   self.done = ko.observable(false);
   self.error = ko.observable(false);
   self.progressBarWidth = ko.observable("0%");
-  self.triggerDone = function() {
+  self.triggerDone = function(scenario_uid) {
     self.done(true);
     clearInterval(app.timer);
     app.timer = null;
+    if (scenario_uid) {
+        console.log("reload and show " + scenario_uid);
+        app.scenarios.viewModel.loadScenarios(scenario_uid);
+    }
   };
   self.checkTimer = function() {
     var checkProgress = function () {
@@ -30,7 +34,8 @@ function progressViewModel() {
                 var pct = parseInt((data.complete / data.total) * 100.0, 10);
                 self.progressBarWidth(pct + "%");
                 if (pct >= 100) {
-                    self.triggerDone();
+                    uid = app.scenarios.viewModel.selectedFeature().uid();
+                    self.triggerDone(uid);
                 }
             });
         }
@@ -113,7 +118,6 @@ function scenariosViewModel() {
 
 
   self.showScenarioForm = function(action, uid) {
-    // get the form
     var formUrl;
     if (action === "create") {
       formUrl = app.workspace["feature-classes"][0]["link-relations"]["create"]["uri-template"]; 
@@ -121,24 +125,18 @@ function scenariosViewModel() {
       formUrl = app.workspace["feature-classes"][0]["link-relations"]["edit"][0]["uri-template"]; 
       formUrl = formUrl.replace('{uid}', uid);
     }
+
     // clean up and show the form
     var jqxhr = $.get(formUrl, function(data) {
       $('#scenarios-form-container').empty().append(data);
       var $form = $('#scenarios-form-container').find('form#featureform');
       $form.find('input:submit').remove();
       self.showScenarioFormPanel(true);
-      /*
-      $form.find('input:visible:first').focus();
-      $form.bind('submit', function(event) {
-        event.preventDefault();
-      });
-      */
     })
     .success( function() {
         selectFeatureControl.unselectAll();
         selectGeographyControl.activate();
         pu_layer.styleMap.styles.default.defaultStyle.display = true;
-        //pu_layer.redraw();
         self.showScenarioList(false);
         self.selectedFeature(false);
         self.showScenarioList(false);
@@ -188,20 +186,6 @@ function scenariosViewModel() {
     })
     .error( function() { self.formLoadError(true); } )
     .complete( function() { self.formLoadComplete(true); } )
-  };
-
-  self.updateScenario = function(scenario_id, isNew) {
-    var updateUrl = '/features/generic-links/links/geojson/{uid}/'.replace('{uid}', scenario_id);
-    $.get(updateUrl, function(data) {
-      if (isNew) {
-        self.scenarioList.unshift(ko.mapping.fromJS(data.features[0].properties));
-        self.selectedFeature(self.scenarioList()[0]);
-      } else {
-        ko.mapping.fromJS(data.features[0].properties, self.selectedFeature());
-        self.showScenarioFormPanel(false);
-        self.showScenarioList(true);
-      }
-    });
   };
 
   self.saveScenarioForm = function(self, event) {
@@ -287,15 +271,10 @@ function scenariosViewModel() {
             })
             .complete( function() { 
                 self.formLoadComplete(true);
-                self.loadScenarios(); // TODO since this is async, the select below is too early (callback instead)
-                if (scenario_uid) {
-                    var selected = self.scenarioList()[0]; // TODO loop and select by uid
-                    self.selectFeature(selected);
-                };
+                self.loadScenarios(scenario_uid); // TODO since this is async, the select below is too early (callback instead)
             });
         };
   };
-
 
   self.showDeleteDialog = function () {
     $("#scenario-delete-dialog").modal("show");
@@ -332,7 +311,6 @@ function scenariosViewModel() {
     self.formLoadComplete(false);
     self.showScenarioForm('create');
   };
-
 
   self.cancelAddScenario = function () {
     selectGeographyControl.unselectAll();
@@ -407,21 +385,13 @@ function scenariosViewModel() {
     });
   };
 
-  self.reloadScenarios = function(property) {
-    console.log("reloadScenarios");
-    self.scenarioList.removeAll();
-    self.loadScenarios();
-  };
-
   self.loadViewModel = function (data) {
     self.scenarioList($.map(data.features, function (feature, i) {
       return ko.mapping.fromJS(feature.properties);
     }));
-    // Don't bother selecting the first feature
-    //self.selectFeature(self.scenarioList()[0]);
   };
 
-  self.loadScenarios = function() {
+  self.loadScenarios = function(scenario_uid) {
     var process = function(data) {
       if (data.features && data.features.length) {
         self.loadViewModel(data);
@@ -430,8 +400,21 @@ function scenariosViewModel() {
     var jqhxr = $.get('/seak/scenarios.geojson', 
         process
     )
+    .success( function() { 
+        if (scenario_uid) {
+            $.each(self.scenarioList(), function(i, scenario) {
+               console.log(scenario.uid());
+               if (scenario.uid() === scenario_uid) {
+                   self.selectFeature(scenario);
+                   return false;
+               }
+            });
+        } else { console.log('no scenario uid provided'); }
+     })
     .error(function() { self.scenarioLoadError(true); })
-    .complete(function() { self.scenarioLoadComplete(true); })
+    .complete(function() { 
+        self.scenarioLoadComplete(true); 
+    })
 
   };
 

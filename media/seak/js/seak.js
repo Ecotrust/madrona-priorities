@@ -32,8 +32,8 @@ function init_map() {
         {sphericalMercator: true} 
     );
 
-    var esri_ocean = new OpenLayers.Layer.XYZ( "ESRI Ocean Map",
-        "http://server.arcgisonline.com/ArcGIS/rest/services/Ocean_Basemap/MapServer/tile/${z}/${y}/${x}",
+    var esri_topo = new OpenLayers.Layer.XYZ( "ESRI World Topo Map",
+        "http://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/${z}/${y}/${x}",
         {sphericalMercator: true} 
     );
 
@@ -82,8 +82,8 @@ function init_map() {
         }),
         "select_geography": new OpenLayers.Style({
             display: true,
-            fillColor: "#3333ff",
-            fillOpacity: 0.6,
+            fillColor: "#777777",
+            fillOpacity: 0.5,
         })
     });
 
@@ -111,7 +111,7 @@ function init_map() {
     .error(function() { app.scenarios.viewModel.planningUnitsLoadError(true); })
     .complete(function() { app.scenarios.viewModel.planningUnitsLoadComplete(true); })
 
-    map.addLayers([esri_shade, esri_ocean, esri_physical, osm, google_terrain, pu_layer, pu_tiles, pu_utfgrid, nplcc]);
+    map.addLayers([esri_shade, esri_topo, esri_physical, osm, google_terrain, pu_layer, pu_tiles, pu_utfgrid, nplcc]);
     
     selectFeatureControl = new OpenLayers.Control.SelectFeature(
         pu_layer,

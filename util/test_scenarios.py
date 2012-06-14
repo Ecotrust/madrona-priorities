@@ -10,6 +10,7 @@ from seak.models import Scenario, ConservationFeature, PlanningUnit, Cost, PuVsC
 from django.contrib.auth.models import User
 from django.utils import simplejson as json
 from django.conf import settings
+from django.contrib.gis.geos import GEOSGeometry
 import time
 import random
 
@@ -27,8 +28,9 @@ factors = [0.75, 1.25, 2]
 numspecies = [3]
 numcosts = [1]
 # these are random
-targets = [0.1, 0.15, 0.2, 0.05]
+targets = [0.1, 0.2, 0.4, 0.05]
 penalties = [0.4, 0.1, 0.8]
+
 
 settings.MARXAN_NUMREPS = 30
 
@@ -48,12 +50,13 @@ if MODE == 'query':
 
 COUNT = 0
 
-def create_wp(target_dict, penalties_dict, costs_dict, sf):
+def create_wp(target_dict, penalties_dict, costs_dict, geography_list, sf):
     global COUNT
     COUNT += 1
     print target_dict
     print penalties_dict
     print costs_dict
+    print geography_list
     print sf
 
     with open(os.path.join(os.path.dirname(__file__), 'random_words.txt'),'r') as fh:
@@ -68,6 +71,9 @@ def create_wp(target_dict, penalties_dict, costs_dict, sf):
         input_relativecosts=json.dumps(
             costs_dict
         ), 
+        input_geography=json.dumps(
+            geography_list 
+        ),
         input_scalefactor=sf,
         name= name, user=user)
 
@@ -95,7 +101,13 @@ if MODE == 'create':
     for f in factors:
         for nc in numcosts:
             for n in numspecies:
-                for i in range(3):
+                for i in range(4):
+                    g = GEOSGeometry('POINT(-13874668 %s)' % random.randrange(5005012, 8101549))
+                    if random.choice([True,False]):
+                        geography_list = [x.fid for x in PlanningUnit.objects.filter(geometry__strictly_below=g)]
+                    else:
+                        geography_list = [x.fid for x in PlanningUnit.objects.filter(geometry__strictly_above=g)]
+
                     try:
                         n = int(n)
                         target_dict = {}
@@ -130,7 +142,7 @@ if MODE == 'create':
                     for a in random.sample(costs_dict.keys(), nc):
                         costs_dict[a] = 1
                     sf = f
-                    wp = create_wp(target_dict, penalty_dict, costs_dict, sf)
+                    wp = create_wp(target_dict, penalty_dict, costs_dict, geography_list, sf)
 
                     print "####################################"
                     print 'targets', wp.input_targets

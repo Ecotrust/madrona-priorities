@@ -98,7 +98,7 @@ class PlanningUnit(models.Model):
 
     @property
     def area(self):
-        # assume storing meters and returning km^2
+        # assume storing meters and returning km^2 (TODO)
         return self.geometry.area / float(1000*1000)
 
     def __unicode__(self):
@@ -353,6 +353,7 @@ class Scenario(Analysis):
         targets = json.loads(self.input_targets)
         penalties = json.loads(self.input_penalties)
         cost_weights = json.loads(self.input_relativecosts)
+        geography = json.loads(self.input_geography)
         targets_penalties = {}
         for k, v in targets.items():
             targets_penalties[k] = {'target': v, 'penalty': None}
@@ -409,12 +410,14 @@ class Scenario(Analysis):
         num_target_species = 0
         num_met = 0
         for line in lines:
+            print line
             sid = int(line[0])
             try:
                 consfeat = ConservationFeature.objects.get(pk=sid)
             except ConservationFeature.DoesNotExist:
                 logger.error("ConservationFeature %s doesn't exist; refers to an old scenario?" % sid)
                 continue
+            print consfeat
             sname = consfeat.name
             sunits = consfeat.units
             slevel1 = consfeat.level1
@@ -446,6 +449,7 @@ class Scenario(Analysis):
 
         res = {
             'costs': cost_weights,
+            'geography': geography,
             'targets_penalties': targets_penalties,
             'area': sum_area, 
             'num_units': len(best),

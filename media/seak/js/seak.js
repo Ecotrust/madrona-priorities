@@ -31,6 +31,10 @@ function init_map() {
         "http://server.arcgisonline.com/ArcGIS/rest/services/World_Shaded_Relief/MapServer/tile/${z}/${y}/${x}",
         {sphericalMercator: true} 
     );
+    var esri_ocean = new OpenLayers.Layer.XYZ( "ESRI Ocean Map",
+        "http://server.arcgisonline.com/ArcGIS/rest/services/Ocean_Basemap/MapServer/tile/${z}/${y}/${x}",
+        {sphericalMercator: true} 
+    );
 
     var nplcc = new OpenLayers.Layer.OSM( "North Pacific LCC",
         "/media/tiles/nplcc/${z}/${x}/${y}.png",
@@ -106,7 +110,7 @@ function init_map() {
     .error(function() { app.scenarios.viewModel.planningUnitsLoadError(true); })
     .complete(function() { app.scenarios.viewModel.planningUnitsLoadComplete(true); })
 
-    map.addLayers([esri_shade, esri_physical, osm, google_terrain, pu_layer, pu_tiles, pu_utfgrid, nplcc]);
+    map.addLayers([esri_shade, esri_ocean, esri_physical, osm, google_terrain, pu_layer, pu_tiles, pu_utfgrid, nplcc]);
     
     selectFeatureControl = new OpenLayers.Control.SelectFeature(
         pu_layer,

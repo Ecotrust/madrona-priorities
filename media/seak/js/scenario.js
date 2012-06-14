@@ -104,11 +104,11 @@ function scenariosViewModel() {
   self.setListIndex = function (button, event) {
     var listStart = self.listStart();
     if (button.displayIndex === '»') {
-      self.listStart(listStart + self.listDisplayCount * 5);
+        self.listStart(listStart + self.listDisplayCount * 5);
     } else {
-    self.listStart(button.listIndex);
+        self.listStart(button.listIndex);
     }
-    self.selectFeature(self.scenarioList()[button.listIndex || self.listStart()]);
+    //self.selectFeature(self.scenarioList()[button.listIndex || self.listStart()]);
   };
 
 
@@ -123,15 +123,16 @@ function scenariosViewModel() {
     }
     // clean up and show the form
     var jqxhr = $.get(formUrl, function(data) {
-      var $form = $(data).find('form');
-      $form.find('input:submit').remove();
-      // app.cleanupForm($form);
       $('#scenarios-form-container').empty().append(data);
+      var $form = $('#scenarios-form-container').find('form#featureform');
+      $form.find('input:submit').remove();
       self.showScenarioFormPanel(true);
+      /*
       $form.find('input:visible:first').focus();
       $form.bind('submit', function(event) {
         event.preventDefault();
       });
+      */
     })
     .success( function() {
         selectFeatureControl.unselectAll();
@@ -139,9 +140,51 @@ function scenariosViewModel() {
         pu_layer.styleMap.styles.default.defaultStyle.display = true;
         //pu_layer.redraw();
         self.showScenarioList(false);
-        // TODO geography control -> if edit, select the selectedFeature's possible_fids
         self.selectedFeature(false);
         self.showScenarioList(false);
+
+        // If we're in EDIT mode, set the form values 
+        if ($('#id_input_targets').val() && 
+            $('#id_input_penalties').val() && 
+            $('#id_input_relativecosts').val() && 
+            $('#id_input_geography').val()) { 
+                
+            // Reset to zeros 
+            $.each( $('.targetvalue'), function(k, target) { $(target).val(0); });
+            $.each( $('.penaltyvalue'), function(k, penalty) { $(penalty).val(0); });
+            $.each( $('.costvalue'), function(k, cost) { $(cost).removeAttr('checked'); });
+
+            // Select and apply geography
+            var in_geog = JSON.parse($('#id_input_geography').val());
+            $.each(in_geog, function (i, fid) {
+                var f = pu_layer.getFeaturesByAttribute("fid",fid)[0];
+                if (!f) {
+                    console.log("warning: fid " + fid + " is not valid");
+                }
+                selectGeographyControl.select(f);
+            });
+             
+            // Apply Costs
+            var in_costs = JSON.parse($('#id_input_relativecosts').val());
+            $.each(in_costs, function(key, val) {
+                if (val > 0) {
+                    $("#cost---" + key).attr('checked','checked')
+                } else {
+                    $("#cost---" + key).removeAttr('checked')
+                }
+            });
+
+            // Apply Targets and Penalties
+            var in_targets = JSON.parse($('#id_input_targets').val());
+            $.each(in_targets, function(key, val) {
+                $("#target---" + key).val(val);
+            });
+            var in_penalties = JSON.parse($('#id_input_penalties').val());
+            $.each(in_penalties, function(key, val) {
+                $("#penalty---" + key).val(val);
+            });
+            
+       }; // end EDIT mode
     })
     .error( function() { self.formLoadError(true); } )
     .complete( function() { self.formLoadComplete(true); } )
@@ -161,21 +204,6 @@ function scenariosViewModel() {
     });
   };
 
-  self.associateScenario = function(scenario_id, property_id) {
-    var url = "/features/folder/{folder_uid}/add/{scenario_uid}";
-    url = url.replace('{folder_uid}', property_id).replace('{scenario_uid}', scenario_id);
-    $.ajax({
-      url: url,
-      type: "POST",
-      success: function(data) {
-        self.updateScenario(JSON.parse(data)["X-Madrona-Select"], true);
-        app.scenarios.viewModel.showScenarioFormPanel(false);
-        app.scenarios.viewModel.showScenarioList(true);
-        app.new_features.removeAllFeatures();
-      }
-    });
-  };
-
   self.saveScenarioForm = function(self, event) {
         var targets = {};
         var penalties = {};
@@ -190,7 +218,6 @@ function scenariosViewModel() {
             geography_fids.push(v.data.fid); 
             totalfids += 1;
         });
-        console.log("geography_fids ", geography_fids);
         // Get targets
         $("#form-cfs input.targetvalue").each( function(index) {
             var xid = $(this).attr("id");
@@ -232,6 +259,7 @@ function scenariosViewModel() {
         if (totalpenalties == 0 || totaltargets == 0 || totalfids == 0) {
             alert("must set targets, penalties and select geography");
         } else {
+            // GO
             var values = {};
             var actionUrl = $(frm).attr('action');
             $(frm).find('input,select,textarea').each(function() {
@@ -239,68 +267,35 @@ function scenariosViewModel() {
             });
 
             // Submit the form
-            console.log("submit form!", actionUrl, values);
+            self.formLoadComplete(false);
+            self.cancelAddScenario(); // Not acutally cancel, just clear 
+            var scenario_uid; 
             var jqxhr = $.ajax({
                 url: actionUrl,
                 type: "POST",
                 data: values
             })
             .success( function(data, textStatus, jqXHR) {
-                console.log(data);
-                //var scenario_uid = JSON.parse(data)["X-Madrona-Select"];
+                var d = JSON.parse(data);
+                if (d['status'] != 200) {
+                    console.log("Unknown error", d);
+                }
+                scenario_uid = d["X-Madrona-Select"];
             })
             .error( function(jqXHR, textStatus, errorThrown) {
                 console.log("ERROR", errorThrown, textStatus);
             })
+            .complete( function() { 
+                self.formLoadComplete(true);
+                self.loadScenarios(); // TODO since this is async, the select below is too early (callback instead)
+                if (scenario_uid) {
+                    var selected = self.scenarioList()[0]; // TODO loop and select by uid
+                    self.selectFeature(selected);
+                };
+            });
         };
   };
 
-  self.OLDsaveScenarioForm = function(self, event) {
-    var isNew, $dialog = $('#scenarios-form-container'),
-      $form = $dialog.find('form'),
-      actionUrl = $form.attr('action'),
-      values = {},
-      error = false;
-    $form.find('input,select').each(function() {
-      var $input = $(this);
-      if ($input.closest('.field').hasClass('required') && $input.attr('type') !== 'hidden' && !$input.val()) {
-        error = true;
-        $input.closest('.control-group').addClass('error');
-        $input.siblings('p.help-block').text('This field is required.');
-      } else {
-        values[$input.attr('name')] = $input.val();
-      }
-    });
-    if (error) {
-      return false;
-    }
-    if (self.modifyFeature.active) {
-      values.geometry_final = values.geometry_orig = self.modifyFeature.feature.geometry.toString();
-      self.modifyFeature.deactivate();
-      isNew = false;
-    } else {
-      //values.geometry_final = values.geometry_orig = app.scenarios.geometry;
-      values.geometry_orig = app.scenarios.geometry;
-      isNew = true;
-    }
-    $form.addClass('form-horizontal');
-    $.ajax({
-      url: actionUrl,
-      type: "POST",
-      data: values,
-      success: function(data, textStatus, jqXHR) {
-        var scenario_uid = JSON.parse(data)["X-Madrona-Select"];
-        if (isNew) {
-          self.associateScenario(scenario_uid, self.property.uid());
-        } else {
-          self.updateScenario(scenario_uid, false);
-        }
-      },
-      error: function(jqXHR, textStatus, errorThrown) {
-        self.cancelAddScenario();
-      }
-    });
-  };
 
   self.showDeleteDialog = function () {
     $("#scenario-delete-dialog").modal("show");
@@ -336,12 +331,6 @@ function scenariosViewModel() {
     self.formLoadError(false);
     self.formLoadComplete(false);
     self.showScenarioForm('create');
-    /*
-     * Do this only on success
-    selectFeatureControl.unselectAll();
-    selectGeographyControl.activate();
-    self.showScenarioList(false);
-    */
   };
 
 
@@ -352,17 +341,6 @@ function scenariosViewModel() {
     pu_layer.redraw();
     self.showScenarioFormPanel(false);
     self.showScenarioList(true);
-  };
-
-  self.mode = function(m) {
-    switch (m) {
-        case 'scenarioList':
-            break;
-        case 'scenarioDetail':
-            break;
-        case 'scenarioEdit':
-            break;
-    }
   };
 
   self.selectControl = {

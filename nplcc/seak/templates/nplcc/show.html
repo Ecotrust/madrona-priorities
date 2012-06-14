@@ -39,38 +39,34 @@
 
         <div id="Inputs" class="tab-pane active">
             <div class="box">
-                <h5>Name</h5> 
+                <h4>Name</h4> 
                 <p>{{ instance.name }}</p>
                 {% if instance.description %}
-                <h5>Description/Notes</h5>
+                <h4>Description/Notes</h4>
                 <p> {{instance.description}} </p>
                 {% endif %}
             </div>
 
             <div class="box">
+
              <table class="table">
-             <thead> <th>Species Key</th><th>Goal Proportion</th><th>Importance Weighting</th></thead>
+             <thead> <th>Conservation Feature</th><th>Goal Proportion</th><th>Importance Weighting</th></thead>
              {% for k,v in results.targets_penalties.items %}
              {% if v.target > 0 %}
              <tr> <td><strong>{{k}}</strong></td><td>{{v.target}} </td><td>{{v.penalty}}</td></tr>
              {% endif %}
              {% endfor %}
              </table>
+
              <table class="table">
                  <thead> <th>Prioritization Constraints</th><th></th></thead>
              {%for k,v in results.costs.items|sortcosts %}
-                {% if k == "watershed-condition" %}
-                <tr> <td><strong>Watershed Condition</strong></td><td>{% if v > 0%}&#10003;{% endif %}</td></tr>
-                {% endif %}
-                {% if k == "climate" %}
-                <tr> <td><strong>Climate Change Vulnerability</strong></td><td>{% if v > 0%}&#10003;{% endif %}</td></tr>
-                {% endif %}
-                {% if k == "invasives" %}
-                <tr> <td><strong>Vulnerability to Invasive Species</strong></td><td>{% if v > 0%}&#10003;{% endif %}</td></tr>
-                {% endif %}
+             {% if v > 0%}<tr><td> &#10003; <strong>{{k}}</strong></td></tr> 
+             {% else %}<tr><td> &nbsp; <del>{{k}}</del></td></tr> 
+             {% endif %} 
              {%endfor%}
              </table>
-             <p style="color:white">Estimated Scaling Factor = {{instance.input_scalefactor}}</p>
+             <span style="display:none" id="estimated_scaling_factor">{{instance.input_scalefactor}}</span>
             </div>
         </div>
 

@@ -193,6 +193,7 @@ class Scenario(Analysis):
         targets = self.process_dict(json.loads(self.input_targets))
         penalties = self.process_dict(json.loads(self.input_penalties))
         cost_weights = json.loads(self.input_relativecosts)
+        geography_fids = json.loads(self.input_geography)
 
         assert len(targets.keys()) == len(penalties.keys()) == len(ConservationFeature.objects.all())
         assert max(targets.values()) <= 1.0
@@ -213,16 +214,8 @@ class Scenario(Analysis):
         except ZeroDivisionError:
             meanpenalty = 0
         numspecies = len(nonzero_targets)
-        # Derived from a multiple regression technique 
-        # predicted_scalefactor = math.exp((predictor + 0.04 - (0.75*meanpenalty) + (0.075*meantarget) - (0.003*numspecies)) / 0.18)
-        # However .... 
-        # SF needs to be independent of user-input penalties.
-        # So we can plug in a meanpenalty = 1 to set the upper range of importance slider. 
-        # That could correspond to, say, 0.9 on the predictor x axis. 
-        # The importance slider would then determine how many watersheds get chosen.
-        predictor = 0.95
-        predicted_scalefactor = math.exp((predictor + 0.04 - 0.75 + (0.075*meantarget) - (0.003*numspecies)) / 0.18)
-        self.input_scalefactor = predicted_scalefactor
+
+        self.input_scalefactor = 1.0
 
         # Apply the target and penalties
         logger.debug("Apply the targets and penalties")
@@ -234,13 +227,12 @@ class Scenario(Analysis):
             except TypeError: 
                 total = 0.0
             target = total * targets[cf.pk]
-            penalty = penalties[cf.pk] * self.input_scalefactor ####################################
+            penalty = penalties[cf.pk] * self.input_scalefactor
             if target > 0:
                 sum_penalties += penalty
             # MUST include all species even if they are zero
             cfs.append((cf.pk, target, penalty, cf.name))
 
-        # conditional .. turn invasives on/off depending
         final_cost_weights = {}
         for cost in Cost.objects.all():
             costkey = slugify(cost.name.lower())
@@ -253,14 +245,14 @@ class Scenario(Analysis):
         pucosts = []
         sum_costs = 0
         # First loop, calc sum of costs 
-        for pu in PlanningUnit.objects.all():
+        for pu in PlanningUnit.objects.filter(fid__in=geography_fids):
             puc = PuVsCost.objects.filter(pu=pu)
             weighted_cost = 50.0
             for c in puc:
                 costkey = slugify(c.cost.name.lower())
                 weighted_cost += final_cost_weights[costkey] * c.amount
-                # TODO CONSTANT ALERT
-                # Add 100 constant to each cost
+                # CONSTANT ALERT
+                # Multiply by 100 constant to each cost
                 # Effectively scales each cost from 100 to 200
                 # Assuming original costs are scaled 0 to 100
                 weighted_cost += final_cost_weights[costkey] * 100

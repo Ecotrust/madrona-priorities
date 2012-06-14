@@ -16,7 +16,7 @@ function progressViewModel() {
   self.checkTimer = function() {
     var checkProgress = function () {
         var url = $('#selected_progress_url').attr('value');
-        var elem = $('#scenario_progress_html'); 
+        var elem = $('#scenario_progress_html'); // will only be there IF instance.done
         if (elem.length === 0) { 
             self.triggerDone();
             return false; 
@@ -41,7 +41,7 @@ function progressViewModel() {
     };
     if (!app.timer) {
         checkProgress();
-        app.timer = setInterval(checkProgress, 5000);
+        app.timer = setInterval(checkProgress, 2000);
     } else {
         console.log("Warning: app.timer is set and checkTimer was called!");
     }
@@ -114,7 +114,6 @@ function scenariosViewModel() {
     } else {
         self.listStart(button.listIndex);
     }
-    //self.selectFeature(self.scenarioList()[button.listIndex || self.listStart()]);
   };
 
 
@@ -244,7 +243,7 @@ function scenariosViewModel() {
         if (totalpenalties == 0 || totaltargets == 0 || totalfids == 0) {
             alert("must set targets, penalties and select geography");
         } else {
-            // GO
+            // GO .. we are clear to submit the form
             var values = {};
             var actionUrl = $(frm).attr('action');
             $(frm).find('input,select,textarea').each(function() {
@@ -254,6 +253,8 @@ function scenariosViewModel() {
             // Submit the form
             self.formSaveComplete(false);
             self.formSaveError(false);
+            //self.selectedFeature().done(false);
+            console.log("try to set the selected feature done to false");
             var scenario_uid; 
             var jqxhr = $.ajax({
                 url: actionUrl,

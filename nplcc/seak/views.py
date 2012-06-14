@@ -179,15 +179,19 @@ def planning_units_geojson(request):
 
     return HttpResponse(geojson, content_type='application/json')
 
+from django.views.decorators.cache import never_cache
+# set headers to disable all client-side caching
+@never_cache
 def user_scenarios_geojson(request):
     from seak.models import Scenario
 
-    # WHy not use @login_required? That just redirects instead of giving proper Http Response code of 401
+    # Why not use @login_required? 
+    # That just redirects instead of giving proper Http Response code of 401
     user = request.user
     if user.is_anonymous() or not user.is_authenticated:
         return HttpResponse("You must be logged in to view your scenarios.", status=401)
 
-    scenarios = Scenario.objects.filter(user=user) #, content_type=None, object_id=None)
+    scenarios = Scenario.objects.filter(user=user)
 
     geojson = """{ 
       "type": "FeatureCollection",

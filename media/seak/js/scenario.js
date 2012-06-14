@@ -10,7 +10,6 @@ function progressViewModel() {
     clearInterval(app.timer);
     app.timer = null;
     if (scenario_uid) {
-        console.log("reload and show " + scenario_uid);
         app.scenarios.viewModel.loadScenarios(scenario_uid);
     }
   };
@@ -72,6 +71,8 @@ function scenariosViewModel() {
   self.planningUnitsLoadComplete = ko.observable(false);
   self.formLoadError = ko.observable(false);
   self.formLoadComplete = ko.observable(true);
+  self.formSaveError = ko.observable(false);
+  self.formSaveComplete = ko.observable(true);
   // list of all scenarios, primary viewmodel
   self.scenarioList = ko.observableArray();
   // display mode
@@ -251,8 +252,8 @@ function scenariosViewModel() {
             });
 
             // Submit the form
-            self.formLoadComplete(false);
-            self.cancelAddScenario(); // Not acutally cancel, just clear 
+            self.formSaveComplete(false);
+            self.formSaveError(false);
             var scenario_uid; 
             var jqxhr = $.ajax({
                 url: actionUrl,
@@ -261,17 +262,16 @@ function scenariosViewModel() {
             })
             .success( function(data, textStatus, jqXHR) {
                 var d = JSON.parse(data);
-                if (d['status'] != 200) {
-                    console.log("Unknown error", d);
-                }
                 scenario_uid = d["X-Madrona-Select"];
+                self.loadScenarios(scenario_uid);
+                self.cancelAddScenario(); // Not acutally cancel, just clear 
             })
             .error( function(jqXHR, textStatus, errorThrown) {
                 console.log("ERROR", errorThrown, textStatus);
+                self.formSaveError(true);
             })
             .complete( function() { 
-                self.formLoadComplete(true);
-                self.loadScenarios(scenario_uid); // TODO since this is async, the select below is too early (callback instead)
+                self.formSaveComplete(true);
             });
         };
   };
@@ -392,6 +392,8 @@ function scenariosViewModel() {
   };
 
   self.loadScenarios = function(scenario_uid) {
+    self.scenarioLoadComplete(false);
+    self.scenarioLoadError(false);
     var process = function(data) {
       if (data.features && data.features.length) {
         self.loadViewModel(data);
@@ -403,13 +405,12 @@ function scenariosViewModel() {
     .success( function() { 
         if (scenario_uid) {
             $.each(self.scenarioList(), function(i, scenario) {
-               console.log(scenario.uid());
                if (scenario.uid() === scenario_uid) {
                    self.selectFeature(scenario);
                    return false;
                }
             });
-        } else { console.log('no scenario uid provided'); }
+        } 
      })
     .error(function() { self.scenarioLoadError(true); })
     .complete(function() { 

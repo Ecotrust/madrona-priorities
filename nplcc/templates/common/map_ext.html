@@ -103,7 +103,11 @@
                             </button>
                             <button href="#" class="btn btn-primary" data-bind="click: saveScenarioForm">
                               <i class="icon-file"></i> Save Scenario
+                              <span data-bind="visible: !formSaveComplete()"><img alt="loading" src="/media/img/ajax-loader.gif"/></span>
                             </button>
+                            <div class="alert alert-error" data-bind="visible: formSaveError">
+                                <p><strong> Error: could not save the scenario!</strong></p>
+                            </div>
                         </div>
                         <div id="scenarios-form-container" class="form-panel"></div>
                       </div>

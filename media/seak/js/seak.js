@@ -31,6 +31,7 @@ function init_map() {
         "http://server.arcgisonline.com/ArcGIS/rest/services/World_Shaded_Relief/MapServer/tile/${z}/${y}/${x}",
         {sphericalMercator: true} 
     );
+
     var esri_ocean = new OpenLayers.Layer.XYZ( "ESRI Ocean Map",
         "http://server.arcgisonline.com/ArcGIS/rest/services/Ocean_Basemap/MapServer/tile/${z}/${y}/${x}",
         {sphericalMercator: true} 

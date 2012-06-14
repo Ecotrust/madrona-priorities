@@ -48,7 +48,17 @@ class MarxanAnalysis(object):
         out = "%s/data/puvcf.dat" % self.outdir
         template = os.path.join(self.templatedir, 'puvcf.dat')
         if os.path.exists(template):
-            copyfile(template, out)
+            outfh = open(out, 'w')
+            inlines = open(template, 'r').readlines()
+            outfh.write(inlines[0])
+            puids = [x[0] for x in self.pus]
+            log.warn(puids)
+            for line in inlines[1:]:
+                puid = int(line.split(',')[1])
+                if puid in puids:
+                    outfh.write(line)
+            outfh.close() 
+            #copyfile(template, out)
         else:
             # Export the puvscf table to csv directly 
             # Why? efficiency and stability vs comparable functions 
@@ -151,9 +161,10 @@ VERBOSITY 3
         fname = os.path.realpath("%s/output/%s_best.csv" % (self.outdir, self.name))
         try:
             fh = open(fname ,'r')
-        except:
+        except IOError:
             log.error("Marxan output file %s was not found" % fname) 
-            raise MarxanError("Error: Marxan output files could not be found") 
+            raise MarxanError("Error: analyis output files could not be found") 
+
         unit_status = [x.strip().split(',') for x in fh.readlines()]
         pks = []
         for u in unit_status[1:]:

@@ -253,8 +253,6 @@ function scenariosViewModel() {
             // Submit the form
             self.formSaveComplete(false);
             self.formSaveError(false);
-            //self.selectedFeature().done(false);
-            console.log("try to set the selected feature done to false");
             var scenario_uid; 
             var jqxhr = $.ajax({
                 url: actionUrl,
@@ -354,12 +352,16 @@ function scenariosViewModel() {
         .error(function() { self.reportLoadError(true); })
         .complete(function() { self.reportLoadComplete(true); })
         
+        selectGeographyControl.unselectAll();
         selectFeatureControl.unselectAll();
+        $.each(feature.potential_fids(), function (i, fid) {
+            var f = pu_layer.getFeaturesByAttribute("fid",fid)[0];
+            if (!f) { console.log("warning: fid " + fid + " is not valid"); }
+            selectGeographyControl.select(f);
+        });
         $.each(feature.selected_fids(), function (i, fid) {
             var f = pu_layer.getFeaturesByAttribute("fid",fid)[0];
-            if (!f) {
-                console.log("warning: fid " + fid + " is not valid");
-            }
+            if (!f) { console.log("warning: fid " + fid + " is not valid"); }
             selectFeatureControl.select(f);
         });
       }

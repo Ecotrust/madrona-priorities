@@ -311,7 +311,7 @@ class Scenario(Analysis):
             selected_fids = [r['fid'] for r in rs['units']]
         else:
             selected_fids = []
-
+        
         try:
             bbox = rs['bbox']
         except:
@@ -325,8 +325,9 @@ class Scenario(Analysis):
                'uid': self.uid, 
                'bbox': bbox,
                'name': self.name, 
-               'done': True, #self.done, 
-               'selected_fids': selected_fids
+               'done': self.done, 
+               'selected_fids': selected_fids,
+               'potential_fids': json.loads(self.input_geography)
             }
         }
         return json.dumps(serializable)
@@ -363,9 +364,10 @@ class Scenario(Analysis):
         bestjson = json.loads(self.output_best)
         bestpks = [int(x) for x in bestjson['best']]
         bestpus = PlanningUnit.objects.filter(pk__in=bestpks).order_by('name')
+        potentialpus = PlanningUnit.objects.filter(fid__in=geography)
         bbox = None
         if bestpus:
-            bbox = bestpus.extent()
+            bbox = potentialpus.extent()
         best = []
         for pu in bestpus:
             logger.debug("looping through bestpus queryset")

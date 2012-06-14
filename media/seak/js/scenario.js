@@ -294,6 +294,7 @@ function scenariosViewModel() {
         self.scenarioList.remove(self.selectedFeature());
         self.selectedFeature(false);
         self.showScenarioList(true);
+        self.listStart(0);
         self.selectControl.unselectAll();
       }  
     });

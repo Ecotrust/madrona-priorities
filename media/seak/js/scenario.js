@@ -16,12 +16,13 @@ function progressViewModel() {
   self.checkTimer = function() {
     var checkProgress = function () {
         var url = $('#selected_progress_url').attr('value');
-        var elem = $('#scenario_progress_html'); // will only be there IF instance.done
-        if (elem.length === 0) { 
-            self.triggerDone();
-            return false; 
+        var selected = app.scenarios.viewModel.selectedFeature();
+        if (!selected) {
+            clearInterval(app.timer);
+            app.timer = null; 
+            return false;
         }
-        if (!self.done()) {
+        if (!self.done() && !selected.done()) {
             $.get(url, function(data) {
                 self.progressHtml(data.html);
                 if (data.error == 1) {
@@ -37,6 +38,11 @@ function progressViewModel() {
                     self.triggerDone(uid);
                 }
             });
+        }
+        var elem = $('#scenario_progress_html');  // if this doesn't exist, instance is done
+        if (elem.length === 0) { 
+            self.triggerDone();
+            return false; 
         }
     };
     if (!app.timer) {

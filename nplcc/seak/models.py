@@ -124,7 +124,7 @@ class Scenario(Analysis):
     input_penalties = JSONField(verbose_name='Penalties for Missing Targets') 
     input_relativecosts = JSONField(verbose_name='Relative Costs')
     input_geography = JSONField(verbose_name='Input Geography fids')
-    input_scalefactor = models.FloatField()
+    input_scalefactor = models.FloatField(default=1.0)  #TODO default scalefactor ?
     description = models.TextField(default="", null=True, blank=True, verbose_name="Description/Notes")
 
     # All output fields should be allowed to be Null/Blank
@@ -215,17 +215,13 @@ class Scenario(Analysis):
             meanpenalty = 0
         numspecies = len(nonzero_targets)
 
-        self.input_scalefactor = 1.0
-
         # Apply the target and penalties
         logger.debug("Apply the targets and penalties")
         cfs = []
         sum_penalties = 0
-        for cf in ConservationFeature.objects.annotate(Sum('puvscf__amount')):
-            try:
-                total = float(cf.puvscf__amount__sum)
-            except TypeError: 
-                total = 0.0
+        pus = PlanningUnit.objects.filter(fid__in=geography_fids)
+        for cf in ConservationFeature.objects.all():
+            total = sum([x.amount for x in cf.puvscf_set.filter(pu__in=pus)])
             target = total * targets[cf.pk]
             penalty = penalties[cf.pk] * self.input_scalefactor
             if target > 0:
@@ -247,15 +243,12 @@ class Scenario(Analysis):
         # First loop, calc sum of costs 
         for pu in PlanningUnit.objects.filter(fid__in=geography_fids):
             puc = PuVsCost.objects.filter(pu=pu)
-            weighted_cost = 50.0
+            weighted_cost = 50.0  # TODO Constant: lowest possible cost
             for c in puc:
                 costkey = slugify(c.cost.name.lower())
                 weighted_cost += final_cost_weights[costkey] * c.amount
-                # CONSTANT ALERT
-                # Multiply by 100 constant to each cost
-                # Effectively scales each cost from 100 to 200
-                # Assuming original costs are scaled 0 to 100
-                weighted_cost += final_cost_weights[costkey] * 100
+                # TODO CONSTANT ALERT 
+                weighted_cost += final_cost_weights[costkey] * 1
             sum_costs += weighted_cost
             pucosts.append( (pu.pk, weighted_cost) )
 
@@ -369,30 +362,16 @@ class Scenario(Analysis):
         if bestpus:
             bbox = potentialpus.extent()
         best = []
+        logger.debug("looping through bestpus queryset")
         for pu in bestpus:
-            logger.debug("looping through bestpus queryset")
             bcosts = {}
             for x in PuVsCost.objects.filter(pu=pu):
                 costname = x.cost.name.lower().replace(" ","")
                 amt = x.amount
                 # TODO classify amount to high/med/low
-                """
-                cls = {
-                        'invasives': (8,18),
-                        'climate': (50,80),
-                        'watershedconditionwithais': (25, 45),
-                        'watershedconditionnoais': (30, 50)
-                }
-                if amt < cls[costname][0]: 
-                    rating = "low" 
-                elif amt > cls[costname][1]: 
-                    rating = "high" 
-                else: 
-                    rating = "med" 
-                """
                 rating = "med"
                 bcosts[costname] = rating
-            best.append( {'name': pu.name, 'costs': bcosts, 'fid': pu.fid })
+            best.append({'name': pu.name, 'costs': bcosts, 'fid': pu.fid })
 
         sum_area = sum([x.area for x in bestpus])
 
@@ -404,14 +383,12 @@ class Scenario(Analysis):
         num_target_species = 0
         num_met = 0
         for line in lines:
-            print line
             sid = int(line[0])
             try:
                 consfeat = ConservationFeature.objects.get(pk=sid)
             except ConservationFeature.DoesNotExist:
                 logger.error("ConservationFeature %s doesn't exist; refers to an old scenario?" % sid)
                 continue
-            print consfeat
             sname = consfeat.name
             sunits = consfeat.units
             slevel1 = consfeat.level1

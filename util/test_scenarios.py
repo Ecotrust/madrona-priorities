@@ -24,13 +24,11 @@ scalefactors = []
 num_species = []
 num_units = []
 
-factors = [0.75, 1.25, 2]
-numspecies = [3]
+factors = [1, 5, 100]
+numspecies = [2]
 numcosts = [1]
-# these are random
-targets = [0.1, 0.2, 0.4, 0.05]
-penalties = [0.4, 0.1, 0.8]
-
+targets = [0.33]
+penalties = [0.5]
 
 settings.MARXAN_NUMREPS = 30
 
@@ -61,6 +59,8 @@ def create_wp(target_dict, penalties_dict, costs_dict, geography_list, sf):
 
     with open(os.path.join(os.path.dirname(__file__), 'random_words.txt'),'r') as fh:
         name = ' '.join([x.strip() for x in random.sample(fh.readlines(), 2)])
+
+    name += " - %s" % sf
 
     wp = Scenario(input_targets = json.dumps( 
            target_dict
@@ -93,6 +93,9 @@ if MODE == 'create':
             a = a[:-3]
         keys.append(a)
 
+    # TODO hardcoded
+    keys = [u'length---shape_leng', u'coordinate---mean_y']
+
     fh = open("/home/mperry/results.csv", 'w+')
     fh.write('ncosts, nspecies, sumpenalties, meanpenalties, scalefactor, numspeciesmet, numplannningunits')
     fh.write('\n')
@@ -101,7 +104,7 @@ if MODE == 'create':
     for f in factors:
         for nc in numcosts:
             for n in numspecies:
-                for i in range(4):
+                for i in range(3):
                     g = GEOSGeometry('POINT(-13874668 %s)' % random.randrange(5005012, 8101549))
                     if random.choice([True,False]):
                         geography_list = [x.fid for x in PlanningUnit.objects.filter(geometry__strictly_below=g)]

@@ -52,10 +52,12 @@ class MarxanAnalysis(object):
             inlines = open(template, 'r').readlines()
             outfh.write(inlines[0])
             puids = [x[0] for x in self.pus]
-            log.warn(puids)
             for line in inlines[1:]:
                 puid = int(line.split(',')[1])
                 if puid in puids:
+                    # Only write the line IF the planning unit is in the geography!
+                    # Important - must have exactly 100% density of matrix
+                    # i.e. number of output rows == planning_units * species
                     outfh.write(line)
             outfh.close() 
             #copyfile(template, out)

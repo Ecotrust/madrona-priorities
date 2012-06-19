@@ -99,7 +99,29 @@ class PlanningUnit(models.Model):
     @property
     def area(self):
         # assume storing meters and returning km^2 (TODO)
-        return self.geometry.area / float(1000*1000)
+        key = "seak_planningunit_%s_area" % self.fid 
+        if settings.USE_CACHE:
+            cached_result = cache.get(key)
+            if cached_result:
+                return cached_result
+
+        area = self.geometry.area / float(1000*1000)
+        if settings.USE_CACHE:
+            cache.set(key, area, timeout=360000)
+        return area
+
+    @property
+    def centroid(self):
+        key = "seak_planningunit_%s_centroid" % self.fid 
+        if settings.USE_CACHE:
+            cached_result = cache.get(key)
+            if cached_result:
+                return cached_result
+
+        centroid = self.geometry.point_on_surface.coords
+        if settings.USE_CACHE:
+            cache.set(key, centroid, timeout=360000)
+        return centroid
 
     def __unicode__(self):
         return u'%s' % self.name
@@ -117,6 +139,32 @@ class PuVsCost(models.Model):
     amount = models.FloatField()
     class Meta:
         unique_together = ("pu", "cost")
+
+    @classmethod
+    def breaks(cls):
+        """
+        Assuming normal distribution, provide a 3-quantile break
+        """
+        key = "seak_cost_breaks"
+        if settings.USE_CACHE:
+            cached_result = cache.get(key)
+            if cached_result:
+                return cached_result
+
+        from django.db.models import Max, Min, StdDev, Avg
+        cost_summaries = cls.objects.values('cost__name').annotate(Max('amount'), 
+                Min('amount'), StdDev('amount'), Avg('amount'))
+        breaks = {}
+        for cs in cost_summaries:
+            low = cs['amount__avg'] - (0.43 * cs['amount__stddev'])
+            high = cs['amount__avg'] + (0.43 * cs['amount__stddev'])
+            name = cs['cost__name']
+            breaks[name] = (low, high)
+
+        if settings.USE_CACHE:
+            cache.set(key, breaks, timeout=360000)
+
+        return breaks
 
 @register
 class Scenario(Analysis):
@@ -136,6 +184,20 @@ class Scenario(Analysis):
         return os.path.realpath(os.path.join(settings.MARXAN_OUTDIR, "%s_" % (self.uid,) ))
         # This is not asycn-safe! A new modificaiton will clobber the old. 
         # What happens if new and old are both still running - small chance of a corrupted mix of output files? 
+
+    def classify_cost(self, costname, value):
+        breaks = PuVsCost.breaks() 
+        try:
+            b = breaks[costname]
+        except IndexError:
+            return value  # don't classify
+
+        if value < b[0]:
+            return 'low'
+        elif value > b[1]:
+            return 'high'
+        else:
+            return 'med'
 
     def copy(self, user):
         """ Override the copy method to make sure the marxan files get copied """
@@ -368,18 +430,17 @@ class Scenario(Analysis):
         for pu in bestpus:
             bcosts = {}
             for x in PuVsCost.objects.filter(pu=pu):
-                cname = x.cost.name
-                if cost_weights[cname] == 0:
+                costname = x.cost.name
+                if cost_weights[costname] == 0:
                    continue 
-                costname = cname.lower().replace(" ","")
                 amt = x.amount
-                # TODO classify amount to high/med/low
-                if amt > 5000000000:
-                    rating = "high"
-                else:
-                    rating = "low"
+                try:
+                    rating = self.classify_cost(costname, amt)
+                except:
+                    rating = amt
+
                 bcosts[costname] = rating
-            centroid = pu.geometry.point_on_surface.coords
+            centroid = pu.centroid 
             best.append({'name': pu.name, 'costs': bcosts, 'fid': pu.fid, 
                          'centroidx': centroid[0],
                          'centroidy': centroid[1]})
@@ -442,7 +503,7 @@ class Scenario(Analysis):
             'bbox': bbox,
         }
         if settings.USE_CACHE:
-            cache.set(key, res, timeout=3600)
+            cache.set(key, res, timeout=360000)
         return res
         
     @property

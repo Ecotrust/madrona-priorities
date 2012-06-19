@@ -71,7 +71,6 @@
                 {{ form.input_targets }}            
                 {{ form.input_relativecosts }}            
                 {{ form.input_geography}}
-                {{ form.input_scalefactor}}
             </div>
             <div class="field required">
                 {{ form.name.label_tag }}
@@ -79,6 +78,7 @@
                 {{ form.name }}            
             </div>
             <div class="field">
+                {{ form.input_scalefactor}}
                 {{ form.description.label_tag }}
                 {{ form.description.errors }}
                 {{ form.description }}            

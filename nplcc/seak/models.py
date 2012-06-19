@@ -124,7 +124,7 @@ class Scenario(Analysis):
     input_penalties = JSONField(verbose_name='Penalties for Missing Targets') 
     input_relativecosts = JSONField(verbose_name='Relative Costs')
     input_geography = JSONField(verbose_name='Input Geography fids')
-    input_scalefactor = models.FloatField(default=1.0)  #TODO default scalefactor ?
+    input_scalefactor = models.FloatField(default=0.0) 
     description = models.TextField(default="", null=True, blank=True, verbose_name="Description/Notes")
 
     # All output fields should be allowed to be Null/Blank
@@ -215,6 +215,10 @@ class Scenario(Analysis):
             meanpenalty = 0
         numspecies = len(nonzero_targets)
 
+        if self.input_scalefactor == 0:
+            # if 0, choose a scalefactor automatically
+            self.input_scalefactor = (meanpenalty * 10) + 1 
+
         # Apply the target and penalties
         logger.debug("Apply the targets and penalties")
         cfs = []
@@ -242,20 +246,18 @@ class Scenario(Analysis):
         sum_costs = 0
         # First loop, calc sum of costs 
         for pu in PlanningUnit.objects.filter(fid__in=geography_fids):
+            weighted_cost = 0.1  # TODO Constant: lowest possible cost
             puc = PuVsCost.objects.filter(pu=pu)
-            weighted_cost = 50.0  # TODO Constant: lowest possible cost
             for c in puc:
                 costkey = slugify(c.cost.name.lower())
                 weighted_cost += final_cost_weights[costkey] * c.amount
-                # TODO CONSTANT ALERT 
-                weighted_cost += final_cost_weights[costkey] * 1
             sum_costs += weighted_cost
             pucosts.append( (pu.pk, weighted_cost) )
 
 
         # Apply ratio to costs to 'pre-scale' the total costs to equal the total penalties
         ##### Marxan has it's own cost scaling strategy so this won't work!
-        ##### SEE APPENDIX B-1.3 for 
+        ##### SEE APPENDIX B-1.3 for details
         #penalty_cost_ratio = float(sum_penalties) / float(sum_costs)
         #new_pucosts = []
         #for pucost in pucosts:
@@ -366,12 +368,21 @@ class Scenario(Analysis):
         for pu in bestpus:
             bcosts = {}
             for x in PuVsCost.objects.filter(pu=pu):
-                costname = x.cost.name.lower().replace(" ","")
+                cname = x.cost.name
+                if cost_weights[cname] == 0:
+                   continue 
+                costname = cname.lower().replace(" ","")
                 amt = x.amount
                 # TODO classify amount to high/med/low
-                rating = "med"
+                if amt > 5000000000:
+                    rating = "high"
+                else:
+                    rating = "low"
                 bcosts[costname] = rating
-            best.append({'name': pu.name, 'costs': bcosts, 'fid': pu.fid })
+            centroid = pu.geometry.point_on_surface.coords
+            best.append({'name': pu.name, 'costs': bcosts, 'fid': pu.fid, 
+                         'centroidx': centroid[0],
+                         'centroidy': centroid[1]})
 
         sum_area = sum([x.area for x in bestpus])
 

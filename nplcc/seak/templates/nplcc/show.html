@@ -45,25 +45,46 @@
                 {% endif %}
             </div>
 
-            <div class="box">
-
+            <div>
              <table class="table">
-             <thead> <th>Conservation Feature</th><th>Goal Proportion</th><th>Importance Weighting</th></thead>
-             {% for k,v in results.targets_penalties.items %}
-             {% if v.target > 0 %}
-             <tr> <td><strong>{{k}}</strong></td><td>{{v.target}} </td><td>{{v.penalty}}</td></tr>
-             {% endif %}
-             {% endfor %}
+             <thead> 
+                <th><h4>{% flatblock 'show-conservation-features' 3600 %}</h4></th>
+                <th>Goal</th> 
+                <th>Importance Weighting</th>
+             </thead>
+             <tbody>
+                {% for k,v in results.targets_penalties.items %}
+                <tr class="{% if v.target > 0 %}targeted{% else %}not-targeted{% endif %}"> 
+                    <td><strong>{{k}}</strong></td>
+                    <td>{{v.target|percentage}}</td>
+                    <td>{{v.penalty}}</td>
+                </tr>
+                {% endfor %}
+             </tbody>
              </table>
 
+             <!-- 
+             <a href="#" class="btn btn-mini" id="btn-show-not-targeted">
+                Toggle {% flatblock 'show-conservation-features' 2600 %} without goals.
+             </a>
+             <script> 
+                $('a#btn-show-not-targeted').click( function(e) { 
+                    e.preventDefault(); 
+                    $('tr.not-targeted').toggle();
+                });
+             </script>
+             -->
+             <hr/>
+
              <table class="table">
-                 <thead> <th>Prioritization Constraints</th><th></th></thead>
+                 <thead> <th><h4>Prioritization Constraints</h4></th><th></th></thead>
              {%for k,v in results.costs.items|sortcosts %}
              {% if v > 0%}<tr><td> &#10003; <strong>{{k}}</strong></td></tr> 
              {% else %}<tr><td> &nbsp; <del>{{k}}</del></td></tr> 
              {% endif %} 
              {%endfor%}
              </table>
+             
              <span style="display:none" id="estimated_scaling_factor">{{instance.input_scalefactor}}</span>
             </div>
         </div>
@@ -71,91 +92,72 @@
         {% if instance.done %}
         <div id="summary" class="tab-pane">
             <div class="box">
-                <p>The optimum watershed prioritization scenario includes {{results.num_units}} subbasins covering {{results.area|floatformat:0|intcomma}} km<sup>2</sup>. </p>
-                <p>Goals were met for {{results.num_met}} of {{results.num_species}} focal species.</p>
+                <p>The optimum prioritization scenario includes {{results.num_units}} {% flatblock 'show-planning-units' 3600 %} covering {{results.area|floatformat:0|intcomma}} km<sup>2</sup>. </p>
+                <p>Goals were met for {{results.num_met}} of {{results.num_species}} {% flatblock 'show-conservation-features' 3600 %}.</p>
             </div>
         </div>
 
         <div id="watersheds" class="tab-pane">
             <div class="box">
-                <p>The optimum watershed prioritization scenario includes {{results.num_units}} subbasins covering {{results.area|floatformat:0|intcomma}} km<sup>2</sup>. </p>
-                <p>Ranking of prioritization constraints is <em>relative</em>. See <a href="/docs.html" target="_blank">data and methods</a> for more details. </p> 
-                <table>
+                <p>The optimum prioritization scenario includes {{results.num_units}} {% flatblock 'show-planning-units' 3600 %} covering {{results.area|floatformat:0|intcomma}} km<sup>2</sup>. </p>
                 <table class="table" summary="Subbasin Table">
                 <thead>
                     <tr>
-                    <th scope="col"> Subbasin </th> 
-                    {%for k,v in results.costs.items|sortcosts %}
-                        {% if v > 0%}
-                            {% if k == "watershed-condition" %}
-                            <th scope="col"> Watershed Condition</th>
-                            {% endif %}
-                            {% if k == "climate" %}
-                            <th scope="col"> Climate Change Vulnerability</th> 
-                            {% endif %}
-                            {% if k == "invasives" %}
-                            <th scope="col"> Vulnerability to Invasive Species</th>
-                            {% endif %}
+                    <th scope="col"> {% flatblock 'show-planning-units' 3600 %} </th> 
+                    {%for k,v in results.costs.items %}
+                        {% if v > 0 %}
+                        <th scope="col">{{k}}</th>
                         {% endif %}
                     {%endfor%}
                     <tr>
                 </thead>
-                <tbody>
+                <tbody id="best-pus">
                 {% for w in results.units %}
-                    <tr class="hit">
+                <tr>
                     <td>{{w.name}}</td>
-                    {%for k,v in results.costs.items|sortcosts %}
-                        {% if v > 0 %}
-                            {% if k == "climate" %}
-                            <td class="{{w.costs.climate}}">{{w.costs.climate}}</td>
-                            {% endif %}
-                            {% if k == "invasives" %}
-                            <td class="{{w.costs.invasives}}">{{w.costs.invasives}}</td>
-                            {% endif %}
-                            {% if k == "watershed-condition" %}
-                                {% if results.costs.invasives > 0 %}
-                                <td class="{{w.costs.watershedconditionnoais}}">{{w.costs.watershedconditionnoais}}</td>
-                                {% else %}
-                                <td class="{{w.costs.watershedconditionwithais}}">{{w.costs.watershedconditionwithais}}</td>
-                                {% endif %}
-                            {% endif %}
-                        {% endif %}
+                    {%for k,v in w.costs.items %}
+                    {% if v %}
+                    <td> {{k}}:{{v}} </td>
+                    {% endif %}
+                    <td class="centroid-x" style="display:none">{{w.centroidx}}</td>
+                    <td class="centroid-y" style="display:none">{{w.centroidy}}</td>
                     {% endfor %}
-                    </tr>
+                </tr>
                 {% endfor %}
                 </tbody>
                 </table>
             </div>
+             <script> 
+                var best = $('tbody#best-pus');
+                best.find('tr').mouseenter( function(e) { 
+                    var x = $(this).find('td.centroid-x').html();
+                    var y = $(this).find('td.centroid-y').html();
+                    var lonLat = new OpenLayers.LonLat(x,y);
+                    markers.addMarker(new OpenLayers.Marker(lonLat));
+                }).mouseleave( function(e) {
+                    markers.clearMarkers();
+                });
+             </script>
         </div>
         <div id="species" class="tab-pane">
             <div class="box">
-                <p>Goals were met for {{results.num_met}} of {{results.num_species}} focal species.</p>
+                <p>Goals were met for {{results.num_met}} of {{results.num_species}} {% flatblock 'show-conservation-features' 3600 %}.</p>
                 <table class="table" id="species_table" summary="Species Table">
                 <thead>
                     <tr>
-                    <th scope="col"> Species </th>
-                    <!-- <th scope="col"> Code </th> -->
-                    <th scope="col"> Percent of Total </th>
-                    <th scope="col" width="50"> Units </th>
-                    <!--
-                    <th scope="col"> Goal Amount</th> 
-                    <th scope="col"> Best Reserve Amount</th>
-                    -->
-                    <th scope="col" width="80"> Goal Met?</th>
-                    <tr>
+                        <th scope="col"> Species </th>
+                        <th scope="col"> Percent of Total </th>
+                        <th scope="col" width="50"> Units </th>
+                        <th scope="col" width="80"> Goal Met?</th>
+                    </tr>
                 </thead>
                 <tbody>
                 {% for s in results.species %}
                 <tr{% if s.target == 0 %} class="nogoal" style="display:none;"{% else %}class="hit"{% endif %}>
                     <td> <strong>{{s.name}}</strong><br/>({{s.code}})</td>
-                    <!-- <td> {{s.code}} </td> -->
-                    <td style="text-align:right;"> {{s.pcttotal|percentage:1}} </td>
+                    <td> {{s.pcttotal|percentage:1}} </td>
                     <td> {{s.units}} </td>
-                    <!--
-                    <td> {{s.target|floatformat:2|intcomma}} </td>
-                    <td> {{s.held|floatformat:2|intcomma}} </td> 
-                    -->
-                    <td style="text-align:center;"> {% if s.target == 0 %} -- {% else %} 
+                    <td> {% if s.target == 0 %} -- {% else %} 
                         {% if s.met %}&#10003;{% else %} NO<br/>(Goal was {{s.target_prop|percentage:0}}){% endif %} 
                          {% endif %}
                     </td>
@@ -163,7 +165,6 @@
                 {% endfor %}
                 </tbody>
             </table>
-            <a href="#" class="toggle_na_species" style="font-size:8pt;"><span class="showhidelang" style="display:inline">Show</span><span class="showhidelang" style="display:none">Hide</span> Species Without Goal Amount</a>
         </div>
         {% endif %}
         </div>

@@ -116,7 +116,10 @@ label.olButton {
 }
 #layerswitcher-list {
     width: 240px;
-    float:right;
+    float: right;
+}
+tr.not-targeted {
+    display: none;
 }
 #layerswitcher {
     float:right;

@@ -1,6 +1,7 @@
 var map;
 var hilites;
 var pu_layer;
+var markers;
 var selectFeatureControl;
 var selectGeographyControl;
 
@@ -19,6 +20,10 @@ function init_map() {
         ],
         numZoomLevels: 18
     });
+
+    markers = new OpenLayers.Layer.Markers( "Markers" );
+    //var lonLat = new OpenLayers.LonLat( -14277165.0, 7002116.0 );
+    //markers.addMarker(new OpenLayers.Marker(lonLat));
 
     var osm = new OpenLayers.Layer.OSM();
 
@@ -111,7 +116,7 @@ function init_map() {
     .error(function() { app.scenarios.viewModel.planningUnitsLoadError(true); })
     .complete(function() { app.scenarios.viewModel.planningUnitsLoadComplete(true); })
 
-    map.addLayers([esri_shade, esri_topo, esri_physical, osm, google_terrain, pu_layer, pu_tiles, pu_utfgrid, nplcc]);
+    map.addLayers([esri_shade, esri_topo, esri_physical, osm, google_terrain, pu_layer, pu_tiles, pu_utfgrid, nplcc, markers]);
     
     selectFeatureControl = new OpenLayers.Control.SelectFeature(
         pu_layer,

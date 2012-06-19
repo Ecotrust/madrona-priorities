@@ -24,11 +24,11 @@ scalefactors = []
 num_species = []
 num_units = []
 
-factors = [1, 5, 100]
-numspecies = [2]
+factors = [0, 1, 5, 10, 20, 100]
+numspecies = [1]
 numcosts = [1]
-targets = [0.33]
-penalties = [0.5]
+targets = [0.52]
+penalties = [1.0]
 
 settings.MARXAN_NUMREPS = 30
 
@@ -94,22 +94,22 @@ if MODE == 'create':
         keys.append(a)
 
     # TODO hardcoded
-    keys = [u'length---shape_leng', u'coordinate---mean_y']
+    keys = [u'length---shape_leng']
 
     fh = open("/home/mperry/results.csv", 'w+')
     fh.write('ncosts, nspecies, sumpenalties, meanpenalties, scalefactor, numspeciesmet, numplannningunits')
     fh.write('\n')
     fh.flush()
 
+    g = GEOSGeometry('POINT(-13874668 %s)' % random.randrange(5005012, 8101549))
     for f in factors:
         for nc in numcosts:
             for n in numspecies:
                 for i in range(3):
-                    g = GEOSGeometry('POINT(-13874668 %s)' % random.randrange(5005012, 8101549))
-                    if random.choice([True,False]):
-                        geography_list = [x.fid for x in PlanningUnit.objects.filter(geometry__strictly_below=g)]
-                    else:
-                        geography_list = [x.fid for x in PlanningUnit.objects.filter(geometry__strictly_above=g)]
+                    #if random.choice([True,False]):
+                    #    geography_list = [x.fid for x in PlanningUnit.objects.filter(geometry__strictly_below=g)]
+                    #else:
+                    geography_list = [x.fid for x in PlanningUnit.objects.filter(geometry__strictly_above=g)]
 
                     try:
                         n = int(n)

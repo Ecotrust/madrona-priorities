@@ -45,51 +45,6 @@
     }
   }, 
   {
-    "pk": 1, 
-    "model": "flatblocks.flatblock", 
-    "fields": {
-      "content": "NPLCC Prioritization Tool", 
-      "header": "", 
-      "slug": "title"
-    }
-  }, 
-  {
-    "pk": 9, 
-    "model": "flatblocks.flatblock", 
-    "fields": {
-      "content": "Results<br/>Summary", 
-      "header": "", 
-      "slug": "show-results-summary"
-    }
-  }, 
-  {
-    "pk": 10, 
-    "model": "flatblocks.flatblock", 
-    "fields": {
-      "content": "Conservation<br/> Features", 
-      "header": "", 
-      "slug": "show-conservation-features"
-    }
-  }, 
-  {
-    "pk": 11, 
-    "model": "flatblocks.flatblock", 
-    "fields": {
-      "content": "Planning<br/> Units", 
-      "header": "", 
-      "slug": "show-planning-units"
-    }
-  }, 
-  {
-    "pk": 8, 
-    "model": "flatblocks.flatblock", 
-    "fields": {
-      "content": "<br/>Inputs", 
-      "header": "", 
-      "slug": "show-inputs"
-    }
-  }, 
-  {
     "pk": 7, 
     "model": "flatblocks.flatblock", 
     "fields": {
@@ -105,15 +60,6 @@
       "content": "Set Proptions and Weights for Focal Fish Species", 
       "header": "", 
       "slug": "form-conservationfeature-header"
-    }
-  }, 
-  {
-    "pk": 13, 
-    "model": "flatblocks.flatblock", 
-    "fields": {
-      "content": "<p> \r\n     The <a href=\"/docs.html#goal\" target=\"_blank\">goal proportion</a> is the proportion of the species habitat or viability score you want to represent in your scenario. \r\n     For example, if a focal species is measured by presence, setting a goal of <em>0.5</em> means that your goal is to conserve at least half of the watersheds containing that species.\r\n     </p>\r\n\r\n<p> \r\n    The <a href=\"/docs.html#importance\" target=\"_blank\">importance weighting</a> is the subjective value of meeting that goal. \r\n    Not all goals can always be met due to prioritization constraints - in cases where tradeoffs need to be made, the importance weighting will determine which goals get higher priority. \r\n    An importance of <em>0</em> means very low priority; <em>1.0</em> means highest priority. \r\n    </p>", 
-      "header": "", 
-      "slug": "form-conservationfeature-description"
     }
   }, 
   {
@@ -150,6 +96,60 @@
       "content": "Setting prioritization constraints helps by avoiding costly or high-risk regions.", 
       "header": "", 
       "slug": "form-costs-description"
+    }
+  }, 
+  {
+    "pk": 13, 
+    "model": "flatblocks.flatblock", 
+    "fields": {
+      "content": "<p> \r\n     The <a href=\"/docs.html#goal\" target=\"_blank\">goal proportion</a> is the proportion of the species habitat or viability score you want to represent in your scenario. \r\n     For example, if a focal species is measured by presence, setting a goal of <em>0.5</em> means that your goal is to conserve at least half of the watersheds containing that species.\r\n     </p>\r\n\r\n<p> \r\n    The <a href=\"/docs.html#importance\" target=\"_blank\">importance weighting</a> is the subjective value of meeting that goal. \r\n    Not all goals can always be met due to prioritization constraints - in cases where tradeoffs need to be made, the importance weighting will determine which goals get higher priority. \r\n    An importance of <em>0</em> means very low priority; <em>1.0</em> means highest priority. \r\n    </p>", 
+      "header": "", 
+      "slug": "form-conservationfeature-description"
+    }
+  }, 
+  {
+    "pk": 1, 
+    "model": "flatblocks.flatblock", 
+    "fields": {
+      "content": "NPLCC Prioritization Tool", 
+      "header": "", 
+      "slug": "title"
+    }
+  }, 
+  {
+    "pk": 10, 
+    "model": "flatblocks.flatblock", 
+    "fields": {
+      "content": "Conservation Features", 
+      "header": "", 
+      "slug": "show-conservation-features"
+    }
+  }, 
+  {
+    "pk": 11, 
+    "model": "flatblocks.flatblock", 
+    "fields": {
+      "content": "Planning Units", 
+      "header": "", 
+      "slug": "show-planning-units"
+    }
+  }, 
+  {
+    "pk": 8, 
+    "model": "flatblocks.flatblock", 
+    "fields": {
+      "content": "Inputs", 
+      "header": "", 
+      "slug": "show-inputs"
+    }
+  }, 
+  {
+    "pk": 9, 
+    "model": "flatblocks.flatblock", 
+    "fields": {
+      "content": "Results Summary", 
+      "header": "", 
+      "slug": "show-results-summary"
     }
   }
 ]

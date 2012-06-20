@@ -87,6 +87,7 @@ class Cost(models.Model):
     uid = models.IntegerField(primary_key=True)
     dbf_fieldname = models.CharField(max_length=15,null=True,blank=True)
     units = models.CharField(max_length=16, null=True, blank=True)
+    desc = models.TextField()
 
     def __unicode__(self):
         return u'%s' % self.name
@@ -168,6 +169,17 @@ class PuVsCost(models.Model):
 
         return breaks
 
+def scale_list(vals, low, high):
+    """
+    Scales a list of floats linearly between low and high
+    """
+    minval = min(vals)
+    maxval = max(vals)
+    scaled = [z / float(maxval - minval) for z in 
+                [(high - low) * y for y in 
+                    [x - minval for x in vals]]] 
+    return scaled
+
 @register
 class Scenario(Analysis):
     input_targets = JSONField(verbose_name='Target Percentage of Habitat')
@@ -186,20 +198,6 @@ class Scenario(Analysis):
         return os.path.realpath(os.path.join(settings.MARXAN_OUTDIR, "%s_" % (self.uid,) ))
         # This is not asycn-safe! A new modificaiton will clobber the old. 
         # What happens if new and old are both still running - small chance of a corrupted mix of output files? 
-
-    def classify_cost(self, costname, value):
-        breaks = PuVsCost.breaks() 
-        try:
-            b = breaks[costname]
-        except IndexError:
-            return value  # don't classify
-
-        if value < b[0]:
-            return 'low'
-        elif value > b[1]:
-            return 'high'
-        else:
-            return 'med'
 
     def copy(self, user):
         """ Override the copy method to make sure the marxan files get copied """
@@ -320,14 +318,8 @@ class Scenario(Analysis):
             pus.append(pu.pk)
 
         # scale the costs 0 to 100
-        minval = min(wcosts)
-        maxval = max(wcosts)
         sum_costs = sum(wcosts)
-        a = 0.0
-        b = 100.0
-        scaled_costs = [z / float(maxval - minval) for z in 
-                            [(b - a) * y for y in 
-                                [x - minval for x in wcosts]]] 
+        scaled_costs = scale_list(wcosts, 0.0, 100.0)
         pucosts = zip(pus, scaled_costs)
 
         logger.debug("Creating the MarxanAnalysis object")
@@ -425,25 +417,29 @@ class Scenario(Analysis):
             bbox = potentialpus.extent()
         best = []
         logger.debug("looping through bestpus queryset")
+
+        
+        scaled_costs = {}
+        for cost, weight in cost_weights.iteritems():
+            if weight <= 0:
+                continue
+
+            all = PuVsCost.objects.filter(cost__name=cost, pu__in=bestpus)
+            vals = [ x.amount for x in all]
+            fids = [x.pu.fid for x in all]
+            scaled_values = [int(x) for x in scale_list(vals, 0.0, 100.0)]
+            pucosts = dict(zip(fids, scaled_values))
+            scaled_costs[cost] = pucosts
+
         for pu in bestpus:
-            bcosts = {}
-            for x in PuVsCost.objects.filter(pu=pu):
-                costname = x.cost.name
-                try:
-                    assert cost_weights[costname] > 0
-                except:
-                    # either weight is zero or not in the dict
-                    continue 
-
-                amt = x.amount
-                try:
-                    rating = self.classify_cost(costname, amt)
-                except:
-                    rating = amt
-
-                bcosts[costname] = rating
             centroid = pu.centroid 
-            best.append({'name': pu.name, 'costs': bcosts, 'fid': pu.fid, 
+            costs = {}
+            for cname, pucosts in scaled_costs.iteritems():
+                costs[cname] = pucosts[pu.fid]
+
+            best.append({'name': pu.name, 
+                         'fid': pu.fid, 
+                         'costs': costs,
                          'centroidx': centroid[0],
                          'centroidy': centroid[1]})
 

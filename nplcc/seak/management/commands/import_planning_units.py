@@ -96,10 +96,8 @@ class Command(BaseCommand):
         sheet = book.sheet_by_name("Costs")
         headers = [str(x).strip() for x in sheet.row_values(0)] #returns all the CELLS of row 0,
 
-        fieldnames = ['name', 'uid', 'dbf_fieldname', 'units']
+        fieldnames = ['name', 'uid', 'dbf_fieldname', 'units', 'desc']
 
-        print headers
-        print fieldnames
         assert len(headers) == len(fieldnames)
         for h in range(len(headers)): 
             if headers[h] != fieldnames[h]:

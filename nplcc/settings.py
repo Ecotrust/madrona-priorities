@@ -58,7 +58,6 @@ MARXAN_NUMITNS = 1000000
 
 LOG_FILE =  os.path.realpath(os.path.join(os.path.dirname(__file__), '..', 'nplcc.log'))
 LOGFILE =  os.path.realpath(os.path.join(os.path.dirname(__file__), '..', 'nplcc.log'))
-USE_CACHE = False
 
 MEDIA_ROOT =  os.path.realpath(os.path.join(os.path.dirname(__file__), '..', 'mediaroot'))
 
@@ -77,7 +76,7 @@ CACHES = {
         'LOCATION': 'nplcc-cache'
     }
 }
-USE_CACHE = True
+USE_CACHE = False
 
 # Use redis_sessions if available
 try:

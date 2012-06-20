@@ -24,7 +24,7 @@ scalefactors = []
 num_species = []
 num_units = []
 
-factors = [0, 1, 5, 10, 20, 100]
+factors = [0, 1, 5, 10, 20]
 numspecies = [1]
 numcosts = [1]
 targets = [0.52]
@@ -93,9 +93,6 @@ if MODE == 'create':
             a = a[:-3]
         keys.append(a)
 
-    # TODO hardcoded
-    keys = [u'length---shape_leng']
-
     fh = open("/home/mperry/results.csv", 'w+')
     fh.write('ncosts, nspecies, sumpenalties, meanpenalties, scalefactor, numspeciesmet, numplannningunits')
     fh.write('\n')
@@ -105,11 +102,11 @@ if MODE == 'create':
     for f in factors:
         for nc in numcosts:
             for n in numspecies:
-                for i in range(3):
-                    #if random.choice([True,False]):
-                    #    geography_list = [x.fid for x in PlanningUnit.objects.filter(geometry__strictly_below=g)]
-                    #else:
-                    geography_list = [x.fid for x in PlanningUnit.objects.filter(geometry__strictly_above=g)]
+                for i in range(2):
+                    if random.choice([True,False]):
+                        geography_list = [x.fid for x in PlanningUnit.objects.filter(geometry__strictly_below=g)]
+                    else:
+                        geography_list = [x.fid for x in PlanningUnit.objects.filter(geometry__strictly_above=g)]
 
                     try:
                         n = int(n)

@@ -6,12 +6,12 @@ function progressViewModel() {
   self.error = ko.observable(false);
   self.progressBarWidth = ko.observable("0%");
   self.triggerDone = function(scenario_uid) {
-    self.done(true);
     clearInterval(app.timer);
     app.timer = null;
     if (scenario_uid) {
         app.scenarios.viewModel.loadScenarios(scenario_uid);
     }
+    self.done(true);
   };
   self.checkTimer = function() {
     var checkProgress = function () {

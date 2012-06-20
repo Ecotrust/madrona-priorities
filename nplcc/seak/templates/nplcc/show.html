@@ -26,14 +26,13 @@
     <ul class="nav nav-tabs" style="margin-bottom:0px;">
         <li class="active"><a href="#Inputs" data-toggle="tab"><span>{% flatblock 'show-inputs' 3600 %}</span></a></li>
         {% if instance.done %}
-        <li><a href="#summary" data-toggle="tab"><span>{% flatblock 'show-results-summary' 3600 %}</span></a></li>
         <li><a href="#species" data-toggle="tab"><span>{% flatblock 'show-conservation-features' 3600 %}</span></a></li>
         <li><a href="#watersheds" data-toggle="tab"><span>{% flatblock 'show-planning-units' 3600 %}</span></a></li>
         {% endif %}
     </ul>
 
     {% set results = instance.results %}
-    <div class="tab-content">
+    <div class="tab-content tab-content-show">
 
         <div id="Inputs" class="tab-pane active">
             <div class="box">
@@ -44,7 +43,7 @@
                 <p> {{instance.description}} </p>
                 {% endif %}
             </div>
-
+            <hr/>
             <div>
              <table class="table">
              <thead> 
@@ -90,12 +89,6 @@
         </div>
 
         {% if instance.done %}
-        <div id="summary" class="tab-pane">
-            <div class="box">
-                <p>The optimum prioritization scenario includes {{results.num_units}} {% flatblock 'show-planning-units' 3600 %} covering {{results.area|floatformat:0|intcomma}} km<sup>2</sup>. </p>
-                <p>Goals were met for {{results.num_met}} of {{results.num_species}} {% flatblock 'show-conservation-features' 3600 %}.</p>
-            </div>
-        </div>
 
         <div id="watersheds" class="tab-pane">
             <div class="box">
@@ -154,7 +147,7 @@
                 <tbody>
                 {% for s in results.species %}
                 <tr{% if s.target == 0 %} class="nogoal" style="display:none;"{% else %}class="hit"{% endif %}>
-                    <td> <strong>{{s.name}}</strong><br/>({{s.code}})</td>
+                    <td> <strong>{{s.name}}</strong></td>
                     <td> {{s.pcttotal|percentage:1}} </td>
                     <td> {{s.units}} </td>
                     <td> {% if s.target == 0 %} -- {% else %} 

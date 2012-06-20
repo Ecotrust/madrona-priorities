@@ -65,9 +65,9 @@ class Command(BaseCommand):
         import xlrd
         book = xlrd.open_workbook(xls)
         sheet = book.sheet_by_name("ConservationFeatures")
-        headers = [str(x.strip()) for x in sheet.row_values(0)] #returns all the CELLS of row 0,
+        headers = [str(x).strip() for x in sheet.row_values(0)] #returns all the CELLS of row 0,
 
-        fieldnames = ['name', 'level1','level2','level3','level4', 'level5', 'dbf_fieldname', 'units']
+        fieldnames = ['name', 'uid', 'level1','level2','level3','level4', 'level5', 'dbf_fieldname', 'units']
 
         assert len(headers) == len(fieldnames)
         for h in range(len(headers)): 
@@ -75,7 +75,8 @@ class Command(BaseCommand):
                 print "WARNING: field %s is '%s' in the xls file but model is expecting '%s' ... OK?" % (h, headers[h], fieldnames[h])
 
         for i in xrange(1, sheet.nrows):
-            vals = [str(x.strip()) for x in sheet.row_values(i)]
+            vals = sheet.row_values(i)
+            print vals
             params = dict(zip(fieldnames, vals))
             cf = ConservationFeature(**params)
             cf.save()
@@ -93,17 +94,20 @@ class Command(BaseCommand):
         print
         print "Loading Costs"
         sheet = book.sheet_by_name("Costs")
-        headers = [str(x.strip()) for x in sheet.row_values(0)] #returns all the CELLS of row 0,
+        headers = [str(x).strip() for x in sheet.row_values(0)] #returns all the CELLS of row 0,
 
-        fieldnames = ['name', 'dbf_fieldname', 'units']
+        fieldnames = ['name', 'uid', 'dbf_fieldname', 'units']
 
+        print headers
+        print fieldnames
         assert len(headers) == len(fieldnames)
         for h in range(len(headers)): 
             if headers[h] != fieldnames[h]:
                 print "WARNING: field %s is '%s' in the xls file but model is expecting '%s' ... OK?" % (h, headers[h], fieldnames[h])
 
         for i in xrange(1, sheet.nrows):
-            vals = [str(x.strip()) for x in sheet.row_values(i)]
+            vals = sheet.row_values(i)
+            print vals
             params = dict(zip(fieldnames, vals))
             c = Cost(**params)
             c.save()
@@ -152,9 +156,11 @@ class Command(BaseCommand):
             pu = pus.get(fid=feature.get(mapping['fid']))
             for cf in cfs_with_fields:
                 amt = feature.get(cf.dbf_fieldname)
+                # TODO allow negative or null values
+                """
                 if amt is None or amt < 0:
-                    # DONT allow negative or null values
                     amt = 0
+                """
                 obj = PuVsCf(pu=pu, cf=cf, amount=amt)
                 obj.save()
 

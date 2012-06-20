@@ -65,6 +65,7 @@ class ConservationFeature(models.Model):
     level5 = models.CharField(max_length=99,null=True,blank=True)
     dbf_fieldname = models.CharField(max_length=15,null=True,blank=True)
     units = models.CharField(max_length=90, null=True, blank=True)
+    uid = models.IntegerField(primary_key=True)
 
     @property
     def level_string(self):
@@ -83,6 +84,7 @@ class ConservationFeature(models.Model):
 
 class Cost(models.Model):
     name = models.CharField(max_length=99)
+    uid = models.IntegerField(primary_key=True)
     dbf_fieldname = models.CharField(max_length=15,null=True,blank=True)
     units = models.CharField(max_length=16, null=True, blank=True)
 
@@ -90,7 +92,7 @@ class Cost(models.Model):
         return u'%s' % self.name
 
 class PlanningUnit(models.Model):
-    fid = models.IntegerField()
+    fid = models.IntegerField(primary_key=True)
     name = models.CharField(max_length=99)
     geometry = models.MultiPolygonField(srid=settings.GEOMETRY_DB_SRID, 
             null=True, blank=True, verbose_name="Planning Unit Geometry")
@@ -225,14 +227,14 @@ class Scenario(Analysis):
         { 1: 0.5, 2: 0.5, ......}
         """
         ndict = {}
-        for s in ConservationFeature.objects.all():
-            levels = s.level_string
+        for cf in ConservationFeature.objects.all():
+            levels = cf.level_string
             val = 0
             for k,v in d.items():
                 if levels.startswith(k.lower()):
                     val = v
                     break
-            ndict[s.pk] = val
+            ndict[cf.pk] = val
         return ndict
 
     def invalidate_cache(self):
@@ -297,40 +299,36 @@ class Scenario(Analysis):
 
         final_cost_weights = {}
         for cost in Cost.objects.all():
-            costkey = slugify(cost.name.lower())
+            costkey = cost.name
             try:
                 final_cost_weights[costkey] = cost_weights[costkey]
             except KeyError:
                 final_cost_weights[costkey] = 0
 
         # Calc costs for each planning unit
-        pucosts = []
-        sum_costs = 0
-        # First loop, calc sum of costs 
+        wcosts = []
+        pus = []
+
+        # First loop, calc the cumulative costs per planning unit
         for pu in PlanningUnit.objects.filter(fid__in=geography_fids):
             weighted_cost = 0.1  # TODO Constant: lowest possible cost
             puc = PuVsCost.objects.filter(pu=pu)
             for c in puc:
-                costkey = slugify(c.cost.name.lower())
+                costkey = c.cost.name
                 weighted_cost += final_cost_weights[costkey] * c.amount
-            sum_costs += weighted_cost
-            pucosts.append( (pu.pk, weighted_cost) )
+            wcosts.append(weighted_cost)
+            pus.append(pu.pk)
 
-
-        # Apply ratio to costs to 'pre-scale' the total costs to equal the total penalties
-        ##### Marxan has it's own cost scaling strategy so this won't work!
-        ##### SEE APPENDIX B-1.3 for details
-        #penalty_cost_ratio = float(sum_penalties) / float(sum_costs)
-        #new_pucosts = []
-        #for pucost in pucosts:
-        #    new_pucost = (pucost[0], pucost[1] * penalty_cost_ratio )# self.input_scalefactor)
-        #    new_pucosts.append(new_pucost)
-        #pucosts = new_pucosts
-
-        # Pull the puvscf table
-        # This takes and insanely long time and is not stable
-        # resort to a horrible hack of exporting the data directly to csv via SQL query
-        #puvscf = [(r.cf.pk, r.pu.pk, r.amount) for r in PuVsCf.objects.all().order_by('pu__pk')]
+        # scale the costs 0 to 100
+        minval = min(wcosts)
+        maxval = max(wcosts)
+        sum_costs = sum(wcosts)
+        a = 0.0
+        b = 100.0
+        scaled_costs = [z / float(maxval - minval) for z in 
+                            [(b - a) * y for y in 
+                                [x - minval for x in wcosts]]] 
+        pucosts = zip(pus, scaled_costs)
 
         logger.debug("Creating the MarxanAnalysis object")
         m = MarxanAnalysis(pucosts, cfs, self.outdir)
@@ -395,10 +393,10 @@ class Scenario(Analysis):
         if settings.USE_CACHE:
             cached_result = cache.get(key)
             if cached_result:
-                logger.debug("cache HIT for scenario results")
+                logger.debug("cache HIT for %s" % key)
                 return cached_result
 
-        logger.debug("cache MISS for scenario results; recalculating")
+        logger.debug("cache MISS for %s; recalculating.." % key)
 
         targets = json.loads(self.input_targets)
         penalties = json.loads(self.input_penalties)
@@ -431,8 +429,12 @@ class Scenario(Analysis):
             bcosts = {}
             for x in PuVsCost.objects.filter(pu=pu):
                 costname = x.cost.name
-                if cost_weights[costname] == 0:
-                   continue 
+                try:
+                    assert cost_weights[costname] > 0
+                except:
+                    # either weight is zero or not in the dict
+                    continue 
+
                 amt = x.amount
                 try:
                     rating = self.classify_cost(costname, amt)
@@ -503,7 +505,8 @@ class Scenario(Analysis):
             'bbox': bbox,
         }
         if settings.USE_CACHE:
-            cache.set(key, res, timeout=360000)
+            logger.debug("setting the cache for %s" % key)
+            cache.set(key, res, timeout=36000)
         return res
         
     @property

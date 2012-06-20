@@ -121,6 +121,9 @@ label.olButton {
 tr.not-targeted {
     display: none;
 }
+div.tab-content-show {
+    height: 320px;
+}
 #layerswitcher {
     float:right;
     text-align:left;

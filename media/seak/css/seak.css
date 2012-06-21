@@ -132,8 +132,10 @@ div.tab-content-show {
     background: rgba(255,255,255, .5); /* Works on all modern browsers */
 }
 #info {
+    position: absolute; 
+    bottom: 7.5%; 
+    z-index: 99999;
     float:right;
-    float: bottom;
     text-align:left;
     font-size: 85%;
     width: 184px;

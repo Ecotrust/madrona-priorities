@@ -396,30 +396,44 @@ function scenariosViewModel() {
   };
 
   self.loadViewModel = function (data) {
-    self.scenarioList($.map(data.features, function (feature, i) {
-      return ko.mapping.fromJS(feature.properties);
-    }));
+    // load the whole enchilada
+    if (data.features && data.features.length) {
+        self.scenarioList($.map(data.features, function (feature, i) {
+            return ko.mapping.fromJS(feature.properties);
+        }));
+    }
   };
+
+  self.updateScenario = function (data) {
+        // Remove it first if it already exists
+        var theUid = data.features[0].properties.uid;
+        var theScenario = self.getScenarioByUid(theUid);
+        if (theScenario) {
+            self.scenarioList.remove(theScenario);
+        }
+          
+        self.scenarioList.unshift(ko.mapping.fromJS(data.features[0].properties));
+        self.selectedFeature(self.scenarioList()[0]);
+  }
 
   self.loadScenarios = function(scenario_uid) {
     self.scenarioLoadComplete(false);
     self.scenarioLoadError(false);
-    var process = function(data) {
-      if (data.features && data.features.length) {
-        self.loadViewModel(data);
-      } 
-    };
-    var jqhxr = $.get('/seak/scenarios.geojson', 
-        process
-    )
+    var url;
+    if (scenario_uid) {
+        // TODO  get url from workspace
+        url = '/features/generic-links/links/geojson/' + scenario_uid + '/';
+        handler = function(data) { self.updateScenario(data); }
+    } else {
+        url = '/seak/scenarios.geojson';
+        handler = function(data) { self.loadViewModel(data); }
+    }
+
+    var jqhxr = $.get(url, handler) 
     .success( function() { 
         if (scenario_uid) {
-            $.each(self.scenarioList(), function(i, scenario) {
-               if (scenario.uid() === scenario_uid) {
-                   self.selectFeature(scenario);
-                   return false;
-               }
-            });
+            var theScenario = self.getScenarioByUid(scenario_uid);
+            self.selectFeature(theScenario);
         } 
      })
     .error(function() { self.scenarioLoadError(true); })
@@ -427,6 +441,17 @@ function scenariosViewModel() {
         self.scenarioLoadComplete(true); 
     })
 
+  };
+
+  self.getScenarioByUid = function(uid) {
+    var theScenario = false;
+    $.each(self.scenarioList(), function(i, scenario) {
+        if (scenario.uid() === uid) {
+            theScenario = scenario;
+            return false;
+        }
+    });
+    return theScenario;
   };
 
   self.backToScenarioList = function() {

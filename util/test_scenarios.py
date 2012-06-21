@@ -24,12 +24,12 @@ scalefactors = []
 num_species = []
 num_units = []
 
-#factors = [0, 1, 5, 10, 20]
-factors = [float(x)/2.0 for x in range(2,10)]
+factors = [2, 3, 4, 5]
+#factors = [float(x)/20.0 for x in range(20,100)]
 numspecies = [3]
 numcosts = [2]
-targets = [0.3, 0.75]
-penalties = [0.3, 0.8]
+targets = [0.5]
+penalties = [0.5]
 
 settings.MARXAN_NUMREPS = 3
 
@@ -103,7 +103,7 @@ if MODE == 'create':
     for f in factors:
         for nc in numcosts:
             for n in numspecies:
-                for i in range(2):
+                for i in range(4):
                     #if random.choice([True,False]):
                     geography_list = [x.fid for x in PlanningUnit.objects.filter(geometry__strictly_below=g)]
                     #else:

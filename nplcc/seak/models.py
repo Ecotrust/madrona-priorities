@@ -357,8 +357,8 @@ class Scenario(Analysis):
                 return (0, numreps)
         return (len(outputs), numreps)
 
-    @property
-    def geojson(self):
+    def geojson(self, srid):
+        # Note: no reprojection support here 
         rs = self.results
         if 'units' in rs:
             selected_fids = [r['fid'] for r in rs['units']]
@@ -508,7 +508,9 @@ class Scenario(Analysis):
         }
         if settings.USE_CACHE:
             logger.debug("setting the cache for %s" % key)
-            cache.set(key, res, timeout=36000)
+            cache.set(key, res)
+            if cache.get(key) != res:
+                raise RuntimeError("USE_CACHE is true but cache is not setting/getting properly")
         return res
         
     @property

@@ -181,7 +181,7 @@ def planning_units_geojson(request):
 
 from django.views.decorators.cache import never_cache
 # set headers to disable all client-side caching
-@never_cache
+# @never_cache
 def user_scenarios_geojson(request):
     from seak.models import Scenario
 
@@ -191,11 +191,11 @@ def user_scenarios_geojson(request):
     if user.is_anonymous() or not user.is_authenticated:
         return HttpResponse("You must be logged in to view your scenarios.", status=401)
 
-    scenarios = Scenario.objects.filter(user=user)
+    scenarios = Scenario.objects.filter(user=user).order_by('-date_modified')
 
     geojson = """{ 
       "type": "FeatureCollection",
       "features": [ %s ]
-    }""" % (', \n'.join([s.geojson for s in scenarios]),)
+    }""" % (', \n'.join([s.geojson(None) for s in scenarios]),)
 
     return HttpResponse(geojson, content_type='application/json')

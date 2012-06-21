@@ -109,9 +109,9 @@
                 <tr>
                     <td>{{w.name}}</td>
                     {%for k,v in w.costs.items %}
-                        {% if v < 24%} <td><span class="badge badge-success">low</span></td>
-                        {% elif v > 66 %} <td><span class="badge badge-important">high</span></td>
-                        {% else %} <td><span class="badge badge-warning">med</span></td>
+                    {% if v < 24%} <td><span class="badge badge-success">low {{v}}</span></td>
+                    {% elif v > 66 %} <td><span class="badge badge-important">high {{v}}</span></td>
+                    {% else %} <td><span class="badge badge-warning">med {{v}}</span></td>
                     {% endif %}
                     <td class="centroid-x" style="display:none">{{w.centroidx}}</td>
                     <td class="centroid-y" style="display:none">{{w.centroidy}}</td>

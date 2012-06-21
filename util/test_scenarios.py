@@ -24,13 +24,14 @@ scalefactors = []
 num_species = []
 num_units = []
 
-factors = [0, 1, 5, 10, 20]
-numspecies = [1]
-numcosts = [1]
-targets = [0.52]
-penalties = [1.0]
+#factors = [0, 1, 5, 10, 20]
+factors = [float(x)/2.0 for x in range(2,10)]
+numspecies = [3]
+numcosts = [2]
+targets = [0.3, 0.75]
+penalties = [0.3, 0.8]
 
-settings.MARXAN_NUMREPS = 30
+settings.MARXAN_NUMREPS = 3
 
 #MODE = 'hardcoded' 
 #MODE = 'query' 
@@ -103,10 +104,10 @@ if MODE == 'create':
         for nc in numcosts:
             for n in numspecies:
                 for i in range(2):
-                    if random.choice([True,False]):
-                        geography_list = [x.fid for x in PlanningUnit.objects.filter(geometry__strictly_below=g)]
-                    else:
-                        geography_list = [x.fid for x in PlanningUnit.objects.filter(geometry__strictly_above=g)]
+                    #if random.choice([True,False]):
+                    geography_list = [x.fid for x in PlanningUnit.objects.filter(geometry__strictly_below=g)]
+                    #else:
+                    #geography_list = [x.fid for x in PlanningUnit.objects.filter(geometry__strictly_above=g)]
 
                     try:
                         n = int(n)
@@ -138,9 +139,10 @@ if MODE == 'create':
                         target_dict = { "coordinate":t, "uids":t2 } 
                         penalty_dict = { "coordinate":p, "uids":p2 } 
 
-                    costs_dict = { "Area":0 } 
-                    for a in random.sample(costs_dict.keys(), nc):
+                    costs_dict = {} 
+                    for a in random.sample([c.slug for c in Cost.objects.all()], nc):
                         costs_dict[a] = 1
+
                     sf = f
                     wp = create_wp(target_dict, penalty_dict, costs_dict, geography_list, sf)
 
@@ -150,27 +152,19 @@ if MODE == 'create':
                     print 'costs', wp.input_relativecosts
 
                     wp.save()
-                    continue 
-                    #while not wp.done:
-                    #    time.sleep(2)
-                    #    print "  ", wp.status_html
+                    #continue 
+                    while not wp.done:
+                        time.sleep(2)
+                        print "  ", wp.status_html
 
                     inpenalties = json.loads(wp.input_penalties)
 
-                    if 'widespread' in inpenalties.keys():
-                        nspecies = 71
-                    else:
-                        nspecies = len(inpenalties.keys())
-
                     r = wp.results
-                    print '----------------'
-                    print r
-                    print '----------------'
 
                     #'ncosts, nspecies, sumpenalties, meanpenalties, scalefactor, numspeciesmet, numplannningunits'
                     fh.write(','.join([str(x) for x in [
                         sum(json.loads(wp.input_relativecosts).values()),
-                        nspecies,
+                        len(inpenalties.values()),
                         sum(inpenalties.values()),
                         mean(inpenalties.values()),
                         wp.input_scalefactor,

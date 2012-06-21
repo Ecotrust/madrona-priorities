@@ -89,6 +89,10 @@ class Cost(models.Model):
     units = models.CharField(max_length=16, null=True, blank=True)
     desc = models.TextField()
 
+    @property
+    def slug(self):
+        return slugify(self.name.lower())
+
     def __unicode__(self):
         return u'%s' % self.name
 
@@ -173,8 +177,12 @@ def scale_list(vals, low, high):
     """
     Scales a list of floats linearly between low and high
     """
+    if len(vals) < 1:
+        return []
     minval = min(vals)
     maxval = max(vals)
+    if maxval == minval: 
+        return [0] * len(vals)
     scaled = [z / float(maxval - minval) for z in 
                 [(high - low) * y for y in 
                     [x - minval for x in vals]]] 
@@ -297,22 +305,20 @@ class Scenario(Analysis):
 
         final_cost_weights = {}
         for cost in Cost.objects.all():
-            costkey = cost.name
+            costkey = cost.slug
             try:
                 final_cost_weights[costkey] = cost_weights[costkey]
             except KeyError:
                 final_cost_weights[costkey] = 0
 
-        # Calc costs for each planning unit
         wcosts = []
         pus = []
-
         # First loop, calc the cumulative costs per planning unit
         for pu in PlanningUnit.objects.filter(fid__in=geography_fids):
             weighted_cost = 0.1  # TODO Constant: lowest possible cost
             puc = PuVsCost.objects.filter(pu=pu)
             for c in puc:
-                costkey = c.cost.name
+                costkey = c.cost.slug
                 weighted_cost += final_cost_weights[costkey] * c.amount
             wcosts.append(weighted_cost)
             pus.append(pu.pk)
@@ -417,19 +423,19 @@ class Scenario(Analysis):
             bbox = potentialpus.extent()
         best = []
         logger.debug("looping through bestpus queryset")
-
         
         scaled_costs = {}
-        for cost, weight in cost_weights.iteritems():
+        all_costs = Cost.objects.all()
+        for costslug, weight in cost_weights.iteritems():
             if weight <= 0:
                 continue
-
-            all = PuVsCost.objects.filter(cost__name=cost, pu__in=bestpus)
-            vals = [ x.amount for x in all]
+            cost = [x for x in all_costs if x.slug == costslug][0] 
+            all = PuVsCost.objects.filter(cost=cost, pu__in=bestpus)
+            vals = [x.amount for x in all]
             fids = [x.pu.fid for x in all]
             scaled_values = [int(x) for x in scale_list(vals, 0.0, 100.0)]
             pucosts = dict(zip(fids, scaled_values))
-            scaled_costs[cost] = pucosts
+            scaled_costs[costslug] = pucosts
 
         for pu in bestpus:
             centroid = pu.centroid 

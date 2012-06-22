@@ -31,6 +31,40 @@ from madrona.common.models import KmlCache
 
 logger = get_logger()
 
+def cachemethod(cache_key, timeout=3600):
+    '''
+    http://djangosnippets.org/snippets/1130/    
+    Cacheable class method decorator
+    from madrona.common.utils import cachemethod
+
+    @property
+    @cachemethod("SomeClass_get_some_result_%(id)s")
+    '''
+    def paramed_decorator(func):
+        def decorated(self):
+            if not settings.USE_CACHE:
+                res = func(self)
+                return res
+
+            key = cache_key % self.__dict__
+            logger.debug("\nCACHING %s" % key)
+            res = cache.get(key)
+            if res == None:
+                logger.debug("   Cache MISS")
+                res = func(self)
+                cache.set(key, res, timeout)
+                logger.debug("   Cache SET")
+                if cache.get(key) == res:
+                    logger.debug("   Cache GET was successful")
+                else:
+                    raise RuntimeError("    Cache GET was NOT successful")
+            else: 
+                logger.debug("   Cache HIT")
+            return res
+        return decorated 
+    return paramed_decorator
+
+
 class JSONField(models.TextField):
     """JSONField is a generic textfield that neatly serializes/unserializes
     JSON objects seamlessly"""
@@ -104,30 +138,16 @@ class PlanningUnit(models.Model):
     objects = models.GeoManager()
 
     @property
+    @cachemethod("PlanningUnit_%(fid)s_area")
     def area(self):
         # assume storing meters and returning km^2 (TODO)
-        key = "seak_planningunit_%s_area" % self.fid 
-        if settings.USE_CACHE:
-            cached_result = cache.get(key)
-            if cached_result:
-                return cached_result
-
         area = self.geometry.area / float(1000*1000)
-        if settings.USE_CACHE:
-            cache.set(key, area, timeout=360000)
         return area
 
     @property
+    @cachemethod("PlanningUnit_%(fid)s_centroid")
     def centroid(self):
-        key = "seak_planningunit_%s_centroid" % self.fid 
-        if settings.USE_CACHE:
-            cached_result = cache.get(key)
-            if cached_result:
-                return cached_result
-
         centroid = self.geometry.point_on_surface.coords
-        if settings.USE_CACHE:
-            cache.set(key, centroid, timeout=360000)
         return centroid
 
     def __unicode__(self):
@@ -146,32 +166,6 @@ class PuVsCost(models.Model):
     amount = models.FloatField()
     class Meta:
         unique_together = ("pu", "cost")
-
-    @classmethod
-    def breaks(cls):
-        """
-        Assuming normal distribution, provide a 3-quantile break
-        """
-        key = "seak_cost_breaks"
-        if settings.USE_CACHE:
-            cached_result = cache.get(key)
-            if cached_result:
-                return cached_result
-
-        from django.db.models import Max, Min, StdDev, Avg
-        cost_summaries = cls.objects.values('cost__name').annotate(Max('amount'), 
-                Min('amount'), StdDev('amount'), Avg('amount'))
-        breaks = {}
-        for cs in cost_summaries:
-            low = cs['amount__avg'] - (0.43 * cs['amount__stddev'])
-            high = cs['amount__avg'] + (0.43 * cs['amount__stddev'])
-            name = cs['cost__name']
-            breaks[name] = (low, high)
-
-        if settings.USE_CACHE:
-            cache.set(key, breaks, timeout=360000)
-
-        return breaks
 
 def scale_list(vals, low, high):
     """
@@ -249,7 +243,7 @@ class Scenario(Analysis):
         cache.delete_many(keys)
         for key in keys:
             assert cache.get(key) == None
-        logger.debug("invalidating cache for %s" % str(keys))
+        logger.debug("invalidated cache for %s" % str(keys))
         return True
 
     def run(self):
@@ -386,16 +380,8 @@ class Scenario(Analysis):
         return json.dumps(serializable)
 
     @property
+    @cachemethod("seak_scenario_%(id)s_results")
     def results(self):
-        key = "%s_results" % self.uid
-        if settings.USE_CACHE:
-            cached_result = cache.get(key)
-            if cached_result:
-                logger.debug("cache HIT for %s" % key)
-                return cached_result
-
-        logger.debug("cache MISS for %s; recalculating.." % key)
-
         targets = json.loads(self.input_targets)
         penalties = json.loads(self.input_penalties)
         cost_weights = json.loads(self.input_relativecosts)
@@ -506,11 +492,7 @@ class Scenario(Analysis):
             'species': species, 
             'bbox': bbox,
         }
-        if settings.USE_CACHE:
-            logger.debug("setting the cache for %s" % key)
-            cache.set(key, res)
-            if cache.get(key) != res:
-                raise RuntimeError("USE_CACHE is true but cache is not setting/getting properly")
+
         return res
         
     @property

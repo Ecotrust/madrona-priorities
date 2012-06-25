@@ -152,7 +152,6 @@ function scenariosViewModel() {
             // slider val is 0 to 100 while targets/penalties are 0 to 1
             // Assume that the slider always tracks target directly (ie 0.75 target == 75 slider)
             // The penalty MAY need to be variable depending on the target  
-            console.log("got here", id, uivalue);
             $( "#penalty---" + id ).val( uivalue / 100.0 );
             $( "#target---" + id ).val( uivalue / 100.0 );
             //$( "#sliderdisplay---" + id).text( uivalue );

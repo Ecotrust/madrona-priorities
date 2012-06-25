@@ -48,15 +48,14 @@
              <table class="table">
              <thead> 
                 <th><h4>{% flatblock 'show-conservation-features' 3600 %}</h4></th>
-                <th>Goal</th> 
-                <th>Importance Weighting</th>
+                <th> Relative Importance</th>
              </thead>
              <tbody>
                 {% for k,v in results.targets_penalties.items %}
                 <tr class="{% if v.target > 0 %}targeted{% else %}not-targeted{% endif %}"> 
                     <td><strong>{{k}}</strong></td>
                     <td>{{v.target|percentage}}</td>
-                    <td>{{v.penalty}}</td>
+                    <!-- <td>{{v.penalty}}</td> -->
                 </tr>
                 {% endfor %}
              </tbody>
@@ -142,7 +141,10 @@
                         <th scope="col"> Species </th>
                         <th scope="col"> Percent of Total </th>
                         <th scope="col" width="50"> Units </th>
+                        <!--
                         <th scope="col" width="80"> Goal Met?</th>
+                        -->
+              
                     </tr>
                 </thead>
                 <tbody>
@@ -151,10 +153,12 @@
                     <td> <strong>{{s.name}}</strong></td>
                     <td> {{s.pcttotal|percentage:1}} </td>
                     <td> {{s.units}} </td>
-                    <td> {% if s.target == 0 %} -- {% else %} 
+                    <!--
+                    <td> {% if s.target == 0 %} - {% else %} 
                         {% if s.met %}&#10003;{% else %} NO<br/>(Goal was {{s.target_prop|percentage:0}}){% endif %} 
                          {% endif %}
                     </td>
+                    -->
                 </tr>
                 {% endfor %}
                 </tbody>

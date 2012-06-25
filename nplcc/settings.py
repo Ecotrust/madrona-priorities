@@ -71,12 +71,9 @@ LOGIN_REDIRECT_URL = '/'
 HELP_EMAIL = 'ksdev@ecotrust.org'
 
 CACHES = {
-    #'default': {
-    #    'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
-    #}
     'default': {
-        'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
-        'LOCATION': '/tmp/django_cache',
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+        'LOCATION': 'nplcc-cache', 
     }
 }
 USE_CACHE = False

@@ -147,6 +147,31 @@ function scenariosViewModel() {
         self.selectedFeature(false);
         self.showScenarioList(false);
 
+        function setTargetsPenalties(id, uivalue) {
+            // Sets the targets and penalties based on the single slider value
+            // slider val is 0 to 100 while targets/penalties are 0 to 1
+            // Assume that the slider always tracks target directly (ie 0.75 target == 75 slider)
+            // The penalty MAY need to be variable depending on the target  
+            console.log("got here", id, uivalue);
+            $( "#penalty---" + id ).val( uivalue / 100.0 );
+            $( "#target---" + id ).val( uivalue / 100.0 );
+            //$( "#sliderdisplay---" + id).text( uivalue );
+        }
+
+        $.each( $(".slider-range"), function(k, sliderrange) {
+            var id = $(sliderrange).attr('id');
+            id = id.replace("sliderrange---", '');
+            $(sliderrange).slider({
+                range: "min",
+                value: 0,
+                min: 0,
+                max: 100,
+                slide: function( event, ui ) {
+                    setTargetsPenalties(id, ui.value);
+                }
+            })
+        });
+
         // If we're in EDIT mode, set the form values 
         if ($('#id_input_targets').val() && 
             $('#id_input_penalties').val() && 
@@ -182,6 +207,9 @@ function scenariosViewModel() {
             var in_targets = JSON.parse($('#id_input_targets').val());
             $.each(in_targets, function(key, val) {
                 $("#target---" + key).val(val);
+                // Assume slider tracks target
+                $("#sliderrange---" + key).slider("value", val * 100);  
+                //$("#sliderdisplay---" + key).text(val * 100);
             });
             var in_penalties = JSON.parse($('#id_input_penalties').val());
             $.each(in_penalties, function(key, val) {
@@ -325,6 +353,7 @@ function scenariosViewModel() {
     pu_layer.redraw();
     self.showScenarioFormPanel(false);
     self.showScenarioList(true);
+    self.formSaveError(false);
   };
 
   self.selectControl = {

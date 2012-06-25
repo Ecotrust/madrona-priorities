@@ -98,11 +98,27 @@
         <br/>
         <form action="#" id="form-cfs">
           <table class="table table-condensed">
+            <tr>
+                <th> Conservation feature </th>
+                <th> Relative Importance</th>
+                <th class="debug-only"> target </th>
+                <th class="debug-only"> penalty </th>
+            </tr>
             {% for cf in cfs %}
             <tr>
                 <td> {{cf.name}}: {{cf.id_string}} </td>
-                <td><input type="text" class="slidervalue targetvalue" id="target---{{cf.id_string}}" value="0.5"/></td>
-                <td><input type="text" class="slidervalue penaltyvalue" id="penalty---{{cf.id_string}}" value="0.5"/></td>
+                <!-- <td> <div class="slider-display" id="sliderdisplay{{cf.id_string}}">0</div> </td> -->
+                <td> 
+                    <span class="slider-label slider-label-left">low</span>
+                    <div class="slider-range" id="sliderrange---{{cf.id_string}}"></div> 
+                    <span class="slider-label slider-label-right">high</span>
+                </td>
+                <td class="debug-only">
+                    <input type="text" class="targetvalue" id="target---{{cf.id_string}}" value="0.0"/>
+                </td>
+                <td class="debug-only">
+                    <input type="text" class="penaltyvalue" id="penalty---{{cf.id_string}}" value="0.0"/>
+                </td>
             </tr>
             {% endfor %}
           </table>
@@ -118,7 +134,7 @@
           <table class="table table-condensed">
             {% for cost in costs %}
             <tr>
-                <td><input type="checkbox" class="slidervalue costvalue" id="cost---{{cost.slug}}" checked="1"/></td>
+                <td><input type="checkbox" class="costvalue" id="cost---{{cost.slug}}" checked="1"/></td>
                 <td> {{cost.name}} </td>
                 <td> <em>{{cost.desc}}</em> </td>
             </tr>

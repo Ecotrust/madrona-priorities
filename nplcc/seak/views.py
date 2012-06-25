@@ -145,12 +145,6 @@ def test(request):
     return render_to_response("seak/test.html")
 
 def planning_units_geojson(request):
-    key = "seak_planning_units_geojson"
-    if settings.USE_CACHE:
-        cached = cache.get(key)
-        if cached:
-            return HttpResponse(cached, content_type='application/json')
-
     def get_feature_json(geom_json, prop_json):
         return """{
             "type": "Feature",
@@ -172,16 +166,11 @@ def planning_units_geojson(request):
       "features": [ %s ]
     }""" % (', \n'.join(feature_jsons),)
 
-    if settings.USE_CACHE:
-        cache.set(key, geojson, timeout=(60 * 60 * 24))
-        if cache.get(key) != geojson:
-            raise RuntimeError("USE_CACHE is true but cache is not setting/getting properly")
-
     return HttpResponse(geojson, content_type='application/json')
 
 from django.views.decorators.cache import never_cache
 # set headers to disable all client-side caching
-# @never_cache
+@never_cache
 def user_scenarios_geojson(request):
     from seak.models import Scenario
 

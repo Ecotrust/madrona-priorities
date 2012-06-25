@@ -165,3 +165,21 @@ h4 {
     /* when OL encounters a 404, don't display the pink image */
     display: none !important;
 } 
+.debug-only {
+    display: none;
+}
+.slider-label {
+    font-style: italic;
+}
+.slider-label-left {
+   float:left;
+   margin-right: 10px;
+}
+.slider-label-right {
+   margin-left: 8px;
+}
+.slider-range {
+  width:220px; 
+  display:inline-block;
+}
+   

@@ -103,7 +103,7 @@ if MODE == 'create':
     for f in factors:
         for nc in numcosts:
             for n in numspecies:
-                for i in range(4):
+                for i in range(1):
                     #if random.choice([True,False]):
                     geography_list = [x.fid for x in PlanningUnit.objects.filter(geometry__strictly_below=g)]
                     #else:

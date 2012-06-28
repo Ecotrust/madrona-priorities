@@ -29,7 +29,11 @@
     <!--[if lt IE 9]>
     <script src="{{MEDIA_URL}}html5shiv.js"></script>
     <![endif]-->
-
+    <script type="text/javascript">
+        // Prevent IE from caching ajax requests
+        // http://www.dashbay.com/2011/05/internet-explorer-caches-ajax/
+        $.ajaxSetup({cache: false});
+    </script>
     <link rel="shortcut icon" href="/media/common/img/favicon.ico">
   </head>
 

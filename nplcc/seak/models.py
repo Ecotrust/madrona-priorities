@@ -751,5 +751,4 @@ class PlanningUnitShapes(models.Model):
     fid = models.IntegerField(null=True)
     name = models.CharField(max_length=99, null=True)
     geometry = models.MultiPolygonField(srid=settings.GEOMETRY_DB_SRID, 
-    #geometry = models.PointField(srid=settings.GEOMETRY_DB_SRID, 
             null=True, blank=True, verbose_name="Planning Unit Geometry")

@@ -31,6 +31,15 @@ def map(request, template_name='common/map_ext.html', extra_context={}):
 def watershed_shapefile(request, instances):
     from seak.models import PlanningUnit, PlanningUnitShapes, Scenario
     wshds = PlanningUnit.objects.all()
+    wshd_fids = [x.fid for x in PlanningUnit.objects.all()]
+    results = {}
+    for fid in wshd_fids:
+        w = wshds.get(fid=fid)
+        p = w.geometry
+        if p.geom_type == 'Polygon':
+            p = MultiPolygon(p)
+        results[fid] = {'pu': w, 'geometry': p, 'name': w.name, 'hits': 0, 'bests': 0} 
+
     stamp = int(time.time() * 1000.0)
 
     for instance in instances:
@@ -38,40 +47,24 @@ def watershed_shapefile(request, instances):
         if not viewable:
             return response
         if not isinstance(instance, Scenario):
-            return HttpResponse("Shapefile export for watershed prioritizations only", status=500)
+            return HttpResponse("Shapefile export for prioritization scenarios only", status=500)
 
         ob = json.loads(instance.output_best)
         wids = [int(x.strip()) for x in ob['best']]
         puc = json.loads(instance.output_pu_count)
 
-        for ws in wshds:
-            print ws
-            # create custom model records
-            pus, created = PlanningUnitShapes.objects.get_or_create(pu=ws, stamp=stamp)
-
-            # Only do this on the first go 'round
-            if created and not pus.geometry:
-                pus.name = ws.name
-                pus.fid = ws.fid
-                #p = ws.geometry.simplify(100)
-                p = ws.geometry
-                if p.geom_type == 'Polygon':
-                    pus.geometry = MultiPolygon(p)
-                elif p.geom_type == 'MultiPolygon':
-                    pus.geometry = p
-
+        for fid in wshd_fids:
             # Calculate hits and best
             try:
-                hits = puc[str(ws.pk)] 
-            except:
+                hits = puc[str(fid)] 
+            except KeyError:
                 hits = 0
-            best = ws.pk in wids
-            pus.hits += hits
+            best = fid in wids
+            results[fid]['hits'] += hits
             if best:
-                pus.bests += 1
-            pus.save()
+                results[fid]['bests'] += 1
 
-    readme = """Prioritization Analysis
+    readme = """Prioritization Scenario Array
 contact: mperry@ecotrust.org
 
 Includes scenarios:
@@ -81,11 +74,14 @@ Includes scenarios:
     'hits' contains the number of times the subbasin was included in any run, cumulative across scenarios.
     """ % ('\n    '.join([i.name for i in instances]), )
 
+    for fid in results.keys():
+        r = results[fid]
+        PlanningUnitShapes.objects.create(stamp=stamp, fid=fid, name=r['name'], pu=r['pu'],
+                                          geometry=r['geometry'], bests=r['bests'], hits=r['hits'])
     allpus = PlanningUnitShapes.objects.filter(stamp=stamp)
-    print allpus
     shp_response = ShpResponder(allpus, readme=readme)
-    filename = '_'.join([slugify(i.name) for i in instances])
-    shp_response.file_name = slugify('nplcc_' + filename)
+    filename = '_'.join([slugify(i.pk) for i in instances])
+    shp_response.file_name = slugify('scenarios_' + filename)
     return shp_response()
 
 def watershed_marxan(request, instance):

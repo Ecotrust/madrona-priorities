@@ -513,6 +513,7 @@ function scenariosViewModel() {
         type: "POST",
     })
     .success( function(data, textStatus, jqXHR) {
+        self.selectedFeature(false);
         var d = JSON.parse(data);
         scenario_uid = d["X-Madrona-Select"];
         self.loadScenarios(scenario_uid);

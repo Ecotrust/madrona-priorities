@@ -29,7 +29,7 @@ def map(request, template_name='common/map_ext.html', extra_context={}):
     return render_to_response(template_name, context)
 
 def watershed_shapefile(request, instances):
-    from seak.models import PlanningUnit
+    from seak.models import PlanningUnit, PlanningUnitShapes, Scenario
     wshds = PlanningUnit.objects.all()
     stamp = int(time.time() * 1000.0)
 
@@ -37,7 +37,7 @@ def watershed_shapefile(request, instances):
         viewable, response = instance.is_viewable(request.user)
         if not viewable:
             return response
-        if not isinstance(instance, WatershedPrioritization):
+        if not isinstance(instance, Scenario):
             return HttpResponse("Shapefile export for watershed prioritizations only", status=500)
 
         ob = json.loads(instance.output_best)
@@ -45,6 +45,7 @@ def watershed_shapefile(request, instances):
         puc = json.loads(instance.output_pu_count)
 
         for ws in wshds:
+            print ws
             # create custom model records
             pus, created = PlanningUnitShapes.objects.get_or_create(pu=ws, stamp=stamp)
 
@@ -52,7 +53,8 @@ def watershed_shapefile(request, instances):
             if created and not pus.geometry:
                 pus.name = ws.name
                 pus.fid = ws.fid
-                p = ws.geometry.simplify(100)
+                #p = ws.geometry.simplify(100)
+                p = ws.geometry
                 if p.geom_type == 'Polygon':
                     pus.geometry = MultiPolygon(p)
                 elif p.geom_type == 'MultiPolygon':
@@ -69,20 +71,20 @@ def watershed_shapefile(request, instances):
                 pus.bests += 1
             pus.save()
 
-    readme = """Watershed Prioritization Analysis
+    readme = """Prioritization Analysis
 contact: mperry@ecotrust.org
 
 Includes scenarios:
     %s
 
-Contains HUC8s from Oregon, Washington, Idaho
     'bests' contains the number of scenarios in which the subbasin was included in the best run
     'hits' contains the number of times the subbasin was included in any run, cumulative across scenarios.
     """ % ('\n    '.join([i.name for i in instances]), )
 
     allpus = PlanningUnitShapes.objects.filter(stamp=stamp)
+    print allpus
     shp_response = ShpResponder(allpus, readme=readme)
-    filename = '_'.join([slugify(i.pk) for i in instances])
+    filename = '_'.join([slugify(i.name) for i in instances])
     shp_response.file_name = slugify('nplcc_' + filename)
     return shp_response()
 

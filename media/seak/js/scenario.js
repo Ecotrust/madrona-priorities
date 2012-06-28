@@ -488,5 +488,41 @@ function scenariosViewModel() {
     self.showScenarioList(true);
   };
 
+  self.showDownloadDialog = function () {
+    $("#scenario-download-dialog").modal("show");
+  };
+
+  self.downloadScenario = function() {
+    var uids = [self.selectedFeature().uid()];
+    var ws = new madrona.features.workspace(app.workspace);
+    var shpTemplate = ws.actions.getByTitle("Shapefile")[0];
+    var shpUrl = shpTemplate.getUrl(uids);
+    $('#download-iframe').attr('src', shpUrl);
+  };
+
+  self.copyScenario = function() {
+    var uids = [self.selectedFeature().uid()];
+    var ws = new madrona.features.workspace(app.workspace);
+    var uriTemplate = ws.actions.getByTitle("Copy")[0];
+    var copyURL = uriTemplate.getUrl(uids);
+    var jqxhr = $.ajax({
+        url: copyURL,
+        type: "POST",
+    })
+    .success( function(data, textStatus, jqXHR) {
+        var d = JSON.parse(data);
+        scenario_uid = d["X-Madrona-Select"];
+        self.loadScenarios(scenario_uid);
+        self.cancelAddScenario(); // Not acutally cancel, just clear 
+    })
+    .error( function(jqXHR, textStatus, errorThrown) {
+        console.log("ERROR", errorThrown, textStatus);
+    })
+    .complete( function() { 
+        console.log('copy complete');
+    });
+    
+  };
+
   return self;
 }

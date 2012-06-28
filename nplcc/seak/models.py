@@ -205,7 +205,7 @@ class Scenario(Analysis):
     def copy(self, user):
         """ Override the copy method to make sure the marxan files get copied """
         orig = self.outdir
-        copy = super(WatershedPrioritization, self).copy(user)
+        copy = super(Scenario, self).copy(user)
         shutil.copytree(orig, copy.outdir, symlinks=True)
         copy.save(rerun=False)
         return copy
@@ -737,7 +737,7 @@ class Folder(FeatureCollection):
         verbose_name = 'Folder'
         valid_children = ( 
                 'seak.models.Folder',
-                'seak.models.WatershedPrioritization',
+                'seak.models.Scenario',
                 )
         form = 'seak.forms.FolderForm'
         show_template = 'folder/show.html'

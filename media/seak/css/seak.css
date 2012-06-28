@@ -111,7 +111,7 @@ label.olButton {
     left: -12px; 
     text-align:right; 
     float:right; 
-    z-index: 99999;
+    z-index: 1039;
     height: 0px;
 }
 #layerswitcher-list {
@@ -134,7 +134,7 @@ div.tab-content-show {
 #info {
     position: absolute; 
     bottom: 7.5%; 
-    z-index: 99999;
+    z-index: 1038;
     float:right;
     text-align:left;
     font-size: 85%;
@@ -151,7 +151,7 @@ div.dataLbl, div.baseLbl {
     position: relative; 
     top: 100px; 
     text-align: center; 
-    z-index: 99999;
+    z-index: 1037;
     height: 0px;
 }
 h4 {
@@ -182,4 +182,8 @@ h4 {
   width:220px; 
   display:inline-block;
 }
-   
+.group {list-style:none; padding:4px;margin:0;text-indent:none;font-size:12px;}
+.groups {padding:0;margin:0;text-indent:none;}
+.member_list { display:none; }
+a.show_members {text-decoration:none;padding:5px;font-size:10px;margin-left:5px;}
+a.show_members img {border:none;margin-right:5px;margin-bottom:-3px;}

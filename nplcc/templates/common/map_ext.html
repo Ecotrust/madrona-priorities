@@ -71,7 +71,7 @@
                               <i class="icon-tags"></i> Copy </a>
                             <a href="#" class="btn btn-mini" data-bind="click: $parent.downloadScenario">
                               <i class="icon-download-alt"></i> Download</a>
-                            <a href="#" class="btn btn-mini" data-bind="click: $parent.shareScenario">
+                            <a href="#" class="btn btn-mini" data-bind="click: $parent.showShareDialog">
                               <i class="icon-retweet"></i> Share</a>
                             <!-- /ko -->
                             <a href="#" class="btn btn-mini" data-bind="click: $parent.showDeleteDialog">
@@ -125,8 +125,22 @@
                   </div>
                 </div>
                 <div class="modal-footer">
-                  <a href="#" class="btn" data-bind="click: closeDialog">cancel</a>
-                  <a href="#" class="btn btn-danger" data-bind="click: deleteFeature">Delete Scenario</a>
+                  <a href="#" class="btn" data-dismiss="modal">cancel</a>
+                  <a href="#" class="btn btn-danger" data-bind="click: deleteScenario">Delete Scenario</a>
+                </div>
+              </div>
+
+              <div class="modal" id="scenario-share-dialog" style="display:none">
+                <div class="modal-header">
+                  <a class="close" data-dismiss="modal">×</a>
+                  <h3>Share Scenario</h3>
+                </div>
+                <div class="modal-body">
+                 <div id="share-form-div"></div> 
+                </div>
+                <div class="modal-footer">
+                  <a href="#" class="btn" data-dismiss="modal">cancel</a>
+                  <a href="#" class="btn btn-danger" data-bind="click: shareScenario">Save Share Settings</a>
                 </div>
               </div>
 

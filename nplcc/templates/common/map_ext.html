@@ -69,7 +69,7 @@
                               <i class="icon-edit"></i> Edit </a>
                             <a href="#" class="btn btn-mini" data-bind="click: $parent.copyScenario">
                               <i class="icon-tags"></i> Copy </a>
-                            <a href="#" class="btn btn-mini" data-bind="click: $parent.downloadScenario">
+                            <a href="#" class="btn btn-mini" data-bind="click: $parent.showDownloadDialog">
                               <i class="icon-download-alt"></i> Download</a>
                             <a href="#" class="btn btn-mini" data-bind="click: $parent.showShareDialog">
                               <i class="icon-retweet"></i> Share</a>
@@ -121,12 +121,38 @@
                 </div>
                 <div class="modal-body">
                   <div data-bind="if: selectedFeature()">
-                   Are you sure you want to delete "<span data-bind="text: selectedFeature().name"></span>"?
+                   Are you sure you want to delete <strong><span data-bind="text: selectedFeature().name"></span></strong>?
                   </div>
                 </div>
                 <div class="modal-footer">
                   <a href="#" class="btn" data-dismiss="modal">cancel</a>
                   <a href="#" class="btn btn-danger" data-bind="click: deleteScenario">Delete Scenario</a>
+                </div>
+              </div>
+
+              <div class="modal" id="scenario-download-dialog" style="display:none">
+                <div class="modal-header">
+                  <a class="close" data-dismiss="modal">×</a>
+                  <h3>Download Scenario</h3>
+                </div>
+                <div class="modal-body">
+                    <p>Download the <strong><span data-bind="text: selectedFeature().name"></span></strong> scenario results as a zipped shapefile for use in GIS software.</p>
+                    <h5><em>Optional</em></h5>
+                    <p> You can select other scenarioes to create an "array"; 
+                        <em>i.e.</em> an aggregate of the results from other selected scenarios.
+                    </p> 
+                    <form id="download-array-form" data-bind="if: selectedFeature">
+                      <ul data-bind="foreach: scenarioList">
+                        <li class="group" data-bind="if: uid != $parent.selectedFeature().uid">
+                          <input type="checkbox" name="download_array" data-bind="attr: {value: uid, id: uid}"/> 
+                          <label style="display: inline-block;" data-bind="attr: {for: uid}, text: name" /></label>
+                        </li>
+                      </ul>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                  <a href="#" class="btn" data-dismiss="modal">cancel</a>
+                  <a href="#" class="btn btn-danger" data-bind="click: downloadScenario">Download</a>
                 </div>
               </div>
 

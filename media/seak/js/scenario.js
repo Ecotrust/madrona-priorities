@@ -312,6 +312,10 @@ function scenariosViewModel() {
     $("#scenario-delete-dialog").modal("show");
   };
 
+  self.showDownloadDialog = function () {
+    $("#scenario-download-dialog").modal("show");
+  };
+
   self.deleteScenario = function () {
     var url = "/features/generic-links/links/delete/{uid}/".replace("{uid}", self.selectedFeature().uid());
     $('#scenario-delete-dialog').modal('hide');
@@ -486,10 +490,17 @@ function scenariosViewModel() {
 
   self.downloadScenario = function() {
     var uids = [self.selectedFeature().uid()];
+    var frm = $('form#download-array-form');
+    $(frm).find('input:checkbox').each( function(k,v) { 
+        if ($(v).attr('checked')) { 
+            uids.push( $(v).attr('value') ); 
+        }
+    });
     var ws = new madrona.features.workspace(app.workspace);
     var shpTemplate = ws.actions.getByTitle("Shapefile")[0];
     var shpUrl = shpTemplate.getUrl(uids);
     $('#download-iframe').attr('src', shpUrl);
+    $("#scenario-download-dialog").modal("hide");
   };
 
   self.copyScenario = function() {

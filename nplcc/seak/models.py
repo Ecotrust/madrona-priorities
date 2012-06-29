@@ -270,6 +270,8 @@ class Scenario(Analysis):
         for nz in nonzero_pks:
             nonzero_targets.append(targets[nz])
             nonzero_penalties.append(penalties[nz])
+            
+        maxtarget = max(nonzero_targets)
         try:
             meantarget = sum(nonzero_targets) / float(len(nonzero_targets))
         except ZeroDivisionError:
@@ -280,9 +282,8 @@ class Scenario(Analysis):
             meanpenalty = 0
         numspecies = len(nonzero_targets)
 
-        if self.input_scalefactor == 0:
-            # if 0, choose a scalefactor automatically
-            self.input_scalefactor = (meanpenalty * 10) + 1 
+        # ignore input, choose a scalefactor automatically
+        self.input_scalefactor = maxtarget * 4 + 2  # effectively scales from 2.5 to 6.5, the sweet spot
 
         # Apply the target and penalties
         logger.debug("Apply the targets and penalties")

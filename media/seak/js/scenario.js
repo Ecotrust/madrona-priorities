@@ -273,8 +273,16 @@ function scenariosViewModel() {
         $(frm).find('textarea#id_input_relativecosts').val( JSON.stringify(costs) );
         $(frm).find('textarea#id_input_geography').val( JSON.stringify(geography_fids) );
 
-        if (totalpenalties == 0 || totaltargets == 0 || totalfids == 0) {
-            alert("must set targets, penalties and select geography");
+        if (totalfids == 0) {
+            alert("Please select geography; complete Step 1");
+            $("#formtabs a[href='#geographytab']").tab('show');
+        } else if ($(frm).find('input[name="name"]').val() === '') {
+            alert("Please provide a name; complete Step 2");
+            $("#formtabs a[href='#generaltab']").tab('show');
+            $(frm).find('input[name="name"]').focus();
+        } else if (totalpenalties == 0 || totaltargets == 0) {
+            alert("Please set goals for at least one target; complete Step 3");
+            $("#formtabs a[href='#speciestab']").tab('show');
         } else {
             // GO .. we are clear to submit the form
             var values = {};
@@ -467,7 +475,7 @@ function scenariosViewModel() {
     .error(function() { self.scenarioLoadError(true); })
     .complete(function() { 
         self.scenarioLoadComplete(true); 
-        $('.scenario-row').popover()
+        $('.scenario-row').tooltip()
     })
 
   };
@@ -511,7 +519,7 @@ function scenariosViewModel() {
     var copyURL = uriTemplate.getUrl(uids);
     var jqxhr = $.ajax({
         url: copyURL,
-        type: "POST",
+        type: "POST"
     })
     .success( function(data, textStatus, jqXHR) {
         self.selectedFeature(false);

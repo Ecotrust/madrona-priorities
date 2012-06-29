@@ -12,7 +12,7 @@
     </div>
 
 <div class="tabbable">
-    <ul class="nav nav-tabs" style="margin-bottom:0px;">
+    <ul class="nav nav-tabs" id="formtabs" style="margin-bottom:0px;">
         <li class="active">
             <a href="#geographytab" data-toggle="tab">
                 <span>Step 1: Geography</span>
@@ -55,7 +55,7 @@
         <br/>
 
         <div id="currentGeographySelection">
-            You've selected <span id="geographySelectionCount">0</span> {% flatblock 'planning-units' 3600 %}.
+            You've selected <span class="badge badge-info" id="geographySelectionCount">0</span> {% flatblock 'planning-units' 3600 %}.
         </div>
 
            
@@ -71,6 +71,8 @@
                 {{ form.input_targets }}            
                 {{ form.input_relativecosts }}            
                 {{ form.input_geography}}
+                {{ form.input_scalefactor.label_tag }}
+                {{ form.input_scalefactor}}
             </div>
             <div class="field required">
                 {{ form.name.label_tag }}
@@ -81,9 +83,6 @@
                 {{ form.description.label_tag }}
                 {{ form.description.errors }}
                 {{ form.description }}            
-                <hr/>
-                {{ form.input_scalefactor.label_tag }}
-                {{ form.input_scalefactor}}
             </div>
             <p><input type="submit" value="submit"></p>
            <div>

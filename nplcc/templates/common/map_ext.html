@@ -37,7 +37,7 @@
                         <table class="table table-scenariolist table-bordered table-condensed">
                         <tbody data-bind="foreach: scenarioListPaginated">
                             <tr class="scenario-row" 
-                                data-bind="attr: {'title': name, 'data-content': description}, 
+                                data-bind="attr: {'data-original-title': description}, 
                                            click: $parent.selectFeature, 
                                            css: {'active': $data === $parent.selectedFeature() }">
                                 <td class="scenario-name" data-bind="text: name"></td>
@@ -238,7 +238,6 @@
     app.onResize = function () {
       $("#map").height($(window).height() * .85);
       map.render('map');
-
     };
     
     $(document).ready(function () {

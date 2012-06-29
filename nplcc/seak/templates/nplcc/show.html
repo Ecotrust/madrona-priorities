@@ -64,21 +64,10 @@
              </tbody>
              </table>
 
-             <!-- 
-             <a href="#" class="btn btn-mini" id="btn-show-not-targeted">
-                Toggle {% flatblock 'show-conservation-features' 2600 %} without goals.
-             </a>
-             <script> 
-                $('a#btn-show-not-targeted').click( function(e) { 
-                    e.preventDefault(); 
-                    $('tr.not-targeted').toggle();
-                });
-             </script>
-             -->
              <hr/>
 
+            <h4>Prioritization Constraints</h4>
              <table class="table">
-                 <thead> <th><h4>Prioritization Constraints</h4></th><th></th></thead>
              {%for k,v in results.costs.items|sortcosts %}
              {% if v > 0%}<tr><td> &#10003; <strong>{{k}}</strong></td></tr> 
              {% else %}<tr><td> &nbsp; <del>{{k}}</del></td></tr> 
@@ -86,7 +75,11 @@
              {%endfor%}
              </table>
              
-             <span style="display:none" id="estimated_scaling_factor">{{instance.input_scalefactor}}</span>
+             <div class="debug-only">
+                <h4>Scaling Factor</h4>
+                <span>{{instance.input_scalefactor}}</span>
+             </div>
+
             </div>
         </div>
 
@@ -111,9 +104,9 @@
                 <tr>
                     <td>{{w.name}}</td>
                     {%for k,v in w.costs.items %}
-                    {% if v < 24%} <td><span class="badge badge-success">low {{v}}</span></td>
-                    {% elif v > 66 %} <td><span class="badge badge-important">high {{v}}</span></td>
-                    {% else %} <td><span class="badge badge-warning">med {{v}}</span></td>
+                    {% if v < 24%} <td><span class="badge badge-success">low&nbsp; <span class="debug-only">{{v}}</span></span></td>
+                    {% elif v > 66 %} <td><span class="badge badge-important">high <span class="debug-only">{{v}}</span></span></td>
+                    {% else %} <td><span class="badge badge-warning">med <span class="debug-only">{{v}}</span></span></td>
                     {% endif %}
                     <td class="centroid-x" style="display:none">{{w.centroidx}}</td>
                     <td class="centroid-y" style="display:none">{{w.centroidy}}</td>
@@ -137,18 +130,15 @@
         </div>
         <div id="species" class="tab-pane">
             <div class="box">
-                <!-- <p>Goals were met for {{results.num_met}} of {{results.num_species}} 
+                <p class="debug-only">Goals were met for {{results.num_met}} of {{results.num_species}} 
                         {% flatblock 'show-conservation-features' 3600 %}.</p>
-                 -->
                 <table class="table" id="species_table" summary="Species Table">
                 <thead>
                     <tr>
                         <th scope="col"> Species </th>
                         <th scope="col"> Percent of Total </th>
                         <th scope="col" width="50"> Units </th>
-                        <!--
-                        <th scope="col" width="80"> Goal Met?</th>
-                        -->
+                        <th class="debug-only" scope="col" width="80"> Goal Met?</th>
               
                     </tr>
                 </thead>
@@ -158,12 +148,10 @@
                     <td> <strong>{{s.name}}</strong></td>
                     <td> {{s.pcttotal|percentage:1}} </td>
                     <td> {{s.units}} </td>
-                    <!--
-                    <td> {% if s.target == 0 %} - {% else %} 
+                    <td class="debug-only"> {% if s.target == 0 %} - {% else %} 
                         {% if s.met %}&#10003;{% else %} NO<br/>(Goal was {{s.target_prop|percentage:0}}){% endif %} 
                          {% endif %}
                     </td>
-                    -->
                 </tr>
                 {% endfor %}
                 </tbody>

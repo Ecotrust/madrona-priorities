@@ -467,6 +467,7 @@ function scenariosViewModel() {
     .error(function() { self.scenarioLoadError(true); })
     .complete(function() { 
         self.scenarioLoadComplete(true); 
+        $('.scenario-row').popover()
     })
 
   };

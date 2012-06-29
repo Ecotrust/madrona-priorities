@@ -35,6 +35,7 @@
     <div class="tab-content tab-content-show">
 
         <div id="Inputs" class="tab-pane active">
+            <!--
             <div class="box">
                 <h4>Name</h4> 
                 <p>{{ instance.name }}</p>
@@ -44,10 +45,12 @@
                 {% endif %}
             </div>
             <hr/>
+            -->
             <div>
+             <h4> Targets </h4>
              <table class="table">
              <thead> 
-                <th><h4>{% flatblock 'show-conservation-features' 3600 %}</h4></th>
+                <th>{% flatblock 'show-conservation-features' 3600 %}</th>
                 <th> Relative Importance</th>
              </thead>
              <tbody>
@@ -134,7 +137,9 @@
         </div>
         <div id="species" class="tab-pane">
             <div class="box">
-                <p>Goals were met for {{results.num_met}} of {{results.num_species}} {% flatblock 'show-conservation-features' 3600 %}.</p>
+                <!-- <p>Goals were met for {{results.num_met}} of {{results.num_species}} 
+                        {% flatblock 'show-conservation-features' 3600 %}.</p>
+                 -->
                 <table class="table" id="species_table" summary="Species Table">
                 <thead>
                     <tr>

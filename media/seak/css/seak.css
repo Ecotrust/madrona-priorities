@@ -1,5 +1,5 @@
 .table tr.active {
-    background: #E4AF87;
+    background: white;
 }
 .outermap {
    padding: 3px !important;
@@ -179,7 +179,7 @@ h4 {
    margin-left: 8px;
 }
 .slider-range {
-  width:220px; 
+  width:160px; 
   display:inline-block;
 }
 .group {list-style:none; padding:4px;margin:0;text-indent:none;font-size:12px;}
@@ -187,3 +187,20 @@ h4 {
 .member_list { display:none; }
 a.show_members {text-decoration:none;padding:5px;font-size:10px;margin-left:5px;}
 a.show_members img {border:none;margin-right:5px;margin-bottom:-3px;}
+
+/*
+.table-striped tbody tr:nth-child(odd) td, .table-striped tbody tr:nth-child(odd) th {
+    background-color: #39F9F9;
+}
+*/
+.table-scenariolist tbody tr td, .table-scenariolist tbody tr th {
+    color: #555555;
+    background-color: #F9F9F9;
+    cursor: pointer;
+}
+.table tbody tr:hover td, .table tbody tr:hover th {
+    background-color: #EEEEEE;
+}
+td.scenario-name {
+    color: #317EAC !important;
+}

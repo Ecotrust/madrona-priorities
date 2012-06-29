@@ -364,7 +364,7 @@ class Scenario(Analysis):
             bbox = rs['bbox']
         except:
             bbox = None
-
+   
         serializable = {
             "type": "Feature",
             "bbox": bbox,
@@ -374,6 +374,9 @@ class Scenario(Analysis):
                'bbox': bbox,
                'name': self.name, 
                'done': self.done, 
+               'description': self.description,
+               'date_modified': self.date_modified.strftime("%a %b %d,%Y %I:%M %p"),
+               'user': self.user.username,
                'selected_fids': selected_fids,
                'potential_fids': json.loads(self.input_geography)
             }

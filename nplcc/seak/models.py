@@ -393,13 +393,13 @@ class Scenario(Analysis):
         geography = json.loads(self.input_geography)
         targets_penalties = {}
         for k, v in targets.items():
-            targets_penalties[k] = {'target': v, 'penalty': None}
+            targets_penalties[k] = {'label': k.replace('---', ' > ').title(), 'target': v, 'penalty': None}
         for k, v in penalties.items():
             try:
                 targets_penalties[k]['penalty'] = v
             except KeyError:
                 # this should never happen but just in case
-                targets_penalties[k] = {'target': None, 'penalty': v}
+                targets_penalties[k] = {'label': k.replace('---', ' > ').title(), 'target': None, 'penalty': v}
 
         species_level_targets = self.process_dict(targets)
         if not self.done:

@@ -51,14 +51,18 @@
              <table class="table">
              <thead> 
                 <th>{% flatblock 'show-conservation-features' 3600 %}</th>
-                <th> Relative Importance</th>
+                <th colspan="2"> Relative Importance</th>
+                <th class="debug-only"> Penalty </th>
              </thead>
              <tbody>
                 {% for k,v in results.targets_penalties.items %}
                 <tr class="{% if v.target > 0 %}targeted{% else %}not-targeted{% endif %}"> 
-                    <td><strong>{{k}}</strong></td>
+                    <td>{{v.label}}</td>
+                    <td> 
+                      <div class="progress" style="width:120px"><div class="bar" style="width:{{v.target|percentage}}"></div></div>
+                    </td>
                     <td>{{v.target|percentage}}</td>
-                    <!-- <td>{{v.penalty}}</td> -->
+                    <td class="debug-only">{{v.penalty|percentage}}</td>
                 </tr>
                 {% endfor %}
              </tbody>
@@ -130,14 +134,16 @@
         </div>
         <div id="species" class="tab-pane">
             <div class="box">
+                <p> For each target, the chart below shows how much of the total potentially available
+                    convservation value is represented by this solution. </p>
+                 
                 <p class="debug-only">Goals were met for {{results.num_met}} of {{results.num_species}} 
                         {% flatblock 'show-conservation-features' 3600 %}.</p>
                 <table class="table" id="species_table" summary="Species Table">
                 <thead>
                     <tr>
                         <th scope="col"> Species </th>
-                        <th scope="col"> Percent of Total </th>
-                        <th scope="col" width="50"> Units </th>
+                        <th scope="col" colspan="2"> Percent of Total Available</th>
                         <th class="debug-only" scope="col" width="80"> Goal Met?</th>
               
                     </tr>
@@ -146,8 +152,8 @@
                 {% for s in results.species %}
                 <tr{% if s.target == 0 %} class="nogoal" style="display:none;"{% else %}class="hit"{% endif %}>
                     <td> <strong>{{s.name}}</strong></td>
-                    <td> {{s.pcttotal|percentage:1}} </td>
-                    <td> {{s.units}} </td>
+                    <td> <div class="progress" style="width:120px" ><div class="bar" style="width:{{s.pcttotal|percentage}}"></div></div></td>
+                    <td> {{s.pcttotal|percentage:1}} {{s.units}} </td>
                     <td class="debug-only"> {% if s.target == 0 %} - {% else %} 
                         {% if s.met %}&#10003;{% else %} NO<br/>(Goal was {{s.target_prop|percentage:0}}){% endif %} 
                          {% endif %}

@@ -22,6 +22,10 @@
 {% endif %}
 {% endblock progress %}
 
+{% if instance.expired %}
+<div class="alert alert-error"> <i style="float:left; margin: 5px;" class="icon-exclamation-sign"></i> {% flatblock 'scenario-expired-message' 3600 %}</div>
+{% endif %}
+
 <div class="tabbable">
     <ul class="nav nav-tabs" style="margin-bottom:0px;">
         <li class="active"><a href="#Inputs" data-toggle="tab"><span>{% flatblock 'show-inputs' 3600 %}</span></a></li>

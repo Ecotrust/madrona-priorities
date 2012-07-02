@@ -151,5 +151,14 @@
       "header": "", 
       "slug": "show-results-summary"
     }
+  }, 
+  {
+    "pk": 18, 
+    "model": "flatblocks.flatblock", 
+    "fields": {
+      "content": "<h3>Scenario Expired</h3> New data has been loaded into the prioritization tool since this scenario was created. It is <em>highly</em> recommended that you Edit and rerun the scenario to make sure the results are still valid with the current data.", 
+      "header": "", 
+      "slug": "scenario-expired-message"
+    }
   }
 ]

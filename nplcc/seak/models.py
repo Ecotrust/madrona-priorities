@@ -137,6 +137,7 @@ class PlanningUnit(models.Model):
     geometry = models.MultiPolygonField(srid=settings.GEOMETRY_DB_SRID, 
             null=True, blank=True, verbose_name="Planning Unit Geometry")
     objects = models.GeoManager()
+    date_modified = models.DateTimeField(auto_now=True)
 
     @property
     @cachemethod("PlanningUnit_%(fid)s_area")
@@ -201,6 +202,13 @@ class Scenario(Analysis):
         return os.path.realpath(os.path.join(settings.MARXAN_OUTDIR, "%s_" % (self.uid,) ))
         # This is not asycn-safe! A new modificaiton will clobber the old. 
         # What happens if new and old are both still running - small chance of a corrupted mix of output files? 
+
+    @property
+    def expired(self):
+        if self.date_modified < PlanningUnit.objects.latest('date_modified').date_modified:
+            return True
+        else:
+            return False
 
     def copy(self, user):
         """ Override the copy method to make sure the marxan files get copied """

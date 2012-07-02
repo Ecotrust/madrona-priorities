@@ -15,7 +15,7 @@
     <ul class="nav nav-tabs" id="formtabs" style="margin-bottom:0px;">
         <li class="active">
             <a href="#geographytab" data-toggle="tab">
-                <span>Step 1: Geography</span>
+                <span>Step 1: {% flatblock 'geography' 3600 %}</span>
             </a> </li>
         <li>
             <a href="#generaltab" data-toggle="tab">
@@ -24,12 +24,12 @@
         </li>
         <li>
             <a href="#speciestab" data-toggle="tab">
-                <span>Step 3: Targets</span>
+                <span>Step 3: {% flatblock 'targets' 3600 %}</span>
             </a>
         </li>
         <li>
             <a href="#coststab" data-toggle="tab">
-                <span>Step 4: Constraints</span>
+                <span>Step 4: {% flatblock 'constraints' %}</span>
             </a>
         </li>
     </ul>
@@ -42,6 +42,7 @@
         <p>Using the map, draw a box or click {% flatblock 'planning-units' 3600 %} to select. To navigate, use the keyboard controls.</p>
         <!-- TODO this doesnt work in IE, use  -->
         <a href="javascript:$('#step1Movie').toggle();" class="btn btn-mini">Need Help <i class="icon-question-sign"></i></a>
+        <br/>
         <br/>
         <div id="step1Movie" style="display:none;">
             <!-- TODO animated gif -->
@@ -99,7 +100,7 @@
           <table class="table table-condensed">
             <tr>
                 <th> {% flatblock 'show-conservation-features' 3600 %} </th>
-                <th> Relative Importance</th>
+                <th> {% flatblock 'relative-importance' 3600 %}</th>
                 <th class="debug-only"> target </th>
                 <th class="debug-only"> penalty </th>
             </tr>

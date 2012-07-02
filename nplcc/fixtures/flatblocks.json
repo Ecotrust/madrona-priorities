@@ -160,5 +160,59 @@
       "header": "", 
       "slug": "scenario-expired-message"
     }
+  }, 
+  {
+    "pk": 19, 
+    "model": "flatblocks.flatblock", 
+    "fields": {
+      "content": "For each target, the chart below shows how much of the total potentially available convservation value is represented by this solution.", 
+      "header": "", 
+      "slug": "show-targets-explanation"
+    }
+  }, 
+  {
+    "pk": 20, 
+    "model": "flatblocks.flatblock", 
+    "fields": {
+      "content": "Percent of Total Available Value", 
+      "header": "", 
+      "slug": "show-percent-met"
+    }
+  }, 
+  {
+    "pk": 21, 
+    "model": "flatblocks.flatblock", 
+    "fields": {
+      "content": "Targets", 
+      "header": "", 
+      "slug": "targets"
+    }
+  }, 
+  {
+    "pk": 23, 
+    "model": "flatblocks.flatblock", 
+    "fields": {
+      "content": "Geography", 
+      "header": "", 
+      "slug": "geography"
+    }
+  }, 
+  {
+    "pk": 22, 
+    "model": "flatblocks.flatblock", 
+    "fields": {
+      "content": "Constraints", 
+      "header": "", 
+      "slug": "constraints"
+    }
+  }, 
+  {
+    "pk": 24, 
+    "model": "flatblocks.flatblock", 
+    "fields": {
+      "content": "Relative Importance", 
+      "header": "", 
+      "slug": "relative-importance"
+    }
   }
 ]

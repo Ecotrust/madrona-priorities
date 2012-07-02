@@ -51,11 +51,11 @@
             <hr/>
             -->
             <div>
-             <h4> Targets </h4>
+             <h4>{% flatblock 'targets' 3600 %}</h4>
              <table class="table">
              <thead> 
                 <th>{% flatblock 'show-conservation-features' 3600 %}</th>
-                <th colspan="2"> Relative Importance</th>
+                <th colspan="2"> {% flatblock 'relative-importance' 3600 %}</th>
                 <th class="debug-only"> Penalty </th>
              </thead>
              <tbody>
@@ -74,7 +74,7 @@
 
              <hr/>
 
-            <h4>Prioritization Constraints</h4>
+            <h4>{% flatblock 'constraints' 3600 %}</h4>
              <table class="table">
              {%for k,v in results.costs.items|sortcosts %}
              {% if v > 0%}<tr><td> &#10003; <strong>{{k}}</strong></td></tr> 
@@ -95,8 +95,8 @@
 
         <div id="watersheds" class="tab-pane">
             <div class="box">
-                <p>The optimum prioritization scenario includes {{results.num_units}} {% flatblock 'show-planning-units' 3600 %} covering {{results.area|floatformat:0|intcomma}} km<sup>2</sup>. </p>
-                <table class="table" summary="Subbasin Table">
+                <p>The optimal prioritization scenario includes {{results.num_units}} {% flatblock 'show-planning-units' 3600 %} covering {{results.area|floatformat:0|intcomma}} km<sup>2</sup>. </p>
+                <table class="table">
                 <thead>
                     <tr>
                     <th scope="col"> {% flatblock 'show-planning-units' 3600 %} </th> 
@@ -138,18 +138,15 @@
         </div>
         <div id="species" class="tab-pane">
             <div class="box">
-                <p> For each target, the chart below shows how much of the total potentially available
-                    convservation value is represented by this solution. </p>
-                 
+                <p>{% flatblock 'show-targets-explanation' 3600 %}</p>
                 <p class="debug-only">Goals were met for {{results.num_met}} of {{results.num_species}} 
                         {% flatblock 'show-conservation-features' 3600 %}.</p>
                 <table class="table" id="species_table" summary="Species Table">
                 <thead>
                     <tr>
-                        <th scope="col"> Species </th>
-                        <th scope="col" colspan="2"> Percent of Total Available</th>
+                        <th scope="col"> {% flatblock 'show-conservation-features' 3600 %} </th>
+                        <th scope="col" colspan="2"> {% flatblock 'show-percent-met' 3600 %}</th>
                         <th class="debug-only" scope="col" width="80"> Goal Met?</th>
-              
                     </tr>
                 </thead>
                 <tbody>

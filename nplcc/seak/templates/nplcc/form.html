@@ -134,8 +134,7 @@
             {% for cost in costs %}
             <tr>
                 <td><input type="checkbox" class="costvalue" id="cost---{{cost.slug}}" checked="1"/></td>
-                <td> {{cost.name}} </td>
-                <td> <em>{{cost.desc}}</em> </td>
+                <td><label for="cost---{{cost.slug}}">{{cost.name}} (<em>{{cost.desc}}</em>)</label></td>
             </tr>
             {% endfor %}
           </table>

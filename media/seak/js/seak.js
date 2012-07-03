@@ -76,7 +76,7 @@ function init_map() {
         "default": new OpenLayers.Style({
             display: "none",  /* needs to be set temporarily to true for selection to work */
             strokeWidth: 0,
-            fillOpacity: 0,
+            fillOpacity: 0
         }),
         "select": new OpenLayers.Style({
             display: true,
@@ -88,7 +88,7 @@ function init_map() {
         "select_geography": new OpenLayers.Style({
             display: true,
             fillColor: "#777777",
-            fillOpacity: 0.5,
+            fillOpacity: 0.5
         })
     });
 
@@ -114,7 +114,7 @@ function init_map() {
         }
     }, 'json')
     .error(function() { app.scenarios.viewModel.planningUnitsLoadError(true); })
-    .complete(function() { app.scenarios.viewModel.planningUnitsLoadComplete(true); })
+    .complete(function() { app.scenarios.viewModel.planningUnitsLoadComplete(true); });
 
     map.addLayers([esri_shade, esri_topo, esri_physical, osm, google_terrain, pu_layer, pu_tiles, pu_utfgrid, nplcc, markers]);
     
@@ -123,7 +123,7 @@ function init_map() {
         {
             multiple: true
         }
-    )
+    );
 
     var geographySelectCallback = function(){ 
         $('#geographySelectionCount').html(pu_layer.selectedFeatures.length);
@@ -143,7 +143,8 @@ function init_map() {
             onSelect: geographySelectCallback,
             onUnselect: geographySelectCallback
         }
-    )
+    );
+
     selectFeatureControl.deactivate();
     selectGeographyControl.deactivate();
 

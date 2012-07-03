@@ -84,6 +84,8 @@ function scenariosViewModel() {
   // display mode
   self.dataMode = ko.observable('manage');
 
+  //self.ws = new madrona.features.workspace(app.workspace);
+  
   // pagination config will display x items 
   // from this zero based index
   self.listStart = ko.observable(0);
@@ -99,7 +101,7 @@ function scenariosViewModel() {
     self.selectedFeature(false);
     self.showScenarioList(true);
     self.loadScenarios();
-  }
+  };
   
   // this list is model for pagination controls 
   self.paginationList = ko.computed(function () {
@@ -132,11 +134,12 @@ function scenariosViewModel() {
 
   self.showScenarioForm = function(action, uid) {
     var formUrl;
+    var ws = new madrona.features.workspace(app.workspace);
     if (action === "create") {
-      formUrl = app.workspace["feature-classes"][0]["link-relations"]["create"]["uri-template"]; 
+      formUrl = ws.actions.getByRel("create")[0].getUrl();
     } else if (action === "edit") {
-      formUrl = app.workspace["feature-classes"][0]["link-relations"]["edit"][0]["uri-template"]; 
-      formUrl = formUrl.replace('{uid}', uid);
+      formUrl = ws.actions.getByTitle("Edit")[0];
+      formUrl = formUrl.getUrl([uid]);
     }
 
     // clean up and show the form
@@ -149,7 +152,7 @@ function scenariosViewModel() {
     .success( function() {
         selectFeatureControl.unselectAll();
         selectGeographyControl.activate();
-        pu_layer.styleMap.styles.default.defaultStyle.display = true;
+        pu_layer.styleMap.styles['default'].defaultStyle.display = true;
         self.showScenarioList(false);
         self.selectedFeature(false);
         self.showScenarioList(false);
@@ -175,7 +178,7 @@ function scenariosViewModel() {
                 slide: function( event, ui ) {
                     setTargetsPenalties(id, ui.value);
                 }
-            })
+            });
         });
 
         // If we're in EDIT mode, set the form values 
@@ -203,9 +206,9 @@ function scenariosViewModel() {
             var in_costs = JSON.parse($('#id_input_relativecosts').val());
             $.each(in_costs, function(key, val) {
                 if (val > 0) {
-                    $("#cost---" + key).attr('checked','checked')
+                    $("#cost---" + key).attr('checked','checked');
                 } else {
-                    $("#cost---" + key).removeAttr('checked')
+                    $("#cost---" + key).removeAttr('checked');
                 }
             });
 
@@ -222,10 +225,10 @@ function scenariosViewModel() {
                 $("#penalty---" + key).val(val);
             });
             
-       }; // end EDIT mode
+       } // end EDIT mode
     })
     .error( function() { self.formLoadError(true); } )
-    .complete( function() { self.formLoadComplete(true); } )
+    .complete( function() { self.formLoadComplete(true); } );
   };
 
   self.saveScenarioForm = function(self, event) {
@@ -280,14 +283,14 @@ function scenariosViewModel() {
         $(frm).find('textarea#id_input_relativecosts').val( JSON.stringify(costs) );
         $(frm).find('textarea#id_input_geography').val( JSON.stringify(geography_fids) );
 
-        if (totalfids == 0) {
+        if (totalfids === 0) {
             alert("Please select geography; complete Step 1");
             $("#formtabs a[href='#geographytab']").tab('show');
         } else if ($(frm).find('input[name="name"]').val() === '') {
             alert("Please provide a name; complete Step 2");
             $("#formtabs a[href='#generaltab']").tab('show');
             $(frm).find('input[name="name"]').focus();
-        } else if (totalpenalties == 0 || totaltargets == 0) {
+        } else if (totalpenalties === 0 || totaltargets === 0) {
             alert("Please set goals for at least one target; complete Step 3");
             $("#formtabs a[href='#speciestab']").tab('show');
         } else {
@@ -320,7 +323,7 @@ function scenariosViewModel() {
             .complete( function() { 
                 self.formSaveComplete(true);
             });
-        };
+        }
   };
 
   self.showDeleteDialog = function () {
@@ -363,7 +366,7 @@ function scenariosViewModel() {
   self.cancelAddScenario = function () {
     selectGeographyControl.unselectAll();
     selectGeographyControl.deactivate();
-    pu_layer.styleMap.styles.default.defaultStyle.display = "none";
+    pu_layer.styleMap.styles['default'].defaultStyle.display = "none";
     pu_layer.redraw();
     self.showScenarioFormPanel(false);
     self.showScenarioList(true);
@@ -381,8 +384,10 @@ function scenariosViewModel() {
       select: function(feature) {
 
         var uid = feature.uid(); 
-        var showUrl = app.workspace["feature-classes"][0]["link-relations"]["self"]["uri-template"]; 
-        showUrl = showUrl.replace('{uid}', uid);
+
+        var ws = new madrona.features.workspace(app.workspace);
+        var showUrl = ws.actions.getByRel("self")[0];
+        showUrl = showUrl.getUrl([uid]);
 
         self.reportLoadError(false);
         self.reportLoadComplete(false);
@@ -398,7 +403,7 @@ function scenariosViewModel() {
           app.scenarios.progressViewModel.checkTimer();
         })
         .error(function() { self.reportLoadError(true); })
-        .complete(function() { self.reportLoadComplete(true); })
+        .complete(function() { self.reportLoadComplete(true); });
         
         selectGeographyControl.unselectAll();
         selectFeatureControl.unselectAll();
@@ -462,7 +467,7 @@ function scenariosViewModel() {
           
         self.scenarioList.unshift(ko.mapping.fromJS(data.features[0].properties));
         self.selectedFeature(self.scenarioList()[0]);
-  }
+  };
 
   self.loadScenarios = function(scenario_uid) {
     self.scenarioLoadComplete(false);
@@ -471,7 +476,12 @@ function scenariosViewModel() {
     if (scenario_uid) {
         // TODO  get url from workspace
         url = '/features/generic-links/links/geojson/' + scenario_uid + '/';
-        handler = function(data) { self.updateScenario(data); }
+
+        var ws = new madrona.features.workspace(app.workspace);
+        var shpTemplate = ws.actions.getByTitle("Shapefile")[0];
+        var shpUrl = shpTemplate.getUrl(uids);
+
+        handler = function(data) { self.updateScenario(data); };
     } else {
         if (self.dataMode() == 'manage') {
             url = '/seak/scenarios.geojson';
@@ -480,7 +490,7 @@ function scenariosViewModel() {
         } else {
             console.log("ERROR: dataMode must be either manage or shared");
         }
-        handler = function(data) { self.loadViewModel(data); }
+        handler = function(data) { self.loadViewModel(data); };
     }
 
     var jqhxr = $.get(url, handler) 
@@ -493,8 +503,8 @@ function scenariosViewModel() {
     .error(function() { self.scenarioLoadError(true); })
     .complete(function() { 
         self.scenarioLoadComplete(true); 
-        $('.scenario-row').tooltip()
-    })
+        $('.scenario-row').tooltip();
+    });
 
   };
 
@@ -562,7 +572,7 @@ function scenariosViewModel() {
     var shareURL = uriTemplate.getUrl(uids);
     var jqxhr = $.ajax({
         url: shareURL,
-        type: "GET",
+        type: "GET"
     })
     .success( function(data, textStatus, jqXHR) {
         var d = $(data).filter('div');

@@ -394,7 +394,6 @@ function scenariosViewModel() {
           clearInterval(app.timer);
           app.timer = null;
           app.scenarios.progressViewModel = new progressViewModel();
-
           ko.applyBindings(app.scenarios.progressViewModel, elem);
           app.scenarios.progressViewModel.checkTimer();
         })
@@ -448,6 +447,8 @@ function scenariosViewModel() {
         self.scenarioList($.map(data.features, function (feature, i) {
             return ko.mapping.fromJS(feature.properties);
         }));
+    } else {
+        self.scenarioList.removeAll(); 
     }
   };
 

@@ -22,8 +22,11 @@
                       <div data-bind="if: !scenarioLoadComplete()" style="text-align: center"> 
                           <img alt="loading" src="/media/img/ajax-loader.gif"/> 
                       </div>
-                      <div data-bind="if: scenarioLoadComplete() && scenarioList().length == 0"> 
-                          <p>{% flatblock "new_explain_scenario" 3600 %}</p>
+                      <div data-bind="if: scenarioLoadComplete() && scenarioList().length == 0 && dataMode() == 'manage'"> 
+                          <p>{% flatblock "new-manage-scenario" 3600 %}</p>
+                      </div>
+                      <div data-bind="if: scenarioLoadComplete() && scenarioList().length == 0 && dataMode() == 'shared'"> 
+                          <p>{% flatblock "new-share-scenario" 3600 %}</p>
                       </div>
                       <div class="alert alert-error" data-bind="visible: scenarioLoadError">
                           <p><strong> Could not load scenario list!</strong></p>

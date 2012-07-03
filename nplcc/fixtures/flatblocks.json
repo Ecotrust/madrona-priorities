@@ -9,15 +9,6 @@
     }
   }, 
   {
-    "pk": 3, 
-    "model": "flatblocks.flatblock", 
-    "fields": {
-      "content": "You can create customized prioritization scenarios, view the results on the map, study the output reports, export to various format, save them for future use, edit them and share them with colleagues. ", 
-      "header": "", 
-      "slug": "new_explain_scenario"
-    }
-  }, 
-  {
     "pk": 4, 
     "model": "flatblocks.flatblock", 
     "fields": {
@@ -213,6 +204,24 @@
       "content": "Relative Importance", 
       "header": "", 
       "slug": "relative-importance"
+    }
+  }, 
+  {
+    "pk": 25, 
+    "model": "flatblocks.flatblock", 
+    "fields": {
+      "content": "There are currently no shared scenarios available.\r\n<br/><br/>\r\nYour colleagues can share their prioritization scenarios allowing you to view results and copy them to your own work space for further modification.", 
+      "header": "", 
+      "slug": "new-share-scenario"
+    }
+  }, 
+  {
+    "pk": 3, 
+    "model": "flatblocks.flatblock", 
+    "fields": {
+      "content": "You haven't created any prioritization scenarios yet.\r\n<br/><br/>\r\nYou can create customized prioritization scenarios, view the results on the map, study the output reports, export to various format, save them for future use, edit them and share them with colleagues. ", 
+      "header": "", 
+      "slug": "new-manage-scenario"
     }
   }
 ]

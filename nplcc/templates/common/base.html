@@ -49,8 +49,8 @@
           <a class="brand" href="/">{% flatblock "title" 3600 %}</a>
           <div>
             <ul class="nav">
-              <li data-bind="css: {'active': dataMode == 'manage'}"><a href="/#manage">Manage</a></li>
-              <li data-bind="css: {'active': dataMode == 'collaborate'}"><a href="/#collaborate">Collaborate</a></li>
+              <li data-bind="css: {'active': dataMode() == 'manage'}, click: switchMode.bind($data, 'manage')"><a href="/">Manage</a></li>
+              <li data-bind="css: {'active': dataMode() == 'shared'}, click: switchMode.bind($data, 'shared')"><a href="/">Shared</a></li>
               <li><a href="/news/about/">Learn More</a></li>
               <li><a href="/help/">Get Help</a></li>
             </ul>

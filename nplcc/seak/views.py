@@ -186,3 +186,22 @@ def user_scenarios_geojson(request):
     }""" % (', \n'.join([s.geojson(None) for s in scenarios]),)
 
     return HttpResponse(geojson, content_type='application/json')
+
+@never_cache
+def shared_scenarios_geojson(request):
+    from seak.models import Scenario
+
+    # Why not use @login_required? 
+    # That just redirects instead of giving proper Http Response code of 401
+    user = request.user
+    if user.is_anonymous() or not user.is_authenticated:
+        return HttpResponse("You must be logged in to view your scenarios.", status=401)
+
+    scenarios = Scenario.objects.shared_with_user(user).exclude(user=user).order_by('-date_modified')
+
+    geojson = """{ 
+      "type": "FeatureCollection",
+      "features": [ %s ]
+    }""" % (', \n'.join([s.geojson(None) for s in scenarios]),)
+
+    return HttpResponse(geojson, content_type='application/json')

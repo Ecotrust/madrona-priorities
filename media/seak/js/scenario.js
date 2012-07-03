@@ -94,6 +94,13 @@ function scenariosViewModel() {
     return self.scenarioList.slice(self.listStart(), self.listDisplayCount+self.listStart());
   });
 
+  self.switchMode = function(mode) {
+    self.dataMode(mode);
+    self.selectedFeature(false);
+    self.showScenarioList(true);
+    self.loadScenarios();
+  }
+  
   // this list is model for pagination controls 
   self.paginationList = ko.computed(function () {
     var list = [], listIndex = 0, displayIndex = 1;
@@ -461,7 +468,13 @@ function scenariosViewModel() {
         url = '/features/generic-links/links/geojson/' + scenario_uid + '/';
         handler = function(data) { self.updateScenario(data); }
     } else {
-        url = '/seak/scenarios.geojson';
+        if (self.dataMode() == 'manage') {
+            url = '/seak/scenarios.geojson';
+        } else if (self.dataMode() == 'shared') {
+            url = '/seak/scenarios_shared.geojson';
+        } else {
+            alert("ERROR: dataMode must be either manage or shared");
+        }
         handler = function(data) { self.loadViewModel(data); }
     }
 

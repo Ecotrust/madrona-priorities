@@ -15,21 +15,21 @@
     <ul class="nav nav-tabs" id="formtabs" style="margin-bottom:0px;">
         <li class="active">
             <a href="#geographytab" data-toggle="tab">
-                <span>Step 1: {% flatblock 'geography' 3600 %}</span>
+                <span>Step 1<br/><strong>{% flatblock 'geography' 3600 %}</strong></span>
             </a> </li>
         <li>
             <a href="#generaltab" data-toggle="tab">
-                <span>Step 2: Describe </span>
+                <span>Step 2<br/><strong>Describe</strong></span>
             </a>
         </li>
         <li>
             <a href="#speciestab" data-toggle="tab">
-                <span>Step 3: {% flatblock 'targets' 3600 %}</span>
+                <span>Step 3<br/><strong>{% flatblock 'targets' 3600 %}</strong></span>
             </a>
         </li>
         <li>
             <a href="#coststab" data-toggle="tab">
-                <span>Step 4: {% flatblock 'constraints' %}</span>
+                <span>Step 4<br/><strong>{% flatblock 'constraints' %}</strong></span>
             </a>
         </li>
     </ul>

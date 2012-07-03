@@ -175,5 +175,5 @@ function init_map() {
 
     map.addControl(ctl);
 
-    map.setCenter(new OpenLayers.LonLat(-13600000, 6700000), 4);
+    map.setCenter(new OpenLayers.LonLat(-15400000, 6700000), 4);
 }

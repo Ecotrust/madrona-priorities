@@ -13,9 +13,9 @@
                       <h3 data-bind="visible: dataMode() == 'manage'">Scenario List</h3>
                       <h3 data-bind="visible: dataMode() == 'shared'">Shared Scenario List</h3>
                       <br/>
-                      <button style="margin-bottom:12px;" href="#" class="btn" 
+                      <button style="margin-bottom:12px;" href="#" class="btn btn-primary" 
                               data-bind="click: addScenarioStart, visible: dataMode() == 'manage'">
-                          <i class="icon-plus-sign"></i> Add Scenario
+                          <i class="icon-plus-sign"></i> Create New Scenario
                           <span data-bind="visible: !formLoadComplete()"><img alt="loading" src="/media/img/ajax-loader.gif"/></span>
                       </button>
 
@@ -122,7 +122,7 @@
                               <i class="icon-trash"></i> Cancel
                             </button>
                             <button href="#" class="btn btn-primary" data-bind="click: saveScenarioForm">
-                              <i class="icon-file"></i> Save Scenario
+                              <i class="icon-file"></i> Run Scenario
                               <span data-bind="visible: !formSaveComplete()"><img alt="loading" src="/media/img/ajax-loader.gif"/></span>
                             </button>
                             <div class="alert alert-error" data-bind="visible: formSaveError">

@@ -403,20 +403,24 @@ function scenariosViewModel() {
         
         selectGeographyControl.unselectAll();
         selectFeatureControl.unselectAll();
+
         $.each(feature.potential_fids(), function (i, fid) {
             var f = pu_layer.getFeaturesByAttribute("fid",fid)[0];
-            if (!f) { console.log("warning: fid " + fid + " is not valid"); }
-            selectGeographyControl.select(f);
+            if (f) { 
+                selectGeographyControl.select(f);
+            }
         });
         $.each(feature.selected_fids(), function (i, fid) {
             var f = pu_layer.getFeaturesByAttribute("fid",fid)[0];
-            if (!f) { console.log("warning: fid " + fid + " is not valid"); }
-            selectFeatureControl.select(f);
+            if (f) { 
+                selectFeatureControl.select(f);
+            }
         });
       }
    };
 
   self.selectFeature = function(feature, event) {
+    if (!self.planningUnitsLoadComplete()) { return false; }
     self.selectControl.unselectAll();
     self.selectControl.select(feature);
     self.selectedFeature(feature); 
@@ -473,7 +477,7 @@ function scenariosViewModel() {
         } else if (self.dataMode() == 'shared') {
             url = '/seak/scenarios_shared.geojson';
         } else {
-            alert("ERROR: dataMode must be either manage or shared");
+            console.log("ERROR: dataMode must be either manage or shared");
         }
         handler = function(data) { self.loadViewModel(data); }
     }

@@ -84,8 +84,6 @@ function scenariosViewModel() {
   // display mode
   self.dataMode = ko.observable('manage');
 
-  //self.ws = new madrona.features.workspace(app.workspace);
-  
   // pagination config will display x items 
   // from this zero based index
   self.listStart = ko.observable(0);
@@ -134,11 +132,10 @@ function scenariosViewModel() {
 
   self.showScenarioForm = function(action, uid) {
     var formUrl;
-    var ws = new madrona.features.workspace(app.workspace);
     if (action === "create") {
-      formUrl = ws.actions.getByRel("create")[0].getUrl();
+      formUrl = app.workspaceUtil.actions.getByRel("create")[0].getUrl();
     } else if (action === "edit") {
-      formUrl = ws.actions.getByTitle("Edit")[0];
+      formUrl = app.workspaceUtil.actions.getByTitle("Edit")[0];
       formUrl = formUrl.getUrl([uid]);
     }
 
@@ -385,8 +382,7 @@ function scenariosViewModel() {
 
         var uid = feature.uid(); 
 
-        var ws = new madrona.features.workspace(app.workspace);
-        var showUrl = ws.actions.getByRel("self")[0];
+        var showUrl = app.workspaceUtil.actions.getByRel("self")[0];
         showUrl = showUrl.getUrl([uid]);
 
         self.reportLoadError(false);
@@ -474,13 +470,8 @@ function scenariosViewModel() {
     self.scenarioLoadError(false);
     var url;
     if (scenario_uid) {
-        // TODO  get url from workspace
-        url = '/features/generic-links/links/geojson/' + scenario_uid + '/';
-
-        var ws = new madrona.features.workspace(app.workspace);
-        var shpTemplate = ws.actions.getByTitle("Shapefile")[0];
-        var shpUrl = shpTemplate.getUrl(uids);
-
+        var jsonLink = app.workspaceUtil.actions.getByTitle("GeoJSON")[0];
+        var url = jsonLink.getUrl([scenario_uid]);
         handler = function(data) { self.updateScenario(data); };
     } else {
         if (self.dataMode() == 'manage') {
@@ -533,8 +524,7 @@ function scenariosViewModel() {
             uids.push( $(v).attr('value') ); 
         }
     });
-    var ws = new madrona.features.workspace(app.workspace);
-    var shpTemplate = ws.actions.getByTitle("Shapefile")[0];
+    var shpTemplate = app.workspaceUtil.actions.getByTitle("Shapefile")[0];
     var shpUrl = shpTemplate.getUrl(uids);
     $('#download-iframe').attr('src', shpUrl);
     $("#scenario-download-dialog").modal("hide");
@@ -542,8 +532,7 @@ function scenariosViewModel() {
 
   self.copyScenario = function() {
     var uids = [self.selectedFeature().uid()];
-    var ws = new madrona.features.workspace(app.workspace);
-    var uriTemplate = ws.actions.getByTitle("Copy")[0];
+    var uriTemplate = app.workspaceUtil.actions.getByTitle("Copy")[0];
     var copyURL = uriTemplate.getUrl(uids);
     var jqxhr = $.ajax({
         url: copyURL,
@@ -567,8 +556,7 @@ function scenariosViewModel() {
 
   self.showShareDialog = function () {
     var uids = [self.selectedFeature().uid()];
-    var ws = new madrona.features.workspace(app.workspace);
-    var uriTemplate = ws.actions.getByTitle("Share")[0];
+    var uriTemplate = app.workspaceUtil.actions.getByTitle("Share")[0];
     var shareURL = uriTemplate.getUrl(uids);
     var jqxhr = $.ajax({
         url: shareURL,
@@ -600,8 +588,7 @@ function scenariosViewModel() {
  
   self.shareScenario = function() {
     var uids = [self.selectedFeature().uid()];
-    var ws = new madrona.features.workspace(app.workspace);
-    var uriTemplate = ws.actions.getByTitle("Share")[0];
+    var uriTemplate = app.workspaceUtil.actions.getByTitle("Share")[0];
     var shareURL = uriTemplate.getUrl(uids);
     var postData = $("form#share").serialize(); 
     var jqxhr = $.ajax({

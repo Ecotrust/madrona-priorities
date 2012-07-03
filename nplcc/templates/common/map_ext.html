@@ -240,15 +240,18 @@
         timer: null
       }
     };
+ 
+    handleWorkspace = function (data) {
+      app.workspace = data;
+      app.workspaceUtil = new madrona.features.workspace(data); 
+    };
     {% if user.is_authenticated %}
-    $.get('/features/{{user.username}}/workspace-owner.json', function (data) {
-        app.workspace = data;
-    });
+    $.get('/features/{{user.username}}/workspace-owner.json', handleWorkspace);
     {% else %}
-    $.get('/features/workspace-public.json', function (data) {
-        app.workspace = data;
-    });
+    $.get('/features/workspace-public.json', handleWorkspace);
     {% endif %}
+
+
     app.onResize = function () {
       $("#map").height($(window).height() * .85);
       map.render('map');

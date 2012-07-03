@@ -28,6 +28,8 @@ INSTALLED_APPS += ( 'seak',
                     'django.contrib.humanize',) 
 
 COMPRESS_CSS['application']['source_filenames'] = (
+    'common/css/jquery-ui.css',
+    'common/css/ui.theme.css',
     'seak/css/seak.css',
     'theme/default/style.css',
 )

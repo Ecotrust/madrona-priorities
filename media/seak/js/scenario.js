@@ -471,7 +471,7 @@ function scenariosViewModel() {
     var url;
     if (scenario_uid) {
         var jsonLink = app.workspaceUtil.actions.getByTitle("GeoJSON")[0];
-        var url = jsonLink.getUrl([scenario_uid]);
+        url = jsonLink.getUrl([scenario_uid]);
         handler = function(data) { self.updateScenario(data); };
     } else {
         if (self.dataMode() == 'manage') {

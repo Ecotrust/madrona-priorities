@@ -33,6 +33,7 @@ COMPRESS_CSS['application']['source_filenames'] = (
 )
 
 COMPRESS_JS['application']['source_filenames'] = (
+    'common/js/json2.js',
     'features/js/workspace.js',
     'seak/js/seak.js',
     'seak/js/scenario.js',

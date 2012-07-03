@@ -166,7 +166,7 @@
                       <ul data-bind="foreach: scenarioList">
                         <li class="group" data-bind="if: uid != $parent.selectedFeature().uid">
                           <input type="checkbox" name="download_array" data-bind="attr: {value: uid, id: uid}"/> 
-                          <label style="display: inline-block;" data-bind="attr: {for: uid}, text: name" /></label>
+                          <label style="display: inline-block;" data-bind="attr: {'for': uid}, text: name" /></label>
                         </li>
                       </ul>
                     </form>

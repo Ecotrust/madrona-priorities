@@ -7,6 +7,7 @@ from django.template.defaultfilters import slugify
 from django.contrib.gis.geos import MultiPolygon
 from django.shortcuts import render_to_response
 from django.core.cache import cache
+from django.views.decorators.cache import cache_page
 from django.conf import settings
 from django.template import RequestContext
 from seak.models import PlanningUnit
@@ -142,6 +143,7 @@ def docs(request):
 def test(request):
     return render_to_response("seak/test.html")
 
+@cache_page(60 * 60)
 def planning_units_geojson(request):
     def get_feature_json(geom_json, prop_json):
         return """{

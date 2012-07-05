@@ -59,8 +59,7 @@ MARXAN_TEMPLATEDIR = os.path.join(MARXAN_OUTDIR, 'template')
 MARXAN_NUMREPS = 20
 MARXAN_NUMITNS = 1000000
 
-LOG_FILE =  os.path.realpath(os.path.join(os.path.dirname(__file__), '..', 'nplcc.log'))
-LOGFILE =  os.path.realpath(os.path.join(os.path.dirname(__file__), '..', 'nplcc.log'))
+LOG_FILE =  os.path.realpath(os.path.join(os.path.dirname(__file__), '..', 'logs', 'nplcc.log'))
 
 MEDIA_ROOT =  os.path.realpath(os.path.join(os.path.dirname(__file__), '..', 'mediaroot'))
 

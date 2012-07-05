@@ -26,10 +26,10 @@ num_units = []
 
 factors = [2, 3, 4, 5]
 #factors = [float(x)/20.0 for x in range(20,100)]
-numspecies = [3]
-numcosts = [2]
-targets = [0.5]
-penalties = [0.5]
+numspecies = [2,3,4]
+numcosts = [2,1,3]
+targets = [0.5, 0.25]
+penalties = [0.5, 0.25]
 
 settings.MARXAN_NUMREPS = 3
 

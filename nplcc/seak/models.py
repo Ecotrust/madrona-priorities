@@ -54,13 +54,8 @@ def cachemethod(cache_key, timeout=3600):
                 res = func(self)
                 cache.set(key, res, timeout)
                 #logger.debug("   Cache SET")
-                """
-                if cache.get(key) == res:
-                    logger.debug("   Cache GET was successful")
-                else:
-                    raise RuntimeError("    Cache GET was NOT successful")
-                """
-            #else: logger.debug("   Cache HIT")
+                if cache.get(key) != res:
+                    logger.error("*** Cache GET was NOT successful, %s" % key)
             return res
         return decorated 
     return paramed_decorator

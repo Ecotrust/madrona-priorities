@@ -24,7 +24,6 @@ TEMPLATE_DIRS = ( os.path.realpath(os.path.join(os.path.dirname(__file__), 'temp
 
 INSTALLED_APPS += ( 'seak', 
                     'djkombu',
-                    'gunicorn',
                     'madrona.analysistools',
                     'django.contrib.humanize',) 
 

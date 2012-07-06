@@ -213,8 +213,5 @@ def shared_scenarios_geojson(request):
 @cache_control(must_revalidate=False, max_age=60 * 60 * 8)
 def tiles(request):
     path_info = request.path_info.replace('/tiles', '')
-    print "\n" * 2
-    print path_info
-    print "\n" * 2
     (mimestr, bytes) = TileStache.requestHandler(config_hint=settings.TILE_CONFIG, path_info=path_info, query_string=None)
     return HttpResponse(bytes, content_type=mimestr)

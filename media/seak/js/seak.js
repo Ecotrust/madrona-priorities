@@ -43,7 +43,8 @@ function init_map() {
     );
 
     var pu_utfgrid = new OpenLayers.Layer.UTFGrid({
-         url: "/tiles/utfgrid/${z}/${x}/${y}.json",
+         //url: "/tiles/utfgrid/${z}/${x}/${y}.json", dynamic, use once mapnik is figured out
+         url: "/media/tiles/planning_units/${z}/${x}/${y}.json",
          utfgridResolution: 4,
          sphericalMercator: true,
          displayInLayerSwitcher: false

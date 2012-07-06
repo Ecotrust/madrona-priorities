@@ -122,4 +122,8 @@ def get_tile_config():
 TILE_CONFIG = get_tile_config()
 
 if DEBUG:
-    INSTALLED_APPS += ('gunicorn',)
+    try:
+        import gunicorn
+        INSTALLED_APPS += ('gunicorn',)
+    except ImportError:
+        pass

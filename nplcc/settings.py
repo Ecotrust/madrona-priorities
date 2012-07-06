@@ -24,8 +24,10 @@ TEMPLATE_DIRS = ( os.path.realpath(os.path.join(os.path.dirname(__file__), 'temp
 
 INSTALLED_APPS += ( 'seak', 
                     'djkombu',
+                    'gunicorn',
                     'madrona.analysistools',
                     'django.contrib.humanize',) 
+
 
 COMPRESS_CSS['application']['source_filenames'] = (
     'common/css/jquery-ui.css',
@@ -59,9 +61,9 @@ MARXAN_TEMPLATEDIR = os.path.join(MARXAN_OUTDIR, 'template')
 MARXAN_NUMREPS = 20
 MARXAN_NUMITNS = 1000000
 
-LOG_FILE =  os.path.realpath(os.path.join(os.path.dirname(__file__), '..', 'logs', 'nplcc.log'))
-
-MEDIA_ROOT =  os.path.realpath(os.path.join(os.path.dirname(__file__), '..', 'mediaroot'))
+LOG_FILE = os.path.realpath(os.path.join(os.path.dirname(__file__), '..', 'logs', 'nplcc.log'))
+MEDIA_ROOT = os.path.realpath(os.path.join(os.path.dirname(__file__), '..', 'mediaroot'))
+TILE_CONFIG_DIR = os.path.realpath(os.path.join(os.path.dirname(__file__), '..', 'tile_config'))
 
 ENFORCE_SUPPORTED_BROWSER = False
 
@@ -107,3 +109,17 @@ if not os.path.exists(MEDIA_ROOT):
 
 if not os.path.exists(MARXAN_TEMPLATEDIR):
     os.makedirs(MARXAN_TEMPLATEDIR)
+
+def get_tile_config():
+    import TileStache as tilestache
+    pth = os.path.join(TILE_CONFIG_DIR, 'tiles.cfg')
+    try:
+        cfg = tilestache.parseConfigfile(pth)
+    except (IOError, ValueError):
+        cfg = None
+    return cfg
+
+TILE_CONFIG = get_tile_config()
+
+if DEBUG:
+    INSTALLED_APPS += ('gunicorn',)

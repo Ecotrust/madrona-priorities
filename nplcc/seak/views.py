@@ -7,10 +7,11 @@ from django.template.defaultfilters import slugify
 from django.contrib.gis.geos import MultiPolygon
 from django.shortcuts import render_to_response
 from django.core.cache import cache
-from django.views.decorators.cache import cache_page
+from django.views.decorators.cache import cache_page, cache_control
 from django.conf import settings
 from django.template import RequestContext
 from seak.models import PlanningUnit
+import TileStache 
 import os
 import json
 import time
@@ -207,3 +208,13 @@ def shared_scenarios_geojson(request):
     }""" % (', \n'.join([s.geojson(None) for s in scenarios]),)
 
     return HttpResponse(geojson, content_type='application/json')
+
+@cache_page(60 * 60 * 8)
+@cache_control(must_revalidate=False, max_age=60 * 60 * 8)
+def tiles(request):
+    path_info = request.path_info.replace('/tiles', '')
+    print "\n" * 2
+    print path_info
+    print "\n" * 2
+    (mimestr, bytes) = TileStache.requestHandler(config_hint=settings.TILE_CONFIG, path_info=path_info, query_string=None)
+    return HttpResponse(bytes, content_type=mimestr)

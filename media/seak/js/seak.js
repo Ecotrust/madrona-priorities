@@ -42,17 +42,8 @@ function init_map() {
         {sphericalMercator: true} 
     );
 
-    var nplcc = new OpenLayers.Layer.OSM( "North Pacific LCC",
-        "/media/tiles/nplcc/${z}/${x}/${y}.png",
-        {
-         sphericalMercator: true,
-         isBaseLayer: false,
-         visibility: false
-        } 
-    );
-
     var pu_utfgrid = new OpenLayers.Layer.UTFGrid({
-         url: "/media/tiles/planning_units/${z}/${x}/${y}.json",
+         url: "/tiles/utfgrid/${z}/${x}/${y}.json",
          utfgridResolution: 4,
          sphericalMercator: true,
          displayInLayerSwitcher: false
@@ -60,7 +51,7 @@ function init_map() {
     );
 
     var pu_tiles = new OpenLayers.Layer.OSM( "Planning Units",
-        "/media/tiles/planning_units/${z}/${x}/${y}.png",
+        "/tiles/planning_units/${z}/${x}/${y}.png",
         {
          sphericalMercator: true,
          isBaseLayer: false
@@ -116,7 +107,7 @@ function init_map() {
     .error(function() { app.scenarios.viewModel.planningUnitsLoadError(true); })
     .complete(function() { app.scenarios.viewModel.planningUnitsLoadComplete(true); });
 
-    map.addLayers([esri_shade, esri_topo, esri_physical, osm, google_terrain, pu_layer, pu_tiles, pu_utfgrid, nplcc, markers]);
+    map.addLayers([esri_shade, esri_topo, esri_physical, osm, google_terrain, pu_layer, pu_tiles, pu_utfgrid, markers]);
     
     selectFeatureControl = new OpenLayers.Control.SelectFeature(
         pu_layer,

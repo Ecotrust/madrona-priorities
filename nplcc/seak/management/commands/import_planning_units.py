@@ -8,14 +8,16 @@ from shapely.geometry import Point
 from shapely import wkt, wkb
 from shapely.ops import cascaded_union
 from django.contrib.gis.gdal import DataSource
+import json
 
 class Command(BaseCommand):
     help = 'Imports shapefile with conservationfeatures/costs and xls metadata to planning units'
-    args = '<shp_path xls_path>'
+    args = '<shp_path> <xls_path> <optional: full resolution shp_path>'
 
     def handle(self, *args, **options):
         from django.core.management.base import CommandError
         from django.conf import settings
+
         try: 
             shp = args[0]
             xls = args[1]
@@ -24,6 +26,13 @@ class Command(BaseCommand):
         except:
             raise CommandError("Specify shp and xls file\n python manage.py import_planning_units test.shp test.xls")
 
+        try:
+            fullres_shp = args[2]
+            assert os.path.exists(fullres_shp)
+        except:
+            print
+            print "Using %s as the full-res display layer" % shp
+            fullres_shp = shp
 
         backup = False
         import_shp = True
@@ -87,7 +96,8 @@ class Command(BaseCommand):
         for cf in cfs:
             fname = cf.dbf_fieldname
             if fname is None or fname == '':
-                print "WARNING: No dbf_fieldname specified for %s, no info can be extracted from shapefile for this species" % cf.name
+                print "WARNING: No dbf_fieldname specified for %s" % cf.name
+                print "   no info can be extracted from shapefile for this conservation feature"
                 continue
 
         # Load Costs from xls
@@ -147,18 +157,113 @@ class Command(BaseCommand):
         pus = PlanningUnit.objects.all()
         assert len(layer) == len(pus)
 
+        print
+        print "Generating tile configuration files"
+        cfs_with_fields = [x for x in cfs if x.dbf_fieldname is not None and x.dbf_fieldname != '' ]
+
+        # Get all dbf fieldnames for the utfgrids
+        all_dbf_fieldnames = [cf.dbf_fieldname for cf in cfs_with_fields]
+        all_dbf_fieldnames.extend([c.dbf_fieldname for c in cs])
+
+        xml_template = """<?xml version="1.0"?>
+<!DOCTYPE Map [
+<!ENTITY google_mercator "+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null +wktext +no_defs +over">
+]>
+<Map srs="&google_mercator;">
+    <Style name="pu" filter-mode="first">
+        <Rule>
+            <PolygonSymbolizer fill="#ffffff" fill-opacity="0.2" />
+        </Rule>
+    </Style>
+    <Style name="pu-outline" filter-mode="first">
+        <Rule>
+            <LineSymbolizer stroke="#444444" stroke-width="0.5" stroke-opacity="1" stroke-linejoin="round" />
+        </Rule>
+    </Style>
+    <Layer name="layer" srs="&google_mercator;">
+        <StyleName>pu-outline</StyleName>
+        <StyleName>pu</StyleName>
+        <Datasource>
+            <Parameter name="type">shape</Parameter>
+            <Parameter name="file">%(shppath)s</Parameter>
+        </Datasource>
+    </Layer>
+</Map>""" 
+        xml = xml_template % {'shppath': os.path.abspath(fullres_shp)}
+
+        if not os.path.exists(settings.TILE_CONFIG_DIR):
+            os.makedirs(settings.TILE_CONFIG_DIR)
+
+        with open(os.path.join(settings.TILE_CONFIG_DIR, 'planning_units.xml'), 'w') as fh:
+            print "  writing planning_units.xml"
+            fh.write(xml)
+
+        cfg = {
+            "cache": {
+                "name": "Multi",
+                "tiers": [
+                    {
+                    "name": "Memcache",
+                    "servers": ["127.0.0.1:11211"]
+                    },
+                    {
+                    "name": "Disk",
+                    "path": "/tmp/stache"
+                    }
+                ]
+            },
+            "layers": {
+                "planning_units":
+                {
+                    "provider": 
+                     {
+                         "name": "mapnik", 
+                         "mapfile": "planning_units.xml"
+                     },
+                    "metatile": 
+                    {
+                        "rows": 4,
+                        "columns": 4,
+                        "buffer": 64
+                    }
+                },
+                "utfgrid":
+                {
+                    "provider":
+                    {
+                        "class": "TileStache.Goodies.Providers.MapnikGrid:Provider",
+                        "kwargs":
+                        {
+                            "mapfile": "planning_units.xml", 
+                            "fields": all_dbf_fieldnames,
+                            "layer_index": 0,
+                            "scale": 4
+                        }
+                    }
+                }
+            }
+        }
+
+        with open(os.path.join(settings.TILE_CONFIG_DIR, 'tiles.cfg'), 'w') as fh:
+            print "  writing tiles.cfg"
+            fh.write(json.dumps(cfg))
+
+        # TODO create mapnik xml file symbolizing each conservation features and cost
+        
+        # TODO add layers (provider = mapnik) for each of the above
+
+        # TODO Create list of aliases for utfgrid callback, how to deliver it? generate js code?
+        for cf in cfs_with_fields:
+            field = cf.dbf_fieldname
+            alias = cf.name
+            #print field, alias
+
         print 
         print "Loading costs and habitat amounts associated with each planning unit"
-        cfs_with_fields = [x for x in cfs if x.dbf_fieldname is not None and x.dbf_fieldname != '' ]
         for feature in layer:
             pu = pus.get(fid=feature.get(mapping['fid']))
             for cf in cfs_with_fields:
                 amt = feature.get(cf.dbf_fieldname)
-                # TODO allow negative or null values
-                """
-                if amt is None or amt < 0:
-                    amt = 0
-                """
                 obj = PuVsCf(pu=pu, cf=cf, amount=amt)
                 obj.save()
 
@@ -188,3 +293,5 @@ class Command(BaseCommand):
         from django.db import connection
         cursor = connection.cursor()
         cursor.execute(query)
+        
+   

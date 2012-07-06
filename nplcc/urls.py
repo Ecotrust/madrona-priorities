@@ -1,6 +1,7 @@
 from django.conf.urls.defaults import *
 from django.contrib import admin
 from django.conf import settings
+from seak.views import tiles
 admin.autodiscover()
 
 urlpatterns = patterns( 'seak.views',
@@ -10,6 +11,7 @@ urlpatterns = patterns( 'seak.views',
 urlpatterns += patterns('',
     (r'^seak/', include('seak.urls')),
     (r'^analysistools/', include('madrona.analysistools.urls')),
+    url(r'^tiles/', tiles, name="tiles"),
 )
 
 urlpatterns += patterns('madrona',

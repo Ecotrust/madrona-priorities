@@ -1,0 +1,9 @@
+1. Clear browser cache
+2. re-import planning units
+3. stop server, manage.py clear_cache, restart
+4. clear tilestache cache
+tilestache-clean.py -c tile_config/tiles.cfg -l ALL -b 40 -153 65 -116 3 4 5 6 7 
+
+# To reseed
+#tilestache-seed.py -c tile_config/tiles.cfg -l planning_units -e png -b 40 -153 65 -116 3 4 5 6 7 
+#tilestache-seed.py -c tile_config/tiles.cfg -l utfgrid -e json -b 40 -153 65 -116 3 4 5 6 7 

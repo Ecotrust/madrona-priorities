@@ -3,3 +3,5 @@ django-redis-sessions
 python-memcached
 tilestache
 modestmaps
+django-celery<3.0.0
+celery<=2.5.5

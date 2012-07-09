@@ -1,6 +1,6 @@
-from celery.decorators import task
+from celery.task import task
 
-@task
+@task()
 def marxan_start(m):
     print "Setting up dirs"
     m.setup()

@@ -51,6 +51,9 @@
                                     <span data-bind="visible: expired()">
                                         <i class="icon-exclamation-sign"></i>
                                     </span>
+                                    <span data-bind="visible: !done()">
+                                        <i class="icon-refresh"></i>
+                                    </span>
                                     <span data-bind="text: name"> </span>
                                 </td>
                                 <td data-bind="text: date_modified"></td>
@@ -93,7 +96,7 @@
                             <a href="#" class="btn btn-mini" data-bind="click: $parent.showDownloadDialog">
                               <i class="icon-download-alt"></i> Download</a>
                             <a href="#" class="btn btn-mini" data-bind="click: $parent.showShareDialog">
-                              <i class="icon-retweet"></i> Share</a>
+                              <i class="icon-share-alt"></i> Share</a>
                             <a href="#" class="btn btn-mini" data-bind="click: $parent.showDeleteDialog">
                               <i class="icon-remove"></i> Delete</a>
                           </div>

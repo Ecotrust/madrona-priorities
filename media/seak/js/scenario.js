@@ -105,7 +105,7 @@ function scenariosViewModel() {
   self.paginationList = ko.computed(function () {
     var list = [], listIndex = 0, displayIndex = 1;
     for (listIndex=0; listIndex < self.scenarioList().length; listIndex++) {
-      if (listIndex % self.listDisplayCount === 0 && Math.abs(listIndex - self.listStart()) < 5 * self.listDisplayCount) {
+      if (listIndex % self.listDisplayCount === 0) { 
         list.push({'displayIndex': 1 + (listIndex/self.listDisplayCount), 'listIndex': listIndex });
       }
     }
@@ -113,9 +113,6 @@ function scenariosViewModel() {
       list.push({'displayIndex': '...', 'listIndex': null });
       list.push({'displayIndex': '»', 'listIndex': null });
 
-    }
-    if (self.listStart() > self.listDisplayCount) {
-      list.shift({'displayIndex': '&laquo;', 'listIndex': null });      
     }
     return list;
   });

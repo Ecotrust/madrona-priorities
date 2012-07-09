@@ -378,6 +378,8 @@ class Scenario(Analysis):
                'bbox': bbox,
                'name': self.name, 
                'done': self.done, 
+               'sharing_groups': [x.name for x in self.sharing_groups.all()],
+               'expired': self.expired,
                'description': self.description,
                'date_modified': self.date_modified.strftime("%a %b %d,%Y %I:%M %p"),
                'user': self.user.username,

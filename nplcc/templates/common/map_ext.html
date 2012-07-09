@@ -47,9 +47,18 @@
                                 data-bind="attr: {'data-original-title': description}, 
                                            click: $parent.selectFeature, 
                                            css: {'active': $data === $parent.selectedFeature() }">
-                                <td class="scenario-name" data-bind="text: name"></td>
+                                <td class="scenario-name">
+                                    <span data-bind="visible: expired()">
+                                        <i class="icon-exclamation-sign"></i>
+                                    </span>
+                                    <span data-bind="text: name"> </span>
+                                </td>
                                 <td data-bind="text: date_modified"></td>
-                                <td data-bind="text: user"></td>
+                                <td> <span data-bind="text: user"></span>
+                                    <span data-bind="visible: sharing_groups().length > 0">
+                                        <i class="icon-share-alt"></i>
+                                    </span>
+                                </td>
                             </tr>
                         </tbody>
                         </table>

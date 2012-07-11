@@ -491,7 +491,7 @@ function scenariosViewModel() {
     .error(function() { self.scenarioLoadError(true); })
     .complete(function() { 
         self.scenarioLoadComplete(true); 
-        $('.scenario-row').tooltip();
+        //$('.scenario-row').tooltip({'placement': 'right', 'animation': true});
     });
 
   };

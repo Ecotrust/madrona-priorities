@@ -42,6 +42,14 @@
                       </div>
                       <div data-bind="if: scenarioList().length > 0">
                         <table class="table table-scenariolist table-bordered table-condensed">
+                        <thead>
+                            <tr>
+                                <th> Scenario Name </th>
+                                <th> Date Modified </th>
+                                <th> Description</th>
+                                <th> Owner</th>
+                            </tr>
+                        </thead>
                         <tbody data-bind="foreach: scenarioListPaginated">
                             <tr class="scenario-row" 
                                 data-bind="attr: {'data-original-title': description}, 
@@ -57,7 +65,8 @@
                                     <span data-bind="text: name"> </span>
                                 </td>
                                 <td data-bind="text: date_modified"></td>
-                                <td> <span data-bind="text: user"></span>
+                                <td data-bind="text: description().substr(0,77) + '...'"></td>
+                                <td> <span data-bind="text: user_fullname"></span>
                                     <span data-bind="visible: sharing_groups().length > 0">
                                         <i class="icon-share-alt"></i>
                                     </span>

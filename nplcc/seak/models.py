@@ -369,6 +369,10 @@ class Scenario(Analysis):
         except:
             bbox = None
    
+        fullname = self.user.get_full_name()
+        if fullname == '':
+            fullname = self.user.username
+
         serializable = {
             "type": "Feature",
             "bbox": bbox,
@@ -381,8 +385,9 @@ class Scenario(Analysis):
                'sharing_groups': [x.name for x in self.sharing_groups.all()],
                'expired': self.expired,
                'description': self.description,
-               'date_modified': self.date_modified.strftime("%a %b %d,%Y %I:%M %p"),
+               'date_modified': self.date_modified.strftime("%m/%d/%y %I:%M%P"),
                'user': self.user.username,
+               'user_fullname': fullname,
                'selected_fids': selected_fids,
                'potential_fids': json.loads(self.input_geography)
             }

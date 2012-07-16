@@ -43,8 +43,8 @@ function init_map() {
     );
 
     var pu_utfgrid = new OpenLayers.Layer.UTFGrid({
-         //url: "/tiles/utfgrid/${z}/${x}/${y}.json", dynamic, use once mapnik is figured out
-         url: "/media/tiles/planning_units/${z}/${x}/${y}.json",
+         url: "/tiles/utfgrid/${z}/${x}/${y}.json", //dynamic, use once mapnik is figured out
+         //url: "/media/tiles/planning_units/${z}/${x}/${y}.json",
          utfgridResolution: 4,
          sphericalMercator: true,
          displayInLayerSwitcher: false
@@ -151,7 +151,9 @@ function init_map() {
                 if (info && info.data) {
                     msg = "<table>";
                     $.each(info.data, function(idx, val) {
-                        msg += "<tr><th>"+ idx + "</th><td>" + val + "</td></tr>";
+                        if (val > 0) { // Assume negative is null
+                            msg += "<tr><th>"+ idx + "</th><td>" + val + "</td></tr>";
+                        }
                     });
                     msg += "</table>";
                 }
@@ -162,7 +164,7 @@ function init_map() {
 
     var ctl = new OpenLayers.Control.UTFGrid({
         callback: callback,
-        handlerMode: "move"
+        handlerMode: "click"
     });
 
     map.addControl(ctl);

@@ -153,14 +153,14 @@ class PlanningUnit(models.Model):
 class PuVsCf(models.Model):
     pu = models.ForeignKey(PlanningUnit)
     cf = models.ForeignKey(ConservationFeature)
-    amount = models.FloatField()
+    amount = models.FloatField(null=True, blank=True)
     class Meta:
         unique_together = ("pu", "cf")
 
 class PuVsCost(models.Model):
     pu = models.ForeignKey(PlanningUnit)
     cost = models.ForeignKey(Cost)
-    amount = models.FloatField()
+    amount = models.FloatField(null=True, blank=True)
     class Meta:
         unique_together = ("pu", "cost")
 
@@ -294,7 +294,7 @@ class Scenario(Analysis):
         sum_penalties = 0
         pus = PlanningUnit.objects.filter(fid__in=geography_fids)
         for cf in ConservationFeature.objects.all():
-            total = sum([x.amount for x in cf.puvscf_set.filter(pu__in=pus)])
+            total = sum([x.amount for x in cf.puvscf_set.filter(pu__in=pus) if x.amount])
             target = total * targets[cf.pk]
             penalty = penalties[cf.pk] * self.input_scalefactor
             if target > 0:
@@ -373,6 +373,10 @@ class Scenario(Analysis):
         if fullname == '':
             fullname = self.user.username
 
+        error = False
+        if self.status_code == 0:
+            error = True
+
         serializable = {
             "type": "Feature",
             "bbox": bbox,
@@ -382,6 +386,7 @@ class Scenario(Analysis):
                'bbox': bbox,
                'name': self.name, 
                'done': self.done, 
+               'error': error,
                'sharing_groups': [x.name for x in self.sharing_groups.all()],
                'expired': self.expired,
                'description': self.description,
@@ -430,7 +435,10 @@ class Scenario(Analysis):
         for costslug, weight in cost_weights.iteritems():
             if weight <= 0:
                 continue
-            cost = [x for x in all_costs if x.slug == costslug][0] 
+            try:
+                cost = [x for x in all_costs if x.slug == costslug][0] 
+            except IndexError:
+                continue
             all = PuVsCost.objects.filter(cost=cost, pu__in=bestpus)
             vals = [x.amount for x in all]
             fids = [x.pu.fid for x in all]

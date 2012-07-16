@@ -10,6 +10,18 @@ from shapely.ops import cascaded_union
 from django.contrib.gis.gdal import DataSource
 import json
 
+def find_possible(key, possible):
+    """
+    Given a key and a list, find possible matches 
+    Right now it just checks for case
+    """
+    if key in possible:
+        return key
+    possible = [x for x in possible if x.lower() == key]
+    if possible == []:
+        return None
+    return possible[0]
+
 class Command(BaseCommand):
     help = 'Imports shapefile with conservationfeatures/costs and xls metadata to planning units'
     args = '<shp_path> <xls_path> <optional: full resolution shp_path>'
@@ -24,7 +36,7 @@ class Command(BaseCommand):
             assert os.path.exists(shp)
             assert os.path.exists(xls)
         except:
-            raise CommandError("Specify shp and xls file\n python manage.py import_planning_units test.shp test.xls")
+            raise CommandError("Specify shp and xls file\n python manage.py import_planning_units test.shp test.xls <optional: full res shp>")
 
         try:
             fullres_shp = args[2]
@@ -68,6 +80,11 @@ class Command(BaseCommand):
             objs = m.objects.all().delete()
             assert len(m.objects.all()) == 0
 
+        # Loading planning units from Shapefile
+        print "Loading planning units from Shapefile"
+        ds = DataSource(shp)
+        layer = ds[0]
+
         # Load ConservationFeatures from xls
         print
         print "Loading ConservationFeatures"
@@ -95,6 +112,10 @@ class Command(BaseCommand):
 
         for cf in cfs:
             fname = cf.dbf_fieldname
+            if fname not in layer.fields:
+                if find_possible(fname, layer.fields):
+                    raise Exception("DBF has no field named `%s`.\n Did you mean `%s`" % (fname,find_possible(fname, layer.fields)))
+                raise Exception("DBF has no field named %s (it IS case sensitive).\n\n %s" % (fname, layer.fields))
             if fname is None or fname == '':
                 print "WARNING: No dbf_fieldname specified for %s" % cf.name
                 print "   no info can be extracted from shapefile for this conservation feature"
@@ -123,23 +144,28 @@ class Command(BaseCommand):
         cs = Cost.objects.all()
         assert len(cs) == sheet.nrows - 1
 
+        for c in cs:
+            fname = c.dbf_fieldname
+            if fname not in layer.fields:
+                if find_possible(fname, layer.fields):
+                    raise Exception("DBF has no field named `%s`.\n Did you mean `%s`" % (fname,find_possible(fname, layer.fields)))
+                raise Exception("DBF has no field named %s (it IS case sensitive).\n\n %s" % (fname,layer.fields))
+
         # Load PU from shpfile
         print
-        print "Loading planning units from Shapefile"
-        ds = DataSource(shp)
-        layer = ds[0]
         print "WARNING It is your responsibility to make sure the shapefile projection below matches srid %s" % settings.GEOMETRY_DB_SRID
         print layer.srs
 
         sheet = book.sheet_by_name("PlanningUnits")
         headers = [str(x.strip()) for x in sheet.row_values(0)] #returns all the CELLS of row 0,
-        fieldnames = ['name_field', 'fid_field']
+        fieldnames = ['name_field', 'fid_field', 'null_value']
         assert len(headers) == len(fieldnames)
         for h in range(len(headers)): 
             if headers[h] != fieldnames[h]:
                 print "WARNING: field %s is '%s' in the xls file but model is expecting '%s' ... OK?" % (h, headers[h], fieldnames[h])
         for i in xrange(1, sheet.nrows):
-            vals = [str(x.strip()) for x in sheet.row_values(i)]
+            #vals = [str(x.strip()) for x in sheet.row_values(i)]
+            vals = sheet.row_values(i)
             params = dict(zip(fieldnames, vals))
  
         mapping = {
@@ -147,6 +173,8 @@ class Command(BaseCommand):
             'fid' : params['fid_field'], 
             'geometry' : 'MULTIPOLYGON',
         }
+
+        NULL_VALUE = params['null_value']
 
         if "PlanningUnit" in modls:
             lm = LayerMapping(PlanningUnit, shp, mapping, transform=False, encoding='iso-8859-1')
@@ -264,6 +292,8 @@ class Command(BaseCommand):
             pu = pus.get(fid=feature.get(mapping['fid']))
             for cf in cfs_with_fields:
                 amt = feature.get(cf.dbf_fieldname)
+                if amt == NULL_VALUE:
+                    amt = None
                 obj = PuVsCf(pu=pu, cf=cf, amount=amt)
                 obj.save()
 

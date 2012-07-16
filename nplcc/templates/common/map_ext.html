@@ -93,7 +93,13 @@
                             <a href="#" class="btn btn-mini" data-bind="click: $parent.backToScenarioList">
                                 <i class="icon-backward"></i> Return to List </a>
                           </div>
-                          <div class="btn-group pull-right" data-bind="if: done() == false && $parent.dataMode() == 'manage'">
+                          <div class="btn-group pull-right" data-bind="if: !error() && done() == false && $parent.dataMode() == 'manage'">
+                            <a href="#" class="btn btn-mini" data-bind="click: $parent.showDeleteDialog">
+                              <i class="icon-remove"></i> Delete</a>
+                          </div>
+                          <div class="btn-group pull-right" data-bind="if: error() && done() == false && $parent.dataMode() == 'manage'">
+                            <a href="#" class="btn btn-mini" data-bind="click: $parent.editScenario">
+                              <i class="icon-edit"></i> Edit </a>
                             <a href="#" class="btn btn-mini" data-bind="click: $parent.showDeleteDialog">
                               <i class="icon-remove"></i> Delete</a>
                           </div>

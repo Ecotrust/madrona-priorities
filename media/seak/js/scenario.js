@@ -27,6 +27,7 @@ function progressViewModel() {
                 self.progressHtml(data.html);
                 if (data.error == 1) {
                     self.error(true);
+                    app.scenarios.viewModel.selectedFeature().error(true);
                     // stop timer without declaring done
                     clearInterval(app.timer);
                     app.timer = null;

@@ -236,8 +236,21 @@ function scenariosViewModel() {
                         selectGeographyControl.activate();
                         keyboardControl.activate();
                         break;
+                    case "tab-costs":
+                        // Show only controls for fields in all planning units
+                        $('tr.cost-row').hide();
+                        costFields = getCostFields();
+                        $.each(costFields, function(idx, val) {
+                            $('tr#row-' + val).show();
+                        });
+                        break;
                     case "tab-species":
-                        console.log("filter cfs by geography");
+                        // Show only controls for fields in all planning units
+                        $('tr.cf-row').hide();
+                        cfFields = getCfFields();
+                        $.each(cfFields, function(idx, val) {
+                            $('tr#row-' + val).show();
+                        });
                         break;
                 };
             });

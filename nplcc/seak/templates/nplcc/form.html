@@ -105,9 +105,8 @@
                 <th class="debug-only"> penalty </th>
             </tr>
             {% for cf in cfs %}
-            <tr>
-                <td> {{cf.name}} <!-- {{cf.id_string}} --></td>
-                <!-- <td> <div class="slider-display" id="sliderdisplay{{cf.id_string}}">0</div> </td> -->
+            <tr class="cf-row" id="row-{{cf.dbf_fieldname}}">
+                <td> {{cf.name}}</td>
                 <td> 
                     <span class="slider-label slider-label-left">low</span>
                     <div class="slider-range" id="sliderrange---{{cf.id_string}}"></div> 
@@ -133,7 +132,7 @@
         <form action="#" id="form-costs">
           <table class="table table-condensed">
             {% for cost in costs %}
-            <tr>
+            <tr class="cost-row" id="row-{{cost.dbf_fieldname}}">
                 <td><input type="checkbox" class="costvalue" id="cost---{{cost.slug}}" checked="1"/></td>
                 <td><label for="cost---{{cost.slug}}">{{cost.name}} (<em>{{cost.desc}}</em>)</label></td>
             </tr>

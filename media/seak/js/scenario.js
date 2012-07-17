@@ -211,13 +211,35 @@ function scenariosViewModel() {
             var in_targets = JSON.parse($('#id_input_targets').val());
             $.each(in_targets, function(key, val) {
                 $("#target---" + key).val(val);
-                // Assume slider tracks target
+                // TODO Assume slider tracks target
                 $("#sliderrange---" + key).slider("value", val * 100);  
                 //$("#sliderdisplay---" + key).text(val * 100);
             });
             var in_penalties = JSON.parse($('#id_input_penalties').val());
             $.each(in_penalties, function(key, val) {
                 $("#penalty---" + key).val(val);
+            });
+
+            // Bindings for tab navigation
+            $('a[data-toggle="tab"]').on('show', function (e) {
+                e.preventDefault();
+                // The tab that was previously selected
+                switch (e.relatedTarget.id) {
+                    case "tab-geography":
+                        selectGeographyControl.deactivate();
+                        keyboardControl.deactivate();
+                        break;
+                };
+                // The newly selected tab 
+                switch (e.target.id) {
+                    case "tab-geography":
+                        selectGeographyControl.activate();
+                        keyboardControl.activate();
+                        break;
+                    case "tab-species":
+                        console.log("filter cfs by geography");
+                        break;
+                };
             });
             
        } // end EDIT mode
@@ -361,6 +383,7 @@ function scenariosViewModel() {
   self.cancelAddScenario = function () {
     selectGeographyControl.unselectAll();
     selectGeographyControl.deactivate();
+    keyboardControl.deactivate();
     pu_layer.styleMap.styles['default'].defaultStyle.display = "none";
     pu_layer.redraw();
     self.showScenarioFormPanel(false);

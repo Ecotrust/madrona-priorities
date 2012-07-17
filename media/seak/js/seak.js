@@ -3,6 +3,7 @@ var hilites;
 var pu_layer;
 var markers;
 var selectFeatureControl;
+var keyboardControl;
 var selectGeographyControl;
 
 function getCfFields() {
@@ -41,7 +42,6 @@ function init_map() {
         controls: [
             new OpenLayers.Control.Navigation(),
             new OpenLayers.Control.Zoom(),
-            new OpenLayers.Control.KeyboardDefaults(),
             new OpenLayers.Control.LayerSwitcher({
                 'div': OpenLayers.Util.getElement('layerswitcher')
             })
@@ -78,8 +78,7 @@ function init_map() {
          displayInLayerSwitcher: false
         } 
     );
-
-    var pu_tiles = new OpenLayers.Layer.OSM( "Planning Units",
+var pu_tiles = new OpenLayers.Layer.OSM( "Planning Units",
         "/tiles/planning_units/${z}/${x}/${y}.png",
         {
          sphericalMercator: true,
@@ -165,10 +164,12 @@ function init_map() {
         }
     );
 
-    selectFeatureControl.deactivate();
-    selectGeographyControl.deactivate();
+    keyboardControl = new OpenLayers.Control.KeyboardDefaults();
 
-    map.addControls([selectFeatureControl, selectGeographyControl]);
+    selectFeatureControl.deactivate();
+    keyboardControl.deactivate();
+    selectGeographyControl.deactivate();
+    map.addControls([selectFeatureControl, selectGeographyControl, keyboardControl]);
 
     var callback = function(infoLookup) {
         var msg = ""; 

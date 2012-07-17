@@ -192,7 +192,6 @@ def user_scenarios_geojson(request):
     }""" % (', \n'.join([s.geojson(None) for s in scenarios]),)
 
     return HttpResponse(geojson, content_type='application/json')
-
 @never_cache
 def shared_scenarios_geojson(request):
     from seak.models import Scenario
@@ -218,3 +217,15 @@ def tiles(request):
     path_info = request.path_info.replace('/tiles', '')
     (mimestr, bytes) = TileStache.requestHandler(config_hint=settings.TILE_CONFIG, path_info=path_info, query_string=None)
     return HttpResponse(bytes, content_type=mimestr)
+
+
+@cache_page(60 * 60 * 8)
+@cache_control(must_revalidate=False, max_age=60 * 60 * 8)
+def field_lookup(request):
+    from seak.models import Cost, ConservationFeature
+    flut = {}
+    for c in Cost.objects.all():
+        flut[c.dbf_fieldname] = c.name
+    for c in ConservationFeature.objects.all():
+        flut[c.dbf_fieldname] = c.name
+    return HttpResponse(json.dumps(flut), content_type='application/json')

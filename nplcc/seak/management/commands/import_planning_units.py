@@ -189,10 +189,6 @@ class Command(BaseCommand):
         print "Generating tile configuration files"
         cfs_with_fields = [x for x in cfs if x.dbf_fieldname is not None and x.dbf_fieldname != '' ]
 
-        # Get all dbf fieldnames for the utfgrids
-        all_dbf_fieldnames = [cf.dbf_fieldname for cf in cfs_with_fields]
-        all_dbf_fieldnames.extend([c.dbf_fieldname for c in cs])
-
         xml_template = """<?xml version="1.0"?>
 <!DOCTYPE Map [
 <!ENTITY google_mercator "+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null +wktext +no_defs +over">
@@ -225,6 +221,11 @@ class Command(BaseCommand):
         with open(os.path.join(settings.TILE_CONFIG_DIR, 'planning_units.xml'), 'w') as fh:
             print "  writing planning_units.xml"
             fh.write(xml)
+
+        # Get all dbf fieldnames for the utfgrids
+        all_dbf_fieldnames = [cf.dbf_fieldname for cf in cfs_with_fields]
+        all_dbf_fieldnames.extend([c.dbf_fieldname for c in cs])
+        all_dbf_fieldnames.append(params['name_field'])
 
         cfg = {
             "cache": {
@@ -280,12 +281,6 @@ class Command(BaseCommand):
         
         # TODO add layers (provider = mapnik) for each of the above
 
-        # TODO Create list of aliases for utfgrid callback, how to deliver it? generate js code?
-        for cf in cfs_with_fields:
-            field = cf.dbf_fieldname
-            alias = cf.name
-            #print field, alias
-
         print 
         print "Loading costs and habitat amounts associated with each planning unit"
         for feature in layer:
@@ -300,7 +295,7 @@ class Command(BaseCommand):
             for c in cs: 
                 amt = feature.get(c.dbf_fieldname)
                 if amt is None or amt < 0:
-                    # DONT allow negative or null values
+                    # DONT allow negative or null values in COSTS! 
                     amt = 0
                 obj = PuVsCost(pu=pu, cost=c, amount=amt)
                 obj.save()

@@ -18,7 +18,7 @@
         <StyleName>pu</StyleName>
         <Datasource>
             <Parameter name="type">shape</Parameter>
-            <Parameter name="file">/usr/local/src/nplcc/nplcc/data/nplcc_20120712_merc.shp</Parameter>
+            <Parameter name="file">/usr/local/src/nplcc/nplcc/data/nplcc_20120712_merc_simplify2100.shp</Parameter>
         </Datasource>
     </Layer>
 </Map>

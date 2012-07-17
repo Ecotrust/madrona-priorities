@@ -121,7 +121,6 @@ var pu_tiles = new OpenLayers.Layer.OSM( "Planning Units",
     });
 
     var url = "/seak/planning_units.geojson";
-
     var jqxhr = $.ajax({
         url: url, 
         cache: true,
@@ -176,6 +175,16 @@ var pu_tiles = new OpenLayers.Layer.OSM( "Planning Units",
     selectGeographyControl.deactivate();
     map.addControls([selectFeatureControl, selectGeographyControl, keyboardControl]);
 
+    var url = "/seak/field_lookup.json";
+    var fieldLookup;
+    var jqxhr = $.ajax({
+        url: url, 
+        cache: true,
+        dataType: 'json', 
+        success: function(data) { fieldLookup = data; }
+    })
+    .error(function() { fieldLookup = null; })
+
     var callback = function(infoLookup) {
         var msg = ""; 
         if (infoLookup) {
@@ -186,7 +195,12 @@ var pu_tiles = new OpenLayers.Layer.OSM( "Planning Units",
                     msg = "<table>";
                     $.each(info.data, function(idx, val) {
                         if (val >= 0) { // Assume negative is null
-                            msg += "<tr><th>"+ idx + "</th><td>" + val + "</td></tr>";
+                            try {
+                                msg += "<tr><th width=\"75%\">"+ fieldLookup[idx] + "</th><td>" + val.toPrecision(6) + "</td></tr>";
+                            } catch (err) {
+                                msg += "<tr><th width=\"75%\">"+ idx + "</th><td>" + val + "</td></tr>";
+                            }
+
                         }
                     });
                     msg += "</table>";

@@ -150,6 +150,16 @@ class PlanningUnit(models.Model):
     def __unicode__(self):
         return u'%s' % self.name
 
+    @property
+    def conservation_feature_fields(self):
+        cfs = PuVsCf.objects.filter(pu=self, amount__isnull=False).select_related()
+        return [x.cf.dbf_fieldname for x in cfs]
+
+    @property
+    def cost_fields(self):
+        cfs = PuVsCost.objects.filter(pu=self, amount__isnull=False).select_related()
+        return [x.cost.dbf_fieldname for x in cfs]
+
 class PuVsCf(models.Model):
     pu = models.ForeignKey(PlanningUnit)
     cf = models.ForeignKey(ConservationFeature)

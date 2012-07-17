@@ -5,6 +5,34 @@ var markers;
 var selectFeatureControl;
 var selectGeographyControl;
 
+function getCfFields() {
+    // Find the set of conservation features represented in ALL of the selected planning units.
+    if (pu_layer.selectedFeatures.length >= 1) {
+        var tmpList = pu_layer.selectedFeatures[0].attributes.cf_fields;
+        $.each( pu_layer.selectedFeatures, function(idx, feat) { 
+            fieldList = feat.attributes.cf_fields;
+            tmpList = tmpList.intersect(fieldList); 
+        });
+    } else { 
+        return [];
+    };
+    return tmpList;
+}
+
+function getCostFields() {
+    // Find the set of costs represented in ALL of the selected planning units.
+    if (pu_layer.selectedFeatures.length >= 1) {
+        var tmpList = pu_layer.selectedFeatures[0].attributes.cost_fields;
+        $.each( pu_layer.selectedFeatures, function(idx, feat) { 
+            fieldList = feat.attributes.cost_fields;
+            tmpList = tmpList.intersect(fieldList); 
+        });
+    } else { 
+        return [];
+    };
+    return tmpList;
+}
+
 function init_map() {
     map = new OpenLayers.Map({
         div: "map",
@@ -151,7 +179,7 @@ function init_map() {
                 if (info && info.data) {
                     msg = "<table>";
                     $.each(info.data, function(idx, val) {
-                        if (val > 0) { // Assume negative is null
+                        if (val >= 0) { // Assume negative is null
                             msg += "<tr><th>"+ idx + "</th><td>" + val + "</td></tr>";
                         }
                     });

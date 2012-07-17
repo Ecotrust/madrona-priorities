@@ -158,6 +158,8 @@ def planning_units_geojson(request):
         fgj = get_feature_json(pu.geometry.json, json.dumps(
             {'name': pu.name, 
              'fid': pu.fid, 
+             'cf_fields': pu.conservation_feature_fields,
+             'cost_fields': pu.cost_fields,
              'area': pu.area}
         )) 
         feature_jsons.append(fgj)

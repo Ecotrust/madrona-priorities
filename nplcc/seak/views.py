@@ -145,6 +145,7 @@ def test(request):
     return render_to_response("seak/test.html")
 
 @cache_page(60 * 60)
+@cache_control(must_revalidate=False, max_age=60 * 60 * 8)
 def planning_units_geojson(request):
     def get_feature_json(geom_json, prop_json):
         return """{

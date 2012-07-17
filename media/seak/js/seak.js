@@ -122,16 +122,21 @@ var pu_tiles = new OpenLayers.Layer.OSM( "Planning Units",
 
     var url = "/seak/planning_units.geojson";
 
-    var jqxhr = $.get(url, function(data) {
-        var gformat = new OpenLayers.Format.GeoJSON();
-        try {
-            var feats = gformat.read(data); 
-            pu_layer.addFeatures(feats);
-        } catch(err) {
-            console.log(err.message);
-            app.scenarios.viewModel.planningUnitsLoadError(true);
+    var jqxhr = $.ajax({
+        url: url, 
+        cache: true,
+        dataType: 'json', 
+        success: function(data) {
+            var gformat = new OpenLayers.Format.GeoJSON();
+            try {
+                var feats = gformat.read(data); 
+                pu_layer.addFeatures(feats);
+            } catch(err) {
+                console.log(err.message);
+                app.scenarios.viewModel.planningUnitsLoadError(true);
+            }
         }
-    }, 'json')
+    })
     .error(function() { app.scenarios.viewModel.planningUnitsLoadError(true); })
     .complete(function() { app.scenarios.viewModel.planningUnitsLoadComplete(true); });
 

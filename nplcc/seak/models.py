@@ -86,6 +86,10 @@ class JSONField(models.TextField):
 
         return super(JSONField, self).get_db_prep_save(value, *args, **kwargs)
 
+# http://south.readthedocs.org/en/latest/customfields.html#extending-introspection
+from south.modelsinspector import add_introspection_rules
+add_introspection_rules([], ["^seak\.models\.JSONField"])
+
 class ConservationFeature(models.Model):
     name = models.CharField(max_length=99)
     level1 = models.CharField(max_length=99)
@@ -225,6 +229,11 @@ class Scenario(Analysis):
         copy.save(rerun=False)
         return copy
 
+    @property
+    def available_fields(self):
+        # TODO get fields for geography
+        return ["MAMU_BLI", "Dalls_IUCN", "MtGoatIUCN", "Area_m2"]
+
     def process_dict(self, d):
         """
         Use the levels in the ConservationFeature table to determine the 
@@ -244,6 +253,8 @@ class Scenario(Analysis):
         """
         ndict = {}
         for cf in ConservationFeature.objects.all():
+            if cf.dbf_fieldname not in self.available_fields:
+                continue
             levels = cf.level_string
             val = 0
             for k,v in d.items():
@@ -275,7 +286,7 @@ class Scenario(Analysis):
         cost_weights = json.loads(self.input_relativecosts)
         geography_fids = json.loads(self.input_geography)
 
-        assert len(targets.keys()) == len(penalties.keys()) == len(ConservationFeature.objects.all())
+        assert len(targets.keys()) == len(penalties.keys()) #== len(ConservationFeature.objects.all())
         assert max(targets.values()) <= 1.0
         assert min(targets.values()) >=  0.0
 
@@ -306,6 +317,8 @@ class Scenario(Analysis):
         sum_penalties = 0
         pus = PlanningUnit.objects.filter(fid__in=geography_fids)
         for cf in ConservationFeature.objects.all():
+            if cf.dbf_fieldname not in self.available_fields:
+                continue
             total = sum([x.amount for x in cf.puvscf_set.filter(pu__in=pus) if x.amount])
             target = total * targets[cf.pk]
             penalty = penalties[cf.pk] * self.input_scalefactor
@@ -491,7 +504,10 @@ class Scenario(Analysis):
             slevel1 = consfeat.level1
             scode = consfeat.dbf_fieldname
             starget = float(line[2])
-            starget_prop = species_level_targets[consfeat.pk]
+            try:
+                starget_prop = species_level_targets[consfeat.pk]
+            except KeyError:
+                continue
             sheld = float(line[3])
             try:
                 stotal = float(starget/starget_prop)

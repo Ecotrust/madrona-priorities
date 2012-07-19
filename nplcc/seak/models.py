@@ -166,6 +166,13 @@ class PlanningUnit(models.Model):
         cfs = PuVsCost.objects.filter(pu=self, amount__isnull=False).select_related()
         return [x.cost.dbf_fieldname for x in cfs]
 
+class DefinedGeography(models.Model):
+    name = models.CharField(max_length=99)
+    planning_units = models.ManyToManyField(PlanningUnit)
+
+    def __unicode__(self):
+        return self.name
+
 class PuVsCf(models.Model):
     pu = models.ForeignKey(PlanningUnit)
     cf = models.ForeignKey(ConservationFeature)

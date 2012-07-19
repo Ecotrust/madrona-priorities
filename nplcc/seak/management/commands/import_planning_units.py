@@ -2,7 +2,7 @@ import os
 from django.core.management.base import BaseCommand, CommandError
 from optparse import make_option
 from django.contrib.auth.models import User
-from seak.models import ConservationFeature, PlanningUnit, Cost, PuVsCf, PuVsCost
+from seak.models import ConservationFeature, PlanningUnit, Cost, PuVsCf, PuVsCost, DefinedGeography
 from django.contrib.gis.utils import LayerMapping
 from shapely.geometry import Point
 from shapely import wkt, wkb
@@ -73,7 +73,7 @@ class Command(BaseCommand):
         # Clear them out
         print
         print "Cleaning out old tables"
-        ms = [ConservationFeature, Cost, PuVsCf, PuVsCost]
+        ms = [ConservationFeature, Cost, PuVsCf, PuVsCost, DefinedGeography]
         if import_shp:
             ms.append(PlanningUnit)
         for m in ms: 
@@ -282,7 +282,7 @@ class Command(BaseCommand):
         # TODO add layers (provider = mapnik) for each of the above
 
         print 
-        print "Loading costs and habitat amounts associated with each planning unit"
+        print "Loading costs and conservation features associated with each planning unit"
         for feature in layer:
             pu = pus.get(fid=feature.get(mapping['fid']))
             for cf in cfs_with_fields:
@@ -302,6 +302,34 @@ class Command(BaseCommand):
 
         assert len(PuVsCf.objects.all()) == len(pus) * len(cfs_with_fields)
         assert len(PuVsCost.objects.all()) == len(pus) * len(cs)
+
+        # Load Geographies from xls
+        print
+        print "Loading Defined Geographies"
+        sheet = book.sheet_by_name("Geographies")
+        headers = sheet.row_values(0) #returns all the CELLS of row 0,
+        fieldnames = ['geography', 'dbf_fieldname']
+
+        assert len(headers) == len(fieldnames)
+        for h in range(len(headers)): 
+            if headers[h] != fieldnames[h]:
+                print "WARNING: field %s is '%s' in the xls file but model is expecting '%s' ... OK?" % (h, headers[h], fieldnames[h])
+
+        for i in xrange(1, sheet.nrows):
+            vals = sheet.row_values(i)
+            print vals
+            params = dict(zip(fieldnames, vals))
+            dg = DefinedGeography(name=params['geography'])
+            dg.save()
+            pus = [x.pu for x in PuVsCf.objects.filter(amount__isnull=False, cf__dbf_fieldname=params['dbf_fieldname'])]
+            if len(pus) == 0:
+                raise Exception(params['geography'] + " has no planning units")
+            for pu in pus:
+                dg.planning_units.add(pu)
+            dg.save()
+
+        dgs = DefinedGeography.objects.all()
+        assert len(dgs) == sheet.nrows - 1
 
         # Export the puvscf table to csv directly 
         from django.conf import settings

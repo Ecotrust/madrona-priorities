@@ -170,6 +170,14 @@ class DefinedGeography(models.Model):
     name = models.CharField(max_length=99)
     planning_units = models.ManyToManyField(PlanningUnit)
 
+    @property
+    def planning_unit_fids(self):
+        return json.dumps([x.fid for x in self.planning_units.all()])
+
+    @property
+    def slug(self):
+        return slugify(self.name)
+
     def __unicode__(self):
         return self.name
 
@@ -760,6 +768,7 @@ class Scenario(Analysis):
         form_template = 'nplcc/form.html'
         form_context = {
             'cfs': ConservationFeature.objects.all(),
+            'defined_geographies': DefinedGeography.objects.all(),
             'costs': Cost.objects.all(),
         }
         icon_url = 'common/images/watershed.png'

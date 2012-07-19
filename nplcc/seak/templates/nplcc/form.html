@@ -39,7 +39,38 @@
 
     <div id="geographytab" class="tab-pane active"> 
         <h4>{% flatblock 'form-geography-header' 3600 %}</h4>
-        <p>Using the map, draw a box or click {% flatblock 'planning-units' 3600 %} to select. To navigate, use the keyboard controls.</p>
+        <div>
+            <p> Use a pre-defined geographic region </p>
+            <ul>
+            {% for dg in defined_geographies %}
+            <p><button id="dg_{{dg.slug}}" class="dg btn btn-mini" style="width:180px;">
+                <i style="float:left;" class="icon-tag"></i> {{dg.name}}</button> </p> 
+            {% endfor %}
+            </ul>
+        </div>
+        <script>
+            {% for dg in defined_geographies %}
+            $('#dg_{{dg.slug}}').bind('click', function(e) { 
+                var fids = {{dg.planning_unit_fids}}; 
+                selectGeographyControl.unselectAll();
+                $.each(fids, function (i, fid) {
+                    var f = pu_layer.getFeaturesByAttribute("fid",fid)[0];
+                    if (f) { 
+                        selectGeographyControl.select(f);
+                    }
+                });
+                // Zoom to selected features
+                var fts = pu_layer.selectedFeatures;
+                var bounds = fts[0].geometry.getBounds().clone();
+                for(var i=1;i<fts.length;i++) {
+                    bounds.extend(fts[i].geometry.getBounds());
+                }
+                map.zoomToExtent(bounds,false);
+            });
+            {% endfor %}
+        </script>
+        <br/>
+        <p>Or, if you need to fine-tune the geography, you can use the map to draw a box around additional {% flatblock 'planning-units' 3600 %}. To navigate, use the keyboard controls. If you need to undo the selection, click the map away from the study region.</p>
         <!-- TODO this doesnt work in IE, use  -->
         <a href="javascript:$('#step1Movie').toggle();" class="btn btn-mini">Need Help <i class="icon-question-sign"></i></a>
         <br/>

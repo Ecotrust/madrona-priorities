@@ -5,7 +5,7 @@ This shapefile must be prepared for the tool by:
 
 - Conservation Features and Costs must be represented by numeric attribute fields
 - Numeric fields must differentiate between zero (no habitat), a positive number (some measure of habitat) 
-    and a negative nuill value (ieg -999 representing no information for that planning unit)
+    and a negative nuill value (eg `-999` representing no information for that planning unit)
 - Data must contain at least one Integer field for the feature ID. This must be unique.
 - Data must contain at least one Text field for the planning unit name (cannot be numeric!)
 - Shapefile must be reprojected to Spherical Mercator for compatibility 

@@ -8,6 +8,7 @@ from shapely.geometry import Point
 from shapely import wkt, wkb
 from shapely.ops import cascaded_union
 from django.contrib.gis.gdal import DataSource
+from django.template.defaultfilters import slugify
 import json
 
 def find_possible(key, possible):
@@ -108,6 +109,16 @@ class Command(BaseCommand):
             cf.save()
 
         cfs = ConservationFeature.objects.all()
+        # ensure uniqueness
+        level_strings = []
+        names = []
+        for cf in cfs:
+            if cf.level_string in level_strings:
+                raise Exception("Levels are not unique: " + cf.level_string)
+            if slugify(cf.name) in names:
+                raise Exception("Name is not unique: " + cf.name)
+            level_strings.append(cf.level_string)
+            names.append(slugify(cf.name))
         assert len(cfs) == sheet.nrows - 1
 
         for cf in cfs:

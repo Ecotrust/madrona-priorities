@@ -225,11 +225,10 @@
               <div class="well"> 
                <div class="row-fluid">
                 {% flatblock "home_text" 3600 %}
+                <hr/>
                 <p><em>You currently not logged in to {% flatblock "title" 3600 %}.</em></p>
-                <ul>
-                  <li><a class="btn btn-mini" href="{% url registration_register %}" id="register">Register</a> for an account</li>
-                  <li><a class="btn btn-mini" href="{% url user_signin %}" id="signin">Sign In</a> to begin creating scenarios</li>                
-                </ul>. 
+                  <p><a class="btn btn-mini" href="{% url registration_register %}" id="register">Register</a> for an account</p>
+                  <p><a class="btn btn-mini" href="{% url user_signin %}" id="signin">Sign In</a> to begin creating scenarios</p>                
               </div>
             </div>
             {% endif %}

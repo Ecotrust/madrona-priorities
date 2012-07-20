@@ -244,11 +244,6 @@ class Scenario(Analysis):
         copy.save(rerun=False)
         return copy
 
-    @property
-    def available_fields(self):
-        # TODO get fields for geography
-        return ["MAMU_BLI", "Dalls_IUCN", "MtGoatIUCN", "Area_m2"]
-
     def process_dict(self, d):
         """
         Use the levels in the ConservationFeature table to determine the 
@@ -268,8 +263,7 @@ class Scenario(Analysis):
         """
         ndict = {}
         for cf in ConservationFeature.objects.all():
-            if cf.dbf_fieldname not in self.available_fields:
-                continue
+            # TODO don't assume fields are valid within the selected geography
             levels = cf.level_string
             val = 0
             for k,v in d.items():
@@ -332,8 +326,6 @@ class Scenario(Analysis):
         sum_penalties = 0
         pus = PlanningUnit.objects.filter(fid__in=geography_fids)
         for cf in ConservationFeature.objects.all():
-            if cf.dbf_fieldname not in self.available_fields:
-                continue
             total = sum([x.amount for x in cf.puvscf_set.filter(pu__in=pus) if x.amount])
             target = total * targets[cf.pk]
             penalty = penalties[cf.pk] * self.input_scalefactor

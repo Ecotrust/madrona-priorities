@@ -238,18 +238,18 @@ function scenariosViewModel() {
                         break;
                     case "tab-costs":
                         // Show only controls for fields in all planning units
-                        $('tr.cost-row').hide();
+                        $('tr.cost-row').addClass('hide');
                         costFields = getCostFields();
                         $.each(costFields, function(idx, val) {
-                            $('tr#row-' + val).show();
+                            $('tr#row-' + val).removeClass('hide');
                         });
                         break;
                     case "tab-species":
                         // Show only controls for fields in all planning units
-                        $('tr.cf-row').hide();
+                        $('tr.cf-row').addClass('hide');
                         cfFields = getCfFields();
                         $.each(cfFields, function(idx, val) {
-                            $('tr#row-' + val).show();
+                            $('tr#row-' + val).removeClass('hide');
                         });
                         break;
                 };
@@ -276,8 +276,8 @@ function scenariosViewModel() {
             totalfids += 1;
         });
         // Get targets
-        $("#form-cfs input.targetvalue").each( function(index) {
-            var xid = $(this).attr("id");
+        $("#form-cfs tr.cf-row:not(.hide) input.targetvalue").each( function(index, elem) {
+            var xid = $(elem).attr("id");
             var id = "#" + xid;
             xid = xid.replace(/^target---/,''); //  Remove preceding identifier
             xid = xid.replace(/---$/,''); // Remove trailing ---
@@ -285,8 +285,8 @@ function scenariosViewModel() {
             totaltargets += parseFloat($(id).val());
         });
         // Get penalties 
-        $("#form-cfs input.penaltyvalue").each( function(index) {
-            var xid = $(this).attr("id");
+        $("#form-cfs tr.cf-row:not(.hide) input.penaltyvalue").each( function(index, elem) {
+            var xid = $(elem).attr("id");
             var id = "#" + xid;
             xid = xid.replace(/^penalty---/,''); 
             xid = xid.replace(/---$/,'');
@@ -314,14 +314,14 @@ function scenariosViewModel() {
         $(frm).find('textarea#id_input_geography').val( JSON.stringify(geography_fids) );
 
         if (totalfids === 0) {
-            alert("Please select geography; complete Step 1");
+            alert("Please complete Step 1");
             $("#formtabs a[href='#geographytab']").tab('show');
         } else if ($(frm).find('input[name="name"]').val() === '') {
-            alert("Please provide a name; complete Step 2");
+            alert("Please complete Step 2");
             $("#formtabs a[href='#generaltab']").tab('show');
             $(frm).find('input[name="name"]').focus();
         } else if (totalpenalties === 0 || totaltargets === 0) {
-            alert("Please set goals for at least one target; complete Step 3");
+            alert("Please complete Step 3");
             $("#formtabs a[href='#speciestab']").tab('show');
         } else {
             // GO .. we are clear to submit the form

@@ -63,7 +63,7 @@
                 <tr class="{% if v.target > 0 %}targeted{% else %}not-targeted{% endif %}"> 
                     <td>{{v.label}}</td>
                     <td> 
-                      <div class="progress" style="width:120px"><div class="bar" style="width:{{v.target|percentage}}"></div></div>
+                      <div class="progress" style="width:120px; margin:0;"><div class="bar" style="width:{{v.target|percentage}}"></div></div>
                     </td>
                     <td>{{v.target|percentage}}</td>
                     <td class="debug-only">{{v.penalty|percentage}}</td>
@@ -151,9 +151,9 @@
                 </thead>
                 <tbody>
                 {% for s in results.species %}
-                <tr{% if s.target == 0 %} class="nogoal" style="display:none;"{% else %}class="hit"{% endif %}>
+                <tr class="{% if s.target == 0 %}nogoal{% else %}hit{% endif %} {%if s.target_prop == 0%}not-targeted{%endif%}">
                     <td> <strong>{{s.name}}</strong></td>
-                    <td> <div class="progress" style="width:120px" ><div class="bar" style="width:{{s.pcttotal|percentage}}"></div></div></td>
+                    <td> <div class="progress" style="width:120px; margin:0;" ><div class="bar" style="width:{{s.pcttotal|percentage}}"></div></div></td>
                     <td> {{s.pcttotal|percentage:1}} {{s.units}} </td>
                     <td class="debug-only"> {% if s.target == 0 %} - {% else %} 
                         {% if s.met %}&#10003;{% else %} NO<br/>(Goal was {{s.target_prop|percentage:0}}){% endif %} 

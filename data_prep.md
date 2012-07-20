@@ -11,6 +11,7 @@ This shapefile must be prepared for the tool according to the following steps:
 - Shapefile must be reprojected to Spherical Mercator for compatibility 
     with web mapping systems. If you need area, you should calculate that as 
     an attribute field in an equal area projection before this step.
+    From ArcGIS, use the projection named `WGS_1984_Web_Mercator_Auxiliary_Sphere`. 
 - For performance purposes, it can help to simplify the layer to reduce vertices. 
     Make sure that the simplification technique maintains topology (i.e. doesnt leave gaps between polygons).
     ArcGIS uses a `RESOLVE_ERRORS` flag in the `Simplify Polygon` tool. 

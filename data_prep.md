@@ -1,7 +1,7 @@
 # Prepping data for the priorities tool
 
 You will need a polygon/multi-polygon shapefile representing your planning units.
-This shapefile must be prepared for the tool by:
+This shapefile must be prepared for the tool according to the following steps:
 
 - Conservation Features and Costs must be represented by numeric attribute fields
 - Numeric fields must differentiate between zero (no habitat), a positive number (some measure of habitat) 

@@ -27,13 +27,21 @@ INSTALLED_APPS += ( 'seak',
                     'madrona.analysistools',
                     'django.contrib.humanize',) 
 
-COMPRESS_JS['application']['source_filenames'] += (
-    'common/js/treeview/jquery.treeview.js',
+
+COMPRESS_CSS['application']['source_filenames'] = (
+    'common/css/jquery-ui.css',
+    'common/css/ui.theme.css',
+    'seak/css/seak.css',
+    'theme/default/style.css',
 )
 
-COMPRESS_CSS['application']['source_filenames'] += (
-    'common/css/nplcc.css',
+COMPRESS_JS['application']['source_filenames'] = (
+    'common/js/json2.js',
+    'features/js/workspace.js',
+    'seak/js/seak.js',
+    'seak/js/scenario.js',
 )
+
 # The following is used to assign a name to the default folder under My Shapes 
 KML_UNATTACHED_NAME = 'Areas of Inquiry'
 
@@ -52,20 +60,69 @@ MARXAN_TEMPLATEDIR = os.path.join(MARXAN_OUTDIR, 'template')
 MARXAN_NUMREPS = 20
 MARXAN_NUMITNS = 1000000
 
-LOG_FILE =  os.path.realpath(os.path.join(os.path.dirname(__file__), '..', 'nplcc.log'))
-LOGFILE =  os.path.realpath(os.path.join(os.path.dirname(__file__), '..', 'nplcc.log'))
-USE_CACHE = False
+LOG_FILE = os.path.realpath(os.path.join(os.path.dirname(__file__), '..', 'logs', 'nplcc.log'))
+MEDIA_ROOT = os.path.realpath(os.path.join(os.path.dirname(__file__), '..', 'mediaroot'))
+TILE_CONFIG_DIR = os.path.realpath(os.path.join(os.path.dirname(__file__), '..', 'tile_config'))
+
+ENFORCE_SUPPORTED_BROWSER = False
 
 # ecotrust.org
 GOOGLE_API_KEY = 'ABQIAAAAIcPbR_l4h09mCMF_dnut8RQbjMqOReB17GfUbkEwiTsW0KzXeRQ-3JgvCcGix8CM65XAjBAn6I0bAQ'
 
 TEMPLATE_DEBUG = False
-LOGIN_REDIRECT_URL = '/tool/'
+LOGIN_REDIRECT_URL = '/'
 HELP_EMAIL = 'ksdev@ecotrust.org'
 
-from settings_local import *
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+        'LOCATION': 'nplcc-cache', 
+    }
+}
+USE_CACHE = False
+
+# Use redis_sessions if available
+try:
+    import redis_sessions
+    SESSION_ENGINE = 'redis_sessions.session'
+    SESSION_REDIS_HOST = 'localhost'
+    SESSION_REDIS_PORT = 6379
+    SESSION_REDIS_DB = 0
+    #SESSION_REDIS_PASSWORD = 'password'
+    SESSION_REDIS_PREFIX = 'session'
+except ImportError:
+    pass
+
+try:
+    from settings_local import *
+except ImportError:
+    pass
 
 # makes djcelery and djkombu happy?
 DATABASE_ENGINE = DATABASES['default']['ENGINE']
 DATABASE_NAME = DATABASES['default']['NAME']
 DATABASE_USER = DATABASES['default']['USER']
+
+if not os.path.exists(MEDIA_ROOT):
+    os.makedirs(MEDIA_ROOT)
+
+if not os.path.exists(MARXAN_TEMPLATEDIR):
+    os.makedirs(MARXAN_TEMPLATEDIR)
+
+def get_tile_config():
+    import TileStache as tilestache
+    pth = os.path.join(TILE_CONFIG_DIR, 'tiles.cfg')
+    try:
+        cfg = tilestache.parseConfigfile(pth)
+    except (IOError, ValueError):
+        cfg = None
+    return cfg
+
+TILE_CONFIG = get_tile_config()
+
+if DEBUG:
+    try:
+        import gunicorn
+        INSTALLED_APPS += ('gunicorn',)
+    except ImportError:
+        pass

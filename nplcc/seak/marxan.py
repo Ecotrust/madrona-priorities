@@ -48,23 +48,24 @@ class MarxanAnalysis(object):
         out = "%s/data/puvcf.dat" % self.outdir
         template = os.path.join(self.templatedir, 'puvcf.dat')
         if os.path.exists(template):
-            copyfile(template, out)
-        else:
-            # Export the puvscf table to csv directly 
-            # Why? efficiency and stability vs comparable functions 
-            # using python loops and/or the django ORM 
-            from django.conf import settings
-            query = """
-                COPY (SELECT cf_id as species, pu_id as pu, amount 
-                    FROM seak_puvscf
-                    ORDER BY pu)
-                TO '%s'
-                WITH DELIMITER ','
-                CSV HEADER
-            """ % template
-            from django.db import connection
-            cursor = connection.cursor()
-            cursor.execute(query)
+            outfh = open(out, 'w')
+            inlines = open(template, 'r').readlines()
+            outfh.write(inlines[0])
+            puids = [x[0] for x in self.pus]
+            for line in inlines[1:]:
+                line_items = line.split(',')
+                puid = int(line_items[1])
+                amount = line_items[2].strip()
+                if amount == '' or not amount:
+                    amount = 0  # TODO appropos to turn nulls to 0?
+                if puid in puids:
+                    # Only write the line IF the planning unit is in the geography!
+                    # Important - must have exactly 100% density of matrix
+                    # i.e. number of output rows == planning_units * species
+                    outfh.write(','.join([str(x) for x in [line_items[0], puid, amount]]))
+                    outfh.write('\n')
+            outfh.close() 
+            #copyfile(template, out)
         
     def write_spec(self):
         fh = open("%s/data/spec.dat" % self.outdir, 'w')
@@ -151,9 +152,10 @@ VERBOSITY 3
         fname = os.path.realpath("%s/output/%s_best.csv" % (self.outdir, self.name))
         try:
             fh = open(fname ,'r')
-        except:
+        except IOError:
             log.error("Marxan output file %s was not found" % fname) 
-            raise MarxanError("Error: Marxan output files could not be found") 
+            raise MarxanError("Error: analyis output files could not be found") 
+
         unit_status = [x.strip().split(',') for x in fh.readlines()]
         pks = []
         for u in unit_status[1:]:

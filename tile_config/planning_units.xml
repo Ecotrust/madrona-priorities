@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<!DOCTYPE Map [
+<!ENTITY google_mercator "+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null +wktext +no_defs +over">
+]>
+<Map srs="&google_mercator;">
+    <Style name="pu" filter-mode="first">
+        <Rule>
+            <PolygonSymbolizer fill="#ffffff" fill-opacity="0.2" />
+        </Rule>
+    </Style>
+    <Style name="pu-outline" filter-mode="first">
+        <Rule>
+            <LineSymbolizer stroke="#444444" stroke-width="0.5" stroke-opacity="1" stroke-linejoin="round" />
+        </Rule>
+    </Style>
+    <Layer name="layer" srs="&google_mercator;">
+        <StyleName>pu-outline</StyleName>
+        <StyleName>pu</StyleName>
+        <Datasource>
+            <Parameter name="type">shape</Parameter>
+            <Parameter name="file">/usr/local/src/nplcc/nplcc/data/nplcc_20120712_merc_simplify2100.shp</Parameter>
+        </Datasource>
+    </Layer>
+</Map>

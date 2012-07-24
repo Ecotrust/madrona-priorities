@@ -1,61 +1,20 @@
-{% extends 'common/panel.html' %}
+{% extends 'common/base.html' %}
+{% load flatblock_tags %}
 {% load appname %}
-{% block title %}{% appname %} Help{% endblock %}
-
-{% block panel %}
-
-<link rel="stylesheet" href="{{MEDIA_URL}}screencasts/css/screencasts.css" type="text/css" media="all" title="no title" charset="utf-8">
-<link rel="stylesheet" href="{{MEDIA_URL}}common/css/typography.css" type="text/css" media="all" title="no title" charset="utf-8">
-<style type="text/css">
-.helpstep {
-	text-decoration:none;
-	display: block;
-	padding: 2px; 
-    margin-bottom: 15px;
-    height: 180px; 
-}
-.helpstep img {
-	margin-right: 12px; 
-    border: 1px solid #444;
-}
-.helpstep p {
-	margin: 2px !important; 
-}
-
-p.step {
-    font-weight: bold;
-}
-</style>
-
+{% block content %}
 <div>
     <h2> Using the Tool to create custom prioritizations </h2>
     <p>
-    <p> <strong>Regional Aquatic Prioritization and Mapping Tool</strong>. Go to 'Create New &gt; Watershed Prioritization Scenario' to start. From here you can enter:</p>
-        <ul class="subabout">
-            <li><p>The <strong>goal</strong> or proportion of habitat to conserve for each species.</p></li>
-            <li><p>The <strong>importance weighting</strong> which indicates the relative importance of each species.</p></li>
-            <li><p>The inclusion of <strong>prioritization constraints</strong> such as climate change, invasives and watershed condition.</p></li>
-        </ul>
-        <p>The process will run in the background; you can continue to use the application and will be notified when the processing is completed. At that time you can click the 'refresh' button to view the results of the analysis. Selecting the analysis and clicking 'Attributes' will provide the details of the analysis and the resulting reserve scenario. </p>
+      <ul>
+          <li><p>The <strong>goal</strong> or proportion of total value to conserve for each {% flatblock 'conservation_feature' 3600 %}.</p></li>
+          <li><p>The <strong>importance weighting</strong> which indicates the relative importance of each {% flatblock 'conservation_feature' 3600 %}.</p></li>
+          <li><p>The inclusion of <strong>{% flatblock 'costs' 3600 %}</strong> such as climate change, invasives and watershed condition.</p></li>
+      </ul>
     </p>
 </div>    
 
 <div>
     <h2> Learn More </h2>
-    <div>
-        <p>There are many other aspects to the Regional Aquatic Prioritization and Mapping Tool to explore.
-        You can export scenarios to GIS, iteratively Edit them to fine-tune the prioritization, collaborate and share scenarios with others and view underlying data layers. </p>
-        <ul class="subabout">
-            <li>
-                <p> For more help on tool usage, please refer to the <a href="/tutorial.html" target="_blank">Tutorial</a>.</p>
-            </li>
-            <li>
-                <p> For background information about the data and methods behind the tool, visit <a href="/docs.html" target="_blank">Complete Documentation</a>.</p>
-            </li>
-        </ul>
-    </div>
-
 </div>    
 
-
-{% endblock panel %}
+{% endblock content %}

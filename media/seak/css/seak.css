@@ -1,0 +1,206 @@
+.table tr.active {
+    background: white;
+}
+.outermap {
+   padding: 3px !important;
+}
+/* Removes Firefox imposed outline */
+.nav-tabs > .active > a, .nav-tabs > .active > a:hover {
+  outline:none;
+}
+.tab-content {
+    padding: 14px; 
+    padding-top: 21px;
+    -webkit-border-radius: 0 0 4px 4px;
+    -moz-border-radius: 0 0 4px 4px;
+    border-radius: 0 0 4px 4px;
+
+    /* Inspect the nav-tabs element of the current theme and copy */
+    background-color: white;
+    border: 1px solid #DDD;
+    cursor: default;
+    /* end copy */
+
+    border-top: 0;
+}
+.well {
+  margin-bottom: 4px !important;
+}
+.stand-detail div, .stand-detail table {
+    padding-bottom: 0px;
+}
+.stand-detail .thumbnail h5 {
+    text-align: center;
+}
+.stand-detail .vegetation {
+    padding-bottom: 20px;
+}
+.hidden {
+    display: none;
+}
+.olControlAttribution {
+    bottom: 5px;
+    font-size: 9px;
+}
+#customZoom {
+    z-index: 1001;
+    position: relative;
+    top: 10px;
+    left: 10px;
+}
+#customZoom a {
+    text-decoration: none;
+    position: absolute;
+    display: block;
+    width: 50px;
+    text-align: center;
+    font-weight: bold;
+    color: #fff;
+    background: #369;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+}
+#customZoom a:hover {
+    background: #036;
+}
+#customZoomOut {
+    top: 25px;
+}
+body {
+  padding-top: 60px; /* align container with bottom of the topbar */
+}
+.olControlAttribution {
+    bottom: 2px !important;
+    font-size: 7pt !important;
+}
+img.olTileImage {
+    max-width: 256px !important;
+}
+label.olButton {
+    display: inline;
+    padding: 9px 10px 11px;
+    line-height: 24px; 
+}
+#customZoom {
+    z-index: 1001;
+    position: relative;
+    top: 100px;
+    left: 190px;
+}
+#customZoom a {
+    text-decoration: none;
+    position: absolute;
+    display: block;
+    width: 50px;
+    text-align: center;
+    font-weight: bold;
+    color: #fff;
+    background: #369;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+}
+#customZoom a:hover {
+    background: #036;
+}
+#customZoomOut {
+    top: 25px;
+}
+#layerswitcher-container {
+    position: relative; 
+    top: 12px; 
+    left: -12px; 
+    text-align:right; 
+    float:right; 
+    z-index: 1039;
+    height: 0px;
+}
+#layerswitcher-list {
+    width: 240px;
+    float: right;
+}
+tr.not-targeted {
+    display: none;
+}
+div.tab-content-show {
+    height: 320px;
+}
+#layerswitcher {
+    float:right;
+    text-align:left;
+    margin-top: 2px;
+    background:#FFF; /* fallback for browser that not support rgba */
+    background: rgba(255,255,255, .5); /* Works on all modern browsers */
+}
+#info {
+    position: absolute; 
+    bottom: 7.5%; 
+    z-index: 1038;
+    float:right;
+    text-align:left;
+    font-size: 85%;
+    width: 184px;
+    margin-top: 2px;
+    background:#FFF; /* fallback for browser that not support rgba */
+    background: rgba(255,255,255, .5); /* Works on all modern browsers */
+}
+div.dataLbl, div.baseLbl {
+    padding-top: 12px;
+    padding-bottom: 8px;
+}
+#map-loading {
+    position: relative; 
+    top: 100px; 
+    text-align: center; 
+    z-index: 1037;
+    height: 0px;
+}
+h4 {
+    margin-bottom: 12px;
+}
+.container-fluid {
+    padding-right: 6px;
+    padding-left: 8px;
+}
+.olImageLoadError { 
+    /* when OL encounters a 404, don't display the pink image */
+    display: none !important;
+} 
+.debug-only {
+    display: none;
+}
+.slider-label {
+    font-style: italic;
+}
+.slider-label-left {
+   float:left;
+   margin-right: 10px;
+}
+.slider-label-right {
+   margin-left: 8px;
+}
+.slider-range {
+  width:160px; 
+  display:inline-block;
+}
+.group {list-style:none; padding:4px;margin:0;text-indent:none;font-size:12px;}
+.groups {padding:0;margin:0;text-indent:none;}
+.member_list { display:none; }
+a.show_members {text-decoration:none;padding:5px;font-size:10px;margin-left:5px;}
+a.show_members img {border:none;margin-right:5px;margin-bottom:-3px;}
+
+/*
+.table-striped tbody tr:nth-child(odd) td, .table-striped tbody tr:nth-child(odd) th {
+    background-color: #39F9F9;
+}
+*/
+.table-scenariolist tbody tr td, .table-scenariolist tbody tr th {
+    color: #555555;
+    background-color: #F9F9F9;
+    cursor: pointer;
+}
+.table tbody tr:hover td, .table tbody tr:hover th {
+    background-color: #EEEEEE;
+}
+td.scenario-name {
+    color: #317EAC !important;
+}

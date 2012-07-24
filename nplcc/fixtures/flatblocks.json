@@ -1,0 +1,227 @@
+[
+  {
+    "pk": 2, 
+    "model": "flatblocks.flatblock", 
+    "fields": {
+      "content": "Ecotrust and the NPLCC have partnered to develop a conservation decision support system for Alaska, British Columbia, Washington, Oregon and California's coastal temperate rainforst. This system will enable stakeholder to engage in strategic planning and program delivery of conservation and restoration priorities for the North Pacific Region.", 
+      "header": "", 
+      "slug": "home_text"
+    }
+  }, 
+  {
+    "pk": 4, 
+    "model": "flatblocks.flatblock", 
+    "fields": {
+      "content": "Welcome to the NPLCC Priorties Tool", 
+      "header": "", 
+      "slug": "about-header"
+    }
+  }, 
+  {
+    "pk": 5, 
+    "model": "flatblocks.flatblock", 
+    "fields": {
+      "content": "An aquatic priorities decision support system for Oregon, Washington, and Idaho developed by Ecotrust and the US Fish and Wildlife Service. ", 
+      "header": "", 
+      "slug": "about-intro"
+    }
+  }, 
+  {
+    "pk": 6, 
+    "model": "flatblocks.flatblock", 
+    "fields": {
+      "content": "<p>\r\nPlease read the detailed <a href=\"/docs.html\">documentation</a> to gain an understanding of the purpose, limitations and products associated with this tool.  All users are able to view priorities, pan and zoom using the map tool and explore input data sets pertaining to aquatic species as well as inputs into the climate change, watershed condition and aquatic invasives analyses.  Registered users sign in by clicking on the \u201csign in\u201d menu in the upper right hand corner.\r\n</p>\r\n\r\n<h3>Review Regional Aquatic Priorities</h3>\r\n<p>\r\nThe map to the right represents regional aquatic priorities identified by USFWS using this decision support tool.  On this map, the darker areas represent those areas that are considered high priority. For additional information on how these priorities were created the detailed <a href=\"/docs.html\">documentation</a>.\r\n</p>\r\n\r\n<p>\r\nClick the \u201cdata and priorities\u201d tab at the top of this page and there you will see the priorities layer at the top of the tree view under the \u201cRegional Priorities\u201d heading. You can click on each sub-basin in the map for additional information specific to the level of importance, sub-basin name and area and prioritization constraints such as vulnerability to climate change, watershed condition and vulnerability to aquatic invasives.\r\n</p>\r\n\r\n<h3>Explore data inputs</h3>\r\n<p>\r\nAlso available to explore are data used to generate the priorities including species specific information and watershed factors related to climate change, watershed condition and aquatic invasives.  These data are under the heading \u201cPriorities input data\u201d.  To explore these layers, click on the arrow next to the heading and a tree view will expand exposing the layers.  Click on the check box next to the desired layer and you will see it appear on the map.  Many of these data are imbedded in subsequent sub-folders.  For additional information on any of these data layers, please see the <a href=\"/home/data_dictionary.pdf\">data dictionary</a>.\r\n\r\n</p>\r\n", 
+      "header": "", 
+      "slug": "about-content"
+    }
+  }, 
+  {
+    "pk": 7, 
+    "model": "flatblocks.flatblock", 
+    "fields": {
+      "content": ".cerulean", 
+      "header": "", 
+      "slug": "theme"
+    }
+  }, 
+  {
+    "pk": 12, 
+    "model": "flatblocks.flatblock", 
+    "fields": {
+      "content": "Set Proptions and Weights for Focal Fish Species", 
+      "header": "", 
+      "slug": "form-conservationfeature-header"
+    }
+  }, 
+  {
+    "pk": 14, 
+    "model": "flatblocks.flatblock", 
+    "fields": {
+      "content": "In addition to focal fish species, prioritize watersheds based the following factors.", 
+      "header": "", 
+      "slug": "form-costs-header"
+    }
+  }, 
+  {
+    "pk": 16, 
+    "model": "flatblocks.flatblock", 
+    "fields": {
+      "content": "watersheds", 
+      "header": "", 
+      "slug": "planning-units"
+    }
+  }, 
+  {
+    "pk": 17, 
+    "model": "flatblocks.flatblock", 
+    "fields": {
+      "content": "Select the watersheds that define your geographic region of interest.", 
+      "header": "", 
+      "slug": "form-geography-header"
+    }
+  }, 
+  {
+    "pk": 15, 
+    "model": "flatblocks.flatblock", 
+    "fields": {
+      "content": "Setting prioritization constraints helps by avoiding costly or high-risk regions.", 
+      "header": "", 
+      "slug": "form-costs-description"
+    }
+  }, 
+  {
+    "pk": 13, 
+    "model": "flatblocks.flatblock", 
+    "fields": {
+      "content": "<p> \r\n     The <a href=\"/docs.html#goal\" target=\"_blank\">goal proportion</a> is the proportion of the species habitat or viability score you want to represent in your scenario. \r\n     For example, if a focal species is measured by presence, setting a goal of <em>0.5</em> means that your goal is to conserve at least half of the watersheds containing that species.\r\n     </p>\r\n\r\n<p> \r\n    The <a href=\"/docs.html#importance\" target=\"_blank\">importance weighting</a> is the subjective value of meeting that goal. \r\n    Not all goals can always be met due to prioritization constraints - in cases where tradeoffs need to be made, the importance weighting will determine which goals get higher priority. \r\n    An importance of <em>0</em> means very low priority; <em>1.0</em> means highest priority. \r\n    </p>", 
+      "header": "", 
+      "slug": "form-conservationfeature-description"
+    }
+  }, 
+  {
+    "pk": 1, 
+    "model": "flatblocks.flatblock", 
+    "fields": {
+      "content": "NPLCC Prioritization Tool", 
+      "header": "", 
+      "slug": "title"
+    }
+  }, 
+  {
+    "pk": 10, 
+    "model": "flatblocks.flatblock", 
+    "fields": {
+      "content": "Conservation Features", 
+      "header": "", 
+      "slug": "show-conservation-features"
+    }
+  }, 
+  {
+    "pk": 11, 
+    "model": "flatblocks.flatblock", 
+    "fields": {
+      "content": "Planning Units", 
+      "header": "", 
+      "slug": "show-planning-units"
+    }
+  }, 
+  {
+    "pk": 8, 
+    "model": "flatblocks.flatblock", 
+    "fields": {
+      "content": "Inputs", 
+      "header": "", 
+      "slug": "show-inputs"
+    }
+  }, 
+  {
+    "pk": 9, 
+    "model": "flatblocks.flatblock", 
+    "fields": {
+      "content": "Results Summary", 
+      "header": "", 
+      "slug": "show-results-summary"
+    }
+  }, 
+  {
+    "pk": 18, 
+    "model": "flatblocks.flatblock", 
+    "fields": {
+      "content": "<h3>Scenario Expired</h3> New data has been loaded into the prioritization tool since this scenario was created. It is <em>highly</em> recommended that you Edit and rerun the scenario to make sure the results are still valid with the current data.", 
+      "header": "", 
+      "slug": "scenario-expired-message"
+    }
+  }, 
+  {
+    "pk": 19, 
+    "model": "flatblocks.flatblock", 
+    "fields": {
+      "content": "For each target, the chart below shows how much of the total potentially available convservation value is represented by this solution.", 
+      "header": "", 
+      "slug": "show-targets-explanation"
+    }
+  }, 
+  {
+    "pk": 20, 
+    "model": "flatblocks.flatblock", 
+    "fields": {
+      "content": "Percent of Total Available Value", 
+      "header": "", 
+      "slug": "show-percent-met"
+    }
+  }, 
+  {
+    "pk": 21, 
+    "model": "flatblocks.flatblock", 
+    "fields": {
+      "content": "Targets", 
+      "header": "", 
+      "slug": "targets"
+    }
+  }, 
+  {
+    "pk": 23, 
+    "model": "flatblocks.flatblock", 
+    "fields": {
+      "content": "Geography", 
+      "header": "", 
+      "slug": "geography"
+    }
+  }, 
+  {
+    "pk": 22, 
+    "model": "flatblocks.flatblock", 
+    "fields": {
+      "content": "Constraints", 
+      "header": "", 
+      "slug": "constraints"
+    }
+  }, 
+  {
+    "pk": 24, 
+    "model": "flatblocks.flatblock", 
+    "fields": {
+      "content": "Relative Importance", 
+      "header": "", 
+      "slug": "relative-importance"
+    }
+  }, 
+  {
+    "pk": 25, 
+    "model": "flatblocks.flatblock", 
+    "fields": {
+      "content": "There are currently no shared scenarios available.\r\n<br/><br/>\r\nYour colleagues can share their prioritization scenarios allowing you to view results and copy them to your own work space for further modification.", 
+      "header": "", 
+      "slug": "new-share-scenario"
+    }
+  }, 
+  {
+    "pk": 3, 
+    "model": "flatblocks.flatblock", 
+    "fields": {
+      "content": "You haven't created any prioritization scenarios yet.\r\n<br/><br/>\r\nYou can create customized prioritization scenarios, view the results on the map, study the output reports, export to various format, save them for future use, edit them and share them with colleagues. ", 
+      "header": "", 
+      "slug": "new-manage-scenario"
+    }
+  }
+]

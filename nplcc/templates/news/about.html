@@ -1,59 +1,15 @@
-{% extends 'common/panel.html' %}
-{% block panel %}
-
-<style>
-    .helpstep {
-        text-decoration:none;
-        display: block;
-        padding: 2px; 
-        margin-bottom: 15px;
-        height: 90px; 
-    }
-    .helpstep img {
-        margin-right: 12px; 
-        border: 1px solid #444;
-    }
-    .helpstep p {
-        margin: 2px !important; 
-    }
-
-    p.step {
-        font-weight: bold;
-    }
-    div.about {
-            font-family: "Lucida Grande","Lucida Sans Unicode",Arial,Verdana,sans-serif;
-            font-size: 12px;
-            margin: 10px;
-            padding: 0;
-            color: #4C4C4C;
-    }
-    .about > li { padding: 6px;}
-    .subabout > li { list-style-type: circle; } 
-</style>
-
+{% extends 'common/base.html' %}
+{% load flatblock_tags %}
+{% block content %}
 <div class="about">
-<h2>Welcome to the Regional Aquatic Prioritization and Mapping Tool</h2>
+    <h2>{% flatblock "about-header" 3600 %}</h2>
 <p>
-An aquatic priorities decision support system for Oregon, Washington, and Idaho developed by Ecotrust and the US Fish and Wildlife Service.
+{% flatblock "about-intro" 3600 %}
 </p>
 <hr/>
 
-<p>
-Please read the detailed <a href="/docs.html">documentation</a> to gain an understanding of the purpose, limitations and products associated with this tool.  All users are able to view priorities, pan and zoom using the map tool and explore input data sets pertaining to aquatic species as well as inputs into the climate change, watershed condition and aquatic invasives analyses.  Registered users sign in by clicking on the “sign in” menu in the upper right hand corner.
-</p>
-<h3>Review Regional Aquatic Priorities</h3>
-<p>
-The map to the right represents regional aquatic priorities identified by USFWS using this decision support tool.  On this map, the darker areas represent those areas that are considered high priority. For additional information on how these priorities were created the detailed <a href="/docs.html">documentation</a>.
-</p>
-<p>
-Click the “data and priorities” tab at the top of this page and there you will see the priorities layer at the top of the tree view under the “Regional Priorities” heading. You can click on each sub-basin in the map for additional information specific to the level of importance, sub-basin name and area and prioritization constraints such as vulnerability to climate change, watershed condition and vulnerability to aquatic invasives.
-</p>
-<h3>Explore data inputs</h3>
-<p>
-Also available to explore are data used to generate the priorities including species specific information and watershed factors related to climate change, watershed condition and aquatic invasives.  These data are under the heading “Priorities input data”.  To explore these layers, click on the arrow next to the heading and a tree view will expand exposing the layers.  Click on the check box next to the desired layer and you will see it appear on the map.  Many of these data are imbedded in subsequent sub-folders.  For additional information on any of these data layers, please see the <a href="/home/data_dictionary.pdf">data dictionary</a>.
-</p>
-
+{% flatblock "about-content" 3600 %}
 
 </div>
 
-{% endblock panel %}
+{% endblock content %}

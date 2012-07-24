@@ -10,6 +10,8 @@ from django.contrib.gis.geos import GEOSGeometry
 from django.core.cache import cache
 from django.template.defaultfilters import slugify
 from django.utils.html import escape
+from django.db.models.signals import post_delete
+from django.dispatch.dispatcher import receiver
 from madrona.features.models import PointFeature, LineFeature, PolygonFeature, FeatureCollection
 from madrona.features import register, alternate
 from madrona.layers.models import PrivateLayerList
@@ -28,6 +30,36 @@ from django.utils import simplejson as json
 from madrona.common.models import KmlCache
 
 logger = get_logger()
+
+def cachemethod(cache_key, timeout=3600):
+    '''
+    http://djangosnippets.org/snippets/1130/    
+    Cacheable class method decorator
+    from madrona.common.utils import cachemethod
+
+    @property
+    @cachemethod("SomeClass_get_some_result_%(id)s")
+    '''
+    def paramed_decorator(func):
+        def decorated(self):
+            if not settings.USE_CACHE:
+                res = func(self)
+                return res
+
+            key = cache_key % self.__dict__
+            #logger.debug("\nCACHING %s" % key)
+            res = cache.get(key)
+            if res == None:
+                #logger.debug("   Cache MISS")
+                res = func(self)
+                cache.set(key, res, timeout)
+                #logger.debug("   Cache SET")
+                if cache.get(key) != res:
+                    logger.error("*** Cache GET was NOT successful, %s" % key)
+            return res
+        return decorated 
+    return paramed_decorator
+
 
 class JSONField(models.TextField):
     """JSONField is a generic textfield that neatly serializes/unserializes
@@ -54,6 +86,10 @@ class JSONField(models.TextField):
 
         return super(JSONField, self).get_db_prep_save(value, *args, **kwargs)
 
+# http://south.readthedocs.org/en/latest/customfields.html#extending-introspection
+from south.modelsinspector import add_introspection_rules
+add_introspection_rules([], ["^seak\.models\.JSONField"])
+
 class ConservationFeature(models.Model):
     name = models.CharField(max_length=99)
     level1 = models.CharField(max_length=99)
@@ -63,57 +99,124 @@ class ConservationFeature(models.Model):
     level5 = models.CharField(max_length=99,null=True,blank=True)
     dbf_fieldname = models.CharField(max_length=15,null=True,blank=True)
     units = models.CharField(max_length=90, null=True, blank=True)
+    uid = models.IntegerField(primary_key=True)
 
-    @ property
+    @property
     def level_string(self):
+        """ All levels concatenated with --- delim """
         levels = [self.level1, self.level2, self.level3, self.level4, self.level5]
         return '---'.join([slugify(x.lower()) for x in levels])
+
+    @property
+    def id_string(self):
+        """ Relevant levels concatenated with --- delim """
+        levels = [self.level1, self.level2, self.level3, self.level4, self.level5]
+        return '---'.join([slugify(x.lower()) for x in levels if x not in ['', None]])
 
     def __unicode__(self):
         return u'%s' % self.name
 
 class Cost(models.Model):
     name = models.CharField(max_length=99)
+    uid = models.IntegerField(primary_key=True)
     dbf_fieldname = models.CharField(max_length=15,null=True,blank=True)
     units = models.CharField(max_length=16, null=True, blank=True)
+    desc = models.TextField()
+
+    @property
+    def slug(self):
+        return slugify(self.name.lower())
 
     def __unicode__(self):
         return u'%s' % self.name
 
 class PlanningUnit(models.Model):
-    fid = models.IntegerField()
+    fid = models.IntegerField(primary_key=True)
     name = models.CharField(max_length=99)
     geometry = models.MultiPolygonField(srid=settings.GEOMETRY_DB_SRID, 
             null=True, blank=True, verbose_name="Planning Unit Geometry")
     objects = models.GeoManager()
+    date_modified = models.DateTimeField(auto_now=True)
 
     @property
+    @cachemethod("PlanningUnit_%(fid)s_area")
     def area(self):
-        return self.geometry.area
+        # assume storing meters and returning km^2 (TODO)
+        area = self.geometry.area / float(1000*1000)
+        return area
+
+    @property
+    @cachemethod("PlanningUnit_%(fid)s_centroid")
+    def centroid(self):
+        centroid = self.geometry.point_on_surface.coords
+        return centroid
 
     def __unicode__(self):
         return u'%s' % self.name
 
+    @property
+    @cachemethod("PlanningUnit_%(fid)s_cffields")
+    def conservation_feature_fields(self):
+        cfs = PuVsCf.objects.filter(pu=self, amount__isnull=False).select_related()
+        return [x.cf.dbf_fieldname for x in cfs]
+
+    @property
+    @cachemethod("PlanningUnit_%(fid)s_costfields")
+    def cost_fields(self):
+        cfs = PuVsCost.objects.filter(pu=self, amount__isnull=False).select_related()
+        return [x.cost.dbf_fieldname for x in cfs]
+
+class DefinedGeography(models.Model):
+    name = models.CharField(max_length=99)
+    planning_units = models.ManyToManyField(PlanningUnit)
+
+    @property
+    def planning_unit_fids(self):
+        return json.dumps([x.fid for x in self.planning_units.all()])
+
+    @property
+    def slug(self):
+        return slugify(self.name)
+
+    def __unicode__(self):
+        return self.name
+
 class PuVsCf(models.Model):
     pu = models.ForeignKey(PlanningUnit)
     cf = models.ForeignKey(ConservationFeature)
-    amount = models.FloatField()
+    amount = models.FloatField(null=True, blank=True)
     class Meta:
         unique_together = ("pu", "cf")
 
 class PuVsCost(models.Model):
     pu = models.ForeignKey(PlanningUnit)
     cost = models.ForeignKey(Cost)
-    amount = models.FloatField()
+    amount = models.FloatField(null=True, blank=True)
     class Meta:
         unique_together = ("pu", "cost")
 
+def scale_list(vals, low, high):
+    """
+    Scales a list of floats linearly between low and high
+    """
+    if len(vals) < 1:
+        return []
+    minval = min(vals)
+    maxval = max(vals)
+    if maxval == minval: 
+        return [0] * len(vals)
+    scaled = [z / float(maxval - minval) for z in 
+                [(high - low) * y for y in 
+                    [x - minval for x in vals]]] 
+    return scaled
+
 @register
-class WatershedPrioritization(Analysis):
+class Scenario(Analysis):
     input_targets = JSONField(verbose_name='Target Percentage of Habitat')
     input_penalties = JSONField(verbose_name='Penalties for Missing Targets') 
     input_relativecosts = JSONField(verbose_name='Relative Costs')
-    input_scalefactor = models.FloatField()
+    input_geography = JSONField(verbose_name='Input Geography fids')
+    input_scalefactor = models.FloatField(default=0.0) 
     description = models.TextField(default="", null=True, blank=True, verbose_name="Description/Notes")
 
     # All output fields should be allowed to be Null/Blank
@@ -123,13 +226,20 @@ class WatershedPrioritization(Analysis):
     @property
     def outdir(self):
         return os.path.realpath(os.path.join(settings.MARXAN_OUTDIR, "%s_" % (self.uid,) ))
-        # TODO this is not asycn-safe!!!
-        # slugify(self.date_modified))
+        # This is not asycn-safe! A new modificaiton will clobber the old. 
+        # What happens if new and old are both still running - small chance of a corrupted mix of output files? 
+
+    @property
+    def expired(self):
+        if self.date_modified < PlanningUnit.objects.latest('date_modified').date_modified:
+            return True
+        else:
+            return False
 
     def copy(self, user):
         """ Override the copy method to make sure the marxan files get copied """
         orig = self.outdir
-        copy = super(WatershedPrioritization, self).copy(user)
+        copy = super(Scenario, self).copy(user)
         shutil.copytree(orig, copy.outdir, symlinks=True)
         copy.save(rerun=False)
         return copy
@@ -152,27 +262,40 @@ class WatershedPrioritization(Analysis):
         { 1: 0.5, 2: 0.5, ......}
         """
         ndict = {}
-        for s in ConservationFeature.objects.all():
-            levels = s.level_string
+        for cf in ConservationFeature.objects.all():
+            # TODO don't assume fields are valid within the selected geography
+            levels = cf.level_string
             val = 0
             for k,v in d.items():
                 if levels.startswith(k.lower()):
                     val = v
                     break
-            ndict[s.pk] = val
+            ndict[cf.pk] = val
         return ndict
+
+    def invalidate_cache(self):
+        keys = ["%s_results",]
+        keys = [x % self.uid for x in keys]
+        cache.delete_many(keys)
+        for key in keys:
+            assert cache.get(key) == None
+        logger.debug("invalidated cache for %s" % str(keys))
+        return True
 
     def run(self):
         from seak.marxan import MarxanAnalysis
         from django.db.models import Sum
          
+        self.invalidate_cache()
+
         # create the target and penalties
         logger.debug("Create targets and penalties")
         targets = self.process_dict(json.loads(self.input_targets))
         penalties = self.process_dict(json.loads(self.input_penalties))
         cost_weights = json.loads(self.input_relativecosts)
+        geography_fids = json.loads(self.input_geography)
 
-        assert len(targets.keys()) == len(penalties.keys()) == len(ConservationFeature.objects.all())
+        assert len(targets.keys()) == len(penalties.keys()) #== len(ConservationFeature.objects.all())
         assert max(targets.values()) <= 1.0
         assert min(targets.values()) >=  0.0
 
@@ -182,6 +305,8 @@ class WatershedPrioritization(Analysis):
         for nz in nonzero_pks:
             nonzero_targets.append(targets[nz])
             nonzero_penalties.append(penalties[nz])
+            
+        maxtarget = max(nonzero_targets)
         try:
             meantarget = sum(nonzero_targets) / float(len(nonzero_targets))
         except ZeroDivisionError:
@@ -191,121 +316,137 @@ class WatershedPrioritization(Analysis):
         except ZeroDivisionError:
             meanpenalty = 0
         numspecies = len(nonzero_targets)
-        # Derived from a multiple regression technique 
-        # predicted_scalefactor = math.exp((predictor + 0.04 - (0.75*meanpenalty) + (0.075*meantarget) - (0.003*numspecies)) / 0.18)
-        # However .... 
-        # SF needs to be independent of user-input penalties.
-        # So we can plug in a meanpenalty = 1 to set the upper range of importance slider. 
-        # That could correspond to, say, 0.9 on the predictor x axis. 
-        # The importance slider would then determine how many watersheds get chosen.
-        predictor = 0.95
-        predicted_scalefactor = math.exp((predictor + 0.04 - 0.75 + (0.075*meantarget) - (0.003*numspecies)) / 0.18)
-        self.input_scalefactor = predicted_scalefactor
+
+        # ignore input, choose a scalefactor automatically
+        self.input_scalefactor = maxtarget * 4 + 2  # effectively scales from 2.5 to 6.5, the sweet spot
 
         # Apply the target and penalties
         logger.debug("Apply the targets and penalties")
         cfs = []
         sum_penalties = 0
-        for cf in ConservationFeature.objects.annotate(Sum('puvscf__amount')):
-            try:
-                total = float(cf.puvscf__amount__sum)
-            except TypeError: 
-                total = 0.0
+        pus = PlanningUnit.objects.filter(fid__in=geography_fids)
+        for cf in ConservationFeature.objects.all():
+            total = sum([x.amount for x in cf.puvscf_set.filter(pu__in=pus) if x.amount])
             target = total * targets[cf.pk]
-            penalty = penalties[cf.pk] * self.input_scalefactor ####################################
+            penalty = penalties[cf.pk] * self.input_scalefactor
             if target > 0:
                 sum_penalties += penalty
             # MUST include all species even if they are zero
             cfs.append((cf.pk, target, penalty, cf.name))
 
-        # conditional .. turn invasives on/off depending
         final_cost_weights = {}
         for cost in Cost.objects.all():
-            costkey = slugify(cost.name.lower())
+            costkey = cost.slug
             try:
                 final_cost_weights[costkey] = cost_weights[costkey]
             except KeyError:
                 final_cost_weights[costkey] = 0
-                if costkey == 'watershed-condition-no-ais' and cost_weights['watershed-condition'] > 0: 
-                    # Use the `no AIS` version if
-                    #   - watershed-condition is checked
-                    #   - invasives is checked
-                    if cost_weights['invasives'] > 0: 
-                        final_cost_weights[costkey] = 1
-                elif costkey == 'watershed-condition-with-ais' and cost_weights['watershed-condition'] > 0: 
-                    # Use the `AIS` version if
-                    #   - watershed-condition is checked
-                    #   - invasives is NOT checked
-                    if cost_weights['invasives'] == 0: 
-                        final_cost_weights[costkey] = 1
-        if cost_weights['watershed-condition'] > 0:
-            assert final_cost_weights['watershed-condition-with-ais'] != final_cost_weights['watershed-condition-no-ais']
 
-        # Calc costs for each planning unit
-        pucosts = []
-        sum_costs = 0
-        # First loop, calc sum of costs 
-        for pu in PlanningUnit.objects.all():
+        wcosts = []
+        pus = []
+        # First loop, calc the cumulative costs per planning unit
+        for pu in PlanningUnit.objects.filter(fid__in=geography_fids):
+            weighted_cost = 0.1  # TODO Constant: lowest possible cost
             puc = PuVsCost.objects.filter(pu=pu)
-            weighted_cost = 50.0
             for c in puc:
-                costkey = slugify(c.cost.name.lower())
+                costkey = c.cost.slug
                 weighted_cost += final_cost_weights[costkey] * c.amount
-                # TODO CONSTANT ALERT
-                # Add 100 constant to each cost
-                # Effectively scales each cost from 100 to 200
-                # Assuming original costs are scaled 0 to 100
-                weighted_cost += final_cost_weights[costkey] * 100
-            sum_costs += weighted_cost
-            pucosts.append( (pu.pk, weighted_cost) )
+            wcosts.append(weighted_cost)
+            pus.append(pu.pk)
 
-
-        # Apply ratio to costs to 'pre-scale' the total costs to equal the total penalties
-        ##### Marxan has it's own cost scaling strategy so this won't work!
-        ##### SEE APPENDIX B-1.3 for 
-        #penalty_cost_ratio = float(sum_penalties) / float(sum_costs)
-        #new_pucosts = []
-        #for pucost in pucosts:
-        #    new_pucost = (pucost[0], pucost[1] * penalty_cost_ratio )# self.input_scalefactor)
-        #    new_pucosts.append(new_pucost)
-        #pucosts = new_pucosts
-
-        # Pull the puvscf table
-        # This takes and insanely long time and is not stable
-        # resort to a horrible hack of exporting the data directly to csv via SQL query
-        #puvscf = [(r.cf.pk, r.pu.pk, r.amount) for r in PuVsCf.objects.all().order_by('pu__pk')]
+        # scale the costs 0 to 100
+        sum_costs = sum(wcosts)
+        scaled_costs = scale_list(wcosts, 0.0, 100.0)
+        pucosts = zip(pus, scaled_costs)
 
         logger.debug("Creating the MarxanAnalysis object")
         m = MarxanAnalysis(pucosts, cfs, self.outdir)
 
-        logger.debug("Firing off the asycn process")
+        logger.debug("Firing off the process")
         check_status_or_begin(marxan_start, task_args=(m,), polling_url=self.get_absolute_url())
         self.process_results()
         return True
 
     @property
+    def numreps(self):
+        try:
+            with open(os.path.join(self.outdir,"input.dat")) as fh:
+                for line in fh.readlines():
+                    if line.startswith('NUMREPS'):
+                        return int(line.strip().replace("NUMREPS ",""))
+        except IOError:
+            # probably hasn't started processing yet
+            return settings.MARXAN_NUMREPS
+
+    @property
     def progress(self):
         path = os.path.join(self.outdir,"output","nplcc_r*.csv")
         outputs = glob.glob(path)
-        if len(outputs) == settings.MARXAN_NUMREPS:
+        numreps = self.numreps
+        if len(outputs) == numreps:
             if not self.done:
-                return (0,settings.MARXAN_NUMREPS)
-        return (len(outputs), settings.MARXAN_NUMREPS)
+                return (0, numreps)
+        return (len(outputs), numreps)
+
+    def geojson(self, srid):
+        # Note: no reprojection support here 
+        rs = self.results
+        if 'units' in rs:
+            selected_fids = [r['fid'] for r in rs['units']]
+        else:
+            selected_fids = []
+        
+        try:
+            bbox = rs['bbox']
+        except:
+            bbox = None
+   
+        fullname = self.user.get_full_name()
+        if fullname == '':
+            fullname = self.user.username
+
+        error = False
+        if self.status_code == 0:
+            error = True
+
+        serializable = {
+            "type": "Feature",
+            "bbox": bbox,
+            "geometry": None,
+            "properties": {
+               'uid': self.uid, 
+               'bbox': bbox,
+               'name': self.name, 
+               'done': self.done, 
+               'error': error,
+               'sharing_groups': [x.name for x in self.sharing_groups.all()],
+               'expired': self.expired,
+               'description': self.description,
+               'date_modified': self.date_modified.strftime("%m/%d/%y %I:%M%P"),
+               'user': self.user.username,
+               'user_fullname': fullname,
+               'selected_fids': selected_fids,
+               'potential_fids': json.loads(self.input_geography)
+            }
+        }
+        return json.dumps(serializable)
 
     @property
+    @cachemethod("seak_scenario_%(id)s_results")
     def results(self):
         targets = json.loads(self.input_targets)
         penalties = json.loads(self.input_penalties)
         cost_weights = json.loads(self.input_relativecosts)
+        geography = json.loads(self.input_geography)
         targets_penalties = {}
         for k, v in targets.items():
-            targets_penalties[k] = {'target': v, 'penalty': None}
+            targets_penalties[k] = {'label': k.replace('---', ' > ').title(), 'target': v, 'penalty': None}
         for k, v in penalties.items():
             try:
                 targets_penalties[k]['penalty'] = v
             except KeyError:
                 # this should never happen but just in case
-                targets_penalties[k] = {'target': None, 'penalty': v}
+                targets_penalties[k] = {'label': k.replace('---', ' > ').title(), 'target': None, 'penalty': v}
 
         species_level_targets = self.process_dict(targets)
         if not self.done:
@@ -314,27 +455,40 @@ class WatershedPrioritization(Analysis):
         bestjson = json.loads(self.output_best)
         bestpks = [int(x) for x in bestjson['best']]
         bestpus = PlanningUnit.objects.filter(pk__in=bestpks).order_by('name')
+        potentialpus = PlanningUnit.objects.filter(fid__in=geography)
+        bbox = None
+        if bestpus:
+            bbox = potentialpus.extent()
         best = []
+        logger.debug("looping through bestpus queryset")
+        
+        scaled_costs = {}
+        all_costs = Cost.objects.all()
+        for costslug, weight in cost_weights.iteritems():
+            if weight <= 0:
+                continue
+            try:
+                cost = [x for x in all_costs if x.slug == costslug][0] 
+            except IndexError:
+                continue
+            all = PuVsCost.objects.filter(cost=cost, pu__in=bestpus)
+            vals = [x.amount for x in all]
+            fids = [x.pu.fid for x in all]
+            scaled_values = [int(x) for x in scale_list(vals, 0.0, 100.0)]
+            pucosts = dict(zip(fids, scaled_values))
+            scaled_costs[costslug] = pucosts
+
         for pu in bestpus:
-            bcosts = {}
-            for x in PuVsCost.objects.filter(pu=pu):
-                costname = x.cost.name.lower().replace(" ","")
-                amt = x.amount
-                # classify amount to high/med/low
-                cls = {
-                        'invasives': (8,18),
-                        'climate': (50,80),
-                        'watershedconditionwithais': (25, 45),
-                        'watershedconditionnoais': (30, 50)
-                }
-                if amt < cls[costname][0]: 
-                    rating = "low" 
-                elif amt > cls[costname][1]: 
-                    rating = "high" 
-                else: 
-                    rating = "med" 
-                bcosts[costname] = rating
-            best.append( {'name': pu.name, 'costs': bcosts})
+            centroid = pu.centroid 
+            costs = {}
+            for cname, pucosts in scaled_costs.iteritems():
+                costs[cname] = pucosts[pu.fid]
+
+            best.append({'name': pu.name, 
+                         'fid': pu.fid, 
+                         'costs': costs,
+                         'centroidx': centroid[0],
+                         'centroidy': centroid[1]})
 
         sum_area = sum([x.area for x in bestpus])
 
@@ -347,13 +501,20 @@ class WatershedPrioritization(Analysis):
         num_met = 0
         for line in lines:
             sid = int(line[0])
-            consfeat = ConservationFeature.objects.get(pk=sid)
+            try:
+                consfeat = ConservationFeature.objects.get(pk=sid)
+            except ConservationFeature.DoesNotExist:
+                logger.error("ConservationFeature %s doesn't exist; refers to an old scenario?" % sid)
+                continue
             sname = consfeat.name
             sunits = consfeat.units
             slevel1 = consfeat.level1
             scode = consfeat.dbf_fieldname
             starget = float(line[2])
-            starget_prop = species_level_targets[consfeat.pk]
+            try:
+                starget_prop = species_level_targets[consfeat.pk]
+            except KeyError:
+                continue
             sheld = float(line[3])
             try:
                 stotal = float(starget/starget_prop)
@@ -379,6 +540,7 @@ class WatershedPrioritization(Analysis):
 
         res = {
             'costs': cost_weights,
+            'geography': geography,
             'targets_penalties': targets_penalties,
             'area': sum_area, 
             'num_units': len(best),
@@ -386,7 +548,9 @@ class WatershedPrioritization(Analysis):
             'num_species': num_target_species, #len(species),
             'units': best,
             'species': species, 
+            'bbox': bbox,
         }
+
         return res
         
     @property
@@ -403,23 +567,26 @@ class WatershedPrioritization(Analysis):
     def status(self):
         url = self.get_absolute_url()
         if process_is_running(url):
-            status = """Analysis for <em>%s</em> is currently running. You can close this window and return later.</p>""" % (self.name,)
+            status = """Analysis for <em>%s</em> is currently running.""" % (self.name,)
             code = 2
         elif process_is_complete(url):
-            status = "%s processing is done. Refresh to see results." % self.name
+            status = "%s processing is done." % self.name
             code = 3
         elif process_is_pending(url):
             status = "%s is in the queue but not yet running." % self.name
             res = get_process_result(url)
             code = 1
             if res is not None:
-                status += "... "
+                status += ".. "
                 status += str(res)
         else:
-            status = "An error occured while running this analysis..."
+            status = "An error occured while running this analysis."
             code = 0
             res = get_process_result(url)
-            status += str(res)
+            if res is not None:
+                status += "..<br/> "
+                status += str(res)
+            status += "<br/>Please edit the scenario and try again. If the problem persists, please contact us."
 
         return (code, "<p>%s</p>" % status)
 
@@ -437,7 +604,7 @@ class WatershedPrioritization(Analysis):
                     selected[int(s[0])] = num
             self.output_pu_count = json.dumps(selected) 
             super(Analysis, self).save() # save without calling save()
-            #first_run = self.marxan
+            self.invalidate_cache()
 
     @property
     def done(self):
@@ -587,10 +754,15 @@ class WatershedPrioritization(Analysis):
         """
 
     class Options:
-        form = 'seak.forms.WatershedPrioritizationForm'
-        verbose_name = 'Watershed Prioritization Scenario' 
+        form = 'seak.forms.ScenarioForm'
+        verbose_name = 'Prioritization Scenario' 
         show_template = 'nplcc/show.html'
         form_template = 'nplcc/form.html'
+        form_context = {
+            'cfs': ConservationFeature.objects.all(),
+            'defined_geographies': DefinedGeography.objects.all(),
+            'costs': Cost.objects.all(),
+        }
         icon_url = 'common/images/watershed.png'
         links = (
             alternate('Shapefile',
@@ -605,6 +777,16 @@ class WatershedPrioritization(Analysis):
             ),
         )
 
+# Post-delete hooks to remove the marxan files
+@receiver(post_delete, sender=Scenario)
+def _scenario_delete(sender, instance, **kwargs):
+    if os.path.exists(instance.outdir):
+        try:
+            shutil.rmtree(instance.outdir)
+            logger.debug("Deleting %s at %s" % (instance.uid, instance.outdir))
+        except OSError:
+            logger.debug("Can't deleting %s; forging ahead anyway..." % (instance.uid, instance.outdir))
+
 @register
 class Folder(FeatureCollection):
     description = models.TextField(default="", null=True, blank=True)
@@ -613,7 +795,7 @@ class Folder(FeatureCollection):
         verbose_name = 'Folder'
         valid_children = ( 
                 'seak.models.Folder',
-                'seak.models.WatershedPrioritization',
+                'seak.models.Scenario',
                 )
         form = 'seak.forms.FolderForm'
         show_template = 'folder/show.html'
@@ -627,5 +809,4 @@ class PlanningUnitShapes(models.Model):
     fid = models.IntegerField(null=True)
     name = models.CharField(max_length=99, null=True)
     geometry = models.MultiPolygonField(srid=settings.GEOMETRY_DB_SRID, 
-    #geometry = models.PointField(srid=settings.GEOMETRY_DB_SRID, 
             null=True, blank=True, verbose_name="Planning Unit Geometry")

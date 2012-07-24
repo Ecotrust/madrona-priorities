@@ -1,86 +1,296 @@
-{% extends 'common/map.html' %}
-{% load appname %}
-{% block pagetitle %}{% appname %}{% endblock pagetitle %}
-{% block title %}{% appname %}{% endblock title %}
-{% block toggle %}{% endblock toggle %}
+{% extends 'common/base.html' %}
+{% load flatblock_tags %}
 
-            {% block tabs %}
+{% block content %}
+        <div class="row-fluid">
+          <div class="span6">
             {% if user.is_authenticated %}
-            <li><a href="#MyShapes"><span>Scenarios</span></a></li>                
-            {% endif %}
-            <li><a href="#SharedShapes"><span>Data &amp; Priorities</span></a></li>
-            {% endblock tabs %}
+            <div id="scenario-html">
+              <div class="row-fluid">
+                <div>
+                  <div class="row-fluid" id="row-scenarios-list">
+                    <div class="span12 well" data-bind="visible: showScenarioList">
+                      <h3 data-bind="visible: dataMode() == 'manage'">Scenario List</h3>
+                      <h3 data-bind="visible: dataMode() == 'shared'">Shared Scenario List</h3>
+                      <br/>
+                      <button style="margin-bottom:12px;" href="#" class="btn btn-primary" 
+                              data-bind="click: addScenarioStart, visible: dataMode() == 'manage'">
+                          <i class="icon-plus-sign icon-white"></i> Create New Scenario
+                          <span data-bind="visible: !formLoadComplete()"><img alt="loading" src="/media/img/ajax-loader.gif"/></span>
+                      </button>
 
-            {% block metanavigation %}
-            {% if user.is_authenticated %}
-            <li>{{user.username}} | </li>
-            {% endif %}
+                      <div data-bind="if: !scenarioLoadComplete()" style="text-align: center"> 
+                          <img alt="loading" src="/media/img/ajax-loader.gif"/> 
+                      </div>
+                      <div data-bind="if: scenarioLoadComplete() && scenarioList().length == 0 && dataMode() == 'manage'"> 
+                          <p>{% flatblock "new-manage-scenario" 3600 %}</p>
+                      </div>
+                      <div data-bind="if: scenarioLoadComplete() && scenarioList().length == 0 && dataMode() == 'shared'"> 
+                          <p>{% flatblock "new-share-scenario" 3600 %}</p>
+                      </div>
+                      <div class="alert alert-error" data-bind="visible: scenarioLoadError">
+                          <p><strong> Could not load scenario list!</strong></p>
+                          <p>Please try again... if the error persists, please contact us.</p>
+                      </div>
+                      <div class="alert alert-error" data-bind="visible: planningUnitsLoadError">
+                          <p><strong> Could not load planning units!</strong></p>
+                          <p> Please try again... if the error persists, please contact us.</p>
+                      </div>
+                      <div class="alert alert-error" data-bind="visible: formLoadError">
+                          <p><strong> Could not load the scenario form!</strong></p>
+                          <p> Please try again... if the error persists, please contact us.</p>
+                      </div>
+                      <div data-bind="if: scenarioList().length > 0">
+                        <table class="table table-scenariolist table-bordered table-condensed">
+                        <thead>
+                            <tr>
+                                <th> Scenario Name </th>
+                                <th> Date Modified </th>
+                                <th> Description</th>
+                                <th> Owner</th>
+                            </tr>
+                        </thead>
+                        <tbody data-bind="foreach: scenarioListPaginated">
+                            <tr class="scenario-row" 
+                                data-bind="attr: {'data-original-title': description}, 
+                                           click: $parent.selectFeature, 
+                                           css: {'active': $data === $parent.selectedFeature() }">
+                                <td class="scenario-name">
+                                    <span data-bind="visible: expired()">
+                                        <i class="icon-exclamation-sign"></i>
+                                    </span>
+                                    <span data-bind="visible: !done()">
+                                        <i class="icon-refresh"></i>
+                                    </span>
+                                    <span data-bind="text: name"> </span>
+                                </td>
+                                <td data-bind="text: date_modified"></td>
+                                <td data-bind="text: description().substr(0,77) + '...'"></td>
+                                <td> <span data-bind="text: user_fullname"></span>
+                                    <span data-bind="visible: sharing_groups().length > 0">
+                                        <i class="icon-share-alt"></i>
+                                    </span>
+                                </td>
+                            </tr>
+                        </tbody>
+                        </table>
+                      </div>
+                      <div data-bind="if: scenarioList().length, visible: scenarioList().length > listDisplayCount">
+                         <div class="pagination">
+                            <ul data-bind="foreach: paginationList">
+                              <li data-bind="click: $parent.setListIndex, 
+                                             css: { 'active': $parent.listStart() === listIndex, 'disabled': displayIndex === '...' }">
+                                <a href="#" data-bind="text: displayIndex, attr: { title: listIndex }"></a>
+                              </li>
+                            </ul>
+                         </div>
+                      </div>
+                    </div>
+                    <div class="span12 well" data-bind="visible: selectedFeature" style="margin-left:0;">
+                      <div class="scenario-detail" data-bind="with: selectedFeature">
+                        <div class="row-fluid">
+                          <div class="btn-group pull-left">
+                            <a href="#" class="btn btn-mini" data-bind="click: $parent.backToScenarioList">
+                                <i class="icon-backward"></i> Return to List </a>
+                          </div>
+                          <div class="btn-group pull-right" data-bind="if: !error() && done() == false && $parent.dataMode() == 'manage'">
+                            <a href="#" class="btn btn-mini" data-bind="click: $parent.showDeleteDialog">
+                              <i class="icon-remove"></i> Delete</a>
+                          </div>
+                          <div class="btn-group pull-right" data-bind="if: error() && done() == false && $parent.dataMode() == 'manage'">
+                            <a href="#" class="btn btn-mini" data-bind="click: $parent.editScenario">
+                              <i class="icon-edit"></i> Edit </a>
+                            <a href="#" class="btn btn-mini" data-bind="click: $parent.showDeleteDialog">
+                              <i class="icon-remove"></i> Delete</a>
+                          </div>
+                          <div class="btn-group pull-right" data-bind="if: done() == true && $parent.dataMode() == 'manage'">
+                            <a href="#" class="btn btn-mini" data-bind="click: $parent.editScenario">
+                              <i class="icon-edit"></i> Edit </a>
+                            <a href="#" class="btn btn-mini" data-bind="click: $parent.copyScenario">
+                              <i class="icon-tags"></i> Copy </a>
+                            <a href="#" class="btn btn-mini" data-bind="click: $parent.showDownloadDialog">
+                              <i class="icon-download-alt"></i> Download</a>
+                            <a href="#" class="btn btn-mini" data-bind="click: $parent.showShareDialog">
+                              <i class="icon-share-alt"></i> Share</a>
+                            <a href="#" class="btn btn-mini" data-bind="click: $parent.showDeleteDialog">
+                              <i class="icon-remove"></i> Delete</a>
+                          </div>
+                          <div class="btn-group pull-right" data-bind="if: $parent.dataMode() == 'shared'">
+                            <a href="#" class="btn btn-mini" data-bind="click: $parent.copyScenario">
+                              <i class="icon-tags"></i> Copy </a>
+                            <a href="#" class="btn btn-mini" data-bind="click: $parent.showDownloadDialog">
+                              <i class="icon-download-alt"></i> Download</a>
+                          </div>
+                        </div>
+                        <div class="row-fluid">
+                          <div style="height:16px;">
+                            <img style="padding-left: 12px;" data-bind="visible: !$parent.formLoadComplete()" 
+                                 alt="loading" src="/media/img/ajax-loader.gif" />
+                          </div>
+                          <h4><div data-bind="text: name"></div></h4>
+                          <p data-bind="text: description"></p>
+                          <div id="scenario-show-container" style="margin-top: 18px;">
+                              <span data-bind="visible: !$parent.reportLoadComplete()">
+                                  <img alt="loading" src="/media/img/ajax-loader.gif" />
+                              </span>
+                              <div class="alert alert-error" data-bind="visible: $parent.reportLoadError">
+                                <p><strong> Could not load the scenario report!</strong></p>
+                                <p> Please try again... if the error persists, please contact us.</p>
+                              </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row-fluid" data-bind="visible: showScenarioFormPanel">
+                      <div class="span12 well">
+                        <div class="pull-right">
+                            <button href="#" class="btn" data-bind="click: cancelAddScenario">
+                              <i class="icon-trash"></i> Cancel
+                            </button>
+                            <button href="#" class="btn btn-primary" data-bind="click: saveScenarioForm">
+                              <i class="icon-file icon-white"></i> Run Scenario
+                              <span data-bind="visible: !formSaveComplete()"><img alt="loading" src="/media/img/ajax-loader.gif"/></span>
+                            </button>
+                            <div class="alert alert-error" data-bind="visible: formSaveError">
+                                <p><strong> Error: could not save the scenario!</strong></p>
+                            </div>
+                        </div>
+                        <div id="scenarios-form-container" class="form-panel"></div>
+                      </div>
+                  </div>
+                </div>
+              </div> <!-- no properties -->
 
-            {% block meta_navigation_list_insert %}{% endblock %}
-            {% if user.is_authenticated %}
-            <li><a href="#" id="about">help</a> | </li>
-            <li><a href="{% url help-main %}" target="_blank" id="help">more info</a> | </li>
-            <li><a href="#" id="profile">my profile</a> | </li>
-            <li><a href="{% url user_signout %}">sign out</a></li>
+              <div class="modal" id="scenario-delete-dialog" style="display:none">
+                <div class="modal-header">
+                  <a class="close" data-dismiss="modal">×</a>
+                  <h3>Delete Scenario</h3>
+                </div>
+                <div class="modal-body">
+                  <div data-bind="if: selectedFeature()">
+                   Are you sure you want to delete <strong><span data-bind="text: selectedFeature().name"></span></strong>?
+                  </div>
+                </div>
+                <div class="modal-footer">
+                  <a href="#" class="btn" data-dismiss="modal">cancel</a>
+                  <a href="#" class="btn btn-danger" data-bind="click: deleteScenario">Delete Scenario</a>
+                </div>
+              </div>
+
+              <div class="modal" id="scenario-download-dialog" style="display:none">
+                <div class="modal-header">
+                  <a class="close" data-dismiss="modal">×</a>
+                  <h3>Download Scenario</h3>
+                </div>
+                <div class="modal-body">
+                    <p>Download the <strong><span data-bind="text: selectedFeature().name"></span></strong> scenario results as a zipped shapefile for use in GIS software.</p>
+                    <h5><em>Optional</em></h5>
+                    <p> You can select other scenarioes to create an "array"; 
+                        <em>i.e.</em> an aggregate of the results from other selected scenarios.
+                    </p> 
+                    <form id="download-array-form" data-bind="if: selectedFeature">
+                      <ul data-bind="foreach: scenarioList">
+                        <li class="group" data-bind="if: uid != $parent.selectedFeature().uid">
+                          <input type="checkbox" name="download_array" data-bind="attr: {value: uid, id: uid}"/> 
+                          <label style="display: inline-block;" data-bind="attr: {'for': uid}, text: name" /></label>
+                        </li>
+                      </ul>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                  <a href="#" class="btn" data-dismiss="modal">cancel</a>
+                  <a href="#" class="btn btn-danger" data-bind="click: downloadScenario">Download</a>
+                </div>
+              </div>
+
+              <div class="modal" id="scenario-share-dialog" style="display:none">
+                <div class="modal-header">
+                  <a class="close" data-dismiss="modal">×</a>
+                  <h3>Share Scenario</h3>
+                </div>
+                <div class="modal-body">
+                 <div id="share-form-div"></div> 
+                </div>
+                <div class="modal-footer">
+                  <a href="#" class="btn" data-dismiss="modal">cancel</a>
+                  <a href="#" class="btn btn-danger" data-bind="click: shareScenario">Save Share Settings</a>
+                </div>
+              </div>
+
+
+            </div>
+            <!-- end of scenario pages -->
             {% else %}
-            <li><a href="#" id="about">help</a> | </li>
-            <li><a href="#" id="signin">sign in</a></li>
-            {% endif %}                
-            {% endblock metanavigation %}
-
-        {% block tabscontents %}
-        {% if user.is_authenticated %}
-        <div id="MyShapes">
-            <h2> My Scenarios </h2>
-            <div class="box" style="font-size:1em;" id="myshapestree"></div>
-            <h2> Shared Scenarios </h2>
-            <div class="box" style="font-size:1em;" id="sharedshapestree"></div>
-        </div>            
-        {% endif %}
-        <div id="SharedShapes"> 
-            <h2>{% block dataLayersTitle %}Data Layers{% endblock dataLayersTitle %}</h2>
-            <br/>
-            <div id="datalayerstree"></div>
-            <hr/>
-            <p style="font-size:85%; font-style: italic;"> For metadata and detailed information on these layers, <br/> 
-                please visit the <a href="/docs.html" target="_blank">data and methods documentation</a>.</p>
-        </div>            
-        {% endblock tabscontents %}
-
-    {% block menu_icons %}
-    <ul class="menu_items" id="header_buttons">
-        <li class="divider"><img src="{{MEDIA_URL}}/common/images/header_divider.gif" height="32" width="46" /></li>
-
-        <li id="bookmarks_menu" class="item item_trigger">
-            <span>
-                <a title="Bookmark" href="#Bookmark"><img src="{{MEDIA_URL}}/common/images/transparent.gif" width="44" height="48" /></a>
-            </span>
-        </li>
-
-        <li class="divider"><img src="{{MEDIA_URL}}/common/images/header_divider.gif" height="32" width="2" /></li>
-
-        <li id="tools_menu" class="item item_trigger">
-            <span>
-                <a title="Tools" href="#tools"><img src="{{MEDIA_URL}}/common/images/transparent.gif" width="44" height="48" /></a>
-            </span>
-        </li>
-        <li class="divider"><img src="{{MEDIA_URL}}/common/images/header_divider.gif" height="32" width="2" /></li>
-    </ul>
-    {% endblock menu_icons %}
-    {% block addToOptions %}
-    options.show_panel='about';
-    options.rememberMapExtent = false;
-    {% endblock addToOptions %}
-
-    {% block datalayers %}
-    <div id="DataLayers"> </div>
-    {% endblock datalayers %}
-
-        {% block layersConfig %}
-            madrona.addLayer('/publickml/regional_priorities_netlink.kml', {setExtent: true});
-            madrona.addLayer('{% url public-data-layers %}');            
-
-            {% if user.is_authenticated %}
-            madrona.addLayer('/publickml/USFW_unpublished.kml');
+              <div class="well"> 
+               <div class="row-fluid">
+                {% flatblock "home_text" 3600 %}
+                <hr/>
+                <p><em>You currently not logged in to {% flatblock "title" 3600 %}.</em></p>
+                  <p><a class="btn btn-mini" href="{% url registration_register %}" id="register">Register</a> for an account</p>
+                  <p><a class="btn btn-mini" href="{% url user_signin %}" id="signin">Sign In</a> to begin creating scenarios</p>                
+              </div>
+            </div>
             {% endif %}
-        {% endblock layersConfig %}
+
+          </div>
+
+          <div class="span6">
+            <div class="outermap well">
+                <div id="layerswitcher-container">
+                    <button id="layerswitcher-button" class="btn btn-mini" 
+                        data-toggle="collapse" data-target="#layerswitcher-list">
+                        <i class="icon-align-justify"></i> Data Layers
+                    </button>
+                    <div class="clearfix"></div>
+                    <div id="layerswitcher-list" class="collapse"> 
+                        <div class="well" id="layerswitcher"> </div>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+                <div data-bind="if: !planningUnitsLoadComplete()" id="map-loading"> 
+                    <img alt="loading" src="/media/img/ajax-loader.gif"/> 
+                </div>
+                <div id="info" class="well"></div>
+              <div id="map"></div>
+            </div>
+          </div>
+        </div>
+  
+    <iframe id="download-iframe" src="" style="display:none; visibility:hidden"></iframe>
+    <script type="text/javascript">
+    var app = {
+      scenarios: {
+        viewModel: new scenariosViewModel(),
+        progressViewModel: null,
+        timer: null
+      }
+    };
+ 
+    handleWorkspace = function (data) {
+      app.workspace = data;
+      app.workspaceUtil = new madrona.features.workspace(data); 
+    };
+    {% if user.is_authenticated %}
+    $.get('/features/{{user.username}}/workspace-owner.json', handleWorkspace);
+    {% else %}
+    $.get('/features/workspace-public.json', handleWorkspace);
+    {% endif %}
+
+
+    app.onResize = function () {
+      $("#map").height($(window).height() * .85);
+      map.render('map');
+    };
+    
+    $(document).ready(function () {
+      ko.applyBindings(app.scenarios.viewModel); //, document.getElementById('scenario-html'));
+      app.scenarios.viewModel.loadScenarios();
+      init_map();
+      app.onResize();
+      $(window).resize(app.onResize);
+    });
+    </script>
+{% endblock content %}
+
+{% block scripts %}<script src="{{MEDIA_URL}}OpenLayers.js"></script>{% endblock scripts %}

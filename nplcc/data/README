@@ -1,0 +1,1 @@
+python manage.py import_planning_units data/nplcc_merc_join_simp2100.shp data/hydro1k_nplcc_meta.xls

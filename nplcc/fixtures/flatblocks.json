@@ -90,15 +90,6 @@
     }
   }, 
   {
-    "pk": 13, 
-    "model": "flatblocks.flatblock", 
-    "fields": {
-      "content": "<p> \r\n     The <a href=\"/docs.html#goal\" target=\"_blank\">goal proportion</a> is the proportion of the species habitat or viability score you want to represent in your scenario. \r\n     For example, if a focal species is measured by presence, setting a goal of <em>0.5</em> means that your goal is to conserve at least half of the watersheds containing that species.\r\n     </p>\r\n\r\n<p> \r\n    The <a href=\"/docs.html#importance\" target=\"_blank\">importance weighting</a> is the subjective value of meeting that goal. \r\n    Not all goals can always be met due to prioritization constraints - in cases where tradeoffs need to be made, the importance weighting will determine which goals get higher priority. \r\n    An importance of <em>0</em> means very low priority; <em>1.0</em> means highest priority. \r\n    </p>", 
-      "header": "", 
-      "slug": "form-conservationfeature-description"
-    }
-  }, 
-  {
     "pk": 1, 
     "model": "flatblocks.flatblock", 
     "fields": {
@@ -141,15 +132,6 @@
       "content": "Results Summary", 
       "header": "", 
       "slug": "show-results-summary"
-    }
-  }, 
-  {
-    "pk": 18, 
-    "model": "flatblocks.flatblock", 
-    "fields": {
-      "content": "<h3>Scenario Expired</h3> New data has been loaded into the prioritization tool since this scenario was created. It is <em>highly</em> recommended that you Edit and rerun the scenario to make sure the results are still valid with the current data.", 
-      "header": "", 
-      "slug": "scenario-expired-message"
     }
   }, 
   {
@@ -222,6 +204,42 @@
       "content": "You haven't created any prioritization scenarios yet.\r\n<br/><br/>\r\nYou can create customized prioritization scenarios, view the results on the map, study the output reports, export to various format, save them for future use, edit them and share them with colleagues. ", 
       "header": "", 
       "slug": "new-manage-scenario"
+    }
+  }, 
+  {
+    "pk": 26, 
+    "model": "flatblocks.flatblock", 
+    "fields": {
+      "content": "Manage", 
+      "header": "", 
+      "slug": "manage"
+    }
+  }, 
+  {
+    "pk": 27, 
+    "model": "flatblocks.flatblock", 
+    "fields": {
+      "content": "Collaborate", 
+      "header": "", 
+      "slug": "shared"
+    }
+  }, 
+  {
+    "pk": 18, 
+    "model": "flatblocks.flatblock", 
+    "fields": {
+      "content": "<h3>Scenario should be rerun</h3> New data has been loaded into the prioritization tool since this scenario was created. It is <em>highly</em> recommended that you Edit and rerun the scenario to make sure the results are still valid with the current data.", 
+      "header": "", 
+      "slug": "scenario-expired-message"
+    }
+  }, 
+  {
+    "pk": 13, 
+    "model": "flatblocks.flatblock", 
+    "fields": {
+      "content": "A <strong>low</strong> relative importance indicates \"<em>do not consider in the prioritization process</em>\"<br/> A <strong>high</strong> relative importance indicates top priority (i.e. \"<em>Attempt to capture almost all of the available conservation value</em>\"). \r\n", 
+      "header": "", 
+      "slug": "form-conservationfeature-description"
     }
   }
 ]

@@ -46,12 +46,12 @@ function init_map() {
                 'div': OpenLayers.Util.getElement('layerswitcher')
             })
         ],
-        numZoomLevels: 18
+        minZoomLevel: 3,
+        restrictedExtent: new OpenLayers.Bounds(-19140016, 2626698, -10262137, 11307047),
+        numZoomLevels: 6
     });
 
-    markers = new OpenLayers.Layer.Markers( "Markers" );
-    //var lonLat = new OpenLayers.LonLat( -14277165.0, 7002116.0 );
-    //markers.addMarker(new OpenLayers.Marker(lonLat));
+    markers = new OpenLayers.Layer.Markers( "Markers", {displayInLayerSwitcher: false});
 
     var osm = new OpenLayers.Layer.OSM();
 
@@ -78,7 +78,8 @@ function init_map() {
          displayInLayerSwitcher: false
         } 
     );
-var pu_tiles = new OpenLayers.Layer.OSM( "Planning Units",
+
+    var pu_tiles = new OpenLayers.Layer.OSM( "Planning Units",
         "/tiles/planning_units/${z}/${x}/${y}.png",
         {
          sphericalMercator: true,
@@ -140,6 +141,14 @@ var pu_tiles = new OpenLayers.Layer.OSM( "Planning Units",
     .complete(function() { app.scenarios.viewModel.planningUnitsLoadComplete(true); });
 
     map.addLayers([esri_shade, esri_topo, esri_physical, osm, google_terrain, pu_layer, pu_tiles, pu_utfgrid, markers]);
+
+    map.isValidZoomLevel = function(zoomLevel) {
+        // Why is this even necessary OpenLayers?.. grrr
+        // http://stackoverflow.com/questions/4240610/min-max-zoom-level-in-openlayers
+        return ( (zoomLevel != null) &&
+            (zoomLevel >= this.minZoomLevel) &&
+            (zoomLevel < this.minZoomLevel + this.numZoomLevels));
+    }
     
     selectFeatureControl = new OpenLayers.Control.SelectFeature(
         pu_layer,

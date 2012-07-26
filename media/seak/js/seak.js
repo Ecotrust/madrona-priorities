@@ -202,7 +202,7 @@ function init_map() {
 
     var callback = function(infoLookup) {
         var msg = ""; 
-        var puname = ""; 
+        var puname = "Watershed Info"; 
         $("#info").hide();
         var fnc = function(idx, val) {
             var varname = fieldLookup[idx];
@@ -212,23 +212,18 @@ function init_map() {
                 } catch (err) {
                     msg += "<tr><th width=\"75%\">"+ varname + "</th><td>" + val + "</td></tr>";
                 }
-            } else if(idx.toLowerCase() == "name") {
+            } else if(idx.toLowerCase() == "name") { // assume "name" 
                 puname = val;
             }
-
         };
-        if (infoLookup) {
-            var info;
-            for (var idx in infoLookup) {
-                info = infoLookup[idx];
-                if (info && info.data) {
-                    msg = "<table class=\"table table-condensed\">";
-                    $.each(info.data, fnc);
-                    msg += "</table>";
-                    $("#info").show();
-                }
+        $.each(infoLookup, function(k, info) {
+            if (info.data) {
+                msg = "<table class=\"table table-condensed\">";
+                $.each(info.data, fnc);
+                msg += "</table>";
+                $("#info").show();
             }
-        }
+        });
         $("#info-title").html("<h4>" + puname + "</h4>");
         $("#info-content").html(msg);
     };

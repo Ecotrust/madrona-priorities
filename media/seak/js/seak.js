@@ -198,29 +198,35 @@ function init_map() {
 
     var callback = function(infoLookup) {
         var msg = ""; 
+        var puname = ""; 
+        $("#info").hide();
         var fnc = function(idx, val) {
-            if (val >= 0) { // Assume negative is null
+            var varname = fieldLookup[idx];
+            if (val >= 0 && varname) { // Assume negative is null
                 try {
-                    msg += "<tr><th width=\"75%\">"+ fieldLookup[idx] + "</th><td>" + val.toPrecision(6) + "</td></tr>";
+                    msg += "<tr><th width=\"75%\">"+ varname + "</th><td>" + val.toPrecision(6) + "</td></tr>";
                 } catch (err) {
-                    msg += "<tr><th width=\"75%\">"+ idx + "</th><td>" + val + "</td></tr>";
+                    msg += "<tr><th width=\"75%\">"+ varname + "</th><td>" + val + "</td></tr>";
                 }
-
+            } else if(idx.toLowerCase() == "name") {
+                puname = val;
             }
-        };
 
+        };
         if (infoLookup) {
             var info;
             for (var idx in infoLookup) {
                 info = infoLookup[idx];
                 if (info && info.data) {
-                    msg = "<table>";
+                    msg = "<table class=\"table table-condensed\">";
                     $.each(info.data, fnc);
                     msg += "</table>";
+                    $("#info").show();
                 }
             }
         }
-        document.getElementById("info").innerHTML = msg;
+        $("#info-title").html("<h4>" + puname + "</h4>");
+        $("#info-content").html(msg);
     };
 
     var ctl = new OpenLayers.Control.UTFGrid({

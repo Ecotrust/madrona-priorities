@@ -251,7 +251,11 @@
                 <div data-bind="if: !planningUnitsLoadComplete()" id="map-loading"> 
                     <img alt="loading" src="/media/img/ajax-loader.gif"/> 
                 </div>
-                <div id="info" class="well"></div>
+                <div id="info" class="well">
+                    <button type="button" class="close" id="info-close">×</button>
+                    <div id="info-title"></div>
+                    <div id="info-content"></div>
+                </div>
               <div id="map"></div>
             </div>
           </div>
@@ -277,7 +281,6 @@
     $.get('/features/workspace-public.json', handleWorkspace);
     {% endif %}
 
-
     app.onResize = function () {
       $("#map").height($(window).height() * .85);
       map.render('map');
@@ -289,6 +292,11 @@
       init_map();
       app.onResize();
       $(window).resize(app.onResize);
+      $("#info").hide();
+      $("#info-close").click( function(e) { 
+        e.preventDefault();
+        $('#info').hide();
+      });
     });
     </script>
 {% endblock content %}

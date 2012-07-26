@@ -133,15 +133,12 @@ div.tab-content-show {
 }
 #info {
     position: absolute; 
-    bottom: 7.5%; 
-    z-index: 1038;
+    z-index: 1042;
     float:right;
     text-align:left;
     font-size: 85%;
-    width: 184px;
-    margin-top: 2px;
-    background:#FFF; /* fallback for browser that not support rgba */
-    background: rgba(255,255,255, .5); /* Works on all modern browsers */
+    width: 204px;
+    margin: 6px;
 }
 div.dataLbl, div.baseLbl {
     padding-top: 12px;
@@ -181,6 +178,10 @@ h4 {
 .slider-range {
   width:160px; 
   display:inline-block;
+}
+#info-content {
+  height:200px; 
+  overflow:auto;
 }
 .group {list-style:none; padding:4px;margin:0;text-indent:none;font-size:12px;}
 .groups {padding:0;margin:0;text-indent:none;}

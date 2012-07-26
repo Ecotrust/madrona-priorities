@@ -198,22 +198,24 @@ function init_map() {
 
     var callback = function(infoLookup) {
         var msg = ""; 
+        var fnc = function(idx, val) {
+            if (val >= 0) { // Assume negative is null
+                try {
+                    msg += "<tr><th width=\"75%\">"+ fieldLookup[idx] + "</th><td>" + val.toPrecision(6) + "</td></tr>";
+                } catch (err) {
+                    msg += "<tr><th width=\"75%\">"+ idx + "</th><td>" + val + "</td></tr>";
+                }
+
+            }
+        };
+
         if (infoLookup) {
             var info;
             for (var idx in infoLookup) {
                 info = infoLookup[idx];
                 if (info && info.data) {
                     msg = "<table>";
-                    $.each(info.data, function(idx, val) {
-                        if (val >= 0) { // Assume negative is null
-                            try {
-                                msg += "<tr><th width=\"75%\">"+ fieldLookup[idx] + "</th><td>" + val.toPrecision(6) + "</td></tr>";
-                            } catch (err) {
-                                msg += "<tr><th width=\"75%\">"+ idx + "</th><td>" + val + "</td></tr>";
-                            }
-
-                        }
-                    });
+                    $.each(info.data, fnc);
                     msg += "</table>";
                 }
             }

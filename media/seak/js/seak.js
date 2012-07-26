@@ -14,10 +14,10 @@ function getCfFields() {
             fieldList = feat.attributes.cf_fields;
             tmpList = tmpList.intersect(fieldList); 
         });
+        return tmpList;
     } else { 
         return [];
-    };
-    return tmpList;
+    }
 }
 
 function getCostFields() {
@@ -28,10 +28,10 @@ function getCostFields() {
             fieldList = feat.attributes.cost_fields;
             tmpList = tmpList.intersect(fieldList); 
         });
+        return tmpList;
     } else { 
         return [];
-    };
-    return tmpList;
+    }
 }
 
 function init_map() {
@@ -145,10 +145,10 @@ function init_map() {
     map.isValidZoomLevel = function(zoomLevel) {
         // Why is this even necessary OpenLayers?.. grrr
         // http://stackoverflow.com/questions/4240610/min-max-zoom-level-in-openlayers
-        return ( (zoomLevel != null) &&
+        return ( (zoomLevel !== null) &&
             (zoomLevel >= this.minZoomLevel) &&
             (zoomLevel < this.minZoomLevel + this.numZoomLevels));
-    }
+    };
     
     selectFeatureControl = new OpenLayers.Control.SelectFeature(
         pu_layer,
@@ -184,15 +184,17 @@ function init_map() {
     selectGeographyControl.deactivate();
     map.addControls([selectFeatureControl, selectGeographyControl, keyboardControl]);
 
-    var url = "/seak/field_lookup.json";
+    var lookup_url = "/seak/field_lookup.json";
     var fieldLookup;
-    var jqxhr = $.ajax({
-        url: url, 
+    var xhr = $.ajax({
+        url: lookup_url, 
         cache: true,
         dataType: 'json', 
         success: function(data) { fieldLookup = data; }
     })
-    .error(function() { fieldLookup = null; })
+    .error( function() { 
+        fieldLookup = null; 
+    });
 
     var callback = function(infoLookup) {
         var msg = ""; 

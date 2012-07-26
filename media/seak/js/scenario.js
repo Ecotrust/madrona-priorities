@@ -229,7 +229,12 @@ function scenariosViewModel() {
                         selectGeographyControl.deactivate();
                         keyboardControl.deactivate();
                         break;
-                };
+                    case "tab-costs":
+                        break;
+                    case "tab-species":
+                        break;
+                }
+
                 // The newly selected tab 
                 switch (e.target.id) {
                     case "tab-geography":
@@ -252,7 +257,7 @@ function scenariosViewModel() {
                             $('tr#row-' + val).removeClass('hide');
                         });
                         break;
-                };
+                }
             });
             
        } // end EDIT mode

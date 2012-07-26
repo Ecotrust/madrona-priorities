@@ -464,6 +464,7 @@ class Scenario(Analysis):
         
         scaled_costs = {}
         all_costs = Cost.objects.all()
+
         for costslug, weight in cost_weights.iteritems():
             if weight <= 0:
                 continue
@@ -471,11 +472,15 @@ class Scenario(Analysis):
                 cost = [x for x in all_costs if x.slug == costslug][0] 
             except IndexError:
                 continue
-            all = PuVsCost.objects.filter(cost=cost, pu__in=bestpus)
-            vals = [x.amount for x in all]
-            fids = [x.pu.fid for x in all]
+            all_selected = PuVsCost.objects.filter(cost=cost, pu__in=bestpus)
+            all_potential = PuVsCost.objects.filter(cost=cost, pu__in=potentialpus)
+            vals = [x.amount for x in all_potential]
+            fids = [x.pu.fid for x in all_potential]
+            fids_selected = [x.pu.fid for x in all_selected]
             scaled_values = [int(x) for x in scale_list(vals, 0.0, 100.0)]
-            pucosts = dict(zip(fids, scaled_values))
+            pucosts_potential = dict(zip(fids, scaled_values))
+            extract = lambda x, y: dict(zip(x, map(y.get, x)))
+            pucosts = extract(fids_selected, pucosts_potential)
             scaled_costs[costslug] = pucosts
 
         for pu in bestpus:

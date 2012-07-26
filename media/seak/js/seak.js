@@ -55,8 +55,11 @@ function init_map() {
 
     var osm = new OpenLayers.Layer.OSM();
 
-    var esri_physical = new OpenLayers.Layer.XYZ( "ESRI World Physical Map",
-        "http://server.arcgisonline.com/ArcGIS/rest/services/World_Physical_Map/MapServer/tile/${z}/${y}/${x}",
+    var esri_physical = new OpenLayers.Layer.XYZ( "Mapbox Terrain",
+        //"http://server.arcgisonline.com/ArcGIS/rest/services/World_Physical_Map/MapServer/tile/${z}/${y}/${x}",
+        //"http://c.tile.stamen.com/watercolor/${z}/${x}/${y}.jpg", // Stamen Watercolor
+        //"http://c.tile.cloudmade.com/8fe4ccbb4940415d9475cc21bf41ea53/998/256/${z}/${x}/${y}.png", // CLoudmade simple bg map
+        "http://d.tiles.mapbox.com/v3/examples.map-4l7djmvo/${z}/${x}/${y}.png",
         {sphericalMercator: true} 
     );
 
@@ -65,9 +68,10 @@ function init_map() {
         {sphericalMercator: true} 
     );
 
-    var esri_topo = new OpenLayers.Layer.XYZ( "ESRI World Topo Map",
-        "http://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/${z}/${y}/${x}",
-        {sphericalMercator: true} 
+    var blue_marble = new OpenLayers.Layer.XYZ( "Blue Marble Satellite",
+        //"http://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/${z}/${y}/${x}",
+        "http://c.tiles.mapbox.com/v3/mapbox.blue-marble-topo-bathy-jul/${z}/${x}/${y}.png",
+        {sphericalMercator: true, opacity: 0.5} 
     );
 
     var pu_utfgrid = new OpenLayers.Layer.UTFGrid({
@@ -140,7 +144,7 @@ function init_map() {
     .error(function() { app.scenarios.viewModel.planningUnitsLoadError(true); })
     .complete(function() { app.scenarios.viewModel.planningUnitsLoadComplete(true); });
 
-    map.addLayers([esri_shade, esri_topo, esri_physical, osm, google_terrain, pu_layer, pu_tiles, pu_utfgrid, markers]);
+    map.addLayers([esri_shade, blue_marble, esri_physical, osm, google_terrain, pu_layer, pu_tiles, pu_utfgrid, markers]);
 
     map.isValidZoomLevel = function(zoomLevel) {
         // Why is this even necessary OpenLayers?.. grrr

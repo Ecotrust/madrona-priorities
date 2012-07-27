@@ -13,11 +13,6 @@
                       <h3 data-bind="visible: dataMode() == 'manage'">Scenario List</h3>
                       <h3 data-bind="visible: dataMode() == 'shared'">Shared Scenario List</h3>
                       <br/>
-                      <button style="margin-bottom:12px;" href="#" class="btn btn-primary" 
-                              data-bind="click: addScenarioStart, visible: dataMode() == 'manage'">
-                          <i class="icon-plus-sign icon-white"></i> Create New Scenario
-                          <span data-bind="visible: !formLoadComplete()"><img alt="loading" src="/media/img/ajax-loader.gif"/></span>
-                      </button>
 
                       <div data-bind="if: !scenarioLoadComplete()" style="text-align: center"> 
                           <img alt="loading" src="/media/img/ajax-loader.gif"/> 
@@ -85,6 +80,12 @@
                             </ul>
                          </div>
                       </div>
+                      <br/>
+                      <button style="margin-bottom:12px;" href="#" class="btn btn-primary" 
+                              data-bind="click: addScenarioStart, visible: dataMode() == 'manage'">
+                          <i class="icon-plus-sign icon-white"></i> Create New Scenario
+                          <span data-bind="visible: !formLoadComplete()"><img alt="loading" src="/media/img/ajax-loader.gif"/></span>
+                      </button>
                     </div>
                     <div class="span12 well" data-bind="visible: selectedFeature" style="margin-left:0;">
                       <div class="scenario-detail" data-bind="with: selectedFeature">

@@ -80,12 +80,13 @@
                             </ul>
                          </div>
                       </div>
-                      <br/>
-                      <button style="margin-bottom:12px;" href="#" class="btn btn-primary" 
+                      <div>
+                        <button href="#" class="btn btn-primary" 
                               data-bind="click: addScenarioStart, visible: dataMode() == 'manage'">
                           <i class="icon-plus-sign icon-white"></i> Create New Scenario
                           <span data-bind="visible: !formLoadComplete()"><img alt="loading" src="/media/img/ajax-loader.gif"/></span>
-                      </button>
+                        </button>
+                      </div>
                     </div>
                     <div class="span12 well" data-bind="visible: selectedFeature" style="margin-left:0;">
                       <div class="scenario-detail" data-bind="with: selectedFeature">
@@ -187,8 +188,8 @@
                 <div class="modal-body">
                     <p>Download the <strong><span data-bind="text: selectedFeature().name"></span></strong> scenario results as a zipped shapefile for use in GIS software.</p>
                     <h5><em>Optional</em></h5>
-                    <p> You can select other scenarioes to create an "array"; 
-                        <em>i.e.</em> an aggregate of the results from other selected scenarios.
+                    <p> You can select other scenarios to create an "array"; 
+                        <em>i.e.</em> an aggregate of the results from all selected scenarios.
                     </p> 
                     <form id="download-array-form" data-bind="if: selectedFeature">
                       <ul data-bind="foreach: scenarioList">

@@ -790,7 +790,7 @@ def _scenario_delete(sender, instance, **kwargs):
             shutil.rmtree(instance.outdir)
             logger.debug("Deleting %s at %s" % (instance.uid, instance.outdir))
         except OSError:
-            logger.debug("Can't deleting %s; forging ahead anyway..." % (instance.uid, instance.outdir))
+            logger.debug("Can't deleting %s; forging ahead anyway..." % (instance.uid,))
 
 @register
 class Folder(FeatureCollection):

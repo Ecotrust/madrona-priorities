@@ -219,48 +219,47 @@ function scenariosViewModel() {
             $.each(in_penalties, function(key, val) {
                 $("#penalty---" + key).val(val);
             });
-
-            // Bindings for tab navigation
-            $('a[data-toggle="tab"]').on('show', function (e) {
-                e.preventDefault();
-                // The tab that was previously selected
-                switch (e.relatedTarget.id) {
-                    case "tab-geography":
-                        selectGeographyControl.deactivate();
-                        keyboardControl.deactivate();
-                        break;
-                    case "tab-costs":
-                        break;
-                    case "tab-species":
-                        break;
-                }
-
-                // The newly selected tab 
-                switch (e.target.id) {
-                    case "tab-geography":
-                        selectGeographyControl.activate();
-                        keyboardControl.activate();
-                        break;
-                    case "tab-costs":
-                        // Show only controls for fields in all planning units
-                        $('tr.cost-row').addClass('hide');
-                        costFields = getCostFields();
-                        $.each(costFields, function(idx, val) {
-                            $('tr#row-' + val).removeClass('hide');
-                        });
-                        break;
-                    case "tab-species":
-                        // Show only controls for fields in all planning units
-                        $('tr.cf-row').addClass('hide');
-                        cfFields = getCfFields();
-                        $.each(cfFields, function(idx, val) {
-                            $('tr#row-' + val).removeClass('hide');
-                        });
-                        break;
-                }
-            });
-            
        } // end EDIT mode
+
+        // Bindings for tab navigation
+        $('a[data-toggle="tab"]').on('show', function (e) {
+            e.preventDefault();
+            // The tab that was previously selected
+            switch (e.relatedTarget.id) {
+                case "tab-geography":
+                    selectGeographyControl.deactivate();
+                    keyboardControl.deactivate();
+                    break;
+                case "tab-costs":
+                    break;
+                case "tab-species":
+                    break;
+            }
+
+            // The newly selected tab 
+            switch (e.target.id) {
+                case "tab-geography":
+                    selectGeographyControl.activate();
+                    keyboardControl.activate();
+                    break;
+                case "tab-costs":
+                    // Show only controls for fields in all planning units
+                    $('tr.cost-row').addClass('hide');
+                    costFields = getCostFields();
+                    $.each(costFields, function(idx, val) {
+                        $('tr#row-' + val).removeClass('hide');
+                    });
+                    break;
+                case "tab-species":
+                    // Show only controls for fields in all planning units
+                    $('tr.cf-row').addClass('hide');
+                    cfFields = getCfFields();
+                    $.each(cfFields, function(idx, val) {
+                        $('tr#row-' + val).removeClass('hide');
+                    });
+                    break;
+            }
+        });
     })
     .error( function() { self.formLoadError(true); } )
     .complete( function() { self.formLoadComplete(true); } );

@@ -33,12 +33,12 @@
 <br>
 {% endif %}
 
-<div class="login" style="margin-top:25px">
-
+<div class="row">
+<div class="span6 well">
 <form id="auth_form" name="auth_form" action="{% url user_signin %}" method="post">
     <input type="hidden" name="next" value="{{ next }}" />
 	<fieldset>
-        <legend><strong>Sign In To {% appname %}</strong></legend> 
+        <legend><strong>Sign In to the {% appname %}</strong></legend> 
         <br/>
         <div class="form-row"><label for="id_username">Username</label>{{ form2.username }}<br/></div>
         <br/>
@@ -52,6 +52,7 @@
 
 <hr/>
 <p style="font-size:85%; font-style: italic;"> If you would like to sign in to develop your own prioritization scenarios, you must have a registered account. </p>
+</div>	
 </div>	
 {% endblock content %}
 

@@ -3,7 +3,6 @@ marinemap.egg-info*
 marinemap.r*.css
 marinemap.r*.js
 example_projects/test_project/mediaroot/*
-env1/*
 docs/.build/*
 .coverage
 TEST*.xml
@@ -34,3 +33,6 @@ anneal/backup/*
 *.working
 data/local/*
 tile_config/*
+wsgi.py
+env/*
+marxan_bin/*

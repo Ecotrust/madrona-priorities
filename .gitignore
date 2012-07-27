@@ -33,4 +33,4 @@ anneal/backup/*
 *.prof
 *.working
 data/local/*
-
+tile_config/*

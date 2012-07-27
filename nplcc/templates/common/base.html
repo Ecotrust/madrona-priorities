@@ -56,7 +56,7 @@
             </ul>
            <ul class="nav pull-right">
               {% if user.is_authenticated %}
-              <li><a href="{% url user_profile-form user.username %}" class="load-in-panel" id="profile">{{ user.username }} </a></li>
+              <li><a href="{% url user_profile-form user.username %}" class="load-in-panel" id="profile"><i class="icon-user icon-white"></i> {{ user.username }}</a></li>
               <li><a href="{% url user_signout %}">Sign Out</a></li>
               {% else %}
               <li><a href="{% url registration_register %}" id="register-navbar">Register</a></li>

@@ -1,12 +1,7 @@
 import os
 from django.core.management.base import BaseCommand, CommandError
-from optparse import make_option
-from django.contrib.auth.models import User
 from seak.models import ConservationFeature, PlanningUnit, Cost, PuVsCf, PuVsCost, DefinedGeography
 from django.contrib.gis.utils import LayerMapping
-from shapely.geometry import Point
-from shapely import wkt, wkb
-from shapely.ops import cascaded_union
 from django.contrib.gis.gdal import DataSource
 from django.template.defaultfilters import slugify
 import json
@@ -28,7 +23,6 @@ class Command(BaseCommand):
     args = '<shp_path> <xls_path> <optional: full resolution shp_path>'
 
     def handle(self, *args, **options):
-        from django.core.management.base import CommandError
         from django.conf import settings
 
         try: 
@@ -36,13 +30,14 @@ class Command(BaseCommand):
             xls = args[1]
             assert os.path.exists(shp)
             assert os.path.exists(xls)
-        except:
-            raise CommandError("Specify shp and xls file\n python manage.py import_planning_units test.shp test.xls <optional: full res shp>")
+        except (AssertionError, IndexError):
+            raise CommandError("Specify shp and xls file\n \
+                    python manage.py import_planning_units test.shp test.xls <optional: full res shp>")
 
         try:
             fullres_shp = args[2]
             assert os.path.exists(fullres_shp)
-        except:
+        except (AssertionError, IndexError):
             print
             print "Using %s as the full-res display layer" % shp
             fullres_shp = shp
@@ -59,7 +54,6 @@ class Command(BaseCommand):
         if backup:
             print "backing up old tables to /tmp/"
             from django.core.management.commands.dumpdata import Command as Dumper
-            from django.core.management.base import CommandError
             for modl in modls:
                 try:
                     fix = Dumper.handle(Dumper(), "%s.%s" % (app, modl.lower()), format='json', indent=4)
@@ -78,7 +72,7 @@ class Command(BaseCommand):
         if import_shp:
             ms.append(PlanningUnit)
         for m in ms: 
-            objs = m.objects.all().delete()
+            m.objects.all().delete()
             assert len(m.objects.all()) == 0
 
         # Loading planning units from Shapefile
@@ -94,12 +88,14 @@ class Command(BaseCommand):
         sheet = book.sheet_by_name("ConservationFeatures")
         headers = [str(x).strip() for x in sheet.row_values(0)] #returns all the CELLS of row 0,
 
-        fieldnames = ['name', 'uid', 'level1','level2','level3','level4', 'level5', 'dbf_fieldname', 'units']
+        fieldnames = ['name', 'uid', 'level1', 'level2', 'level3', 
+                      'level4', 'level5', 'dbf_fieldname', 'units']
 
         assert len(headers) == len(fieldnames)
         for h in range(len(headers)): 
             if headers[h] != fieldnames[h]:
-                print "WARNING: field %s is '%s' in the xls file but model is expecting '%s' ... OK?" % (h, headers[h], fieldnames[h])
+                print "WARNING: field %s is '%s' in the xls file but model is \
+                        expecting '%s' ... OK?" % (h, headers[h], fieldnames[h])
 
         for i in xrange(1, sheet.nrows):
             vals = sheet.row_values(i)
@@ -125,8 +121,10 @@ class Command(BaseCommand):
             fname = cf.dbf_fieldname
             if fname not in layer.fields:
                 if find_possible(fname, layer.fields):
-                    raise Exception("DBF has no field named `%s`.\n Did you mean `%s`" % (fname,find_possible(fname, layer.fields)))
-                raise Exception("DBF has no field named %s (it IS case sensitive).\n\n %s" % (fname, layer.fields))
+                    raise Exception("DBF has no field named `%s`.\n Did you mean `%s`" % (fname, 
+                        find_possible(fname, layer.fields)))
+                raise Exception("DBF has no field named %s (it IS case sensitive).\n\n %s" % (fname, 
+                    layer.fields))
             if fname is None or fname == '':
                 print "WARNING: No dbf_fieldname specified for %s" % cf.name
                 print "   no info can be extracted from shapefile for this conservation feature"
@@ -143,7 +141,8 @@ class Command(BaseCommand):
         assert len(headers) == len(fieldnames)
         for h in range(len(headers)): 
             if headers[h] != fieldnames[h]:
-                print "WARNING: field %s is '%s' in the xls file but model is expecting '%s' ... OK?" % (h, headers[h], fieldnames[h])
+                print "WARNING: field %s is '%s' in the xls file but model is expecting '%s' ... OK?" % (h, 
+                        headers[h], fieldnames[h])
 
         for i in xrange(1, sheet.nrows):
             vals = sheet.row_values(i)
@@ -159,12 +158,15 @@ class Command(BaseCommand):
             fname = c.dbf_fieldname
             if fname not in layer.fields:
                 if find_possible(fname, layer.fields):
-                    raise Exception("DBF has no field named `%s`.\n Did you mean `%s`" % (fname,find_possible(fname, layer.fields)))
-                raise Exception("DBF has no field named %s (it IS case sensitive).\n\n %s" % (fname,layer.fields))
+                    raise Exception("DBF has no field named `%s`.\n Did you mean `%s`" % (fname,
+                        find_possible(fname, layer.fields)))
+                raise Exception("DBF has no field named %s (it IS case sensitive).\n\n %s" % (fname, 
+                    layer.fields))
 
         # Load PU from shpfile
         print
-        print "WARNING It is your responsibility to make sure the shapefile projection below matches srid %s" % settings.GEOMETRY_DB_SRID
+        print "WARNING It is your responsibility to make sure the shapefile projection below \
+                matches srid %s" % settings.GEOMETRY_DB_SRID
         print layer.srs
 
         sheet = book.sheet_by_name("PlanningUnits")
@@ -173,7 +175,8 @@ class Command(BaseCommand):
         assert len(headers) == len(fieldnames)
         for h in range(len(headers)): 
             if headers[h] != fieldnames[h]:
-                print "WARNING: field %s is '%s' in the xls file but model is expecting '%s' ... OK?" % (h, headers[h], fieldnames[h])
+                print "WARNING: field %s is '%s' in the xls file but model is expecting \
+                       '%s' ... OK?" % (h, headers[h], fieldnames[h])
         for i in xrange(1, sheet.nrows):
             #vals = [str(x.strip()) for x in sheet.row_values(i)]
             vals = sheet.row_values(i)
@@ -324,7 +327,8 @@ class Command(BaseCommand):
         assert len(headers) == len(fieldnames)
         for h in range(len(headers)): 
             if headers[h] != fieldnames[h]:
-                print "WARNING: field %s is '%s' in the xls file but model is expecting '%s' ... OK?" % (h, headers[h], fieldnames[h])
+                print "WARNING: field %s is '%s' in the xls file but model is expecting '%s' ... OK?" % (h,
+                        headers[h], fieldnames[h])
 
         for i in xrange(1, sheet.nrows):
             vals = sheet.row_values(i)
@@ -343,7 +347,6 @@ class Command(BaseCommand):
         assert len(dgs) == sheet.nrows - 1
 
         # Export the puvscf table to csv directly 
-        from django.conf import settings
         out = os.path.realpath(os.path.join(settings.MARXAN_TEMPLATEDIR, 'puvcf.dat'))
         print "Exporting the table to %s" % out
         query = """

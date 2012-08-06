@@ -16,7 +16,7 @@ def marxan_start(m):
     return m.best
 
 @task()
-def add(x,y):
+def add(x, y):
     return x + y
 
 

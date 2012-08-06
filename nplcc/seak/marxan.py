@@ -29,19 +29,19 @@ class MarxanAnalysis(object):
         if os.path.exists(self.outdir):
             import shutil 
             shutil.rmtree(self.outdir) 
-        os.makedirs(os.path.join(self.outdir,"data"))
-        os.makedirs(os.path.join(self.outdir,"output"))
+        os.makedirs(os.path.join(self.outdir, "data"))
+        os.makedirs(os.path.join(self.outdir, "output"))
 
-        link = os.path.realpath(os.path.join(self.outdir,"marxan"))
+        link = os.path.realpath(os.path.join(self.outdir, "marxan"))
         if not os.path.exists(link):
             os.symlink(self.marxan_bin, link)
 
     def write_pu(self):
         fh = open("%s/data/pu.dat" % self.outdir, 'w')
-        fh.write(",".join(["id","cost","status"]))
+        fh.write(",".join(["id", "cost", "status"]))
         for w in self.pus:
             fh.write("\n")
-            fh.write(",".join(str(x) for x in [w[0],w[1],0]))
+            fh.write(",".join(str(x) for x in [w[0], w[1], 0]))
         fh.close()
 
     def write_puvcf(self):
@@ -69,10 +69,10 @@ class MarxanAnalysis(object):
         
     def write_spec(self):
         fh = open("%s/data/spec.dat" % self.outdir, 'w')
-        fh.write(",".join(['id','type','target','spf','name']))
+        fh.write(",".join(['id', 'type', 'target', 'spf', 'name']))
         for s in self.cfs:
             fh.write("\n")
-            fh.write(",".join(str(x) for x in [s[0],0,s[1],s[2],s[3].replace(",",'')]))
+            fh.write(",".join(str(x) for x in [s[0], 0, s[1], s[2], s[3].replace(",", '')]))
             
         fh.close()
 

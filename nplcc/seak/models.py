@@ -1,30 +1,22 @@
 import os
 import glob
-import random
 import shutil
-import math
-from django import forms
 from django.conf import settings
 from django.contrib.gis.db import models
-from django.contrib.gis.geos import GEOSGeometry 
 from django.core.cache import cache
 from django.template.defaultfilters import slugify
 from django.utils.html import escape
 from django.db.models.signals import post_delete
 from django.dispatch.dispatcher import receiver
-from madrona.features.models import PointFeature, LineFeature, PolygonFeature, FeatureCollection
 from madrona.features import register, alternate
-from madrona.layers.models import PrivateLayerList
+from madrona.features.models import FeatureCollection
 from madrona.unit_converter.models import area_in_display_units
 from madrona.analysistools.models import Analysis
-from madrona.analysistools.widgets import SliderWidget
-from madrona.common.utils import get_class
-from madrona.features import register
 from madrona.common.utils import asKml
-from madrona.async.ProcessHandler import *
+from madrona.async.ProcessHandler import process_is_running, process_is_complete, \
+    process_is_pending, get_process_result, process_is_complete, check_status_or_begin
 from madrona.common.utils import get_logger
 from seak.tasks import marxan_start
-from seak.marxan import MarxanError
 from django.core.serializers.json import DjangoJSONEncoder
 from django.utils import simplejson as json
 from madrona.common.models import KmlCache
@@ -91,13 +83,16 @@ from south.modelsinspector import add_introspection_rules
 add_introspection_rules([], ["^seak\.models\.JSONField"])
 
 class ConservationFeature(models.Model):
+    '''
+    Django model representing Conservation Features (typically species)
+    '''
     name = models.CharField(max_length=99)
     level1 = models.CharField(max_length=99)
-    level2 = models.CharField(max_length=99,null=True,blank=True)
-    level3 = models.CharField(max_length=99,null=True,blank=True)
-    level4 = models.CharField(max_length=99,null=True,blank=True)
-    level5 = models.CharField(max_length=99,null=True,blank=True)
-    dbf_fieldname = models.CharField(max_length=15,null=True,blank=True)
+    level2 = models.CharField(max_length=99, null=True, blank=True)
+    level3 = models.CharField(max_length=99, null=True, blank=True)
+    level4 = models.CharField(max_length=99, null=True, blank=True)
+    level5 = models.CharField(max_length=99, null=True, blank=True)
+    dbf_fieldname = models.CharField(max_length=15, null=True, blank=True)
     units = models.CharField(max_length=90, null=True, blank=True)
     uid = models.IntegerField(primary_key=True)
 
@@ -117,9 +112,13 @@ class ConservationFeature(models.Model):
         return u'%s' % self.name
 
 class Cost(models.Model):
+    '''
+    Django model representing Costs (typically planning unit metrics which are considered
+    "costly")
+    '''
     name = models.CharField(max_length=99)
     uid = models.IntegerField(primary_key=True)
-    dbf_fieldname = models.CharField(max_length=15,null=True,blank=True)
+    dbf_fieldname = models.CharField(max_length=15, null=True, blank=True)
     units = models.CharField(max_length=16, null=True, blank=True)
     desc = models.TextField()
 
@@ -131,6 +130,9 @@ class Cost(models.Model):
         return u'%s' % self.name
 
 class PlanningUnit(models.Model):
+    '''
+    Django model representing polygon planning units
+    '''
     fid = models.IntegerField(primary_key=True)
     name = models.CharField(max_length=99)
     geometry = models.MultiPolygonField(srid=settings.GEOMETRY_DB_SRID, 
@@ -141,7 +143,7 @@ class PlanningUnit(models.Model):
     @property
     @cachemethod("PlanningUnit_%(fid)s_area")
     def area(self):
-        # assume storing meters and returning km^2 (TODO)
+        # TODO don't assume storing meters and returning km^2
         area = self.geometry.area / float(1000*1000)
         return area
 
@@ -167,6 +169,9 @@ class PlanningUnit(models.Model):
         return [x.cost.dbf_fieldname for x in cfs]
 
 class DefinedGeography(models.Model):
+    '''
+    A subset of planning units that can be refered to by name 
+    '''
     name = models.CharField(max_length=99)
     planning_units = models.ManyToManyField(PlanningUnit)
 
@@ -182,6 +187,9 @@ class DefinedGeography(models.Model):
         return self.name
 
 class PuVsCf(models.Model):
+    '''
+    The conservation feature value per planning unit
+    '''
     pu = models.ForeignKey(PlanningUnit)
     cf = models.ForeignKey(ConservationFeature)
     amount = models.FloatField(null=True, blank=True)
@@ -189,6 +197,9 @@ class PuVsCf(models.Model):
         unique_together = ("pu", "cf")
 
 class PuVsCost(models.Model):
+    '''
+    The cost feature value per planning unit
+    '''
     pu = models.ForeignKey(PlanningUnit)
     cost = models.ForeignKey(Cost)
     amount = models.FloatField(null=True, blank=True)
@@ -212,6 +223,9 @@ def scale_list(vals, low, high):
 
 @register
 class Scenario(Analysis):
+    '''
+    Madrona feature for prioritization scenario
+    '''
     input_targets = JSONField(verbose_name='Target Percentage of Habitat')
     input_penalties = JSONField(verbose_name='Penalties for Missing Targets') 
     input_relativecosts = JSONField(verbose_name='Relative Costs')
@@ -266,7 +280,7 @@ class Scenario(Analysis):
             # TODO don't assume fields are valid within the selected geography
             levels = cf.level_string
             val = 0
-            for k,v in d.items():
+            for k, v in d.items():
                 if levels.startswith(k.lower()):
                     val = v
                     break
@@ -274,6 +288,10 @@ class Scenario(Analysis):
         return ndict
 
     def invalidate_cache(self):
+        '''
+        Remove any cached values associated with this scenario.
+        Warning: additional caches will need to be added to this method
+        '''
         keys = ["%s_results",]
         keys = [x % self.uid for x in keys]
         cache.delete_many(keys)
@@ -283,8 +301,10 @@ class Scenario(Analysis):
         return True
 
     def run(self):
+        '''
+        Fire off the marxan analysis
+        '''
         from seak.marxan import MarxanAnalysis
-        from django.db.models import Sum
          
         self.invalidate_cache()
 
@@ -299,7 +319,7 @@ class Scenario(Analysis):
         assert max(targets.values()) <= 1.0
         assert min(targets.values()) >=  0.0
 
-        nonzero_pks = [k for k,v in targets.items() if v > 0] 
+        nonzero_pks = [k for k, v in targets.items() if v > 0] 
         nonzero_targets = []
         nonzero_penalties = []
         for nz in nonzero_pks:
@@ -307,15 +327,6 @@ class Scenario(Analysis):
             nonzero_penalties.append(penalties[nz])
             
         maxtarget = max(nonzero_targets)
-        try:
-            meantarget = sum(nonzero_targets) / float(len(nonzero_targets))
-        except ZeroDivisionError:
-            meantarget = 0
-        try:
-            meanpenalty = sum(nonzero_penalties) / float(len(nonzero_penalties))
-        except ZeroDivisionError:
-            meanpenalty = 0
-        numspecies = len(nonzero_targets)
 
         # ignore input, choose a scalefactor automatically
         self.input_scalefactor = maxtarget * 4 + 2  # effectively scales from 2.5 to 6.5, the sweet spot
@@ -323,14 +334,11 @@ class Scenario(Analysis):
         # Apply the target and penalties
         logger.debug("Apply the targets and penalties")
         cfs = []
-        sum_penalties = 0
         pus = PlanningUnit.objects.filter(fid__in=geography_fids)
         for cf in ConservationFeature.objects.all():
             total = sum([x.amount for x in cf.puvscf_set.filter(pu__in=pus) if x.amount])
             target = total * targets[cf.pk]
             penalty = penalties[cf.pk] * self.input_scalefactor
-            if target > 0:
-                sum_penalties += penalty
             # MUST include all species even if they are zero
             cfs.append((cf.pk, target, penalty, cf.name))
 
@@ -346,7 +354,7 @@ class Scenario(Analysis):
         pus = []
         # First loop, calc the cumulative costs per planning unit
         for pu in PlanningUnit.objects.filter(fid__in=geography_fids):
-            weighted_cost = 0.1  # TODO Constant: lowest possible cost
+            weighted_cost = 0.1  # Constant: lowest possible cost
             puc = PuVsCost.objects.filter(pu=pu)
             for c in puc:
                 costkey = c.cost.slug
@@ -355,7 +363,6 @@ class Scenario(Analysis):
             pus.append(pu.pk)
 
         # scale the costs 0 to 100
-        sum_costs = sum(wcosts)
         scaled_costs = scale_list(wcosts, 0.0, 100.0)
         pucosts = zip(pus, scaled_costs)
 
@@ -380,7 +387,7 @@ class Scenario(Analysis):
 
     @property
     def progress(self):
-        path = os.path.join(self.outdir,"output","nplcc_r*.csv")
+        path = os.path.join(self.outdir, "output", "nplcc_r*.csv")
         outputs = glob.glob(path)
         numreps = self.numreps
         if len(outputs) == numreps:
@@ -396,9 +403,9 @@ class Scenario(Analysis):
         else:
             selected_fids = []
         
-        try:
+        if 'bbox' in rs: 
             bbox = rs['bbox']
-        except:
+        else:
             bbox = None
    
         fullname = self.user.get_full_name()
@@ -498,7 +505,7 @@ class Scenario(Analysis):
         sum_area = sum([x.area for x in bestpus])
 
         # Parse mvbest
-        fh = open(os.path.join(self.outdir,"output","nplcc_mvbest.csv"), 'r')
+        fh = open(os.path.join(self.outdir, "output", "nplcc_mvbest.csv"), 'r')
         lines = [x.strip().split(',') for x in fh.readlines()[1:]]
         fh.close()
         species = []
@@ -560,13 +567,11 @@ class Scenario(Analysis):
         
     @property
     def status_html(self):
-        code, status_html = self.status
-        return status_html
+        return self.status[1]
 
     @property
     def status_code(self):
-        code, status_html = self.status
-        return code
+        return self.status[0]
     
     @property
     def status(self):
@@ -615,16 +620,20 @@ class Scenario(Analysis):
     def done(self):
         """ Boolean; is process complete? """
         done = True
-        if self.output_best is None: done = False
-        if self.output_pu_count is None: done = False
+        if self.output_best is None: 
+            done = False
+        if self.output_pu_count is None: 
+            done = False
 
         if not done:
             done = True
             # only process async results if output fields are blank
             # this means we have to recheck after running
             self.process_results()
-            if self.output_best is None: done = False
-            if self.output_pu_count is None: done = False
+            if self.output_best is None: 
+                done = False
+            if self.output_pu_count is None: 
+                done = False
         return done
 
     @classmethod
@@ -668,7 +677,7 @@ class Scenario(Analysis):
         for ws in wshds:
             try:
                 hits = puc[str(ws.pk)] 
-            except:
+            except KeyError:
                 hits = 0
 
             if method == "all":
@@ -725,11 +734,16 @@ class Scenario(Analysis):
     @property 
     def kml_working(self):
         code = self.status_code
-        if code == 3: txt = "completed"
-        elif code == 2: txt = "in progress"
-        elif code == 1: txt = "in queue"
-        elif code == 0: txt = "error occured"
-        else: txt = "status unknown"
+        if code == 3: 
+            txt = "completed"
+        elif code == 2: 
+            txt = "in progress"
+        elif code == 1: 
+            txt = "in queue"
+        elif code == 0: 
+            txt = "error occured"
+        else: 
+            txt = "status unknown"
 
         return """
         <Placemark id="%s">

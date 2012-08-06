@@ -1,5 +1,4 @@
-from django.contrib.gis.db import models
-from seak.models import *
+from seak.models import Folder, ConservationFeature, PlanningUnit, PuVsCf, PuVsCost, Cost
 from django.contrib import admin
 
 admin.site.register(Folder)

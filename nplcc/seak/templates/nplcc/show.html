@@ -2,7 +2,6 @@
 {% load humanize %}
 {% load set_var %}
 {% load percentage %}
-{% load sortcosts %}
 {% load flatblock_tags %}
 {% block title %}{{instance.name}}{% endblock title %}
 {% block panel %}
@@ -76,7 +75,7 @@
 
             <h4>{% flatblock 'constraints' 3600 %}</h4>
              <table class="table">
-             {%for k,v in results.costs.items|sortcosts %}
+             {%for k,v in results.costs.items %}
              {% if v > 0%}<tr><td> &#10003; <strong>{{k}}</strong></td></tr> 
              {% else %}<tr><td> &nbsp; <del>{{k}}</del></td></tr> 
              {% endif %} 

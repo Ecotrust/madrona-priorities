@@ -1,12 +1,10 @@
-from madrona.common import utils
-from madrona.common.utils import load_session, get_logger
+from madrona.common.utils import get_logger
 from madrona.shapes.views import ShpResponder
 #from madrona.features.views import get_object_for_viewing
 from django.http import HttpResponse
 from django.template.defaultfilters import slugify
 from django.contrib.gis.geos import MultiPolygon
 from django.shortcuts import render_to_response
-from django.core.cache import cache
 from django.views.decorators.cache import cache_page, cache_control
 from django.conf import settings
 from django.template import RequestContext
@@ -19,19 +17,21 @@ import tempfile
 
 logger = get_logger()
 
-def map(request, template_name='common/map_ext.html', extra_context={}):
+def map(request, template_name='common/map_ext.html', extra_context=None):
     """
     Main application window
     """
-    context = RequestContext(request,{
-        'api_key':settings.GOOGLE_API_KEY, 
+    if not extra_context:
+        extra_context = {}
+    context = RequestContext(request, {
+        'api_key': settings.GOOGLE_API_KEY, 
         'session_key': request.session.session_key,
     })
     context.update(extra_context)
     return render_to_response(template_name, context)
 
 def watershed_shapefile(request, instances):
-    from seak.models import PlanningUnit, PlanningUnitShapes, Scenario
+    from seak.models import PlanningUnitShapes, Scenario
     wshds = PlanningUnit.objects.all()
     wshd_fids = [x.fid for x in PlanningUnit.objects.all()]
     results = {}
@@ -87,17 +87,18 @@ Includes scenarios:
     return shp_response()
 
 def watershed_marxan(request, instance):
-    from seak.models import PlanningUnit, WatershedPrioritization
+    from seak.models import Scenario
     viewable, response = instance.is_viewable(request.user)
     if not viewable:
         return response
 
-    if not isinstance(instance, WatershedPrioritization):
+    if not isinstance(instance, Scenario):
         return HttpResponse("Shapefile export for watershed prioritizations only", status=500)
 
     from madrona.common.utils import KMZUtil
     zu = KMZUtil()
-    filename = os.path.join(tempfile.gettempdir(), '%s_%s.zip' % (slugify(instance.name),slugify(instance.date_modified)))
+    filename = os.path.join(tempfile.gettempdir(), 
+            '%s_%s.zip' % (slugify(instance.name),slugify(instance.date_modified)))
     directory = instance.outdir 
     zu.toZip(directory, filename)
 
@@ -110,39 +111,6 @@ def watershed_marxan(request, instance):
     response['Content-Type'] = 'application/zip'
     response.write(zip_stream)
     return response
-
-def test_params(request):
-    from seak.models import WatershedPrioritization
-    from django.contrib.auth.models import User
-    from django.utils import simplejson as json
-  
-    if request.method == 'POST':
-        user = User.objects.get(username='mperry')
-        nplcc = WatershedPrioritization(input_targets = request.POST['input_targets'], 
-                input_penalties = request.POST['input_penalties'],
-                input_relativecosts='[]', 
-                name="Test", user=user)
-        nplcc.save()
-        t = nplcc.process_dict(nplcc.input_targets)
-        p = nplcc.process_dict(nplcc.input_penalties)
-        a = json.dumps([t,p])
-        res = HttpResponse(a, 200)
-        res['Content-Type'] = 'application/json'
-        return res
-    else:
-        return HttpResponse('POST required', status=404)
-
-def home(request):
-    return render_to_response("nplcc/home.html")
-
-def tutorial(request):
-    return render_to_response("nplcc/tutorial.html")
-
-def docs(request):
-    return render_to_response("nplcc/docs.html")
-
-def test(request):
-    return render_to_response("seak/test.html")
 
 @cache_page(60 * 60)
 @cache_control(must_revalidate=False, max_age=60 * 60 * 8)
@@ -215,8 +183,9 @@ def shared_scenarios_geojson(request):
 @cache_control(must_revalidate=False, max_age=60 * 60 * 8)
 def tiles(request):
     path_info = request.path_info.replace('/tiles', '')
-    (mimestr, bytes) = TileStache.requestHandler(config_hint=settings.TILE_CONFIG, path_info=path_info, query_string=None)
-    return HttpResponse(bytes, content_type=mimestr)
+    (mimestr, bytestotal) = TileStache.requestHandler(config_hint=settings.TILE_CONFIG, 
+            path_info=path_info, query_string=None)
+    return HttpResponse(bytestotal, content_type=mimestr)
 
 
 @cache_page(60 * 60 * 8)

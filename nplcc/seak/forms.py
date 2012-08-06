@@ -1,5 +1,5 @@
-from madrona.features.forms import FeatureForm, SpatialFeatureForm
-from models import *
+from madrona.features.forms import FeatureForm
+from seak.models import Folder, Scenario 
 from django import forms
 
 class FolderForm(FeatureForm):

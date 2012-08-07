@@ -45,15 +45,6 @@
     }
   }, 
   {
-    "pk": 12, 
-    "model": "flatblocks.flatblock", 
-    "fields": {
-      "content": "Set Proptions and Weights for Focal Fish Species", 
-      "header": "", 
-      "slug": "form-conservationfeature-header"
-    }
-  }, 
-  {
     "pk": 14, 
     "model": "flatblocks.flatblock", 
     "fields": {
@@ -240,6 +231,15 @@
       "content": "For each conservation objective, the chart below shows how much of the total potentially available convservation value is represented by this solution.", 
       "header": "", 
       "slug": "show-targets-explanation"
+    }
+  }, 
+  {
+    "pk": 12, 
+    "model": "flatblocks.flatblock", 
+    "fields": {
+      "content": "Set Objectives for Focal Species", 
+      "header": "", 
+      "slug": "form-conservationfeature-header"
     }
   }
 ]

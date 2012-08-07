@@ -327,9 +327,10 @@ class Scenario(Analysis):
             nonzero_penalties.append(penalties[nz])
             
         maxtarget = max(nonzero_targets)
+        avgtarget = float(sum(nonzero_targets))/float(len(nonzero_targets))
 
-        # ignore input, choose a scalefactor automatically
-        self.input_scalefactor = maxtarget * 4 + 2  # effectively scales from 2.5 to 6.5, the sweet spot
+        # ignore input, choose a scalefactor automatically based on avg and max target
+        self.input_scalefactor = 0.5 + (avgtarget * 2) + (maxtarget * 2)
 
         # Apply the target and penalties
         logger.debug("Apply the targets and penalties")

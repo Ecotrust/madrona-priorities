@@ -53,12 +53,7 @@ function init_map() {
 
     markers = new OpenLayers.Layer.Markers( "Markers", {displayInLayerSwitcher: false});
 
-    var osm = new OpenLayers.Layer.OSM();
-
     var esri_physical = new OpenLayers.Layer.XYZ( "Mapbox Terrain",
-        //"http://server.arcgisonline.com/ArcGIS/rest/services/World_Physical_Map/MapServer/tile/${z}/${y}/${x}",
-        //"http://c.tile.stamen.com/watercolor/${z}/${x}/${y}.jpg", // Stamen Watercolor
-        //"http://c.tile.cloudmade.com/8fe4ccbb4940415d9475cc21bf41ea53/998/256/${z}/${x}/${y}.png", // CLoudmade simple bg map
         "http://d.tiles.mapbox.com/v3/examples.map-4l7djmvo/${z}/${x}/${y}.png",
         {sphericalMercator: true} 
     );
@@ -89,11 +84,6 @@ function init_map() {
          sphericalMercator: true,
          isBaseLayer: false
         } 
-    );
-
-    var google_terrain = new OpenLayers.Layer.Google(
-        "Google Terrain",
-        {type: google.maps.MapTypeId.TERRAIN, opacity: 0.6}
     );
 
     var myStyles = new OpenLayers.StyleMap({
@@ -144,7 +134,7 @@ function init_map() {
     .error(function() { app.scenarios.viewModel.planningUnitsLoadError(true); })
     .complete(function() { app.scenarios.viewModel.planningUnitsLoadComplete(true); });
 
-    map.addLayers([esri_shade, blue_marble, esri_physical, osm, google_terrain, pu_layer, pu_tiles, pu_utfgrid, markers]);
+    map.addLayers([esri_shade, blue_marble, esri_physical, pu_layer, pu_tiles, pu_utfgrid, markers]);
 
     map.isValidZoomLevel = function(zoomLevel) {
         // Why is this even necessary OpenLayers?.. grrr

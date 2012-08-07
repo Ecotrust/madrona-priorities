@@ -135,30 +135,12 @@
     }
   }, 
   {
-    "pk": 19, 
-    "model": "flatblocks.flatblock", 
-    "fields": {
-      "content": "For each target, the chart below shows how much of the total potentially available convservation value is represented by this solution.", 
-      "header": "", 
-      "slug": "show-targets-explanation"
-    }
-  }, 
-  {
     "pk": 20, 
     "model": "flatblocks.flatblock", 
     "fields": {
       "content": "Percent of Total Available Value", 
       "header": "", 
       "slug": "show-percent-met"
-    }
-  }, 
-  {
-    "pk": 21, 
-    "model": "flatblocks.flatblock", 
-    "fields": {
-      "content": "Targets", 
-      "header": "", 
-      "slug": "targets"
     }
   }, 
   {
@@ -177,15 +159,6 @@
       "content": "Constraints", 
       "header": "", 
       "slug": "constraints"
-    }
-  }, 
-  {
-    "pk": 24, 
-    "model": "flatblocks.flatblock", 
-    "fields": {
-      "content": "Relative Importance", 
-      "header": "", 
-      "slug": "relative-importance"
     }
   }, 
   {
@@ -234,12 +207,39 @@
     }
   }, 
   {
+    "pk": 24, 
+    "model": "flatblocks.flatblock", 
+    "fields": {
+      "content": "Importance Weighting", 
+      "header": "", 
+      "slug": "relative-importance"
+    }
+  }, 
+  {
     "pk": 13, 
     "model": "flatblocks.flatblock", 
     "fields": {
-      "content": "A <strong>low</strong> relative importance indicates \"<em>do not consider in the prioritization process</em>\"<br/> A <strong>high</strong> relative importance indicates top priority (i.e. \"<em>Attempt to capture almost all of the available conservation value</em>\"). \r\n", 
+      "content": "A <strong>low</strong> importance indicates \"<em>do not consider in the prioritization process</em>\"<br/> A <strong>high</strong> importance indicates very high priority (i.e. \"<em>Attempt to capture almost all of the available habitat</em>\"). \r\n", 
       "header": "", 
       "slug": "form-conservationfeature-description"
+    }
+  }, 
+  {
+    "pk": 21, 
+    "model": "flatblocks.flatblock", 
+    "fields": {
+      "content": "Objectives", 
+      "header": "", 
+      "slug": "targets"
+    }
+  }, 
+  {
+    "pk": 19, 
+    "model": "flatblocks.flatblock", 
+    "fields": {
+      "content": "For each conservation objective, the chart below shows how much of the total potentially available convservation value is represented by this solution.", 
+      "header": "", 
+      "slug": "show-targets-explanation"
     }
   }
 ]

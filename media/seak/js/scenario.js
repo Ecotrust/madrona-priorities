@@ -320,13 +320,13 @@ function scenariosViewModel() {
         if (totalfids === 0) {
             alert("Please complete Step 1");
             $("#formtabs a[href='#geographytab']").tab('show');
-        } else if ($(frm).find('input[name="name"]').val() === '') {
+        } else if (totalpenalties === 0 || totaltargets === 0) {
             alert("Please complete Step 2");
+            $("#formtabs a[href='#speciestab']").tab('show');
+        } else if ($(frm).find('input[name="name"]').val() === '') {
+            alert("Please complete Step 4");
             $("#formtabs a[href='#generaltab']").tab('show');
             $(frm).find('input[name="name"]').focus();
-        } else if (totalpenalties === 0 || totaltargets === 0) {
-            alert("Please complete Step 3");
-            $("#formtabs a[href='#speciestab']").tab('show');
         } else {
             // GO .. we are clear to submit the form
             var values = {};

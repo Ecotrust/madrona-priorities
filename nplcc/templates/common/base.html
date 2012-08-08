@@ -41,7 +41,6 @@
         <div class="container-fluid">
           <a class="brand" href="/">{% flatblock "title" 3600 %}</a>
           <ul class="nav">
-                <li class="divider-vertical"></li>
             {% if user.is_authenticated %}
                 <li data-bind="css: {'active': dataMode() == 'manage'}, click: switchMode.bind($data, 'manage')"><a href="/">{% flatblock "manage" 3600 %}</a></li>
                 <li data-bind="css: {'active': dataMode() == 'shared'}, click: switchMode.bind($data, 'shared')"><a href="/">{% flatblock "shared" 3600 %}</a></li>

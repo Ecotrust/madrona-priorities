@@ -212,7 +212,6 @@ function init_map() {
         var lyrname
         $.each($("select#layer-select option"), function(k,v) {
             lyrname = $(v).val();
-            console.log(lyrname, "off");
             if (lyrname !== '')
                 map.getLayersByName(lyrname)[0].setVisibility(false);
         });

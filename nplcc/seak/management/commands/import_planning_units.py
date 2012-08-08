@@ -346,7 +346,8 @@ class Command(BaseCommand):
 
         print 
         print "create mapnik xml file symbolizing each conservation features and cost"
-        all_dbf_fieldnames.remove(params['name_field'])
+        numeric_dbf_fieldnames = all_dbf_fieldnames[:]
+        numeric_dbf_fieldnames.remove(params['name_field'])
         for fieldname in all_dbf_fieldnames:
             vals = layer.get_fields(fieldname)
             vals = [x for x in vals if x >= 0 ]

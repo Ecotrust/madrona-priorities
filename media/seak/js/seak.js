@@ -183,8 +183,7 @@ function init_map() {
     var lookup_url = "/seak/field_lookup.json";
     var fieldLookup;
     var sel = $('<select>').appendTo('#layerswitcher-list').attr("id","layer-select");
-    sel.addClass
-    sel.append($("<option>").attr('value','').text('Select attribute to map...'));
+    sel.append($("<option>").attr('value','').text('.. Select attribute to map ..'));
     var xhr = $.ajax({
         url: lookup_url, 
         cache: true,
@@ -203,19 +202,29 @@ function init_map() {
                 );
                 sel.append($("<option>").attr('value',realname).text(realname));
             });
+            // sort 'em
+            var my_options = $("select#layer-select option");
+            my_options.sort(function(a,b) {
+                if (a.text > b.text) return 1;
+                else if (a.text < b.text) return -1;
+                else return 0;
+            });
+            sel.empty().append( my_options );
         }
     })
     .error( function() { 
         fieldLookup = null; 
     });
+   
+    // when the dropdown changes, tell openlayers
     sel.bind('change', function() {
-        var lyrname
+        var lyrname;
         $.each($("select#layer-select option"), function(k,v) {
             lyrname = $(v).val();
             if (lyrname !== '')
                 map.getLayersByName(lyrname)[0].setVisibility(false);
         });
-        var lyrname = $("select#layer-select option:selected").val();
+        lyrname = $("select#layer-select option:selected").val();
         if (lyrname !== '')
             map.getLayersByName(lyrname)[0].setVisibility(true);
     });

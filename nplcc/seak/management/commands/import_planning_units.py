@@ -18,6 +18,74 @@ def find_possible(key, possible):
         return None
     return possible[0]
 
+"""
+File    quantile.py
+Desc    computes sample quantiles
+Author  Ernesto P. Adorio, PhD.
+        UPDEPP (U.P. at Clarkfield)
+Version 0.0.1 August 7. 2009
+"""
+ 
+from math import modf, floor
+ 
+def quantile(x, q,  qtype = 7, issorted = False):
+    """
+    Author  Ernesto P. Adorio, PhD.
+            UPDEPP (U.P. at Clarkfield)
+    Version 0.0.1 August 7. 2009
+    from http://adorio-research.org/wordpress/?p=125
+
+    Args:
+       x - input data
+       q - quantile
+       qtype - algorithm
+       issorted- True if x already sorted.
+ 
+    Compute quantiles from input array x given q.For median,
+    specify q=0.5.
+ 
+    References:
+       http://reference.wolfram.com/mathematica/ref/Quantile.html
+       http://wiki.r-project.org/rwiki/doku.php?id=rdoc:stats:quantile
+ 
+    Author:
+    Ernesto P.Adorio Ph.D.
+    UP Extension Program in Pampanga, Clark Field.
+    """
+    if not issorted:
+        y = sorted(x)
+    else:
+        y = x
+    if not (1 <= qtype <= 9):
+       return None  # error!
+ 
+    # Parameters for the Hyndman and Fan algorithm
+    abcd = [(0,   0, 1, 0), # inverse empirical distrib.function., R type 1
+            (0.5, 0, 1, 0), # similar to type 1, averaged, R type 2
+            (0.5, 0, 0, 0), # nearest order statistic,(SAS) R type 3
+ 
+            (0,   0, 0, 1), # California linear interpolation, R type 4
+            (0.5, 0, 0, 1), # hydrologists method, R type 5
+            (0,   1, 0, 1), # mean-based estimate(Weibull method), (SPSS,Minitab), type 6
+            (1,  -1, 0, 1), # mode-based method,(S, S-Plus), R type 7
+            (1.0/3, 1.0/3, 0, 1), # median-unbiased ,  R type 8
+            (3/8.0, 0.25, 0, 1)   # normal-unbiased, R type 9.
+           ]
+ 
+    a, b, c, d = abcd[qtype-1]
+    n = len(x)
+    g, j = modf( a + (n+b) * q -1)
+    if j < 0:
+        return y[0]
+    elif j >= n:
+        return y[n-1] 
+ 
+    j = int(floor(j))
+    if g ==  0:
+       return y[j]
+    else:
+       return y[j] + (y[j+1]- y[j])* (c + d * g)
+
 class Command(BaseCommand):
     help = 'Imports shapefile with conservationfeatures/costs and xls metadata to planning units'
     args = '<shp_path> <xls_path> <optional: full resolution shp_path>'
@@ -209,6 +277,7 @@ class Command(BaseCommand):
 ]>
 <Map srs="&google_mercator;">
     <Style name="pu" filter-mode="first">
+        %(extra_rules)s
         <Rule>
             <PolygonSymbolizer fill="#ffffff" fill-opacity="0.2" />
         </Rule>
@@ -227,7 +296,7 @@ class Command(BaseCommand):
         </Datasource>
     </Layer>
 </Map>""" 
-        xml = xml_template % {'shppath': os.path.abspath(fullres_shp)}
+        xml = xml_template % {'shppath': os.path.abspath(fullres_shp), 'extra_rules': ''}
 
         if not os.path.exists(settings.TILE_CONFIG_DIR):
             os.makedirs(settings.TILE_CONFIG_DIR)
@@ -245,30 +314,17 @@ class Command(BaseCommand):
             "cache": {
                 "name": "Multi",
                 "tiers": [
-                    {
-                    "name": "Memcache",
-                    "servers": ["127.0.0.1:11211"]
-                    },
-                    {
-                    "name": "Disk",
-                    "path": "/tmp/stache"
-                    }
+                    { "name": "Memcache", "servers": ["127.0.0.1:11211"] },
+                    { "name": "Disk", "path": "/tmp/stache" }
                 ]
             },
             "layers": {
                 "planning_units":
                 {
                     "provider": 
-                     {
-                         "name": "mapnik", 
-                         "mapfile": "planning_units.xml"
-                     },
+                     { "name": "mapnik", "mapfile": "planning_units.xml" },
                     "metatile": 
-                    {
-                        "rows": 4,
-                        "columns": 4,
-                        "buffer": 64
-                    }
+                    { "rows": 4, "columns": 4, "buffer": 64 }
                 },
                 "utfgrid":
                 {
@@ -287,13 +343,49 @@ class Command(BaseCommand):
             }
         }
 
+
+        print 
+        print "create mapnik xml file symbolizing each conservation features and cost"
+        all_dbf_fieldnames.remove(params['name_field'])
+        for fieldname in all_dbf_fieldnames:
+            vals = layer.get_fields(fieldname)
+            vals = [x for x in vals if x >= 0 ]
+            breaks = [quantile(vals, 0.25), quantile(vals, 0.5), quantile(vals, 0.75)]
+            print fieldname, breaks, min(vals), max(vals)
+            extra_rules = """
+                <Rule>
+                    <Filter>([%(fieldname)s] &gt;= %(b3)f)</Filter>
+                    <PolygonSymbolizer fill="#CC4C02" fill-opacity="0.7" />
+                </Rule>
+                <Rule>
+                    <Filter>([%(fieldname)s] &gt;= %(b2)f)</Filter>
+                    <PolygonSymbolizer fill="#FE9929" fill-opacity="0.7" />
+                </Rule>
+                <Rule>
+                    <Filter>([%(fieldname)s] &gt;= %(b1)f)</Filter>
+                    <PolygonSymbolizer fill="#FED98E" fill-opacity="0.7" />
+                </Rule>
+                <Rule>
+                    <Filter>([%(fieldname)s] &gt;= 0)</Filter>
+                    <PolygonSymbolizer fill="#FFFFD4" fill-opacity="0.7" />
+                </Rule>
+            """ % {"fieldname": fieldname, 'b1': breaks[0], 'b2': breaks[1], 'b3': breaks[2]}
+            xml = xml_template % {'shppath': os.path.abspath(fullres_shp), 'extra_rules': extra_rules} 
+            with open(os.path.join(settings.TILE_CONFIG_DIR, fieldname + '.xml'), 'w') as fh:
+                print "  writing %s.xml" % fieldname
+                fh.write(xml)
+
+                # add layers (provider = mapnik) for each of the above
+                lyrcfg = {
+                    "provider": { "name": "mapnik", "mapfile": fieldname + ".xml" },
+                    "metatile": { "rows": 4, "columns": 4, "buffer": 64 }
+                }
+                cfg["layers"][fieldname] = lyrcfg
+
+
         with open(os.path.join(settings.TILE_CONFIG_DIR, 'tiles.cfg'), 'w') as fh:
             print "  writing tiles.cfg"
             fh.write(json.dumps(cfg))
-
-        # TODO create mapnik xml file symbolizing each conservation features and cost
-        
-        # TODO add layers (provider = mapnik) for each of the above
 
         print 
         print "Loading costs and conservation features associated with each planning unit"
@@ -336,7 +428,8 @@ class Command(BaseCommand):
             params = dict(zip(fieldnames, vals))
             dg = DefinedGeography(name=params['geography'])
             dg.save()
-            pus = [x.pu for x in PuVsCf.objects.filter(amount__isnull=False, cf__dbf_fieldname=params['dbf_fieldname'])]
+            pus = [x.pu for x in PuVsCf.objects.filter(amount__isnull=False, 
+                                     cf__dbf_fieldname=params['dbf_fieldname'])]
             if len(pus) == 0:
                 raise Exception(params['geography'] + " has no planning units")
             for pu in pus:

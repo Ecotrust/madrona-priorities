@@ -459,7 +459,8 @@ function scenariosViewModel() {
 
   self.selectFeature = function(feature, event) {
     if (!self.planningUnitsLoadComplete()) { return false; }
-    $('select#layer-select').val('').change();
+    $('#layer-select-toggle').click();
+    map.getLayersByName('Planning Unit Highlight')[0].setVisibility(true);
     self.selectControl.unselectAll();
     self.selectControl.select(feature);
     self.selectedFeature(feature); 

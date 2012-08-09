@@ -66,7 +66,7 @@ function init_map() {
     var blue_marble = new OpenLayers.Layer.XYZ( "Blue Marble Satellite",
         //"http://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/${z}/${y}/${x}",
         "http://c.tiles.mapbox.com/v3/mapbox.blue-marble-topo-bathy-jul/${z}/${x}/${y}.png",
-        {sphericalMercator: true, opacity: 0.5} 
+        {sphericalMercator: true, opacity: 0.75} 
     );
 
     var pu_utfgrid = new OpenLayers.Layer.UTFGrid({
@@ -109,7 +109,7 @@ function init_map() {
     // allow testing of specific renderers via "?renderer=Canvas", etc
     var renderer = OpenLayers.Util.getParameters(window.location.href).renderer;
     renderer = (renderer) ? [renderer] : OpenLayers.Layer.Vector.prototype.renderers;
-    pu_layer = new OpenLayers.Layer.Vector("Planning Units", {
+    pu_layer = new OpenLayers.Layer.Vector("Planning Unit Highlight", {
         styleMap: myStyles,
         renderers: renderer,
         displayInLayerSwitcher: false
@@ -182,7 +182,10 @@ function init_map() {
 
     var lookup_url = "/seak/field_lookup.json";
     var fieldLookup;
-    var sel = $('<select>').appendTo('#layerswitcher-list').attr("id","layer-select");
+    $('<div><input type="checkbox" id="layer-select-toggle"></input></div>')
+        .appendTo('#layerswitcher')
+        .attr("id", "layer-select-div");
+    var sel = $('<select>').appendTo('#layer-select-div').attr("id","layer-select");
     sel.append($("<option>").attr('value','').text('.. Select attribute to map ..'));
     var xhr = $.ajax({
         url: lookup_url, 
@@ -217,7 +220,7 @@ function init_map() {
     });
    
     // when the dropdown changes, tell openlayers
-    sel.bind('change', function() {
+    var switchLayer = function() {
         var lyrname;
         $.each($("select#layer-select option"), function(k,v) {
             lyrname = $(v).val();
@@ -225,9 +228,16 @@ function init_map() {
                 map.getLayersByName(lyrname)[0].setVisibility(false);
         });
         lyrname = $("select#layer-select option:selected").val();
-        if (lyrname !== '')
+        if (lyrname !== '' && $('#layer-select-toggle').prop('checked')) {
             map.getLayersByName(lyrname)[0].setVisibility(true);
-    });
+            map.getLayersByName('Planning Unit Highlight')[0].setVisibility(false);
+        } else {
+            map.getLayersByName('Planning Unit Highlight')[0].setVisibility(true);
+        }
+    }
+
+    $('#layer-select-toggle').bind('change', switchLayer);
+    sel.bind('change', switchLayer);
 
     map.addLayers([esri_shade, blue_marble, esri_physical, pu_layer, pu_tiles, pu_utfgrid, markers]);
 

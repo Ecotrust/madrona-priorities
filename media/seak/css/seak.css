@@ -115,7 +115,7 @@ label.olButton {
     height: 0px;
 }
 #layerswitcher-list {
-    width: 240px;
+    width: 280px;
     float: right;
 }
 tr.not-targeted {
@@ -204,4 +204,12 @@ a.show_members img {border:none;margin-right:5px;margin-bottom:-3px;}
 }
 td.scenario-name {
     color: #317EAC !important;
+}
+select#layer-select {
+    width: 195px !important;
+    height: 22px;
+    margin-left: 8px;
+    padding: 1px;
+    margin-bottom: 4px;
+    line-height: 22px;
 }

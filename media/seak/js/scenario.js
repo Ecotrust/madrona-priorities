@@ -552,6 +552,7 @@ function scenariosViewModel() {
 
   self.backToScenarioList = function() {
     selectFeatureControl.unselectAll();
+    markers.clearMarkers();
     self.selectedFeature(false);
     self.showScenarioList(true);
   };

@@ -108,7 +108,7 @@
                 </thead>
                 <tbody id="best-pus">
                 {% for w in results.units %}
-                <tr>
+                <tr id="purow-{{w.uid}}">
                     <td>{{w.name}}</td>
                     {%for k,v in w.costs.items %}
                     {% if v < 24%} <td><span class="badge badge-success">low&nbsp; <span class="debug-only">{{v}}</span></span></td>
@@ -125,13 +125,15 @@
             </div>
              <script> 
                 var best = $('tbody#best-pus');
-                best.find('tr').mouseenter( function(e) { 
+                best.find('tr').click( function(e) { 
+                    markers.clearMarkers();
+                    $('tbody#best-pus tr').removeClass('highlighted-planningunit');
+                    $(this).addClass('highlighted-planningunit');
                     var x = $(this).find('td.centroid-x').html();
                     var y = $(this).find('td.centroid-y').html();
                     var lonLat = new OpenLayers.LonLat(x,y);
                     markers.addMarker(new OpenLayers.Marker(lonLat));
-                }).mouseleave( function(e) {
-                    markers.clearMarkers();
+                    map.setCenter([x,y]);
                 });
              </script>
         </div>

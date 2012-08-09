@@ -134,10 +134,6 @@ function init_map() {
     .error(function() { app.scenarios.viewModel.planningUnitsLoadError(true); })
     .complete(function() { app.scenarios.viewModel.planningUnitsLoadComplete(true); });
 
-    /*
-    map.addLayers([esri_shade, blue_marble, esri_physical, pu_layer, pu_tiles, pu_utfgrid, markers]);
-    */
-
     map.isValidZoomLevel = function(zoomLevel) {
         // Why is this even necessary OpenLayers?.. grrr
         // http://stackoverflow.com/questions/4240610/min-max-zoom-level-in-openlayers
@@ -179,6 +175,9 @@ function init_map() {
     keyboardControl.deactivate();
     selectGeographyControl.deactivate();
     map.addControls([selectFeatureControl, selectGeographyControl, keyboardControl]);
+
+    map.addLayers([esri_shade, blue_marble, esri_physical, pu_layer, pu_tiles, pu_utfgrid, markers]);
+    map.getLayersByName("Markers")[0].setZIndex(9999);
 
     var lookup_url = "/seak/field_lookup.json";
     var fieldLookup;
@@ -239,9 +238,7 @@ function init_map() {
     $('#layer-select-toggle').bind('change', switchLayer);
     sel.bind('change', switchLayer);
 
-    map.addLayers([esri_shade, blue_marble, esri_physical, pu_layer, pu_tiles, pu_utfgrid, markers]);
-
-    var callback = function(infoLookup) {
+    var utfgridCallback = function(infoLookup) {
         var msg = ""; 
         var puname = "Watershed Info"; 
         $("#info").hide();
@@ -270,7 +267,7 @@ function init_map() {
     };
 
     var ctl = new OpenLayers.Control.UTFGrid({
-        callback: callback,
+        callback: utfgridCallback,
         handlerMode: "click"
     });
 

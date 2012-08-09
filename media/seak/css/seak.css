@@ -213,3 +213,6 @@ select#layer-select {
     margin-bottom: 4px;
     line-height: 22px;
 }
+.highlighted-planningunit {
+    background-color: #c9c9c9;
+}

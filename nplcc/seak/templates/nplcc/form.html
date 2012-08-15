@@ -145,7 +145,7 @@
                     <tr>
                     <th style="width:45%;text-align:left;">
                        <a class="accordion-toggle" data-toggle="collapse" 
-                          href="#collapse-{{category.grouper|slugify}}"> {{category.grouper}} </a>
+                           href="#collapse-{{category.grouper|slugify}}"> <i class="category-icon icon-minus"></i> {{category.grouper}} </a>
                     </th>
                     <td>
                       <div class="slider-collapse aggregate hide" 
@@ -206,9 +206,13 @@
             });
             // When collapsing details, show the aggregate sliderbar and vice-versa
             $('.cf-collapse').on('hide', function() {
+                $(this).parent().find(".category-icon").removeClass("icon-minus"); 
+                $(this).parent().find(".category-icon").addClass("icon-plus"); 
                 $(this).parent().find('.slider-collapse').show();
             });
             $('.cf-collapse').on('show', function() {
+                $(this).parent().find(".category-icon").removeClass("icon-plus"); 
+                $(this).parent().find(".category-icon").addClass("icon-minus"); 
                 $(this).parent().find('.slider-collapse').hide();
             });
         </script>

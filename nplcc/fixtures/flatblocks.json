@@ -45,15 +45,6 @@
     }
   }, 
   {
-    "pk": 14, 
-    "model": "flatblocks.flatblock", 
-    "fields": {
-      "content": "In addition to focal fish species, prioritize watersheds based the following factors.", 
-      "header": "", 
-      "slug": "form-costs-header"
-    }
-  }, 
-  {
     "pk": 16, 
     "model": "flatblocks.flatblock", 
     "fields": {
@@ -240,6 +231,51 @@
       "content": "Set Objectives for Focal Species", 
       "header": "", 
       "slug": "form-conservationfeature-header"
+    }
+  }, 
+  {
+    "pk": 14, 
+    "model": "flatblocks.flatblock", 
+    "fields": {
+      "content": "In addition to focal species, prioritize watersheds based the following factors.", 
+      "header": "", 
+      "slug": "form-costs-header"
+    }
+  }, 
+  {
+    "pk": 28, 
+    "model": "flatblocks.flatblock", 
+    "fields": {
+      "content": "Included in current scenario", 
+      "header": "", 
+      "slug": "legend-included"
+    }
+  }, 
+  {
+    "pk": 29, 
+    "model": "flatblocks.flatblock", 
+    "fields": {
+      "content": "Potential geography", 
+      "header": "", 
+      "slug": "legend-potential"
+    }
+  }, 
+  {
+    "pk": 30, 
+    "model": "flatblocks.flatblock", 
+    "fields": {
+      "content": "All NPLCC planning units", 
+      "header": "", 
+      "slug": "legend-allpus"
+    }
+  }, 
+  {
+    "pk": 31, 
+    "model": "flatblocks.flatblock", 
+    "fields": {
+      "content": "Relative Value", 
+      "header": "", 
+      "slug": "legend-relative-value"
     }
   }
 ]

@@ -230,8 +230,12 @@ function init_map() {
         if (lyrname !== '' && $('#layer-select-toggle').prop('checked')) {
             map.getLayersByName(lyrname)[0].setVisibility(true);
             map.getLayersByName('Planning Unit Highlight')[0].setVisibility(false);
+            $('.map-legend-group').hide();
+            $('#map-legend-attr').show();
         } else {
             map.getLayersByName('Planning Unit Highlight')[0].setVisibility(true);
+            $('.map-legend-group').hide();
+            $('#map-legend-scenario').show();
         }
     }
 

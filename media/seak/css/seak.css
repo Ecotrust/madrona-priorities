@@ -226,3 +226,35 @@ a.ui-state-focus {
     outline-color: #0097E5 !important;
     outline-width: 0px !important;
 }
+#map-legend {
+    bottom: 12px;
+    margin: 2px;
+    position: absolute; 
+    z-index: 1043;
+    text-align:left;
+    vertical-align:center;
+    font-size: 85%;
+    padding: 4px;
+    background:#FFF; /* fallback for browser that not support rgba */
+    background: rgba(255,255,255, .5); /* Works on all modern browsers */
+}
+.legend-box {
+    display: inline-block;
+    width: 14px;
+    height: 12px;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+    border: 1px solid #444;
+}
+.legend-item {
+    list-style:none;
+    vertical-align: top;
+}
+ul.map-legend-group {
+    margin: 0px;
+    padding: 0px;
+}
+ul#map-legend-attr { 
+    display:none;
+}

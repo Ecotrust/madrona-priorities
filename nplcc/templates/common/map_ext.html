@@ -258,6 +258,48 @@
                     <div id="info-title"></div>
                     <div id="info-content"></div>
                 </div>
+                <div>
+                    <div id="map-legend" class="well">
+                        <ul id="map-legend-scenario" class="map-legend-group">
+                            <p> {% flatblock "show-planning-units" 3600 %} </p>
+                            <li id="map-legend-item-scenario-on" class="legend-scenario legend-item">
+                                <span class="legend-box" style="background-color:yellow"></span>
+                                {% flatblock "legend-included" 3600 %}
+                            </li>
+                            <li id="map-legend-item-scenario-potential" class="legend-scenario legend-item">
+                                <span class="legend-box" style="background-color:grey"></span>
+                                {% flatblock "legend-potential" 3600 %}
+                            </li>
+                            <li id="map-legend-item-scenario-off" class="legend-item">
+                                <span class="legend-box" style="background-color:white;"></span>
+                                {% flatblock "legend-allpus" 3600 %}
+                            </li>
+                        </ul>
+                        <ul id="map-legend-attr" class="map-legend-group">
+                            <p> {% flatblock "legend-relative-value" 3600 %} </p>
+                            <li class="legend-item">
+                                <span class="legend-box" style="background-color:#CC4C02;"></span>
+                                High
+                            </li>
+                            <li class="legend-item">
+                                <span class="legend-box" style="background-color:#FE9929;"></span>
+                                Medium
+                            </li>
+                            <li class="legend-item">
+                                <span class="legend-box" style="background-color:#FED98E;"></span>
+                                Low
+                            </li>
+                            <li class="legend-item">
+                                <span class="legend-box" style="background-color:#FFFFD4;"></span>
+                                Very Low/None
+                            </li>
+                            <li class="legend-item">
+                                <span class="legend-box" style="background-color:white;"></span>
+                                No Data
+                            </li>
+                        </ul>
+                    </div>
+                </div>
               <div id="map"></div>
             </div>
           </div>
@@ -284,7 +326,7 @@
     {% endif %}
 
     app.onResize = function () {
-      $("#map").height($(window).height() * .85);
+      $("#map").height($(window).height() - 78);
       map.render('map');
     };
     

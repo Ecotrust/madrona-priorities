@@ -206,19 +206,25 @@ class PuVsCost(models.Model):
     class Meta:
         unique_together = ("pu", "cost")
 
-def scale_list(vals, low, high):
+def scale_list(vals, floor=None):
     """
-    Scales a list of floats linearly between low and high
+    If floor is None, Scales a list of floats linearly between 100*min/max and 100 
+    Otherwise, scales a list of floats linearly between floor and 100 
     """
     if len(vals) < 1:
         return []
     minval = min(vals)
     maxval = max(vals)
+    high = 100.0
+    if floor is None:
+        low = 100.0 * float(minval)/maxval
+    else:
+        low = floor
     if maxval == minval: 
         return [0] * len(vals)
-    scaled = [z / float(maxval - minval) for z in 
+    scaled = [high - (z / float(maxval - minval)) for z in 
                 [(high - low) * y for y in 
-                    [x - minval for x in vals]]] 
+                    [maxval - x for x in vals]]] 
     return scaled
 
 @register
@@ -351,21 +357,24 @@ class Scenario(Analysis):
             except KeyError:
                 final_cost_weights[costkey] = 0
 
-        wcosts = []
+        raw_costs = {}
         pus = []
-        # First loop, calc the cumulative costs per planning unit
         for pu in PlanningUnit.objects.filter(fid__in=geography_fids):
-            weighted_cost = 0.1  # Constant: lowest possible cost
             puc = PuVsCost.objects.filter(pu=pu)
             for c in puc:
                 costkey = c.cost.slug
-                weighted_cost += final_cost_weights[costkey] * c.amount
-            wcosts.append(weighted_cost)
+                if costkey not in raw_costs.keys():
+                    raw_costs[costkey] = []
+                raw_costs[costkey].append(c.amount)
             pus.append(pu.pk)
 
-        # scale the costs 0 to 100
-        scaled_costs = scale_list(wcosts, 0.0, 100.0)
-        pucosts = zip(pus, scaled_costs)
+        # scale, weight and combine costs
+        weighted_costs = {}
+        for costkey, costs in raw_costs.iteritems():
+            weighted_costs[costkey] = [x * final_cost_weights[costkey] for x in scale_list(costs)]
+        final_costs = [sum(x) for x in zip(*weighted_costs.values())] 
+        final_costs = [1.0 if x < 1.0 else x for x in final_costs] # enforce a minimum cost of 1.0
+        pucosts = zip(pus, final_costs)
 
         logger.debug("Creating the MarxanAnalysis object")
         m = MarxanAnalysis(pucosts, cfs, self.outdir)
@@ -485,7 +494,7 @@ class Scenario(Analysis):
             vals = [x.amount for x in all_potential]
             fids = [x.pu.fid for x in all_potential]
             fids_selected = [x.pu.fid for x in all_selected]
-            scaled_values = [int(x) for x in scale_list(vals, 0.0, 100.0)]
+            scaled_values = [int(x) for x in scale_list(vals, floor=0.0)]
             pucosts_potential = dict(zip(fids, scaled_values))
             extract = lambda x, y: dict(zip(x, map(y.get, x)))
             pucosts = extract(fids_selected, pucosts_potential)

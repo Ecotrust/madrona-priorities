@@ -791,7 +791,7 @@ class Scenario(Analysis):
         show_template = 'nplcc/show.html'
         form_template = 'nplcc/form.html'
         form_context = {
-            'cfs': ConservationFeature.objects.all(),
+            'cfs': ConservationFeature.objects.all().order_by('level1'),
             'defined_geographies': DefinedGeography.objects.all(),
             'costs': Cost.objects.all(),
         }

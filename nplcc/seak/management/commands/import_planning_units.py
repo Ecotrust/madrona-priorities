@@ -330,14 +330,19 @@ class Command(BaseCommand):
                 amt = feature.get(cf.dbf_fieldname)
                 if amt == NULL_VALUE:
                     amt = None
+                elif amt < 0:
+                    print "WARNING:", cf.dbf_fieldname, "has negative values"
+                    amt = 0  # no non-null negatives
                 obj = PuVsCf(pu=pu, cf=cf, amount=amt)
                 obj.save()
 
             for c in cs: 
                 amt = feature.get(c.dbf_fieldname)
-                if amt is None or amt < 0:
-                    # DONT allow negative or null values in COSTS! 
-                    amt = 0
+                if amt == NULL_VALUE:
+                    amt = None
+                elif amt < 0:
+                    print "WARNING:", c.dbf_fieldname, "has negative values"
+                    amt = 0  # no non-null negatives
                 obj = PuVsCost(pu=pu, cost=c, amount=amt)
                 obj.save()
 
@@ -364,9 +369,12 @@ class Command(BaseCommand):
             dg = DefinedGeography(name=params['geography'])
             dg.save()
             pus = [x.pu for x in PuVsCf.objects.filter(amount__isnull=False, 
-                                     cf__dbf_fieldname=params['dbf_fieldname'])]
+                    cf__dbf_fieldname=params['dbf_fieldname'])]
             if len(pus) == 0:
-                raise Exception(params['geography'] + " has no planning units")
+                pus = [x.pu for x in PuVsCost.objects.filter(amount__isnull=False, 
+                        cost__dbf_fieldname=params['dbf_fieldname'])]
+                if len(pus) == 0:
+                    raise Exception(params['geography'] + " has no planning units; check field named " + params['dbf_fieldname'])
             for pu in pus:
                 dg.planning_units.add(pu)
             dg.save()

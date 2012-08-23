@@ -371,6 +371,9 @@ class Scenario(Analysis):
         # scale, weight and combine costs
         weighted_costs = {}
         for costkey, costs in raw_costs.iteritems():
+            if None in costs:
+                print "Warning: skipping ", costkey, "; contains nulls in this geography"
+                continue
             weighted_costs[costkey] = [x * final_cost_weights[costkey] for x in scale_list(costs)]
         final_costs = [sum(x) for x in zip(*weighted_costs.values())] 
         final_costs = [1.0 if x < 1.0 else x for x in final_costs] # enforce a minimum cost of 1.0

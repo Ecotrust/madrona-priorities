@@ -104,17 +104,22 @@ def run(schedule=None):
             watershed = watersheds[huc]
             # Sum up total habitat for each fish
             for fish in species:
+                print fish
                 if energy == 0:
                     # reset for new calcs
                     totals[fish] = watershed[fish]
+                    print fish, totals
                 else:
                     totals[fish] += watershed[fish]
+                    print fish, totals
 
             # Incorporate Cost of including watershed
             energy += watershed['total_cost']
 
         # incorporate penalties for missing species targets
         for fish in species:
+            print totals
+            print targets
             pct = totals[fish] / targets[fish]
             if pct < 1.0: # if missed target, ie total < target
                 if pct < 0.1:

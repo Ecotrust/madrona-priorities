@@ -14,10 +14,9 @@ penalty_list = [300, 200, 100]
 cost_fields = ['pcp80bdfmm']
 uidfield = 'OBJECTID'
 NUMREPS = 2 # 30
-NUMITER = 500000 # 1 million
+NUMITER = 30000 # 1 million
 TMAX = 6555.0 
 TMIN = 10.0
-
 
 
 watersheds = {}

@@ -3,7 +3,14 @@ import sys
 import os
 from anneal import Annealer
 import shapefile
+
+#from numpy import random
 import random
+
+#try:
+#    from numpy import random
+#except:
+#    import random
 
 #-----------------------------------------------#
 #-------------- Configuration ------------------#
@@ -25,8 +32,8 @@ penalties = {
             }
 costs = ['pcp80bdfmm', ]
 uidfield = 'OBJECTID'
-NUMREPS = 5
-NUMITER = 50000
+NUMREPS = 2 
+NUMITER = 30000
 
 # Uncomment to manually define temperature schedule
 #SCHEDULE = {'tmin': 10, 'tmax': 6500, 'steps': 1}
@@ -84,7 +91,9 @@ def run(schedule=None):
         Add watershed (if not already in state) OR remove it. 
         * This is the Marxan technique as well
         """
-        huc = random.choice(hucs)
+        huc = hucs[int(random.random() * num_hucs)]
+        #huc = hucs[random.randint(0,num_hucs-1)]
+
         if huc in state:
             state.remove(huc)
         else:

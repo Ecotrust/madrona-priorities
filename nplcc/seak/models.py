@@ -213,8 +213,15 @@ def scale_list(vals, floor=None):
     """
     if len(vals) < 1:
         return []
-    minval = min(vals)
-    maxval = max(vals)
+    nonull_vals = []
+    for v in vals:
+        if v:
+            nonull_vals.append(v)
+        else:
+            logger.error("WARNING: null value enountered in a scaled list: assuming zero!")
+            nonull_vals.append(0)
+    minval = min(nonull_vals)
+    maxval = max(nonull_vals)
     high = 100.0
     if floor is None:
         low = 100.0 * float(minval)/maxval
@@ -224,7 +231,7 @@ def scale_list(vals, floor=None):
         return [0] * len(vals)
     scaled = [high - (z / float(maxval - minval)) for z in 
                 [(high - low) * y for y in 
-                    [maxval - x for x in vals]]] 
+                    [maxval - x for x in nonull_vals]]] 
     return scaled
 
 @register

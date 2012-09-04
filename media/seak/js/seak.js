@@ -242,26 +242,58 @@ function init_map() {
     $('#layer-select-toggle').bind('change', switchLayer);
     sel.bind('change', switchLayer);
 
+    var sortByKeys = function(obj) {
+        var tmpObj = {};
+        var fullName;
+        var keys = [];
+        var i, k, len;
+        var outObj = {};
+
+        for(var key in obj) {
+            fullName = fieldLookup[key];
+
+            if (!fullName)
+                fullName = key;
+
+            if (fullName !== 'NAME')
+                tmpObj[fullName] = obj[key];
+        }
+
+        for(var key in tmpObj) {
+            if(tmpObj.hasOwnProperty(key)) {
+                keys.push(key);
+            }
+        }
+
+        keys.sort();
+        len = keys.length;
+        for (i=0; i < len; i++) {
+            k = keys[i];
+            outObj[k] = tmpObj[k];
+        }
+        return outObj;
+    };
+
     var utfgridCallback = function(infoLookup) {
         var msg = ""; 
         var puname = "Watershed Info"; 
         $("#info").hide();
         var fnc = function(idx, val) {
-            var varname = fieldLookup[idx];
-            if (val >= 0 && varname) { // Assume negative is null
+            if (val >= 0) { // Assume negative is null
                 try {
-                    msg += "<tr><th width=\"75%\">"+ varname + "</th><td>" + val.toPrecision(6) + "</td></tr>";
+                    msg += "<tr><th width=\"75%\">"+ idx + "</th><td>" + val.toPrecision(6) + "</td></tr>";
                 } catch (err) {
-                    msg += "<tr><th width=\"75%\">"+ varname + "</th><td>" + val + "</td></tr>";
+                    msg += "<tr><th width=\"75%\">"+ idx + "</th><td>" + val + "</td></tr>";
                 }
             } else if(idx.toLowerCase() == "name") { // assume "name" 
                 puname = val;
             }
         };
+
         $.each(infoLookup, function(k, info) {
             if (info.data) {
                 msg = "<table class=\"table table-condensed\">";
-                $.each(info.data, fnc);
+                $.each(sortByKeys(info.data), fnc);
                 msg += "</table>";
                 $("#info").show();
             }

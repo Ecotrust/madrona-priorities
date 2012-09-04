@@ -43,8 +43,11 @@
             <p> Use a pre-defined geographic region </p>
             <ul>
             {% for dg in defined_geographies %}
-            <p><button id="dg_{{dg.slug}}" class="dg btn btn-mini" style="width:180px;">
-                <i style="float:left;" class="icon-tag"></i> {{dg.name}}</button> </p> 
+            <p>
+                <button id="dg_{{dg.slug}}" class="dg btn btn-mini" style="width:240px; text-align:left;">
+                    <i style="float:left;" class="icon-tag"></i> &nbsp;&nbsp; {{dg.name}}
+                </button> 
+            </p> 
             {% endfor %}
             </ul>
         </div>

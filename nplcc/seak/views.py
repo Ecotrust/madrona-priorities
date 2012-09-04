@@ -192,9 +192,14 @@ def tiles(request):
 @cache_control(must_revalidate=False, max_age=60 * 60 * 8)
 def field_lookup(request):
     from seak.models import Cost, ConservationFeature
+    from flatblocks.models import FlatBlock
+    try:
+        constraint_text = FlatBlock.objects.get(slug="constraints").content
+    except:
+        constraint_text = "Constraints"
     flut = {}
     for c in Cost.objects.all():
-        flut[c.dbf_fieldname] = c.name
+        flut[c.dbf_fieldname] = "%s: %s" % (constraint_text, c.name)
     for c in ConservationFeature.objects.all():
-        flut[c.dbf_fieldname] = c.name
+        flut[c.dbf_fieldname] = "%s: %s" % (c.level1, c.name)
     return HttpResponse(json.dumps(flut), content_type='application/json')

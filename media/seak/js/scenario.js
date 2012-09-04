@@ -304,7 +304,7 @@ function scenariosViewModel() {
             costs[xid] = 0;
         });
         // Set the *checked* costs to 1
-        $('#form-costs .cost-row:visible input:checkbox.costvalue:checked').each( function(index) {
+        $('#form-costs .cost-row:not(.hide) input:checkbox.costvalue:checked').each( function(index) {
             var xid = $(this).attr("id");
             xid = xid.replace(/^cost---/,'');
             costs[xid] = 1;

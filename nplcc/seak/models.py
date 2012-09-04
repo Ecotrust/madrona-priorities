@@ -351,7 +351,12 @@ class Scenario(Analysis):
         pus = PlanningUnit.objects.filter(fid__in=geography_fids)
         for cf in ConservationFeature.objects.all():
             total = sum([x.amount for x in cf.puvscf_set.filter(pu__in=pus) if x.amount])
-            target = total * targets[cf.pk]
+            target_prop = targets[cf.pk]
+            # only take 99.9% at most to avoid rounding errors 
+            # which lead Marxan to believe that the target is unreachable
+            if target_prop >= 0.999:
+                target_prop = 0.999 
+            target = total * target_prop 
             penalty = penalties[cf.pk] * self.input_scalefactor
             # MUST include all species even if they are zero
             cfs.append((cf.pk, target, penalty, cf.name))

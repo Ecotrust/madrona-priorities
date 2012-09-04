@@ -58,13 +58,14 @@
                 <th class="debug-only"> Penalty </th>
              </thead>
              <tbody>
+                {% load multiply %}
                 {% for k,v in results.targets_penalties.items %}
                 <tr class="{% if v.target > 0 %}targeted{% else %}not-targeted{% endif %}"> 
                     <td>{{v.label}}</td>
                     <td> 
                       <div class="progress" style="width:120px; margin:0;"><div class="bar" style="width:{{v.target|percentage}}"></div></div>
                     </td>
-                    <td>{{v.target|percentage}}</td>
+                    <td>{{v.target|multiply:100|floatformat}} / 100</td>
                     <td class="debug-only">{{v.penalty|percentage}}</td>
                 </tr>
                 {% endfor %}

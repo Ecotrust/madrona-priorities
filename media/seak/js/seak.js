@@ -251,12 +251,9 @@ function init_map() {
 
         for(var key in obj) {
             fullName = fieldLookup[key];
-
             if (!fullName)
                 fullName = key;
-
-            if (fullName !== 'NAME')
-                tmpObj[fullName] = obj[key];
+            tmpObj[fullName] = obj[key];
         }
 
         for(var key in tmpObj) {
@@ -285,7 +282,8 @@ function init_map() {
                 } catch (err) {
                     msg += "<tr><th width=\"75%\">"+ idx + "</th><td>" + val + "</td></tr>";
                 }
-            } else if(idx.toLowerCase() == "name") { // assume "name" 
+            } 
+            if(idx.toLowerCase() == "name") { // assume "name" 
                 puname = val;
             }
         };

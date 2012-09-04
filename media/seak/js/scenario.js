@@ -257,6 +257,12 @@ function scenariosViewModel() {
                     $.each(cfFields, function(idx, val) {
                         $('tr#row-' + val).removeClass('hide');
                     });
+                    $.each($('div.accordion-group'), function() { 
+                        $(this).removeClass('hide');
+                        if($(this).find('tr.cf-row:not(.hide)').length === 0) { 
+                            $(this).addClass('hide');
+                        }
+                    });
                     break;
             }
         });

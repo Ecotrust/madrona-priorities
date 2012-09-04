@@ -38,17 +38,6 @@
     <div class="tab-content tab-content-show">
 
         <div id="Inputs" class="tab-pane active">
-            <!--
-            <div class="box">
-                <h4>Name</h4> 
-                <p>{{ instance.name }}</p>
-                {% if instance.description %}
-                <h4>Description/Notes</h4>
-                <p> {{instance.description}} </p>
-                {% endif %}
-            </div>
-            <hr/>
-            -->
             <div>
              <h4>{% flatblock 'targets' 3600 %}</h4>
              <table class="table">
@@ -78,7 +67,7 @@
              <table class="table">
              {%for k,v in results.costs.items %}
              {% if v > 0%}<tr><td> &#10003; <strong>{{k}}</strong></td></tr> 
-             {% else %}<tr><td> &nbsp; <del>{{k}}</del></td></tr> 
+             {% else %}<tr class="debug-only"><td> &nbsp; <del>{{k}}</del></td></tr> 
              {% endif %} 
              {%endfor%}
              </table>

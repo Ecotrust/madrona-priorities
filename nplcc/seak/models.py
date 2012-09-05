@@ -472,7 +472,7 @@ class Scenario(Analysis):
         geography = json.loads(self.input_geography)
         targets_penalties = {}
         for k, v in targets.items():
-            targets_penalties[k] = {'label': k.replace('---', ' > ').title(), 'target': v, 'penalty': None}
+            targets_penalties[k] = {'label': k.replace('---', ' > ').replace('-',' ').title(), 'target': v, 'penalty': None}
         for k, v in penalties.items():
             try:
                 targets_penalties[k]['penalty'] = v
@@ -575,8 +575,13 @@ class Scenario(Analysis):
 
         species.sort(key=lambda k:k['name'].lower())
 
+        costs = {}
+        for k,v in cost_weights.iteritems():
+            name = k.replace("-", " ").title()
+            costs[name] = v
+
         res = {
-            'costs': cost_weights,
+            'costs': costs, #cost_weights
             'geography': geography,
             'targets_penalties': targets_penalties,
             'area': sum_area, 

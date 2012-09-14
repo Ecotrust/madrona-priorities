@@ -98,10 +98,15 @@ class Command(BaseCommand):
                 print "WARNING: field %s is '%s' in the xls file but model is \
                         expecting '%s' ... OK?" % (h, headers[h], fieldnames[h])
 
+        uids = []
         for i in xrange(1, sheet.nrows):
             vals = sheet.row_values(i)
             print vals
             params = dict(zip(fieldnames, vals))
+            if params['uid'] in uids:
+                raise Exception("Already used UID %s" % params['uid'])
+            else:
+                uids.append(params['uid'])
             cf = ConservationFeature(**params)
             cf.save()
 

@@ -20,6 +20,7 @@ from seak.tasks import marxan_start
 from django.core.serializers.json import DjangoJSONEncoder
 from django.utils import simplejson as json
 from madrona.common.models import KmlCache
+from seak.jenks import get_jenks_breaks
 
 logger = get_logger()
 
@@ -496,6 +497,7 @@ class Scenario(Analysis):
         
         scaled_costs = {}
         all_costs = Cost.objects.all()
+        scaled_breaks = {}
 
         for costslug, weight in cost_weights.iteritems():
             if weight <= 0:
@@ -514,16 +516,39 @@ class Scenario(Analysis):
             extract = lambda x, y: dict(zip(x, map(y.get, x)))
             pucosts = extract(fids_selected, pucosts_potential)
             scaled_costs[costslug] = pucosts
+            scaled_breaks[costslug] = get_jenks_breaks(scaled_values, 3)
+
+        print 
+        print scaled_breaks
+        print
 
         for pu in bestpus:
             centroid = pu.centroid 
             costs = {}
+            costs_class = {}
             for cname, pucosts in scaled_costs.iteritems():
-                costs[cname] = pucosts[pu.fid]
+                thecost = pucosts[pu.fid]
+                breaks = scaled_breaks[cname]
+                costs[cname] = thecost
+                # classify the costs into categories
+                if thecost <=  breaks[1]:
+                    costs_class[cname] = 'low'
+                elif thecost > breaks[2]: 
+                    costs_class[cname] = 'high'
+                else:
+                    costs_class[cname] = 'med' 
+
+	    print 
+            print pu
+	    print costs
+	    print costs_class
+	    print
+
 
             best.append({'name': pu.name, 
                          'fid': pu.fid, 
                          'costs': costs,
+                         'costs_class': costs_class,
                          'centroidx': centroid[0],
                          'centroidy': centroid[1]})
 

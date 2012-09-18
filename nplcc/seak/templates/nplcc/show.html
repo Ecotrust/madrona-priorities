@@ -89,7 +89,7 @@
                 <thead>
                     <tr>
                     <th scope="col"> {% flatblock 'show-planning-units' 3600 %} </th> 
-                    {%for k,v in results.costs.items %}
+                    {%for k,v in results.units.1.costs_class.items %}
                         {% if v > 0 %}
                         <th scope="col">{{k}}</th>
                         {% endif %}
@@ -100,11 +100,8 @@
                 {% for w in results.units %}
                 <tr id="purow-{{w.uid}}">
                     <td>{{w.name}}</td>
-                    {%for k,v in w.costs.items %}
-                    {% if v < 24%} <td><span class="badge badge-success">low&nbsp; <span class="debug-only">{{v}}</span></span></td>
-                    {% elif v > 66 %} <td><span class="badge badge-important">high <span class="debug-only">{{v}}</span></span></td>
-                    {% else %} <td><span class="badge badge-warning">med <span class="debug-only">{{v}}</span></span></td>
-                    {% endif %}
+                    {%for k,v in w.costs_class.items %}
+                    <td><p class="debug-only" style="font-size: 7pt;">{{k}}</p><span class="badge {% if v == 'low' %}badge-success{% elif v == 'med' %}badge-warning{% elif v == 'high' %}badge-important{% endif %}">{{v}}&nbsp;</span></td>
                     <td class="centroid-x" style="display:none">{{w.centroidx}}</td>
                     <td class="centroid-y" style="display:none">{{w.centroidy}}</td>
                     {% endfor %}

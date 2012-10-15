@@ -225,7 +225,10 @@ def scale_list(vals, floor=None):
     maxval = max(nonull_vals)
     high = 100.0
     if floor is None:
-        low = 100.0 * float(minval)/maxval
+        try:
+            low = 100.0 * float(minval)/maxval
+        except ZeroDivisionError:
+            low = 0
     else:
         low = floor
     if maxval == minval: 

@@ -40,3 +40,14 @@ This shapefile must be prepared for the tool according to the following steps:
    ~/projects/nplcc/data_20120822/NPLCC_metrics20120822.xls \
    ~/projects/nplcc/data_20120822/H1K_Values20120821_Merc_Simp.shp
 ```
+
+
+## Issues 
+- If the unique id for the planning unit changes, you must currently delete ALL existing scenarios without except. They are completely invalid if they point to the wrong ID. THere is currently no way around this unfortunately so if the planning unit fid field is altered, ALL scenarios must be deleted. 
+
+```
+python manage.py dumpdata --indent=2 seak > backup.json
+python manage.py shell
+>>> from seak.models import Scenario
+>>> Scenario.objects.all().delete()
+```

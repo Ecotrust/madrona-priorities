@@ -1,47 +1,11 @@
 [
   {
-    "pk": 2, 
-    "model": "flatblocks.flatblock", 
-    "fields": {
-      "content": "Ecotrust and the NPLCC have partnered to develop a conservation decision support system for Alaska, British Columbia, Washington, Oregon and California's coastal temperate rainforst. This system will enable stakeholder to engage in strategic planning and program delivery of conservation and restoration priorities for the North Pacific Region.", 
-      "header": "", 
-      "slug": "home_text"
-    }
-  }, 
-  {
-    "pk": 4, 
-    "model": "flatblocks.flatblock", 
-    "fields": {
-      "content": "Welcome to the NPLCC Priorties Tool", 
-      "header": "", 
-      "slug": "about-header"
-    }
-  }, 
-  {
-    "pk": 5, 
-    "model": "flatblocks.flatblock", 
-    "fields": {
-      "content": "An aquatic priorities decision support system for Oregon, Washington, and Idaho developed by Ecotrust and the US Fish and Wildlife Service. ", 
-      "header": "", 
-      "slug": "about-intro"
-    }
-  }, 
-  {
     "pk": 6, 
     "model": "flatblocks.flatblock", 
     "fields": {
       "content": "<p>\r\nPlease read the detailed <a href=\"/docs.html\">documentation</a> to gain an understanding of the purpose, limitations and products associated with this tool.  All users are able to view priorities, pan and zoom using the map tool and explore input data sets pertaining to aquatic species as well as inputs into the climate change, watershed condition and aquatic invasives analyses.  Registered users sign in by clicking on the \u201csign in\u201d menu in the upper right hand corner.\r\n</p>\r\n\r\n<h3>Review Regional Aquatic Priorities</h3>\r\n<p>\r\nThe map to the right represents regional aquatic priorities identified by USFWS using this decision support tool.  On this map, the darker areas represent those areas that are considered high priority. For additional information on how these priorities were created the detailed <a href=\"/docs.html\">documentation</a>.\r\n</p>\r\n\r\n<p>\r\nClick the \u201cdata and priorities\u201d tab at the top of this page and there you will see the priorities layer at the top of the tree view under the \u201cRegional Priorities\u201d heading. You can click on each sub-basin in the map for additional information specific to the level of importance, sub-basin name and area and prioritization constraints such as vulnerability to climate change, watershed condition and vulnerability to aquatic invasives.\r\n</p>\r\n\r\n<h3>Explore data inputs</h3>\r\n<p>\r\nAlso available to explore are data used to generate the priorities including species specific information and watershed factors related to climate change, watershed condition and aquatic invasives.  These data are under the heading \u201cPriorities input data\u201d.  To explore these layers, click on the arrow next to the heading and a tree view will expand exposing the layers.  Click on the check box next to the desired layer and you will see it appear on the map.  Many of these data are imbedded in subsequent sub-folders.  For additional information on any of these data layers, please see the <a href=\"/home/data_dictionary.pdf\">data dictionary</a>.\r\n\r\n</p>\r\n", 
       "header": "", 
       "slug": "about-content"
-    }
-  }, 
-  {
-    "pk": 7, 
-    "model": "flatblocks.flatblock", 
-    "fields": {
-      "content": ".cerulean", 
-      "header": "", 
-      "slug": "theme"
     }
   }, 
   {
@@ -69,15 +33,6 @@
       "content": "Setting prioritization constraints helps by avoiding costly or high-risk regions.", 
       "header": "", 
       "slug": "form-costs-description"
-    }
-  }, 
-  {
-    "pk": 1, 
-    "model": "flatblocks.flatblock", 
-    "fields": {
-      "content": "NPLCC Prioritization Tool", 
-      "header": "", 
-      "slug": "title"
     }
   }, 
   {
@@ -225,15 +180,6 @@
     }
   }, 
   {
-    "pk": 12, 
-    "model": "flatblocks.flatblock", 
-    "fields": {
-      "content": "Set Objectives for Focal Species", 
-      "header": "", 
-      "slug": "form-conservationfeature-header"
-    }
-  }, 
-  {
     "pk": 14, 
     "model": "flatblocks.flatblock", 
     "fields": {
@@ -249,15 +195,6 @@
       "content": "Included in current scenario", 
       "header": "", 
       "slug": "legend-included"
-    }
-  }, 
-  {
-    "pk": 30, 
-    "model": "flatblocks.flatblock", 
-    "fields": {
-      "content": "All NPLCC planning units", 
-      "header": "", 
-      "slug": "legend-allpus"
     }
   }, 
   {
@@ -285,6 +222,69 @@
       "content": "<em>* Note: some datasets are not available for your selected geography and were excluded from this analysis.</em>", 
       "header": "", 
       "slug": "form-geography-note"
+    }
+  }, 
+  {
+    "pk": 4, 
+    "model": "flatblocks.flatblock", 
+    "fields": {
+      "content": "Welcome to the BLM Juniper Management Tool", 
+      "header": "", 
+      "slug": "about-header"
+    }
+  }, 
+  {
+    "pk": 5, 
+    "model": "flatblocks.flatblock", 
+    "fields": {
+      "content": "A juniper management prioritization support tool for Eastern Oregon. ", 
+      "header": "", 
+      "slug": "about-intro"
+    }
+  }, 
+  {
+    "pk": 12, 
+    "model": "flatblocks.flatblock", 
+    "fields": {
+      "content": "Set Objectives", 
+      "header": "", 
+      "slug": "form-conservationfeature-header"
+    }
+  }, 
+  {
+    "pk": 2, 
+    "model": "flatblocks.flatblock", 
+    "fields": {
+      "content": "Ecotrust and the BLM have partnered to develop a conservation decision support system for Juniper management in Oregon.\r\n\r\nThis system will enable stakeholders to engage in strategic landscape-scale planning for Juniper management and sage grouse habitat conservation priorities for Oregon BLM lands.", 
+      "header": "", 
+      "slug": "home_text"
+    }
+  }, 
+  {
+    "pk": 30, 
+    "model": "flatblocks.flatblock", 
+    "fields": {
+      "content": "All planning units", 
+      "header": "", 
+      "slug": "legend-allpus"
+    }
+  }, 
+  {
+    "pk": 7, 
+    "model": "flatblocks.flatblock", 
+    "fields": {
+      "content": ".spruce", 
+      "header": "", 
+      "slug": "theme"
+    }
+  }, 
+  {
+    "pk": 1, 
+    "model": "flatblocks.flatblock", 
+    "fields": {
+      "content": "Oregon Juniper Management Tool", 
+      "header": "", 
+      "slug": "title"
     }
   }
 ]

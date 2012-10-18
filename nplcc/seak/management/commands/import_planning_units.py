@@ -252,8 +252,8 @@ class Command(BaseCommand):
             "cache": {
                 "name": "Multi",
                 "tiers": [
-                    { "name": "Memcache", "servers": ["127.0.0.1:11211"] },
-                    { "name": "Disk", "path": "/tmp/stache" }
+                    #{ "name": "Memcache", "servers": ["127.0.0.1:11211"] },
+                    { "name": "Disk", "path": "/tmp/juniper-stache" }
                 ]
             },
             "layers": {

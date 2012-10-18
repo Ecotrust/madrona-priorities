@@ -131,6 +131,17 @@ div.tab-content-show {
     background:#FFF; /* fallback for browser that not support rgba */
     background: rgba(255,255,255, .5); /* Works on all modern browsers */
 }
+#watershed-name {
+    position: absolute; 
+    z-index: 1042;
+    float:right;
+    text-align:left;
+    font-size: 85%;
+    width: 252px;
+    margin: 6px;
+    margin-left: 46px;
+    background: rgba(255,255,255, .8); /* Works on all modern browsers */
+}
 #info {
     position: absolute; 
     z-index: 1042;

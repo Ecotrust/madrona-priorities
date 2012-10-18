@@ -52,10 +52,10 @@ function init_map() {
                 'div': OpenLayers.Util.getElement('layerswitcher')
             })
         ],
-        zoom: 6,
+        //zoom: 6,
         minZoomLevel: 6,
         restrictedExtent: extent, //new OpenLayers.Bounds(-19140016, 2626698, -10262137, 11307047),
-        maxExtent: extent, //new OpenLayers.Bounds(-19140016, 2626698, -10262137, 11307047),
+        //maxExtent: extent, //new OpenLayers.Bounds(-19140016, 2626698, -10262137, 11307047),
         numZoomLevels: 7
     });
 
@@ -79,7 +79,7 @@ function init_map() {
     var pu_utfgrid = new OpenLayers.Layer.UTFGrid({
          url: "/tiles/utfgrid/${z}/${x}/${y}.json",
          utfgridResolution: 4,
-         sphericalMercator: true,
+         sphericalMercator: true, 
          displayInLayerSwitcher: false
         } 
     );
@@ -185,7 +185,6 @@ function init_map() {
 
     map.addLayers([terrain, imagery, pu_layer, pu_tiles, pu_utfgrid, markers]);
     map.getLayersByName("Markers")[0].setZIndex(9999);
-    map.zoomToMaxExtent();
 
     var lookup_url = "/seak/field_lookup.json";
     var fieldLookup;
@@ -292,13 +291,13 @@ function init_map() {
                     msg += "<tr><th width=\"75%\">"+ idx + "</th><td>" + val + "</td></tr>";
                 }
             } 
-            if(idx.toLowerCase() == "name") { // assume "name" 
+            if(idx.toLowerCase() == "watershed_") { // assume "name" 
                 puname = val;
             }
         };
 
         $.each(infoLookup, function(k, info) {
-            if (info.data) {
+            if (info && info.data) {
                 msg = "<table class=\"table table-condensed\">";
                 $.each(sortByKeys(info.data), fnc);
                 msg += "</table>";
@@ -313,8 +312,23 @@ function init_map() {
         callback: utfgridCallback,
         handlerMode: "click"
     });
-
     map.addControl(ctl);
 
-    map.setCenter(new OpenLayers.LonLat(-15400000, 6700000), 4);
+    var nameCallback = function(infoLookup) {
+        $("#watershed-name").hide();
+        $.each(infoLookup, function(k, info) {
+            if (info && info.data && info.data.WATERSHED_) {
+                $("#watershed-name").html(info.data.WATERSHED_);
+                $("#watershed-name").show();
+            }
+        });
+    };
+    var ctl2 = new OpenLayers.Control.UTFGrid({
+        callback: nameCallback,
+        handlerMode: "move"
+    });
+    map.addControl(ctl2);
+
+    map.setCenter(new OpenLayers.LonLat(-15400000, 6700000), 6);
+    //map.zoomToMaxExtent();
 }

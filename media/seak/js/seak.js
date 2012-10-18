@@ -47,6 +47,7 @@ function init_map() {
         controls: [
             new OpenLayers.Control.Navigation(),
             new OpenLayers.Control.Zoom(),
+            new OpenLayers.Control.Attribution(),
             new OpenLayers.Control.LayerSwitcher({
                 'div': OpenLayers.Util.getElement('layerswitcher')
             })
@@ -55,25 +56,15 @@ function init_map() {
         minZoomLevel: 6,
         restrictedExtent: extent, //new OpenLayers.Bounds(-19140016, 2626698, -10262137, 11307047),
         maxExtent: extent, //new OpenLayers.Bounds(-19140016, 2626698, -10262137, 11307047),
-        numZoomLevels: 6
+        numZoomLevels: 7
     });
-
-    //var extent = new OpenLayers.Bounds(-157.8516, 33.7243, -112.8516, 65.0721);
-    /*
-    console.log(extent);
-    map.setOptions({restrictedExtent: extent});
-    */
 
     markers = new OpenLayers.Layer.Markers( "Markers", {displayInLayerSwitcher: false});
 
-    var terrain = new OpenLayers.Layer.XYZ( "Mapbox Terrain",
-        "http://d.tiles.mapbox.com/v3/examples.map-4l7djmvo/${z}/${x}/${y}.png",
-        {sphericalMercator: true} 
-    );
-
-    var esri_shade = new OpenLayers.Layer.XYZ( "ESRI Shaded Relief Map",
-        "http://server.arcgisonline.com/ArcGIS/rest/services/World_Shaded_Relief/MapServer/tile/${z}/${y}/${x}",
-        {sphericalMercator: true} 
+    var terrain = new OpenLayers.Layer.XYZ( "National Geographic Base Map",
+        //"http://d.tiles.mapbox.com/v3/examples.map-4l7djmvo/${z}/${x}/${y}.png",
+        "http://server.arcgisonline.com/ArcGIS/rest/services/NatGeo_World_Map/MapServer/tile/${z}/${y}/${x}",
+        {sphericalMercator: true, attribution: "National Geographic, Esri, DeLorme, NAVTEQ, UNEP-WCMC, USGS, NASA, ESA, METI, NRCAN, GEBCO, NOAA, iPC" } 
     );
 
     var blue_marble = new OpenLayers.Layer.XYZ( "Blue Marble Satellite",
@@ -95,6 +86,7 @@ function init_map() {
         "/tiles/planning_units/${z}/${x}/${y}.png",
         {
          sphericalMercator: true,
+         attribution: "",
          isBaseLayer: false
         } 
     );
@@ -189,7 +181,7 @@ function init_map() {
     selectGeographyControl.deactivate();
     map.addControls([selectFeatureControl, selectGeographyControl, keyboardControl]);
 
-    map.addLayers([terrain, esri_shade, blue_marble, pu_layer, pu_tiles, pu_utfgrid, markers]);
+    map.addLayers([terrain, blue_marble, pu_layer, pu_tiles, pu_utfgrid, markers]);
     map.getLayersByName("Markers")[0].setZIndex(9999);
     map.zoomToMaxExtent();
 
@@ -213,6 +205,7 @@ function init_map() {
                         { visibility: false, 
                           sphericalMercator: true, 
                           displayInLayerSwitcher: false, 
+                          attribution: "",
                           isBaseLayer: false } 
                     )
                 );

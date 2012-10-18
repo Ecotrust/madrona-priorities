@@ -64,18 +64,20 @@ function init_map() {
     var terrain = new OpenLayers.Layer.XYZ( "National Geographic Base Map",
         //"http://d.tiles.mapbox.com/v3/examples.map-4l7djmvo/${z}/${x}/${y}.png",
         "http://server.arcgisonline.com/ArcGIS/rest/services/NatGeo_World_Map/MapServer/tile/${z}/${y}/${x}",
-        {sphericalMercator: true, attribution: "National Geographic, Esri, DeLorme, NAVTEQ, UNEP-WCMC, USGS, NASA, ESA, METI, NRCAN, GEBCO, NOAA, iPC" } 
+        {sphericalMercator: true, 
+         opacity: 0.75,
+         attribution: "National Geographic, Esri, DeLorme, NAVTEQ, UNEP-WCMC, USGS, NASA, ESA, METI, NRCAN, GEBCO, NOAA, iPC" } 
     );
 
-    var blue_marble = new OpenLayers.Layer.XYZ( "Blue Marble Satellite",
-        //"http://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/${z}/${y}/${x}",
-        "http://c.tiles.mapbox.com/v3/mapbox.blue-marble-topo-bathy-jul/${z}/${x}/${y}.png",
-        {sphericalMercator: true, opacity: 0.75} 
+    var imagery = new OpenLayers.Layer.XYZ( "ESRI Imagery",
+        "http://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/${z}/${y}/${x}",
+        {sphericalMercator: true,
+         opacity: 0.75,
+         attribution: "Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, and the GIS User Community" } 
     );
 
     var pu_utfgrid = new OpenLayers.Layer.UTFGrid({
-         url: "/tiles/utfgrid/${z}/${x}/${y}.json", //dynamic, use once mapnik is figured out
-         //url: "/media/tiles/planning_units/${z}/${x}/${y}.json",
+         url: "/tiles/utfgrid/${z}/${x}/${y}.json",
          utfgridResolution: 4,
          sphericalMercator: true,
          displayInLayerSwitcher: false
@@ -181,7 +183,7 @@ function init_map() {
     selectGeographyControl.deactivate();
     map.addControls([selectFeatureControl, selectGeographyControl, keyboardControl]);
 
-    map.addLayers([terrain, blue_marble, pu_layer, pu_tiles, pu_utfgrid, markers]);
+    map.addLayers([terrain, imagery, pu_layer, pu_tiles, pu_utfgrid, markers]);
     map.getLayersByName("Markers")[0].setZIndex(9999);
     map.zoomToMaxExtent();
 

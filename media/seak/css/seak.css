@@ -140,7 +140,7 @@ div.tab-content-show {
     width: 252px;
     margin: 6px;
     margin-left: 46px;
-    background: rgba(255,255,255, .8); /* Works on all modern browsers */
+    background: rgba(162,205,181,0.8); /* Works on all modern browsers */
 }
 #info {
     position: absolute; 

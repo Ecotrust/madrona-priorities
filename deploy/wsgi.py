@@ -2,9 +2,9 @@ import sys
 import site
 import os
 
-project = '/usr/local/apps/nplcc/nplcc'
-ve = '/usr/local/apps/nplcc/env'
-vepath = os.path.join(ve, 'lib/python2.7/site-packages')
+project = '/usr/local/apps/juniper-blm/nplcc'
+ve = '/usr/local/apps/juniper-blm/env'
+vepath = os.path.join(ve, 'lib/python2.6/site-packages')
 
 prev_sys_path = list(sys.path)
 # add the site-packages of our virtualenv as a site dir

@@ -35,6 +35,11 @@ function getCostFields() {
 }
 
 function init_map() {
+    var latlon = new OpenLayers.Projection("EPSG:4326");
+    var merc = new OpenLayers.Projection("EPSG:900913");
+    var extent = new OpenLayers.Bounds(-125.04, 41.5, -116.0, 46.4);
+    extent.transform(latlon, merc);
+
     map = new OpenLayers.Map({
         div: "map",
         projection: "EPSG:900913",
@@ -46,14 +51,22 @@ function init_map() {
                 'div': OpenLayers.Util.getElement('layerswitcher')
             })
         ],
-        minZoomLevel: 3,
-        restrictedExtent: new OpenLayers.Bounds(-19140016, 2626698, -10262137, 11307047),
+        zoom: 6,
+        minZoomLevel: 6,
+        restrictedExtent: extent, //new OpenLayers.Bounds(-19140016, 2626698, -10262137, 11307047),
+        maxExtent: extent, //new OpenLayers.Bounds(-19140016, 2626698, -10262137, 11307047),
         numZoomLevels: 6
     });
 
+    //var extent = new OpenLayers.Bounds(-157.8516, 33.7243, -112.8516, 65.0721);
+    /*
+    console.log(extent);
+    map.setOptions({restrictedExtent: extent});
+    */
+
     markers = new OpenLayers.Layer.Markers( "Markers", {displayInLayerSwitcher: false});
 
-    var esri_physical = new OpenLayers.Layer.XYZ( "Mapbox Terrain",
+    var terrain = new OpenLayers.Layer.XYZ( "Mapbox Terrain",
         "http://d.tiles.mapbox.com/v3/examples.map-4l7djmvo/${z}/${x}/${y}.png",
         {sphericalMercator: true} 
     );
@@ -176,8 +189,9 @@ function init_map() {
     selectGeographyControl.deactivate();
     map.addControls([selectFeatureControl, selectGeographyControl, keyboardControl]);
 
-    map.addLayers([esri_shade, blue_marble, esri_physical, pu_layer, pu_tiles, pu_utfgrid, markers]);
+    map.addLayers([terrain, esri_shade, blue_marble, pu_layer, pu_tiles, pu_utfgrid, markers]);
     map.getLayersByName("Markers")[0].setZIndex(9999);
+    map.zoomToMaxExtent();
 
     var lookup_url = "/seak/field_lookup.json";
     var fieldLookup;

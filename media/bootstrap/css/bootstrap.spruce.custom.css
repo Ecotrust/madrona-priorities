@@ -4730,7 +4730,7 @@ legend {
 label,
 .help-block,
 input[type="file"] {
-  color: #f5f3dc;
+  /*color: #f5f3dc;*/
 }
 input,
 textarea,

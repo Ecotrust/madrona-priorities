@@ -25,6 +25,7 @@ TEMPLATE_DIRS = ( os.path.realpath(os.path.join(os.path.dirname(__file__), 'temp
 INSTALLED_APPS += ( 'seak', 
                     'djkombu',
                     'madrona.analysistools',
+                    'madrona.layer_manager',
                     'django.contrib.humanize',) 
 
 
@@ -76,7 +77,7 @@ HELP_EMAIL = 'ksdev@ecotrust.org'
 CACHES = {
     'default': {
         'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
-        'LOCATION': 'nplcc-cache', 
+        'LOCATION': 'juniper-cache', 
     }
 }
 USE_CACHE = False
@@ -88,10 +89,14 @@ try:
     SESSION_REDIS_HOST = 'localhost'
     SESSION_REDIS_PORT = 6379
     SESSION_REDIS_DB = 0
-    #SESSION_REDIS_PASSWORD = 'password'
-    SESSION_REDIS_PREFIX = 'session'
+    SESSION_REDIS_PREFIX = 'juniper-session'
 except ImportError:
     pass
+
+import logging
+LOG_LEVEL = logging.INFO
+dblogger = logging.getLogger('django.db.backends')
+dblogger.setLevel(logging.INFO)
 
 try:
     from settings_local import *
@@ -126,3 +131,4 @@ if DEBUG:
         INSTALLED_APPS += ('gunicorn',)
     except ImportError:
         pass
+

@@ -286,9 +286,9 @@ function init_map() {
         var fnc = function(idx, val) {
             if (val >= 0) { // Assume negative is null
                 try {
-                    msg += "<tr><th width=\"75%\">"+ idx + "</th><td>" + val.toPrecision(6) + "</td></tr>";
+                    msg += "<tr><td width=\"75%\">"+ idx + "</td><td>" + val.toPrecision(6) + "</td></tr>";
                 } catch (err) {
-                    msg += "<tr><th width=\"75%\">"+ idx + "</th><td>" + val + "</td></tr>";
+                    msg += "<tr><td width=\"75%\">"+ idx + "</td><td>" + val + "</td></tr>";
                 }
             } 
             if(idx.toLowerCase() == "watershed_") { // assume "name" 

@@ -474,7 +474,7 @@ function scenariosViewModel() {
     if (bbox && bbox.length === 4) {
         map.zoomToExtent(bbox);
     }
-    self.showScenarioList(false);
+    //self.showScenarioList(false);
   };
 
   self.selectFeatureById = function (id) {

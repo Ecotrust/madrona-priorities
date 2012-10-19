@@ -7,7 +7,7 @@
             <div id="scenario-html">
               <div class="row-fluid">
                   <div class="row-fluid" id="row-scenarios-list">
-                    <div class="span12 well" data-bind="visible: showScenarioList">
+                    <div class="span12 well">
                         <div class="tabbable">
                             <ul class="nav nav-tabs" id="formtabs" style="margin-bottom:0px;">
                                 <li class="active">
@@ -33,80 +33,82 @@
                                 <div id="scenario-tab-content" class="tab-pane">
                                     {% if user.is_authenticated %}
                                     <div>
-                                        <div data-bind="if: !scenarioLoadComplete()" style="text-align: center"> 
-                                            <img alt="loading" src="/media/img/ajax-loader.gif"/> 
-                                        </div>
-                                        <div data-bind="if: scenarioLoadComplete() && scenarioList().length == 0 && dataMode() == 'manage'"> 
-                                            <p>{% flatblock "new-manage-scenario" 3600 %}</p>
-                                        </div>
-                                        <div data-bind="if: scenarioLoadComplete() && scenarioList().length == 0 && dataMode() == 'shared'"> 
-                                            <p>{% flatblock "new-share-scenario" 3600 %}</p>
-                                        </div>
-                                        <div class="alert alert-error" data-bind="visible: scenarioLoadError">
-                                            <p><strong> Could not load scenario list!</strong></p>
-                                            <p>Please try again... if the error persists, please contact us.</p>
-                                        </div>
-                                        <div class="alert alert-error" data-bind="visible: planningUnitsLoadError">
-                                            <p><strong> Could not load planning units!</strong></p>
-                                            <p> Please try again... if the error persists, please contact us.</p>
-                                        </div>
-                                        <div class="alert alert-error" data-bind="visible: formLoadError">
-                                            <p><strong> Could not load the scenario form!</strong></p>
-                                            <p> Please try again... if the error persists, please contact us.</p>
-                                        </div>
-                                        <div data-bind="if: scenarioList().length > 0">
-                                            <table class="table table-scenariolist table-bordered table-condensed">
-                                            <thead>
-                                                <tr>
-                                                    <th> Scenario Name </th>
-                                                    <th> Date Modified </th>
-                                                    <th> Description</th>
-                                                    <th> Owner</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody data-bind="foreach: scenarioListPaginated">
-                                                <tr class="scenario-row" 
-                                                    data-bind="attr: {'data-original-title': description}, 
-                                                            click: $parent.selectFeature, 
-                                                            css: {'active': $data === $parent.selectedFeature() }">
-                                                    <td class="scenario-name">
-                                                        <span data-bind="visible: expired()">
-                                                            <i class="icon-exclamation-sign"></i>
-                                                        </span>
-                                                        <span data-bind="visible: !done()">
-                                                            <i class="icon-refresh"></i>
-                                                        </span>
-                                                        <span data-bind="text: name"> </span>
-                                                    </td>
-                                                    <td data-bind="text: date_modified"></td>
-                                                    <td data-bind="text: description().substr(0,77) + '...'"></td>
-                                                    <td> <span data-bind="text: user_fullname"></span>
-                                                        <span data-bind="visible: sharing_groups().length > 0">
-                                                            <i class="icon-share-alt"></i>
-                                                        </span>
-                                                    </td>
-                                                </tr>
-                                            </tbody>
-                                            </table>
-                                        </div>
-                                        <div data-bind="if: scenarioList().length, visible: scenarioList().length > listDisplayCount">
-                                            <div class="pagination">
-                                                <ul data-bind="foreach: paginationList">
-                                                <li data-bind="click: $parent.setListIndex, 
-                                                                css: { 'active': $parent.listStart() === listIndex, 'disabled': displayIndex === '...' }">
-                                                    <a href="#" data-bind="text: displayIndex, attr: { title: listIndex }"></a>
-                                                </li>
-                                                </ul>
+                                        <div data-bind="visible: showScenarioList">
+                                            <div data-bind="if: !scenarioLoadComplete()" style="text-align: center"> 
+                                                <img alt="loading" src="/media/img/ajax-loader.gif"/> 
                                             </div>
-                                        </div>
-                                        <div>
-                                            <button href="#" class="btn btn-primary" 
-                                                data-bind="click: addScenarioStart, visible: dataMode() == 'manage'">
-                                            <i class="icon-plus-sign icon-white"></i> Create New Scenario
-                                            <span data-bind="visible: !formLoadComplete()"><img alt="loading" src="/media/img/ajax-loader.gif"/></span>
-                                            </button>
-                                        </div>
-                                        <div class="span12 well" data-bind="visible: selectedFeature" style="margin-left:0;">
+                                            <div data-bind="if: scenarioLoadComplete() && scenarioList().length == 0 && dataMode() == 'manage'"> 
+                                                <p>{% flatblock "new-manage-scenario" 3600 %}</p>
+                                            </div>
+                                            <div data-bind="if: scenarioLoadComplete() && scenarioList().length == 0 && dataMode() == 'shared'"> 
+                                                <p>{% flatblock "new-share-scenario" 3600 %}</p>
+                                            </div>
+                                            <div class="alert alert-error" data-bind="visible: scenarioLoadError">
+                                                <p><strong> Could not load scenario list!</strong></p>
+                                                <p>Please try again... if the error persists, please contact us.</p>
+                                            </div>
+                                            <div class="alert alert-error" data-bind="visible: planningUnitsLoadError">
+                                                <p><strong> Could not load planning units!</strong></p>
+                                                <p> Please try again... if the error persists, please contact us.</p>
+                                            </div>
+                                            <div class="alert alert-error" data-bind="visible: formLoadError">
+                                                <p><strong> Could not load the scenario form!</strong></p>
+                                                <p> Please try again... if the error persists, please contact us.</p>
+                                            </div>
+                                            <div data-bind="if: scenarioList().length > 0">
+                                                <table class="table table-scenariolist table-bordered table-condensed">
+                                                <thead>
+                                                    <tr>
+                                                        <th> Scenario Name </th>
+                                                        <th> Date Modified </th>
+                                                        <th> Description</th>
+                                                        <th> Owner</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody data-bind="foreach: scenarioListPaginated">
+                                                    <tr class="scenario-row" 
+                                                        data-bind="attr: {'data-original-title': description}, 
+                                                                click: $parent.selectFeature, 
+                                                                css: {'active': $data === $parent.selectedFeature() }">
+                                                        <td class="scenario-name">
+                                                            <span data-bind="visible: expired()">
+                                                                <i class="icon-exclamation-sign"></i>
+                                                            </span>
+                                                            <span data-bind="visible: !done()">
+                                                                <i class="icon-refresh"></i>
+                                                            </span>
+                                                            <span data-bind="text: name"> </span>
+                                                        </td>
+                                                        <td data-bind="text: date_modified"></td>
+                                                        <td data-bind="text: description().substr(0,77) + '...'"></td>
+                                                        <td> <span data-bind="text: user_fullname"></span>
+                                                            <span data-bind="visible: sharing_groups().length > 0">
+                                                                <i class="icon-share-alt"></i>
+                                                            </span>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                                </table>
+                                            </div>
+                                            <div data-bind="if: scenarioList().length, visible: scenarioList().length > listDisplayCount">
+                                                <div class="pagination">
+                                                    <ul data-bind="foreach: paginationList">
+                                                    <li data-bind="click: $parent.setListIndex, 
+                                                                    css: { 'active': $parent.listStart() === listIndex, 'disabled': displayIndex === '...' }">
+                                                        <a href="#" data-bind="text: displayIndex, attr: { title: listIndex }"></a>
+                                                    </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                            <div>
+                                                <button href="#" class="btn btn-primary" 
+                                                    data-bind="click: addScenarioStart, visible: dataMode() == 'manage'">
+                                                <i class="icon-plus-sign icon-white"></i> Create New Scenario
+                                                <span data-bind="visible: !formLoadComplete()"><img alt="loading" src="/media/img/ajax-loader.gif"/></span>
+                                                </button>
+                                            </div>
+                                        </div> <!-- end showScenarioList -->
+                                        <div class="span12" data-bind="visible: selectedFeature" style="margin-left:0;">
                                         <div class="scenario-detail" data-bind="with: selectedFeature">
                                             <div class="row-fluid">
                                             <div class="btn-group pull-left">
@@ -162,6 +164,23 @@
                                         </div>
                                       </div>
                                     </div>
+                                    <div class="row-fluid" data-bind="visible: showScenarioFormPanel">
+                                        <div class="span12 well">
+                                            <div class="pull-right">
+                                                <button href="#" class="btn" data-bind="click: cancelAddScenario">
+                                                <i class="icon-white icon-trash"></i> Cancel
+                                                </button>
+                                                <button href="#" class="btn btn-primary" data-bind="click: saveScenarioForm">
+                                                <i class="icon-file icon-white"></i> Run Scenario
+                                                <span data-bind="visible: !formSaveComplete()"><img alt="loading" src="/media/img/ajax-loader.gif"/></span>
+                                                </button>
+                                                <div class="alert alert-error" data-bind="visible: formSaveError">
+                                                    <p><strong> Error: could not save the scenario!</strong></p>
+                                                </div>
+                                            </div>
+                                            <div id="scenarios-form-container" class="form-panel"></div>
+                                        </div>
+                                    </div>
                                     {% else %}
                                     <!-- /////////// User not authenticated ///////////////// -->
                                     <div> 
@@ -174,23 +193,6 @@
                                 </div> <!-- end scenario tab content -->
                             </div> <!-- end tab content -->
                         </div>  <!-- end tabable -->
-                  </div>
-                  <div class="row-fluid" data-bind="visible: showScenarioFormPanel">
-                      <div class="span12 well">
-                        <div class="pull-right">
-                            <button href="#" class="btn" data-bind="click: cancelAddScenario">
-                              <i class="icon-white icon-trash"></i> Cancel
-                            </button>
-                            <button href="#" class="btn btn-primary" data-bind="click: saveScenarioForm">
-                              <i class="icon-file icon-white"></i> Run Scenario
-                              <span data-bind="visible: !formSaveComplete()"><img alt="loading" src="/media/img/ajax-loader.gif"/></span>
-                            </button>
-                            <div class="alert alert-error" data-bind="visible: formSaveError">
-                                <p><strong> Error: could not save the scenario!</strong></p>
-                            </div>
-                        </div>
-                        <div id="scenarios-form-container" class="form-panel"></div>
-                      </div>
                   </div>
                 </div>
               </div> <!-- no properties -->

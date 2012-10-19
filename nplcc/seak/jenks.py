@@ -55,9 +55,7 @@ def get_jenks_breaks( dataList, numClass ):
 
     countNum = numClass
     while countNum >= 2:
-        #print "rank = " + str(mat1[k][countNum])
         id = int((mat1[k][countNum]) - 2)
-        #print "val = " + str(dataList[id])
 
         kclass[countNum - 1] = dataList[id]
         k = int((mat1[k][countNum] - 1))

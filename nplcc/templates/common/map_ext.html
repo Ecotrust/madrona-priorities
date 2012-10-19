@@ -13,10 +13,11 @@
                                 <li class="active">
                                     <a href="#data-tab-content" id="data-tab" data-toggle="tab">Data</a>
                                 </li>
-                                <li>
-                                <a href="#scenario-tab-content" id="scenario-tab" 
-                                    data-toggle="tab"><span data-bind="visible: dataMode() == 'manage'">Scenarios</span><span 
-                                    data-bind="visible: dataMode() == 'shared'">Shared Scenarios</span></a> 
+                                <li data-bind="click: switchMode.bind($data, 'manage')"> 
+                                    <a href="#scenario-tab-content" id="scenario-tab" data-toggle="tab">Scenarios</a>
+                                </li>
+                                <li data-bind="click: switchMode.bind($data, 'shared')"> 
+                                    <a href="#scenario-tab-content" id="shared-scenario-tab" data-toggle="tab">Shared</a>
                                 </li>
                             </ul>
                             <div class="tab-content">

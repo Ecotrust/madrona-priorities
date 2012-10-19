@@ -96,6 +96,10 @@ function scenariosViewModel() {
   });
 
   self.switchMode = function(mode) {
+    if (self.dataMode() == mode) {
+        // no need to switch or reload
+        return;
+    };
     self.dataMode(mode);
     self.selectedFeature(false);
     self.showScenarioList(true);

@@ -388,7 +388,7 @@ class Scenario(Analysis):
         weighted_costs = {}
         for costkey, costs in raw_costs.iteritems():
             if None in costs:
-                print "Warning: skipping ", costkey, "; contains nulls in this geography"
+                logger.debug("Warning: skipping ", costkey, "; contains nulls in this geography")
                 continue
             weighted_costs[costkey] = [x * final_cost_weights[costkey] for x in scale_list(costs)]
         final_costs = [sum(x) for x in zip(*weighted_costs.values())] 
@@ -521,10 +521,6 @@ class Scenario(Analysis):
             scaled_costs[costslug] = pucosts
             scaled_breaks[costslug] = get_jenks_breaks(scaled_values, 3)
 
-        print 
-        print scaled_breaks
-        print
-
         for pu in bestpus:
             centroid = pu.centroid 
             costs = {}
@@ -540,13 +536,6 @@ class Scenario(Analysis):
                     costs_class[cname] = 'high'
                 else:
                     costs_class[cname] = 'med' 
-
-	    print 
-            print pu
-	    print costs
-	    print costs_class
-	    print
-
 
             best.append({'name': pu.name, 
                          'fid': pu.fid, 

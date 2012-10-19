@@ -137,6 +137,7 @@ div.tab-content-show {
     float:right;
     text-align:left;
     font-size: 85%;
+    font-weight: bold;
     width: 252px;
     margin: 6px;
     margin-left: 46px;
@@ -268,4 +269,7 @@ ul.map-legend-group {
 }
 ul#map-legend-attr { 
     display:none;
+}
+.alert-info {
+    background-color: #013435;
 }

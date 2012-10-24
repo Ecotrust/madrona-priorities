@@ -16,10 +16,8 @@
     border-radius: 0 0 4px 4px;
 
     /* Inspect the nav-tabs element of the current theme and copy */
-    background-color: #A2CDB5;
-    /*
-    border: 1px solid #DDD;
-    */
+    background-color: white;
+    border: solid 1px #dddddd; 
     /* end copy */
 
     cursor: default;

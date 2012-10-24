@@ -23,9 +23,8 @@
                             <div class="tab-content">
                                 <div id="data-tab-content" class="tab-pane active"> 
                                     <div>{% flatblock "pre-layer-list" 3600 %}</div>
-                                    <div class="well">
+                                    <div class="">
                                         <div>{% include "layer_manager/data.html" %}</div>
-                                        <hr/>
                                         <div id="map-legend">
                                             <ul id="map-legend-scenario" class="map-legend-group">
                                                 <p> {% flatblock "show-planning-units" 3600 %} </p>
@@ -78,10 +77,10 @@
                                             <div data-bind="if: !scenarios.scenarioLoadComplete()" style="text-align: center"> 
                                                 <img alt="loading" src="/media/img/ajax-loader.gif"/> 
                                             </div>
-                                            <div data-bind="if: scenarios.scenarioLoadComplete() && scenarios.scenarioList().length == 0 && dataMode() == 'manage'"> 
+                                            <div data-bind="if: scenarios.scenarioLoadComplete() && scenarios.scenarioList().length == 0 && scenarios.dataMode() == 'manage'"> 
                                                 <p>{% flatblock "new-manage-scenario" 3600 %}</p>
                                             </div>
-                                            <div data-bind="if: scenarios.scenarioLoadComplete() && scenarios.scenarioList().length == 0 && dataMode() == 'shared'"> 
+                                            <div data-bind="if: scenarios.scenarioLoadComplete() && scenarios.scenarioList().length == 0 && scenarios.dataMode() == 'shared'"> 
                                                 <p>{% flatblock "new-share-scenario" 3600 %}</p>
                                             </div>
                                             <div class="alert alert-error" data-bind="visible: scenarios.scenarioLoadError">

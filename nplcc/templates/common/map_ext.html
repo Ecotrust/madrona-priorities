@@ -22,56 +22,49 @@
                             </ul>
                             <div class="tab-content">
                                 <div id="data-tab-content" class="tab-pane active"> 
-                                    <div class="row-fluid">
-                                        <div class="span6">{% flatblock "pre-layer-list" 3600 %}</div>
-                                        <div class="span6 well">
-                                            <h5>Layers</h5>
-                                            <!--
-                                            <div id="layerswitcher"> </div>
-                                            -->
-                                            <div>{% include "layer_manager/data.html" %}</div>
-                                            <hr/>
-                                            <h5>Legend</h5>
-                                            <div id="map-legend">
-                                                <ul id="map-legend-scenario" class="map-legend-group">
-                                                    <p> {% flatblock "show-planning-units" 3600 %} </p>
-                                                    <li id="map-legend-item-scenario-on" class="legend-scenario legend-item">
-                                                        <span class="legend-box" style="background-color:yellow"></span>
-                                                        {% flatblock "legend-included" 3600 %}
-                                                    </li>
-                                                    <li id="map-legend-item-scenario-potential" class="legend-scenario legend-item">
-                                                        <span class="legend-box" style="background-color:grey"></span>
-                                                        {% flatblock "legend-potential" 3600 %}
-                                                    </li>
-                                                    <li id="map-legend-item-scenario-off" class="legend-item">
-                                                        <span class="legend-box" style="background-color:white;"></span>
-                                                        {% flatblock "legend-allpus" 3600 %}
-                                                    </li>
-                                                </ul>
-                                                <ul id="map-legend-attr" class="map-legend-group">
-                                                    <p> {% flatblock "legend-relative-value" 3600 %} </p>
-                                                    <li class="legend-item">
-                                                        <span class="legend-box" style="background-color:#CC4C02;"></span>
-                                                        High
-                                                    </li>
-                                                    <li class="legend-item">
-                                                        <span class="legend-box" style="background-color:#FE9929;"></span>
-                                                        Medium
-                                                    </li>
-                                                    <li class="legend-item">
-                                                        <span class="legend-box" style="background-color:#FED98E;"></span>
-                                                        Low
-                                                    </li>
-                                                    <li class="legend-item">
-                                                        <span class="legend-box" style="background-color:#FFFFD4;"></span>
-                                                        Very Low/None
-                                                    </li>
-                                                    <li class="legend-item">
-                                                        <span class="legend-box" style="background-color:white;"></span>
-                                                        No Data
-                                                    </li>
-                                                </ul>
-                                            </div>
+                                    <div>{% flatblock "pre-layer-list" 3600 %}</div>
+                                    <div class="well">
+                                        <div>{% include "layer_manager/data.html" %}</div>
+                                        <hr/>
+                                        <div id="map-legend">
+                                            <ul id="map-legend-scenario" class="map-legend-group">
+                                                <p> {% flatblock "show-planning-units" 3600 %} </p>
+                                                <li id="map-legend-item-scenario-on" class="legend-scenario legend-item">
+                                                    <span class="legend-box" style="background-color:yellow"></span>
+                                                    {% flatblock "legend-included" 3600 %}
+                                                </li>
+                                                <li id="map-legend-item-scenario-potential" class="legend-scenario legend-item">
+                                                    <span class="legend-box" style="background-color:grey"></span>
+                                                    {% flatblock "legend-potential" 3600 %}
+                                                </li>
+                                                <li id="map-legend-item-scenario-off" class="legend-item">
+                                                    <span class="legend-box" style="background-color:white;"></span>
+                                                    {% flatblock "legend-allpus" 3600 %}
+                                                </li>
+                                            </ul>
+                                            <ul id="map-legend-attr" class="map-legend-group">
+                                                <p> {% flatblock "legend-relative-value" 3600 %} </p>
+                                                <li class="legend-item">
+                                                    <span class="legend-box" style="background-color:#CC4C02;"></span>
+                                                    High
+                                                </li>
+                                                <li class="legend-item">
+                                                    <span class="legend-box" style="background-color:#FE9929;"></span>
+                                                    Medium
+                                                </li>
+                                                <li class="legend-item">
+                                                    <span class="legend-box" style="background-color:#FED98E;"></span>
+                                                    Low
+                                                </li>
+                                                <li class="legend-item">
+                                                    <span class="legend-box" style="background-color:#FFFFD4;"></span>
+                                                    Very Low/None
+                                                </li>
+                                                <li class="legend-item">
+                                                    <span class="legend-box" style="background-color:white;"></span>
+                                                    No Data
+                                                </li>
+                                            </ul>
                                         </div>
                                     </div>
 
@@ -336,78 +329,21 @@
   
     <iframe id="download-iframe" src="" style="display:none; visibility:hidden"></iframe>
 
-
-
-
-
-
     <script type="text/javascript">
     var app = {
         // TODO document global namespace app.viewModel.blah
         viewModel: {
-            scenarios: new scenariosViewModel(),  // TODO  change all app.scenarios.viewModel to app.viewModel.scenarios
-            progress: null, // TODO change all app.scenarios.progressViewModel to app.viewModel.progress
+            scenarios: new scenariosViewModel(), 
+            progress: null,
         },
-        timer: null // TODO app.scenarios.timer to app.timer
+        utils: {},
+        updateUrl: function() { /* change url hash */ },
     };
     </script>
 
-    <!-- TODO data_maanger -->
     <script src="/media/layer_manager/js/map.js"></script>
-    <script type="text/javascript">
-
-
-
-
-
-
-
-
-    </script>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    <script src="/media/layer_manager/js/models.js"></script>
+    <script src="/media/layer_manager/js/load.js"></script>
 
     <script>
     handleWorkspace = function (data) {
@@ -425,12 +361,16 @@
       map.render('map');
     };
     
+    app.timer = null; 
+
     $(document).ready(function () {
       ko.applyBindings(app.viewModel); //, document.getElementById('scenario-html'));
       {% if user.is_authenticated %}
         app.viewModel.scenarios.loadScenarios();
       {% endif %}
       init_map();
+      app.utils.initMap(map);
+      app.viewModel.layers.loadLayersFromServer();
       app.onResize();
       $(window).resize(app.onResize);
       $("#info").hide();

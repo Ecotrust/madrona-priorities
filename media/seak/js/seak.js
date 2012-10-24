@@ -42,15 +42,18 @@ function init_map() {
 
     map = new OpenLayers.Map({
         div: "map",
+        //div: null,
         projection: "EPSG:900913",
         displayProjection: "EPSG:4326",
         controls: [
             new OpenLayers.Control.Navigation(),
             new OpenLayers.Control.Zoom(),
-            new OpenLayers.Control.Attribution(),
+            new OpenLayers.Control.Attribution()
+            /*
             new OpenLayers.Control.LayerSwitcher({
                 'div': OpenLayers.Util.getElement('layerswitcher')
             })
+            */
         ],
         //zoom: 6,
         minZoomLevel: 6,

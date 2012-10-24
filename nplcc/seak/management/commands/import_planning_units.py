@@ -4,7 +4,9 @@ from seak.models import ConservationFeature, PlanningUnit, Cost, PuVsCf, PuVsCos
 from django.contrib.gis.utils import LayerMapping
 from django.contrib.gis.gdal import DataSource
 from django.template.defaultfilters import slugify
+from django.core.management import call_command
 from seak.jenks import get_jenks_breaks
+from madrona.layer_manager.models import Layer, Theme 
 import json
 
 def find_possible(key, possible):
@@ -291,7 +293,7 @@ class Command(BaseCommand):
             vals = [x for x in vals if x >= 0 ]
             breaks = sorted(get_jenks_breaks(vals, 4))
             breaks = [0.000001 if x == 0.0 else x for x in breaks]
-            print fieldname, breaks, min(vals), max(vals)
+            #print fieldname, breaks, min(vals), max(vals)
             extra_rules = """
                 <Rule>
                     <Filter>([%(fieldname)s] &gt;= %(b3)f)</Filter>
@@ -322,11 +324,37 @@ class Command(BaseCommand):
                 }
                 cfg["layers"][fieldname] = lyrcfg
 
-
         with open(os.path.join(settings.TILE_CONFIG_DIR, 'tiles.cfg'), 'w') as fh:
             print "  writing tiles.cfg"
             fh.write(json.dumps(cfg))
 
+        print 
+        print "Populating theme and layers for the layer manager"
+        Theme.objects.all().delete()
+        Layer.objects.all().delete()
+        call_command('loaddata','base_layers')
+
+        for cf in cfs_with_fields:
+            url = "/tiles/%s/${z}/${x}/${y}.png" % cf.dbf_fieldname
+            print " ",url
+            theme_name = cf.level1
+            theme, created = Theme.objects.get_or_create(name=theme_name, display_name=theme_name)
+            desc = cf.metric
+            lyr = Layer.objects.create(name=cf.name, layer_type="XYZ", url=url, opacity=1.0, description=desc)
+            lyr.themes.add(theme)
+            lyr.save()
+
+        theme_name = "Costs"
+        theme, created = Theme.objects.get_or_create(name=theme_name, display_name=theme_name)
+        for c in cs: 
+            url = "/tiles/%s/${z}/${x}/${y}.png" % c.dbf_fieldname
+            print " ",url
+            desc = c.desc
+            lyr = Layer.objects.create(name=c.name, layer_type="XYZ", url=url, opacity=1.0, description=desc)
+            lyr.themes.add(theme)
+            lyr.save()
+
+            
         print 
         print "Loading costs and conservation features associated with each planning unit"
         for feature in layer:

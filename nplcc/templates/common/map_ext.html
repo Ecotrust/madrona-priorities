@@ -320,8 +320,39 @@
                     <div id="info-title"></div>
                     <div id="info-content"></div>
                 </div>
-                <div>
+
+                <!-- ko with:layers -->
+                <style>
+                    #description-overlay {
+                        bottom: 14px;
+                        margin: 2px;
+                        position: absolute;
+                        z-index: 1043;
+                        text-align: left;
+                        vertical-align: center;
+                        font-size: 90%;
+                        padding: 18px;
+                        background: white;
+                        background: rgba(255, 255, 255, .5);
+                        margin-right: 12px;
+                    }
+                </style>
+                <div id="description-overlay" style="display: none" data-bind="visible: showDescription()" >
+                    <div class="span11">
+                        <span class="title" data-bind="text: activeInfoLayer().name"></span> -- 
+                        <span class="text" data-bind="text: activeInfoLayer().description"></span>
+                        <span class="text">
+                            <a class="btn-mini btn" data-bind="attr: { href: activeInfoLayer().learn_link }" 
+                                target="_blank">Learn More...</a>
+                        </span>  
+                    </div>
+                    <div class="span1">
+                        <a href="#" style="margin-left: 10px; opacity: .6;" class="btn btn-mini pull-right close" 
+                            data-bind="click: closeDescription">X</a> 
+                    </div>
                 </div>
+                <!-- /ko -->
+
               <div id="map"></div>
             </div>
           </div>

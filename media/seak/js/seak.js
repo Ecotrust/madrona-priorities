@@ -186,72 +186,8 @@ function init_map() {
     selectGeographyControl.deactivate();
     map.addControls([selectFeatureControl, selectGeographyControl, keyboardControl]);
 
-    map.addLayers([terrain, imagery, pu_layer, pu_tiles, pu_utfgrid, markers]);
+    map.addLayers([terrain, pu_layer, pu_tiles, pu_utfgrid, markers]);  // must have at least one base layer
     map.getLayersByName("Markers")[0].setZIndex(9999);
-
-    var lookup_url = "/seak/field_lookup.json";
-    var fieldLookup;
-    $('<div><input type="checkbox" id="layer-select-toggle"></input></div>')
-        .appendTo('#layerswitcher')
-        .attr("id", "layer-select-div");
-    var sel = $('<select>').appendTo('#layer-select-div').attr("id","layer-select");
-    sel.append($("<option>").attr('value','').text('.. Select attribute to map ..'));
-    var xhr = $.ajax({
-        url: lookup_url, 
-        cache: true,
-        dataType: 'json', 
-        success: function(data) { 
-            fieldLookup = data; 
-            $.each(data, function(dbf_fieldname, realname) {
-                map.addLayer( 
-                    new OpenLayers.Layer.OSM( realname,
-                        "/tiles/" + dbf_fieldname + "/${z}/${x}/${y}.png",
-                        { visibility: false, 
-                          sphericalMercator: true, 
-                          displayInLayerSwitcher: false, 
-                          attribution: "",
-                          isBaseLayer: false } 
-                    )
-                );
-                sel.append($("<option>").attr('value',realname).text(realname));
-            });
-            // sort 'em
-            var my_options = $("select#layer-select option");
-            my_options.sort(function(a,b) {
-                if (a.text > b.text) return 1;
-                else if (a.text < b.text) return -1;
-                else return 0;
-            });
-            sel.empty().append( my_options );
-        }
-    })
-    .error( function() { 
-        fieldLookup = null; 
-    });
-   
-    // when the dropdown changes, tell openlayers
-    var switchLayer = function() {
-        var lyrname;
-        $.each($("select#layer-select option"), function(k,v) {
-            lyrname = $(v).val();
-            if (lyrname !== '')
-                map.getLayersByName(lyrname)[0].setVisibility(false);
-        });
-        lyrname = $("select#layer-select option:selected").val();
-        if (lyrname !== '' && $('#layer-select-toggle').prop('checked')) {
-            map.getLayersByName(lyrname)[0].setVisibility(true);
-            map.getLayersByName('Planning Unit Highlight')[0].setVisibility(false);
-            $('.map-legend-group').hide();
-            $('#map-legend-attr').show();
-        } else {
-            map.getLayersByName('Planning Unit Highlight')[0].setVisibility(true);
-            $('.map-legend-group').hide();
-            $('#map-legend-scenario').show();
-        }
-    }
-
-    $('#layer-select-toggle').bind('change', switchLayer);
-    sel.bind('change', switchLayer);
 
     var sortByKeys = function(obj) {
         var tmpObj = {};

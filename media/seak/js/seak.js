@@ -134,12 +134,12 @@ function init_map() {
                 pu_layer.addFeatures(feats);
             } catch(err) {
                 console.log(err.message);
-                app.scenarios.viewModel.planningUnitsLoadError(true);
+                app.viewModel.scenarios.planningUnitsLoadError(true);
             }
         }
     })
-    .error(function() { app.scenarios.viewModel.planningUnitsLoadError(true); })
-    .complete(function() { app.scenarios.viewModel.planningUnitsLoadComplete(true); });
+    .error(function() { app.viewModel.scenarios.planningUnitsLoadError(true); })
+    .complete(function() { app.viewModel.scenarios.planningUnitsLoadComplete(true); });
 
     map.isValidZoomLevel = function(zoomLevel) {
         // Why is this even necessary OpenLayers?.. grrr

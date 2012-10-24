@@ -9,14 +9,14 @@ function progressViewModel() {
     clearInterval(app.timer);
     app.timer = null;
     if (scenario_uid) {
-        app.scenarios.viewModel.loadScenarios(scenario_uid);
+        app.viewModel.scenarios.loadScenarios(scenario_uid);
     }
     self.done(true);
   };
   self.checkTimer = function() {
     var checkProgress = function () {
         var url = $('#selected_progress_url').attr('value');
-        var selected = app.scenarios.viewModel.selectedFeature();
+        var selected = app.viewModel.scenarios.selectedFeature();
         if (!selected) {
             clearInterval(app.timer);
             app.timer = null; 
@@ -27,7 +27,7 @@ function progressViewModel() {
                 self.progressHtml(data.html);
                 if (data.error == 1) {
                     self.error(true);
-                    app.scenarios.viewModel.selectedFeature().error(true);
+                    app.viewModel.scenarios.selectedFeature().error(true);
                     // stop timer without declaring done
                     clearInterval(app.timer);
                     app.timer = null;
@@ -35,7 +35,7 @@ function progressViewModel() {
                 var pct = parseInt((data.complete / data.total) * 100.0, 10);
                 self.progressBarWidth(pct + "%");
                 if (pct >= 100) {
-                    uid = app.scenarios.viewModel.selectedFeature().uid();
+                    uid = app.viewModel.scenarios.selectedFeature().uid();
                     self.triggerDone(uid);
                 }
             });
@@ -103,6 +103,7 @@ function scenariosViewModel() {
     self.dataMode(mode);
     self.selectedFeature(false);
     self.showScenarioList(true);
+    self.cancelAddScenario();
     self.loadScenarios();
   };
   
@@ -439,12 +440,12 @@ function scenariosViewModel() {
           var elem = document.getElementById('scenario-show-container');
           ko.cleanNode(elem);
           $('#scenario-show-container').empty().append(data);
-          app.scenarios.progressViewModel = null;
+          app.viewModel.progress = null;
           clearInterval(app.timer);
           app.timer = null;
-          app.scenarios.progressViewModel = new progressViewModel();
-          ko.applyBindings(app.scenarios.progressViewModel, elem);
-          app.scenarios.progressViewModel.checkTimer();
+          app.viewModel.progress = new progressViewModel();
+          ko.applyBindings(app.viewModel.progress, elem);
+          app.viewModel.progress.checkTimer();
         })
         .error(function() { self.reportLoadError(true); })
         .complete(function() { self.reportLoadComplete(true); });

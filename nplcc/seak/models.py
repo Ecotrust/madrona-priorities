@@ -216,7 +216,7 @@ def scale_list(vals, floor=None):
         return []
     nonull_vals = []
     for v in vals:
-        if v:
+        if v is not None:
             nonull_vals.append(v)
         else:
             logger.error("WARNING: null value enountered in a scaled list: assuming zero!")

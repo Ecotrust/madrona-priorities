@@ -17,10 +17,12 @@
 
     /* Inspect the nav-tabs element of the current theme and copy */
     background-color: #A2CDB5;
+    /*
     border: 1px solid #DDD;
-    cursor: default;
+    */
     /* end copy */
 
+    cursor: default;
     border-top: 0;
 }
 .well {
@@ -125,11 +127,8 @@ div.tab-content-show {
     height: 430px;
 }
 #layerswitcher {
-    float:right;
     text-align:left;
-    margin-top: 2px;
-    background:#FFF; /* fallback for browser that not support rgba */
-    background: rgba(255,255,255, .5); /* Works on all modern browsers */
+    margin: 4px;
 }
 #watershed-name {
     position: absolute; 
@@ -239,16 +238,11 @@ a.ui-state-focus {
     outline-width: 0px !important;
 }
 #map-legend {
-    bottom: 12px;
-    margin: 2px;
-    position: absolute; 
     z-index: 1043;
     text-align:left;
     vertical-align:center;
     font-size: 85%;
-    padding: 4px;
-    background:#FFF; /* fallback for browser that not support rgba */
-    background: rgba(255,255,255, .5); /* Works on all modern browsers */
+    margin: 4px;
 }
 .legend-box {
     display: inline-block;

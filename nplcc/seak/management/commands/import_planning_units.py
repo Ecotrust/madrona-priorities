@@ -339,7 +339,7 @@ class Command(BaseCommand):
             print " ",url
             theme_name = cf.level1
             theme, created = Theme.objects.get_or_create(name=theme_name, display_name=theme_name)
-            desc = cf.metric
+            desc = cf.units
             lyr = Layer.objects.create(name=cf.name, layer_type="XYZ", url=url, opacity=1.0, description=desc)
             lyr.themes.add(theme)
             lyr.save()

@@ -219,12 +219,12 @@ class Command(BaseCommand):
     <Style name="pu" filter-mode="first">
         %(extra_rules)s
         <Rule>
-            <PolygonSymbolizer fill="#ffffff" fill-opacity="0.2" />
+            <PolygonSymbolizer fill="#ffffff" fill-opacity="0.0" />
         </Rule>
     </Style>
     <Style name="pu-outline" filter-mode="first">
         <Rule>
-            <LineSymbolizer stroke="#444444" stroke-width="0.5" stroke-opacity="1" stroke-linejoin="round" />
+            <LineSymbolizer stroke="#222222" stroke-width="0.5" stroke-opacity="1" stroke-linejoin="round" />
         </Rule>
     </Style>
     <Layer name="layer" srs="&google_mercator;">
@@ -297,19 +297,19 @@ class Command(BaseCommand):
             extra_rules = """
                 <Rule>
                     <Filter>([%(fieldname)s] &gt;= %(b3)f)</Filter>
-                    <PolygonSymbolizer fill="#CC4C02" fill-opacity="0.7" />
+                    <PolygonSymbolizer fill="#CC4C02" fill-opacity="1.0" />
                 </Rule>
                 <Rule>
                     <Filter>([%(fieldname)s] &gt;= %(b2)f)</Filter>
-                    <PolygonSymbolizer fill="#FE9929" fill-opacity="0.7" />
+                    <PolygonSymbolizer fill="#FE9929" fill-opacity="1.0" />
                 </Rule>
                 <Rule>
                     <Filter>([%(fieldname)s] &gt;= %(b1)f)</Filter>
-                    <PolygonSymbolizer fill="#FED98E" fill-opacity="0.7" />
+                    <PolygonSymbolizer fill="#FED98E" fill-opacity="1.0" />
                 </Rule>
                 <Rule>
                     <Filter>([%(fieldname)s] &gt;= 0)</Filter>
-                    <PolygonSymbolizer fill="#FFFFD4" fill-opacity="0.7" />
+                    <PolygonSymbolizer fill="#FFFFD4" fill-opacity="1.0" />
                 </Rule>
             """ % {"fieldname": fieldname, 'b1': breaks[1], 'b2': breaks[2], 'b3': breaks[3]}
             xml = xml_template % {'shppath': os.path.abspath(fullres_shp), 'extra_rules': extra_rules} 

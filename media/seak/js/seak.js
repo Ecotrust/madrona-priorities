@@ -72,13 +72,6 @@ function init_map() {
          attribution: "National Geographic, Esri, DeLorme, NAVTEQ, UNEP-WCMC, USGS, NASA, ESA, METI, NRCAN, GEBCO, NOAA, iPC" } 
     );
 
-    var imagery = new OpenLayers.Layer.XYZ( "ESRI Imagery",
-        "http://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/${z}/${y}/${x}",
-        {sphericalMercator: true,
-         opacity: 0.75,
-         attribution: "Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, and the GIS User Community" } 
-    );
-
     var pu_utfgrid = new OpenLayers.Layer.UTFGrid({
          url: "/tiles/utfgrid/${z}/${x}/${y}.json",
          utfgridResolution: 4,
@@ -87,6 +80,7 @@ function init_map() {
         } 
     );
 
+    /*
     var pu_tiles = new OpenLayers.Layer.OSM( "Planning Units",
         "/tiles/planning_units/${z}/${x}/${y}.png",
         {
@@ -95,6 +89,7 @@ function init_map() {
          isBaseLayer: false
         } 
     );
+    */
 
     var myStyles = new OpenLayers.StyleMap({
         "default": new OpenLayers.Style({
@@ -186,7 +181,7 @@ function init_map() {
     selectGeographyControl.deactivate();
     map.addControls([selectFeatureControl, selectGeographyControl, keyboardControl]);
 
-    map.addLayers([terrain, pu_layer, pu_tiles, pu_utfgrid, markers]);  // must have at least one base layer
+    map.addLayers([terrain, pu_layer, pu_utfgrid, markers]);  // must have at least one base layer
     map.getLayersByName("Markers")[0].setZIndex(9999);
 
     var lookup_url = "/seak/field_lookup.json";

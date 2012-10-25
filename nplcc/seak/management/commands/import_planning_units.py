@@ -358,6 +358,22 @@ class Command(BaseCommand):
             lyr.themes.add(theme)
             lyr.save()
 
+        # planning unit boundaries
+        url = "/tiles/planning_units/${z}/${x}/${y}.png"
+        legend = "/media/legends/planning_units.png"
+        name = "Planning Units"
+        print " ",url
+        theme_name = "Base"
+        try:
+            theme = Theme.objects.get(display_name=theme_name)
+        except Theme.DoesNotExist:
+            theme = Theme.objects.create(name=theme_name, display_name=theme_name)
+
+        desc = "Planning unit boundaries"
+        lyr = Layer.objects.create(name=name, layer_type="XYZ", url=url, default_on=True,
+                opacity=1.0, description=desc, legend=legend, legend_title=name)
+        lyr.themes.add(theme)
+        lyr.save()
             
         print 
         print "Loading costs and conservation features associated with each planning unit"

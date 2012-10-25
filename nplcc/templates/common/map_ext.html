@@ -339,7 +339,6 @@
                         z-index: 1043;
                         text-align: left;
                         vertical-align: center;
-                        font-size: 90%;
                         padding: 18px;
                         background: white;
                         background: rgba(162, 205, 181, 0.8);
@@ -374,39 +373,44 @@
     <script src="/media/layer_manager/js/knockout-bindings.js"></script>
 
     <script>
-    handleWorkspace = function (data) {
-      app.workspace = data;
-      app.workspaceUtil = new madrona.features.workspace(data); 
-    };
-    {% if user.is_authenticated %}
-    $.get('/features/{{user.username}}/workspace-owner.json', handleWorkspace);
-    {% else %}
-    $.get('/features/workspace-public.json', handleWorkspace);
-    {% endif %}
+        handleWorkspace = function (data) {
+            app.workspace = data;
+            app.workspaceUtil = new madrona.features.workspace(data); 
+        };
 
-    app.onResize = function () {
-      $("#map").height($(window).height() - 78);
-      map.render('map');
-    };
-    
-    app.timer = null; 
+        {% if user.is_authenticated %}
+            $.get('/features/{{user.username}}/workspace-owner.json', handleWorkspace);
+        {% else %}
+            $.get('/features/workspace-public.json', handleWorkspace);
+        {% endif %}
 
-    $(document).ready(function () {
-      ko.applyBindings(app.viewModel); //, document.getElementById('scenario-html'));
-      {% if user.is_authenticated %}
-        app.viewModel.scenarios.loadScenarios();
-      {% endif %}
-      init_map();
-      app.utils.initMap(map);
-      app.viewModel.layers.loadLayersFromServer();
-      app.onResize();
-      $(window).resize(app.onResize);
-      $("#info").hide();
-      $("#info-close").click( function(e) { 
-        e.preventDefault();
-        $('#info').hide();
-      });
-    });
+        app.onResize = function () {
+            $("#map").height($(window).height() - 78);
+            map.render('map');
+        };
+        
+        app.timer = null; 
+
+        $(document).ready(function () {
+            ko.applyBindings(app.viewModel); //, document.getElementById('scenario-html'));
+
+            {% if user.is_authenticated %}
+                app.viewModel.scenarios.loadScenarios();
+            {% endif %}
+
+            init_map();
+            app.utils.initMap(map);
+            app.viewModel.layers.loadLayersFromServer().done( function() {
+                /* do whatever needs to be done after layers are loaded */
+            });
+            app.onResize();
+            $(window).resize(app.onResize);
+            $("#info").hide();
+            $("#info-close").click( function(e) { 
+                e.preventDefault();
+                $('#info').hide();
+            });
+        });
     </script>
 {% endblock content %}
 

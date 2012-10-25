@@ -513,7 +513,7 @@ cite {
   color: #817b58;
 }
 .text-success {
-  color: #014238;
+  color: #02a78f;
 }
 h1,
 h2,
@@ -1161,19 +1161,19 @@ input[type="checkbox"][readonly] {
 .control-group.success > label,
 .control-group.success .help-block,
 .control-group.success .help-inline {
-  color: #014238;
+  color: #02a78f;
 }
 .control-group.success .checkbox,
 .control-group.success .radio,
 .control-group.success input,
 .control-group.success select,
 .control-group.success textarea {
-  color: #014238;
+  color: #02a78f;
 }
 .control-group.success input,
 .control-group.success select,
 .control-group.success textarea {
-  border-color: #014238;
+  border-color: #02a78f;
   -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
   -moz-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
   box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
@@ -1181,16 +1181,16 @@ input[type="checkbox"][readonly] {
 .control-group.success input:focus,
 .control-group.success select:focus,
 .control-group.success textarea:focus {
-  border-color: #000f0d;
-  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 6px #02a78f;
-  -moz-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 6px #02a78f;
-  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 6px #02a78f;
+  border-color: #017464;
+  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 6px #12fcdb;
+  -moz-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 6px #12fcdb;
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 6px #12fcdb;
 }
 .control-group.success .input-prepend .add-on,
 .control-group.success .input-append .add-on {
-  color: #014238;
+  color: #02a78f;
   background-color: #ccddbb;
-  border-color: #014238;
+  border-color: #02a78f;
 }
 .control-group.info > label,
 .control-group.info .help-block,
@@ -3119,7 +3119,7 @@ input[type="submit"].btn.btn-mini {
 .alert-success {
   background-color: #ccddbb;
   border-color: #c6d4aa;
-  color: #014238;
+  color: #02a78f;
 }
 .alert-danger,
 .alert-error {
@@ -4493,11 +4493,11 @@ a.badge:hover {
 }
 .label-success,
 .badge-success {
-  background-color: #014238;
+  background-color: #02a78f;
 }
 .label-success[href],
 .badge-success[href] {
-  background-color: #000f0d;
+  background-color: #017464;
 }
 .label-info,
 .badge-info {

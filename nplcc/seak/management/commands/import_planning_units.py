@@ -336,11 +336,13 @@ class Command(BaseCommand):
 
         for cf in cfs_with_fields:
             url = "/tiles/%s/${z}/${x}/${y}.png" % cf.dbf_fieldname
+            legend = "/media/legends/relative_value.png"
             print " ",url
             theme_name = cf.level1
             theme, created = Theme.objects.get_or_create(name=theme_name, display_name=theme_name)
             desc = cf.units
-            lyr = Layer.objects.create(name=cf.name, layer_type="XYZ", url=url, opacity=1.0, description=desc)
+            lyr = Layer.objects.create(name=cf.name, layer_type="XYZ", url=url, 
+                    opacity=1.0, description=desc, legend=legend, legend_title=cf.name)
             lyr.themes.add(theme)
             lyr.save()
 
@@ -348,9 +350,11 @@ class Command(BaseCommand):
         theme, created = Theme.objects.get_or_create(name=theme_name, display_name=theme_name)
         for c in cs: 
             url = "/tiles/%s/${z}/${x}/${y}.png" % c.dbf_fieldname
+            legend = "/media/legends/relative_value.png"
             print " ",url
             desc = c.desc
-            lyr = Layer.objects.create(name=c.name, layer_type="XYZ", url=url, opacity=1.0, description=desc)
+            lyr = Layer.objects.create(name=c.name, layer_type="XYZ", url=url, 
+                    opacity=1.0, description=desc, legend=legend, legend_title=c.name)
             lyr.themes.add(theme)
             lyr.save()
 

@@ -22,56 +22,22 @@
                                 <li>
                                     <a href="#active-tab-content" id="active-tab" data-toggle="tab">Active</a>
                                 </li>
+                                <li>
+                                    <a href="#legend-tab-content" id="legend-tab" data-toggle="tab">Legend</a>
+                                </li>
                             </ul>
                             <div class="tab-content">
                                 <div id="active-tab-content" class="tab-pane">
                                     <div>{% include "layer_manager/active.html" %}</div>
+                                </div>
+                                <div id="legend-tab-content" class="tab-pane">
+                                    <div>{% include "layer_manager/legend.html" %}</div>
                                 </div>
                                 <div id="data-tab-content" class="tab-pane active"> 
                                     <div>{% flatblock "pre-layer-list" 3600 %}</div>
                                     <div class="">
                                         <div>{% include "layer_manager/search.html" %}</div>
                                         <div>{% include "layer_manager/data.html" %}</div>
-                                        <div id="map-legend">
-                                            <ul id="map-legend-scenario" class="map-legend-group">
-                                                <p> {% flatblock "show-planning-units" 3600 %} </p>
-                                                <li id="map-legend-item-scenario-on" class="legend-scenario legend-item">
-                                                    <span class="legend-box" style="background-color:yellow"></span>
-                                                    {% flatblock "legend-included" 3600 %}
-                                                </li>
-                                                <li id="map-legend-item-scenario-potential" class="legend-scenario legend-item">
-                                                    <span class="legend-box" style="background-color:grey"></span>
-                                                    {% flatblock "legend-potential" 3600 %}
-                                                </li>
-                                                <li id="map-legend-item-scenario-off" class="legend-item">
-                                                    <span class="legend-box" style="background-color:white;"></span>
-                                                    {% flatblock "legend-allpus" 3600 %}
-                                                </li>
-                                            </ul>
-                                            <ul id="map-legend-attr" class="map-legend-group">
-                                                <p> {% flatblock "legend-relative-value" 3600 %} </p>
-                                                <li class="legend-item">
-                                                    <span class="legend-box" style="background-color:#CC4C02;"></span>
-                                                    High
-                                                </li>
-                                                <li class="legend-item">
-                                                    <span class="legend-box" style="background-color:#FE9929;"></span>
-                                                    Medium
-                                                </li>
-                                                <li class="legend-item">
-                                                    <span class="legend-box" style="background-color:#FED98E;"></span>
-                                                    Low
-                                                </li>
-                                                <li class="legend-item">
-                                                    <span class="legend-box" style="background-color:#FFFFD4;"></span>
-                                                    Very Low/None
-                                                </li>
-                                                <li class="legend-item">
-                                                    <span class="legend-box" style="background-color:white;"></span>
-                                                    No Data
-                                                </li>
-                                            </ul>
-                                        </div>
                                     </div>
 
                                     <p>{% flatblock "post-layer-list" 3600 %}</p>

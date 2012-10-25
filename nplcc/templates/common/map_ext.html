@@ -19,8 +19,14 @@
                                 <li data-bind="click: scenarios.switchMode.bind($data, 'shared')"> 
                                     <a href="#scenario-tab-content" id="shared-scenario-tab" data-toggle="tab">Shared</a>
                                 </li>
+                                <li>
+                                    <a href="#active-tab-content" id="active-tab" data-toggle="tab">Active</a>
+                                </li>
                             </ul>
                             <div class="tab-content">
+                                <div id="active-tab-content" class="tab-pane">
+                                    <div>{% include "layer_manager/active.html" %}</div>
+                                </div>
                                 <div id="data-tab-content" class="tab-pane active"> 
                                     <div>{% flatblock "pre-layer-list" 3600 %}</div>
                                     <div class="">
@@ -211,23 +217,27 @@
                                         <!-- /ko -->
                                       </div>
                                     </div>
-                                    <div class="row-fluid" data-bind="visible: scenarios.showScenarioFormPanel">
+                                    <!-- ko with: scenarios -->
+                                    <div class="row-fluid" data-bind="visible: showScenarioFormPanel">
                                         <div class="span12 well">
                                             <div class="pull-right">
-                                                <button href="#" class="btn" data-bind="click: scenarios.cancelAddScenario">
-                                                <i class="icon-white icon-trash"></i> Cancel
+                                                <button href="#" class="btn" data-bind="click: cancelAddScenario">
+                                                    <i class="icon-trash"></i> Cancel
                                                 </button>
-                                                <button href="#" class="btn btn-primary" data-bind="click: scenarios.saveScenarioForm">
-                                                <i class="icon-file icon-white"></i> Run Scenario
-                                                <span data-bind="visible: !scenarios.formSaveComplete()"><img alt="loading" src="/media/img/ajax-loader.gif"/></span>
+                                                <button href="#" class="btn btn-primary" data-bind="click: saveScenarioForm">
+                                                    <i class="icon-file icon-white"></i> Run Scenario
+                                                    <span data-bind="visible: !formSaveComplete()">
+                                                        <img alt="loading" src="/media/img/ajax-loader.gif"/>
+                                                    </span>
                                                 </button>
-                                                <div class="alert alert-error" data-bind="visible: scenarios.formSaveError">
+                                                <div class="alert alert-error" data-bind="visible: formSaveError">
                                                     <p><strong> Error: could not save the scenario!</strong></p>
                                                 </div>
                                             </div>
                                             <div id="scenarios-form-container" class="form-panel"></div>
                                         </div>
                                     </div>
+                                    <!-- /ko -->
                                     {% else %}
                                     <!-- /////////// User not authenticated ///////////////// -->
                                     <div> 
@@ -357,9 +367,11 @@
     };
     </script>
 
+    <!-- TODO document or put in include -->
     <script src="/media/layer_manager/js/map.js"></script>
     <script src="/media/layer_manager/js/models.js"></script>
     <script src="/media/layer_manager/js/load.js"></script>
+    <script src="/media/layer_manager/js/knockout-bindings.js"></script>
 
     <script>
     handleWorkspace = function (data) {

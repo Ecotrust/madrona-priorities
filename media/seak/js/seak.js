@@ -189,6 +189,20 @@ function init_map() {
     map.addLayers([terrain, pu_layer, pu_tiles, pu_utfgrid, markers]);  // must have at least one base layer
     map.getLayersByName("Markers")[0].setZIndex(9999);
 
+    var lookup_url = "/seak/field_lookup.json";
+    var fieldLookup;
+    var xhr = $.ajax({
+        url: lookup_url, 
+        cache: true,
+        dataType: 'json', 
+        success: function(data) { 
+            fieldLookup = data; 
+        }
+    })
+    .error( function() { 
+        fieldLookup = null; 
+    });
+
     var sortByKeys = function(obj) {
         var tmpObj = {};
         var fullName;

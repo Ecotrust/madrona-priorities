@@ -330,8 +330,8 @@ class Command(BaseCommand):
 
         print 
         print "Populating theme and layers for the layer manager"
-        Theme.objects.all().delete()
-        Layer.objects.all().delete()
+        Layer.objects.filter(themes__name__startswith="auto_").delete()
+        Theme.objects.filter(name__startswith="auto_").delete()
         call_command('loaddata','base_layers')
 
         for cf in cfs_with_fields:
@@ -339,7 +339,7 @@ class Command(BaseCommand):
             legend = "/media/legends/relative_value.png"
             print " ",url
             theme_name = cf.level1
-            theme, created = Theme.objects.get_or_create(name=theme_name, display_name=theme_name)
+            theme, created = Theme.objects.get_or_create(name="auto_%s" % theme_name, display_name=theme_name)
             desc = cf.units
             lyr = Layer.objects.create(name=cf.name, layer_type="XYZ", url=url, 
                     opacity=1.0, description=desc, legend=legend, legend_title=cf.name)
@@ -347,7 +347,7 @@ class Command(BaseCommand):
             lyr.save()
 
         theme_name = "Costs"
-        theme, created = Theme.objects.get_or_create(name=theme_name, display_name=theme_name)
+        theme, created = Theme.objects.get_or_create(name="auto_%s" % theme_name, display_name=theme_name)
         for c in cs: 
             url = "/tiles/%s/${z}/${x}/${y}.png" % c.dbf_fieldname
             legend = "/media/legends/relative_value.png"
@@ -367,14 +367,13 @@ class Command(BaseCommand):
         try:
             theme = Theme.objects.get(display_name=theme_name)
         except Theme.DoesNotExist:
-            theme = Theme.objects.create(name=theme_name, display_name=theme_name)
-
+            theme = Theme.objects.create(name="auto_%s" % theme_name, display_name=theme_name)
         desc = "Planning unit boundaries"
         lyr = Layer.objects.create(name=name, layer_type="XYZ", url=url, default_on=True,
                 opacity=1.0, description=desc, legend=legend, legend_title=name)
         lyr.themes.add(theme)
         lyr.save()
-            
+
         print 
         print "Loading costs and conservation features associated with each planning unit"
         for feature in layer:

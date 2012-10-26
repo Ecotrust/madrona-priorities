@@ -357,8 +357,27 @@
         
         app.timer = null; 
 
+        app.utils.loadScenarioLayer = function() {
+            olLayer = map.getLayersByName("Scenario Results")[0];
+
+            var keys = [];
+            for (var k in app.viewModel.layers.layerIndex)
+                keys.push(k);
+            id = keys.length + 999999; // offset to make sure no collision
+            app.scenarioLayerId = id;
+
+            var layerViewModel = new layerModel({
+                name: olLayer.name,
+                type: "Vector",
+                legend: "/media/legends/priorities.png"
+            });
+            layerViewModel.layer = olLayer;
+            app.viewModel.layers.layerIndex[id] = layerViewModel;
+            // TODO activate this from the application side
+        };
+
         $(document).ready(function () {
-            ko.applyBindings(app.viewModel); //, document.getElementById('scenario-html'));
+            ko.applyBindings(app.viewModel);
 
             {% if user.is_authenticated %}
                 app.viewModel.scenarios.loadScenarios();
@@ -367,7 +386,7 @@
             init_map();
             app.utils.initMap(map);
             app.viewModel.layers.loadLayersFromServer().done( function() {
-                /* do whatever needs to be done after layers are loaded */
+                app.utils.loadScenarioLayer();
             });
             app.onResize();
             $(window).resize(app.onResize);

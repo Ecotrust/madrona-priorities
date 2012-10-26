@@ -473,7 +473,9 @@ function scenariosViewModel() {
     //$('#layer-select-toggle').prop("checked", false).change();
 
     // TODO use layer_manager
-    map.getLayersByName('Planning Unit Highlight')[0].setVisibility(true);
+    //map.getLayersByName('Scenario Results')[0].setVisibility(true);
+    layer = app.viewModel.layers.layerIndex[app.scenarioLayerId];
+    layer.activateLayer();
 
     self.selectControl.unselectAll();
     self.selectControl.select(feature);
@@ -566,6 +568,10 @@ function scenariosViewModel() {
 
   self.backToScenarioList = function() {
     selectFeatureControl.unselectAll();
+
+    layer = app.viewModel.layers.layerIndex[app.scenarioLayerId];
+    layer.deactivateLayer();
+
     markers.clearMarkers();
     self.selectedFeature(false);
     self.showScenarioList(true);

@@ -80,17 +80,6 @@ function init_map() {
         } 
     );
 
-    /*
-    var pu_tiles = new OpenLayers.Layer.OSM( "Planning Units",
-        "/tiles/planning_units/${z}/${x}/${y}.png",
-        {
-         sphericalMercator: true,
-         attribution: "",
-         isBaseLayer: false
-        } 
-    );
-    */
-
     var myStyles = new OpenLayers.StyleMap({
         "default": new OpenLayers.Style({
             display: "none",  /* needs to be set temporarily to true for selection to work */
@@ -114,7 +103,7 @@ function init_map() {
     // allow testing of specific renderers via "?renderer=Canvas", etc
     var renderer = OpenLayers.Util.getParameters(window.location.href).renderer;
     renderer = (renderer) ? [renderer] : OpenLayers.Layer.Vector.prototype.renderers;
-    pu_layer = new OpenLayers.Layer.Vector("Planning Unit Highlight", {
+    pu_layer = new OpenLayers.Layer.Vector("Scenario Results", {
         styleMap: myStyles,
         renderers: renderer,
         displayInLayerSwitcher: false

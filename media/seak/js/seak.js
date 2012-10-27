@@ -90,13 +90,13 @@ function init_map() {
             display: true,
             strokeWidth: 0,
             fillColor: "#ffff00",
-            fillOpacity: 0.5,
+            fillOpacity: 1.0,
             graphicZIndex: 2
         }),
         "select_geography": new OpenLayers.Style({
             display: true,
             fillColor: "#777777",
-            fillOpacity: 0.5
+            fillOpacity: 1.0 
         })
     });
 

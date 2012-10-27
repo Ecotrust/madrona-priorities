@@ -142,7 +142,7 @@
           <div id="accordion1" class="accordion">
             {% regroup cfs by level1 as category_list %}
             {% for category in category_list %}
-            <div class="accordion-group">
+            <div class="accordion-group accordion-group-objective">
                 <div class="accordion-heading">
                     <table style="width:100%;">
                     <tr>
@@ -205,10 +205,10 @@
                 e.preventDefault();
                 var targetval = $(this).parent().parent().parent().parent().find('.targetvalue').val();
                 var penaltyval = $(this).parent().parent().parent().parent().find('.penaltyvalue').val();
-                $(this).closest('.accordion-group').find('.accordion-body .slider-range')
+                $(this).closest('.accordion-group-objective').find('.accordion-body .slider-range')
                        .slider('value', 100 * penaltyval);
-                $(this).closest('.accordion-group').find('.accordion-body .penaltyvalue').val(penaltyval).change();
-                $(this).closest('.accordion-group').find('.accordion-body .targetvalue').val(targetval).change();
+                $(this).closest('.accordion-group-objective').find('.accordion-body .penaltyvalue').val(penaltyval).change();
+                $(this).closest('.accordion-group-objective').find('.accordion-body .targetvalue').val(targetval).change();
             });
             // When collapsing details, show the aggregate sliderbar and vice-versa
             $('.cf-collapse').on('hide', function() {

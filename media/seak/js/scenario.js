@@ -134,6 +134,10 @@ function scenariosViewModel() {
 
 
   self.showScenarioForm = function(action, uid) {
+    // toggleScenarioLayer
+    layer = app.viewModel.layers.layerIndex[app.scenarioLayerId];
+    layer.activateLayer();
+
     var formUrl;
     if (action === "create") {
       formUrl = app.workspaceUtil.actions.getByRel("create")[0].getUrl();
@@ -262,7 +266,7 @@ function scenariosViewModel() {
                     $.each(cfFields, function(idx, val) {
                         $('tr#row-' + val).removeClass('hide');
                     });
-                    $.each($('div.accordion-group'), function() { 
+                    $.each($('div.accordion-group-objective'), function() { 
                         $(this).removeClass('hide');
                         if($(this).find('tr.cf-row:not(.hide)').length === 0) { 
                             $(this).addClass('hide');
@@ -360,6 +364,9 @@ function scenariosViewModel() {
                 scenario_uid = d["X-Madrona-Select"];
                 self.loadScenarios(scenario_uid);
                 self.cancelAddScenario(); // Not acutally cancel, just clear 
+                // toggleScenarioForm
+                layer = app.viewModel.layers.layerIndex[app.scenarioLayerId];
+                layer.deactivateLayer();
             })
             .error( function(jqXHR, textStatus, errorThrown) {
                 console.log("ERROR", errorThrown, textStatus);
@@ -472,8 +479,7 @@ function scenariosViewModel() {
     if (!self.planningUnitsLoadComplete()) { return false; }
     //$('#layer-select-toggle').prop("checked", false).change();
 
-    // TODO use layer_manager
-    //map.getLayersByName('Scenario Results')[0].setVisibility(true);
+    // toggleScenarioForm
     layer = app.viewModel.layers.layerIndex[app.scenarioLayerId];
     layer.activateLayer();
 
@@ -569,6 +575,7 @@ function scenariosViewModel() {
   self.backToScenarioList = function() {
     selectFeatureControl.unselectAll();
 
+    // toggleScenarioLayer
     layer = app.viewModel.layers.layerIndex[app.scenarioLayerId];
     layer.deactivateLayer();
 

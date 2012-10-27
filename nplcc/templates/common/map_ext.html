@@ -369,11 +369,12 @@
             var layerViewModel = new layerModel({
                 name: olLayer.name,
                 type: "Vector",
+                opacity: 0.5,
                 legend: "/media/legends/priorities.png"
             });
             layerViewModel.layer = olLayer;
             app.viewModel.layers.layerIndex[id] = layerViewModel;
-            // TODO activate this from the application side
+            olLayer.setOpacity(layerViewModel.opacity());
         };
 
         $(document).ready(function () {

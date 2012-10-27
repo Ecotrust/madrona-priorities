@@ -160,6 +160,7 @@ def user_scenarios_geojson(request):
     }""" % (', \n'.join([s.geojson(None) for s in scenarios]),)
 
     return HttpResponse(geojson, content_type='application/json')
+
 @never_cache
 def shared_scenarios_geojson(request):
     from seak.models import Scenario

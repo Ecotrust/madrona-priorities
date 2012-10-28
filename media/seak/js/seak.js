@@ -88,13 +88,18 @@ function init_map() {
         }),
         "select": new OpenLayers.Style({
             display: true,
-            strokeWidth: 0,
+            strokeWidth: 1.0,
+            strokeColor: "#ffff00",
+            strokeOpacity: 1.0,
             fillColor: "#ffff00",
             fillOpacity: 1.0,
             graphicZIndex: 2
         }),
         "select_geography": new OpenLayers.Style({
             display: true,
+            strokeWidth: 1.0,
+            strokeColor: "#777777",
+            strokeOpacity: 1.0,
             fillColor: "#777777",
             fillOpacity: 1.0 
         })

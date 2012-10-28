@@ -134,9 +134,7 @@ function scenariosViewModel() {
 
 
   self.showScenarioForm = function(action, uid) {
-    // toggleScenarioLayer
-    layer = app.viewModel.layers.layerIndex[app.scenarioLayerId];
-    layer.activateLayer();
+    self.toggleScenarioLayer('on');
 
     var formUrl;
     if (action === "create") {
@@ -364,9 +362,7 @@ function scenariosViewModel() {
                 scenario_uid = d["X-Madrona-Select"];
                 self.loadScenarios(scenario_uid);
                 self.cancelAddScenario(); // Not acutally cancel, just clear 
-                // toggleScenarioForm
-                layer = app.viewModel.layers.layerIndex[app.scenarioLayerId];
-                layer.deactivateLayer();
+                self.toggleScenarioLayer('off');
             })
             .error( function(jqXHR, textStatus, errorThrown) {
                 console.log("ERROR", errorThrown, textStatus);
@@ -378,6 +374,27 @@ function scenariosViewModel() {
         }
   };
 
+  self.toggleScenarioLayer = function(status) {
+        layer = app.viewModel.layers.layerIndex[app.scenarioLayerId];
+
+        if (this.selectedFeature()) {
+            layer.name = "Scenario: " + this.selectedFeature().name();
+        } else {
+            layer.name = "Scenario: (empty)";
+        }
+
+        if (status == 'off') {
+            layer.deactivateLayer();
+        } else if (status == 'on') {
+            layer.activateLayer();
+        } else {
+            if (layer.active()) {
+                layer.deactivateLayer();
+            } else {
+                layer.activateLayer();
+            }
+        };
+  };
   self.showDeleteDialog = function () {
     $("#scenario-delete-dialog").modal("show");
   };
@@ -479,13 +496,10 @@ function scenariosViewModel() {
     if (!self.planningUnitsLoadComplete()) { return false; }
     //$('#layer-select-toggle').prop("checked", false).change();
 
-    // toggleScenarioForm
-    layer = app.viewModel.layers.layerIndex[app.scenarioLayerId];
-    layer.activateLayer();
-
     self.selectControl.unselectAll();
     self.selectControl.select(feature);
     self.selectedFeature(feature); 
+    self.toggleScenarioLayer('on');
     bbox = feature.bbox();
     if (bbox && bbox.length === 4) {
         map.zoomToExtent(bbox);
@@ -574,13 +588,9 @@ function scenariosViewModel() {
 
   self.backToScenarioList = function() {
     selectFeatureControl.unselectAll();
-
-    // toggleScenarioLayer
-    layer = app.viewModel.layers.layerIndex[app.scenarioLayerId];
-    layer.deactivateLayer();
-
     markers.clearMarkers();
     self.selectedFeature(false);
+    self.toggleScenarioLayer('off');
     self.showScenarioList(true);
   };
 

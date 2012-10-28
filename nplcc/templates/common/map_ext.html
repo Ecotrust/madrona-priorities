@@ -16,9 +16,6 @@
                                 <li data-bind="click: scenarios.switchMode.bind($data, 'manage')"> 
                                     <a href="#scenario-tab-content" id="scenario-tab" data-toggle="tab">Scenarios</a>
                                 </li>
-                                <li data-bind="click: scenarios.switchMode.bind($data, 'shared')"> 
-                                    <a href="#scenario-tab-content" id="shared-scenario-tab" data-toggle="tab">Shared</a>
-                                </li>
                                 <li>
                                     <a href="#active-tab-content" id="active-tab" data-toggle="tab">Active</a>
                                 </li>
@@ -122,6 +119,13 @@
                                                     data-bind="click: scenarios.addScenarioStart, visible: scenarios.dataMode() == 'manage'">
                                                 <i class="icon-plus-sign icon-white"></i> Create New Scenario
                                                 <span data-bind="visible: !scenarios.formLoadComplete()"><img alt="loading" src="/media/img/ajax-loader.gif"/></span>
+                                                </button>
+
+                                                <button data-bind="click: scenarios.switchMode.bind($data, 'shared'), visible: scenarios.dataMode() == 'manage'"> 
+                                                    <i class="icon-share-alt"></i> Switch to shared scenarios
+                                                </button>
+                                                <button data-bind="click: scenarios.switchMode.bind($data, 'manage'), visible: scenarios.dataMode() == 'shared'"> 
+                                                    <i class="icon-user"></i> Switch to my scenarios
                                                 </button>
                                             </div>
                                         </div> <!-- end showScenarioList -->

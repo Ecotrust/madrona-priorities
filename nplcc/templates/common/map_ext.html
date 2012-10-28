@@ -121,10 +121,10 @@
                                                 <span data-bind="visible: !scenarios.formLoadComplete()"><img alt="loading" src="/media/img/ajax-loader.gif"/></span>
                                                 </button>
 
-                                                <button data-bind="click: scenarios.switchMode.bind($data, 'shared'), visible: scenarios.dataMode() == 'manage'"> 
+                                                <button class="btn" data-bind="click: scenarios.switchMode.bind($data, 'shared'), visible: scenarios.dataMode() == 'manage'"> 
                                                     <i class="icon-share-alt"></i> Switch to shared scenarios
                                                 </button>
-                                                <button data-bind="click: scenarios.switchMode.bind($data, 'manage'), visible: scenarios.dataMode() == 'shared'"> 
+                                                <button class="btn" data-bind="click: scenarios.switchMode.bind($data, 'manage'), visible: scenarios.dataMode() == 'shared'"> 
                                                     <i class="icon-user"></i> Switch to my scenarios
                                                 </button>
                                             </div>
@@ -303,15 +303,15 @@
 
                 <style>
                     #description-overlay {
+                        margin: 6px;
+                        background: rgba(162, 205, 181, 0.9);
                         bottom: 14px;
-                        margin: 2px;
+                        font-size: 93%;
+                        font-weight: bold;
                         position: absolute;
                         z-index: 1043;
                         text-align: left;
                         vertical-align: center;
-                        padding: 18px;
-                        background: white;
-                        background: rgba(162, 205, 181, 0.8);
                         margin-right: 12px;
                     }
                 </style>

@@ -24,7 +24,7 @@ from seak.jenks import get_jenks_breaks
 
 logger = get_logger()
 
-def cachemethod(cache_key, timeout=3600):
+def cachemethod(cache_key, timeout=60*60*24*365):
     '''
     http://djangosnippets.org/snippets/1130/    
     Cacheable class method decorator

@@ -1,0 +1,46 @@
+<VirtualHost *:80>
+    ServerName <DEFAULT>.labs.ecotrust.org
+
+    WSGIScriptAlias / /usr/local/apps/<DEFAULT>/deploy/wsgi.py
+    WSGIDaemonProcess <DEFAULT> user=www-data group=www-data threads=1 processes=2
+    WSGIProcessGroup <DEFAULT>
+
+    ErrorLog "/usr/local/apps/<DEFAULT>/logs/apache-error.log"
+    CustomLog "/usr/local/apps/<DEFAULT>/logs/apache-access.log" combined
+
+    Alias /media /usr/local/apps/<DEFAULT>/mediaroot
+
+    ServerAdmin webmaster@localhost
+
+    DocumentRoot /var/www
+    <Directory />
+        Options FollowSymLinks
+        AllowOverride None
+    </Directory>
+    <Directory /var/www/>
+        Options Indexes FollowSymLinks MultiViews
+        AllowOverride None
+        Order allow,deny
+        allow from all
+    </Directory>
+
+    <Location /media>
+        #GZIP media files just not images or for IE6
+        SetOutputFilter DEFLATE
+        SetEnvIfNoCase Request_URI \
+        \.(?:gif|jpe?g|png)$ no-gzip dont-vary   
+        BrowserMatch \bMSIE\s6 no-gzip
+        Order allow,deny
+        Allow from all
+    </Location>
+
+    <LocationMatch "\.png$">
+        ErrorDocument 404 /media/tiles/blank.png
+    </LocationMatch>
+
+    <LocationMatch "\.json$">
+        ErrorDocument 404 /media/tiles/blank.json
+        ForceType application/json
+    </LocationMatch>
+</VirtualHost>
+

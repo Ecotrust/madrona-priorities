@@ -172,7 +172,7 @@ h4 {
     display: none !important;
 } 
 .debug-only {
-    display: none;
+    display: none !important;
 }
 .slider-label {
     font-style: italic;

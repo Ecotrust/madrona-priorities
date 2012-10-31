@@ -176,17 +176,52 @@
                 <table class="table table-condensed" style="width:100%; margin-bottom:0px;">
                 {% for cf in category.list %} 
                     <tr class="cf-row" id="row-{{cf.dbf_fieldname}}">
-                        <td style="width:45%">{{cf.name}}</td>
+                        <th>{{cf.name}}</th>
                         <td> 
+                            {% if slider_mode == 'single' %}
                             <span class="slider-label slider-label-left">low</span>
-                            <div class="slider-range" id="sliderrange---{{cf.id_string}}"></div> 
+                            <div class="slider-range slider-range-both" id="singlerange---{{cf.id_string}}"></div> 
                             <span class="slider-label slider-label-right">high</span>
-                        </td>
-                        <td class="debug-only">
-                            <input type="text" class="targetvalue" id="target---{{cf.id_string}}" value="0.0"/>
-                        </td>
-                        <td class="debug-only">
-                            <input type="text" class="penaltyvalue" id="penalty---{{cf.id_string}}" value="0.0"/>
+                            <span>
+                                <input type="text" class="{% if slider_show_input %}input-mini{% else %}debug-only{% endif %} targetvalue" id="target---{{cf.id_string}}" value="0.0"/>
+                                <input type="text" class="debug-only penaltyvalue" id="penalty---{{cf.id_string}}" value="0.0"/>
+                            </span>
+                            {% elif slider_mode == 'dual' %}
+                            <div class="row-fluid">
+                                <div class="span3">
+                                    Target
+                                </div>
+                                <div class="span2">
+                                    <span class="slider-label slider-label-left">low</span>
+                                </div>
+                                <div class="span3">
+                                    <div class="slider-range slider-range-target" id="targetrange---{{cf.id_string}}"></div> 
+                                </div>
+                                <div class="span2">
+                                    <span class="slider-label slider-label-right">high</span>
+                                </div>
+                                <div class="{% if slider_show_input %}span2{% else %}debug-only{% endif %}">
+                                    <input type="text" class="{% if slider_show_input %}input-mini{% else %}debug-only{% endif %} targetvalue" id="target---{{cf.id_string}}" value="0.0"/>
+                                </div>
+                            </div>
+                            <div class="row-fluid">
+                                <div class="span3">
+                                    Penalty
+                                </div>
+                                <div class="span2">
+                                    <span class="slider-label slider-label-left">low</span>
+                                </div>
+                                <div class="span3">
+                                    <div class="slider-range slider-range-penalty" id="penaltyrange---{{cf.id_string}}"></div> 
+                                </div>
+                                <div class="span2">
+                                    <span class="slider-label slider-label-right">high</span>
+                                </div>
+                                <div class="{% if slider_show_input %}span2{% else %}debug-only{% endif %}">
+                                    <input type="text" class="{% if slider_show_input %}input-mini{% else %}debug-only{% endif %} penaltyvalue" id="penalty---{{cf.id_string}}" value="0.0"/>
+                                </div>
+                            </div>
+                            {% endif %}
                         </td>
                     </tr>
                 {% endfor %}
@@ -206,7 +241,7 @@
                 var targetval = $(this).parent().parent().parent().parent().find('.targetvalue').val();
                 var penaltyval = $(this).parent().parent().parent().parent().find('.penaltyvalue').val();
                 $(this).closest('.accordion-group-objective').find('.accordion-body .slider-range')
-                       .slider('value', 100 * penaltyval);
+                       .slider('value', 100 * penaltyval); // assume stuff ? 
                 $(this).closest('.accordion-group-objective').find('.accordion-body .penaltyvalue').val(penaltyval).change();
                 $(this).closest('.accordion-group-objective').find('.accordion-body .targetvalue').val(targetval).change();
             });

@@ -159,26 +159,48 @@ function scenariosViewModel() {
         self.selectedFeature(false);
         self.showScenarioList(false);
 
-        function setTargetsPenalties(id, uivalue) {
-            // Sets the targets and penalties based on the single slider value
-            // slider val is 0 to 100 while targets/penalties are 0 to 1
-            // Assume that the slider always tracks target directly (ie 0.75 target == 75 slider)
-            // The penalty MAY need to be variable depending on the target  
-            $( "#penalty---" + id ).val( uivalue / 100.0 );
-            $( "#target---" + id ).val( uivalue / 100.0 );
-            //$( "#sliderdisplay---" + id).text( uivalue );
-        }
-
-        $.each( $(".slider-range"), function(k, sliderrange) {
+        $.each( $(".slider-range-both"), function(k, sliderrange) {
             var id = $(sliderrange).attr('id');
-            id = id.replace("sliderrange---", '');
+            id = id.replace("singlerange---", '');
             $(sliderrange).slider({
                 range: "min",
                 value: 0,
                 min: 0,
                 max: 100,
                 slide: function( event, ui ) {
-                    setTargetsPenalties(id, ui.value);
+                    // Sets the targets and penalties based on the single slider value
+                    // slider val is 0 to 100 while targets/penalties are 0 to 1
+                    // assume that the slider always tracks target directly (ie 0.75 target == 75 slider)
+                    $( "#penalty---" + id ).val( ui.value / 100.0 );
+                    $( "#target---" + id ).val( ui.value / 100.0 );
+                }
+            });
+        });
+        
+        $.each( $(".slider-range-penalty"), function(k, sliderrange) {
+            var id = $(sliderrange).attr('id');
+            id = id.replace("penaltyrange---", '');
+            $(sliderrange).slider({
+                range: "min",
+                value: 0,
+                min: 0,
+                max: 100,
+                slide: function( event, ui ) {
+                    $( "#penalty---" + id ).val( ui.value / 100.0 );
+                }
+            });
+        });
+
+        $.each( $(".slider-range-target"), function(k, sliderrange) {
+            var id = $(sliderrange).attr('id');
+            id = id.replace("targetrange---", '');
+            $(sliderrange).slider({
+                range: "min",
+                value: 0,
+                min: 0,
+                max: 100,
+                slide: function( event, ui ) {
+                    $( "#target---" + id ).val( ui.value / 100.0 );
                 }
             });
         });
@@ -218,13 +240,14 @@ function scenariosViewModel() {
             var in_targets = JSON.parse($('#id_input_targets').val());
             $.each(in_targets, function(key, val) {
                 $("#target---" + key).val(val);
-                // TODO Assume slider tracks target
-                $("#sliderrange---" + key).slider("value", val * 100);  
-                //$("#sliderdisplay---" + key).text(val * 100);
+                $("#targetrange---" + key).slider("value", val * 100);  
+                $("#singlerange---" + key).slider("value", val * 100); 
+                // TODO $("#sliderdisplay---" + key).text(val * 100);
             });
             var in_penalties = JSON.parse($('#id_input_penalties').val());
             $.each(in_penalties, function(key, val) {
                 $("#penalty---" + key).val(val);
+                $("#penaltyrange---" + key).slider("value", val * 100);  
             });
        } // end EDIT mode
 

@@ -828,6 +828,12 @@ class Scenario(Analysis):
             'cfs': ConservationFeature.objects.all().order_by('level1'),
             'defined_geographies': DefinedGeography.objects.all(),
             'costs': Cost.objects.all(),
+            'slider_mode': settings.SLIDER_MODE,
+            'slider_show_input': settings.SLIDER_SHOW_INPUT,
+        }
+        show_context = {
+            'slider_mode': settings.SLIDER_MODE,
+            'slider_show_input': settings.SLIDER_SHOW_INPUT,
         }
         icon_url = 'common/images/watershed.png'
         links = (

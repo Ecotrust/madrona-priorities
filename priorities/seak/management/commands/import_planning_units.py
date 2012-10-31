@@ -197,6 +197,7 @@ class Command(BaseCommand):
         }
 
         NULL_VALUE = params['null_value']
+        FID_FIELD = params['fid_field']
 
         if "PlanningUnit" in modls:
             lm = LayerMapping(PlanningUnit, shp, mapping, transform=False, encoding='iso-8859-1')
@@ -332,7 +333,7 @@ class Command(BaseCommand):
         print "Populating theme and layers for the layer manager"
         Layer.objects.filter(themes__name__startswith="auto_").delete()
         Theme.objects.filter(name__startswith="auto_").delete()
-        call_command('loaddata','base_layers')
+        call_command('loaddata','project_base_layers')
 
         for cf in cfs_with_fields:
             url = "/tiles/%s/${z}/${x}/${y}.png" % cf.dbf_fieldname
@@ -362,6 +363,11 @@ class Command(BaseCommand):
         url = "/tiles/planning_units/${z}/${x}/${y}.png"
         legend = "/media/legends/planning_units.png"
         name = "Planning Units"
+        try:
+            lyr = Layer.objects.get(name=name)
+            lyr.delete()
+        except Layer.DoesNotExist:
+            pass
         print " ",url
         theme_name = "Base"
         try:
@@ -420,6 +426,15 @@ class Command(BaseCommand):
             params = dict(zip(fieldnames, vals))
             dg = DefinedGeography(name=params['geography'])
             dg.save()
+
+            fids = []
+            for feature in layer:
+                if feature.get(params['dbf_fieldname']) != NULL_VALUE:
+                    fids.append(feature.get(FID_FIELD))
+            new_pus = PlanningUnit.objects.filter(fid__in=fids)
+
+            """
+            # old method, assumed geography field was either cost or consfeat
             pus = [x.pu for x in PuVsCf.objects.filter(amount__isnull=False, 
                     cf__dbf_fieldname=params['dbf_fieldname'])]
             if len(pus) == 0:
@@ -427,6 +442,7 @@ class Command(BaseCommand):
                         cost__dbf_fieldname=params['dbf_fieldname'])]
                 if len(pus) == 0:
                     raise Exception(params['geography'] + " has no planning units; check field named " + params['dbf_fieldname'])
+            """
             for pu in pus:
                 dg.planning_units.add(pu)
             dg.save()

@@ -1,9 +1,7 @@
-# Juniper Management Prioritization Tool
-# Prioritization Tool
+# Madrona Prioritization Tool
 
-[Ecotrust](http://ecotrust.org) and the BLM have partnered 
-to develop a conservation decision support system for Juniper management in Oregon.
+[Ecotrust](http://ecotrust.org),
+in partnership with USFW, the NPLCC and BLM, 
+have developed a framework for developing prioritization tools.
 
-This system will enable stakeholders to engage in strategic landscape-scale planning
-for Juniper management and sage grouse habitat conservation priorities for Oregon BLM lands.
-
+The priorities tool is based on Madrona and Marxan. 

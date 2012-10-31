@@ -1,7 +1,5 @@
-OLCFG=nplcc.cfg
-OUTDIR=/usr/local/src/nplcc/media/
-#python build.py -c none $OLCFG
-#python build.py $OLCFG 
+OLCFG=seak_openlayers.cfg
+OUTDIR=./openlayers_build
 python build.py -c closure $OLCFG 
 cp OpenLayers.js $OUTDIR 
 cp -r ../theme $OUTDIR 

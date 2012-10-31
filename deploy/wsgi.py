@@ -2,7 +2,7 @@ import sys
 import site
 import os
 
-project = '/usr/local/apps/juniper-blm/nplcc'
+project = '/usr/local/apps/juniper-blm/priorities'
 ve = '/usr/local/apps/juniper-blm/env'
 vepath = os.path.join(ve, 'lib/python2.6/site-packages')
 

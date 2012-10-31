@@ -1,12 +1,21 @@
-* Install Madrona
-* Create and populate db
+# Install madrona et. al. into virtual environment 
+
+# Create and populate database
 
 ```
-dropdb nplcc -U postgres
-createdb nplcc -U postgres
+dropdb juniper -U postgres
+createdb juniper -U postgres
 python manage.py syncdb
 python manage.py migrate
 python manage.py enable_sharing --all
 python manage.py loaddata fixtures/flatblocks.json
-python manage.py import_planning_units data/hydro1k_nplcc_merc_join_simp2100.shp data/hydro1k_nplcc_meta.xls
+python manage.py loaddata seak/fixtures/base_data.json 
 ```
+
+# edit seak/import.sh to point to data
+
+```
+sh seak/import.sh
+```
+
+# See docs/* for more info on importing, caching, deployment, etc

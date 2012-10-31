@@ -1,11 +1,10 @@
 1. Clear browser cache
 
 2. re-import planning units
-# modify and run nplcc/import.sh
-
+# modify and run import.sh
 
 3. stop server, manage.py clear_cache, restart
-sudo s2dissite nplcc
+sudo s2dissite <apache site name>
 sudo /etc/init.d/apache2 reload
 
 4. clear tilestache cache
@@ -17,6 +16,6 @@ tilestache-seed.py -c tile_config/tiles.cfg -l planning_units -e png -b 41 -125 
 tilestache-seed.py -c tile_config/tiles.cfg -l utfgrid -e json -b 41 -125 47 -115 3 4 5 6 7 
 
 6. Reload site
-sudo s2ensite nplcc
+sudo s2ensite <apache site name>
 sudo /etc/init.d/apache2 reload
 

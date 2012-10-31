@@ -23,7 +23,6 @@ This shapefile must be prepared for the tool according to the following steps:
     It is highly recomended to simplify AFTER necessary changes to the attribute table are completed.
     Make sure that the simplification technique maintains topology (i.e. doesnt leave gaps between polygons).
     ArcGIS uses a `RESOLVE_ERRORS` flag in the `Simplify Polygon` tool. 
-    The NPLCC data is simplified to a tolerance of 2100 meters to smooth out the 2km raster artifacts.
 
 ## Metadata
 - Complete the xls metadata file describing the dataset:
@@ -36,9 +35,9 @@ This shapefile must be prepared for the tool according to the following steps:
 - Run the import procedure:
 ```
  python manage.py import_planning_units \
-   ~/projects/nplcc/data_20120822/H1K_Values20120821_Merc.shp \
-   ~/projects/nplcc/data_20120822/NPLCC_metrics20120822.xls \
-   ~/projects/nplcc/data_20120822/H1K_Values20120821_Merc_Simp.shp
+   data_20120822/H1K_Values20120821_Merc.shp \
+   data_20120822/metrics20120822.xls \
+   data_20120822/H1K_Values20120821_Merc_Simp.shp
 ```
 
 

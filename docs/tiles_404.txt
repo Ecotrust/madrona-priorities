@@ -1,6 +1,6 @@
 
 
     location /media/tiles {
-       alias /usr/local/media/nplcc/tiles; 
+       alias /usr/local/media/<app>/tiles; 
        error_page    404 = /media/tiles/blank.png;
     }

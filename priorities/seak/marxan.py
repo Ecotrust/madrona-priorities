@@ -9,7 +9,7 @@ class MarxanError(Exception):
 
 class MarxanAnalysis(object):
 
-    def __init__(self, pucosts, cfs, outdir, name="nplcc"):
+    def __init__(self, pucosts, cfs, outdir, name="seak"):
         self.outdir = os.path.realpath(outdir)
         self.marxan_bin = os.path.realpath(settings.MARXAN_BIN)
         if not os.path.exists(self.marxan_bin):

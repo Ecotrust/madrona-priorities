@@ -1,4 +1,4 @@
-{% extends 'nplcc/base.html' %}
+{% extends 'seak/base.html' %}
 {% block title %}North Pacific Landscape Conservation Cooperative Prioritization Tool{% endblock title %}
 
 {% block js %}
@@ -39,7 +39,7 @@ border: 1px solid #CCC;
 
     var tiles = new OpenLayers.Layer.XYZ(
         "MapBox Streets",
-        "/media/tiles/nplcc/${z}/${x}/${y}.png",
+        "/media/tiles/seak/${z}/${x}/${y}.png",
         {
             sphericalMercator: true,
             transitionEffect: "resize",
@@ -49,7 +49,7 @@ border: 1px solid #CCC;
     );
 
     var utfgrid = new OpenLayers.Layer.UTFGrid({
-        url: "/media/tiles/nplcc/${z}/${x}/${y}.json",
+        url: "/media/tiles/seak/${z}/${x}/${y}.json",
         utfgridResolution: 4, // default is 2
         displayInLayerSwitcher: false
     });

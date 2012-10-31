@@ -416,7 +416,7 @@ class Scenario(Analysis):
 
     @property
     def progress(self):
-        path = os.path.join(self.outdir, "output", "nplcc_r*.csv")
+        path = os.path.join(self.outdir, "output", "seak_r*.csv")
         outputs = glob.glob(path)
         numreps = self.numreps
         if len(outputs) == numreps:
@@ -547,7 +547,7 @@ class Scenario(Analysis):
         sum_area = sum([x.area for x in bestpus])
 
         # Parse mvbest
-        fh = open(os.path.join(self.outdir, "output", "nplcc_mvbest.csv"), 'r')
+        fh = open(os.path.join(self.outdir, "output", "seak_mvbest.csv"), 'r')
         lines = [x.strip().split(',') for x in fh.readlines()[1:]]
         fh.close()
         species = []
@@ -653,7 +653,7 @@ class Scenario(Analysis):
             wshds = PlanningUnit.objects.filter(pk__in=chosen)
             self.output_best = json.dumps({'best': [str(x.pk) for x in wshds]})
             ssoln = [x.strip().split(',') for x in 
-                     open(os.path.join(self.outdir,"output","nplcc_ssoln.csv"),'r').readlines()][1:]
+                     open(os.path.join(self.outdir,"output","seak_ssoln.csv"),'r').readlines()][1:]
             selected = {}
             for s in ssoln:
                 num = int(s[1])
@@ -822,8 +822,8 @@ class Scenario(Analysis):
     class Options:
         form = 'seak.forms.ScenarioForm'
         verbose_name = 'Prioritization Scenario' 
-        show_template = 'nplcc/show.html'
-        form_template = 'nplcc/form.html'
+        show_template = 'seak/show.html'
+        form_template = 'seak/form.html'
         form_context = {
             'cfs': ConservationFeature.objects.all().order_by('level1'),
             'defined_geographies': DefinedGeography.objects.all(),

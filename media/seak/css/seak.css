@@ -185,7 +185,8 @@ h4 {
    margin-left: 8px;
 }
 .slider-range {
-  width:160px; 
+  min-width:100px; 
+  width:55%;
   display:inline-block;
 }
 #info-content {
@@ -264,4 +265,8 @@ ul#map-legend-attr {
 }
 .alert-info {
     background-color: #013435;
+}
+
+input.input-micro {
+    width: 30px;
 }

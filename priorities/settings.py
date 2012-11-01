@@ -98,7 +98,7 @@ LOG_LEVEL = logging.INFO
 dblogger = logging.getLogger('django.db.backends')
 dblogger.setLevel(logging.INFO)
 
-SLIDER_MODE = "single" # OR 'single'
+SLIDER_MODE = "dual" # 'dual' OR 'single'
 SLIDER_SHOW_INPUT = True # do we show the target/penalty input text values?
 
 #############################################################

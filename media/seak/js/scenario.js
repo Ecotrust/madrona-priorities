@@ -159,9 +159,9 @@ function scenariosViewModel() {
         self.selectedFeature(false);
         self.showScenarioList(false);
 
-        $.each( $(".slider-range-both"), function(k, sliderrange) {
+        $.each( $(".slider-range-dual"), function(k, sliderrange) {
             var id = $(sliderrange).attr('id');
-            id = id.replace("singlerange---", '');
+            id = id.replace("dualrange---", '');
             $(sliderrange).slider({
                 range: "min",
                 value: 0,

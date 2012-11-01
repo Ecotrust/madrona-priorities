@@ -146,27 +146,24 @@
                 <div class="accordion-heading">
                     <table style="width:100%;">
                     <tr>
-                    <th style="width:45%;text-align:left;">
+                    <th style="width:156px;text-align:left;">
                        <a class="accordion-toggle" data-toggle="collapse" 
                            href="#collapse-{{category.grouper|slugify}}"> <i class="category-icon icon-minus"></i> {{category.grouper}} </a>
                     </th>
                     <td>
-                      <div class="slider-collapse aggregate hide" 
-                           id="#slider-collapse-{{category.grouper|slugify}}">
-                        <span class="slider-label slider-label-left">low</span>
-                        <div class="slider-range" id="sliderrange---CATEGORY-{{category.grouper|slugify}}"></div> 
-                        <span class="slider-label slider-label-right">high</span>
-                        <span style="margin-left:16px;">
-                            <a class="btn btn-mini apply">Apply value to all {{category.grouper}}</a>
-                        </span>
-                      </div>
+                        <div class="slider-collapse aggregate hide" id="#slider-collapse-{{category.grouper|slugify}}">
+                            <span class="slider-label slider-label-left">{% flatblock 'target-low' 3600 %}</span>
+                            <div class="slider-range slider-range-dual" id="dualrange---CATEGORY-{{category.grouper|slugify}}"></div> 
+                            <span class="slider-label slider-label-right">{% flatblock 'target-high' 3600 %}</span>
+                            <a class="pull-right btn btn-mini apply">Apply to all {{category.grouper}}</a>
+                        </div>
                     </td>
                     <td class="debug-only">
-                        <input type="text" class="targetvalue" 
+                        <input type="text" class="targetvalue input-micro" 
                                id="target---CATEGORY-{{category.grouper|slugify}}" value="0.0"/>
                     </td>
                     <td class="debug-only">
-                        <input type="text" class="penaltyvalue" 
+                        <input type="text" class="penaltyvalue input-micro" 
                                id="penalty---CATEGORY-{{category.grouper|slugify}}" value="0.0"/>
                     </td>
                     </tr>
@@ -179,13 +176,30 @@
                         <th style="width:156px;">{{cf.name}}</th>
                         <td> 
                             {% if slider_mode == 'single' %}
-                            <span class="slider-label slider-label-left">low</span>
-                            <div class="slider-range slider-range-both" id="singlerange---{{cf.id_string}}"></div> 
-                            <span class="slider-label slider-label-right">high</span>
-                            <span>
+                            
+                            <div class="row-fluid">
+                                <div class="span1" style="padding-right:13px;">
+                                </div>
+                                <div class="span10">
+                                    <span class="text-success slider-label slider-label-left"><small>{% flatblock 'target-low' 3600 %}</small></span>
+                                    <span> <div class="slider-range slider-range-dual" id="dualrange---{{cf.id_string}}"></div> </span>
+                                    <span class="text-success slider-label slider-label-right"><small>{% flatblock 'target-high' 3600 %}</small></span>
+                                </div>
+                                <div class="{% if slider_show_input %}span1{% else %}debug-only{% endif %}">
+                                    <input type="text" class="input-mini targetvalue" id="target---{{cf.id_string}}" value="0.0"/>
+                                    <input type="text" class="debug-only penaltyvalue" id="penalty---{{cf.id_string}}" value="0.0"/>
+                                </div>
+                            </div>
+
+                            <!--
+                            <span class="text-success slider-label slider-label-left"><small>{% flatblock 'target-low' 3600 %}</small></span>
+                            <span> <div class="slider-range slider-range-dual" id="dualrange---{{cf.id_string}}"></div> </span>
+                            <span class="text-success slider-label slider-label-right"><small>{% flatblock 'target-high' 3600 %}</small></span>
+                            <span style="pull-right">
                                 <input type="text" class="{% if slider_show_input %}input-mini{% else %}debug-only{% endif %} targetvalue" id="target---{{cf.id_string}}" value="0.0"/>
                                 <input type="text" class="debug-only penaltyvalue" id="penalty---{{cf.id_string}}" value="0.0"/>
                             </span>
+                            -->
                             {% elif slider_mode == 'dual' %}
                             <div class="row-fluid">
                                 <div class="span2" style="padding-right:13px;">
@@ -227,16 +241,18 @@
           </div>
         </form>
         <script>
-            // Make slider work
+            // Make category slider work
             $('a.apply').click(function(e) {
                 e.preventDefault();
                 var targetval = $(this).parent().parent().parent().parent().find('.targetvalue').val();
                 var penaltyval = $(this).parent().parent().parent().parent().find('.penaltyvalue').val();
-                $(this).closest('.accordion-group-objective').find('.accordion-body .slider-range')
-                       .slider('value', 100 * penaltyval); // assume stuff ? 
+                $(this).closest('.accordion-group-objective').find('.accordion-body .slider-range-dual').slider('value', 100 * penaltyval); 
+                $(this).closest('.accordion-group-objective').find('.accordion-body .slider-range-penalty').slider('value', 100 * penaltyval); 
+                $(this).closest('.accordion-group-objective').find('.accordion-body .slider-range-target').slider('value', 100 * targetval); 
                 $(this).closest('.accordion-group-objective').find('.accordion-body .penaltyvalue').val(penaltyval).change();
                 $(this).closest('.accordion-group-objective').find('.accordion-body .targetvalue').val(targetval).change();
             });
+
             // When collapsing details, show the aggregate sliderbar and vice-versa
             $('.cf-collapse').on('hide', function() {
                 $(this).parent().find(".category-icon").removeClass("icon-minus"); 

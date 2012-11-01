@@ -286,5 +286,59 @@
       "header": "", 
       "slug": "title"
     }
+  }, 
+  {
+    "pk": 33, 
+    "model": "flatblocks.flatblock", 
+    "fields": {
+      "content": "Target", 
+      "header": "", 
+      "slug": "target"
+    }
+  }, 
+  {
+    "pk": 34, 
+    "model": "flatblocks.flatblock", 
+    "fields": {
+      "content": "Penalty", 
+      "header": "", 
+      "slug": "penalty"
+    }
+  }, 
+  {
+    "pk": 35, 
+    "model": "flatblocks.flatblock", 
+    "fields": {
+      "content": "low", 
+      "header": "", 
+      "slug": "target-low"
+    }
+  }, 
+  {
+    "pk": 36, 
+    "model": "flatblocks.flatblock", 
+    "fields": {
+      "content": "high", 
+      "header": "", 
+      "slug": "target-high"
+    }
+  }, 
+  {
+    "pk": 37, 
+    "model": "flatblocks.flatblock", 
+    "fields": {
+      "content": "low", 
+      "header": "", 
+      "slug": "penalty-low"
+    }
+  }, 
+  {
+    "pk": 38, 
+    "model": "flatblocks.flatblock", 
+    "fields": {
+      "content": "high", 
+      "header": "", 
+      "slug": "penalty-high"
+    }
   }
 ]

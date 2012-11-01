@@ -431,7 +431,8 @@ class Command(BaseCommand):
             for feature in layer:
                 if feature.get(params['dbf_fieldname']) != NULL_VALUE:
                     fids.append(feature.get(FID_FIELD))
-            new_pus = PlanningUnit.objects.filter(fid__in=fids)
+
+            pus = PlanningUnit.objects.filter(fid__in=fids)
 
             """
             # old method, assumed geography field was either cost or consfeat

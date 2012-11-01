@@ -466,6 +466,7 @@ function scenariosViewModel() {
     self.showScenarioFormPanel(false);
     self.showScenarioList(true);
     self.formSaveError(false);
+    self.toggleScenarioLayer('off');
   };
 
   self.selectControl = {

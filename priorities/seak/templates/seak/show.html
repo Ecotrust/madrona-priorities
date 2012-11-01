@@ -2,6 +2,7 @@
 {% load humanize %}
 {% load set_var %}
 {% load percentage %}
+{% load deslug %}
 {% load flatblock_tags %}
 {% block title %}{{instance.name}}{% endblock title %}
 {% block panel %}
@@ -101,7 +102,7 @@
                     <th scope="col"> {% flatblock 'show-planning-units' 3600 %} </th> 
                     {%for k,v in results.units.1.costs_class.items %}
                         {% if v > 0 %}
-                        <th scope="col">{{k}}</th>
+                        <th scope="col">{{k|deslug}}</th>
                         {% endif %}
                     {%endfor%}
                     <tr>

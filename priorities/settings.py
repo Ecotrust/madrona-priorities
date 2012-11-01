@@ -100,6 +100,7 @@ dblogger.setLevel(logging.INFO)
 
 SLIDER_MODE = "dual" # 'dual' OR 'single'
 SLIDER_SHOW_INPUT = True # do we show the target/penalty input text values?
+VARIABLE_GEOGRAPHY = False # do we allow variable geographies (True) or just use all planning units (False)?
 
 #############################################################
 try:

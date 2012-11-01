@@ -830,6 +830,7 @@ class Scenario(Analysis):
             'costs': Cost.objects.all(),
             'slider_mode': settings.SLIDER_MODE,
             'slider_show_input': settings.SLIDER_SHOW_INPUT,
+            'variable_geography': settings.VARIABLE_GEOGRAPHY,
         }
         show_context = {
             'slider_mode': settings.SLIDER_MODE,

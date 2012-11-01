@@ -144,6 +144,10 @@ function scenariosViewModel() {
       formUrl = formUrl.getUrl([uid]);
     }
 
+        selectFeatureControl.unselectAll();
+        selectGeographyControl.activate();
+        pu_layer.styleMap.styles['default'].defaultStyle.display = true;
+
     // clean up and show the form
     var jqxhr = $.get(formUrl, function(data) {
       $('#scenarios-form-container').empty().append(data);
@@ -152,9 +156,7 @@ function scenariosViewModel() {
       self.showScenarioFormPanel(true);
     })
     .success( function() {
-        selectFeatureControl.unselectAll();
-        selectGeographyControl.activate();
-        pu_layer.styleMap.styles['default'].defaultStyle.display = true;
+         // ----
         self.showScenarioList(false);
         self.selectedFeature(false);
         self.showScenarioList(false);
@@ -354,13 +356,13 @@ function scenariosViewModel() {
         $(frm).find('textarea#id_input_geography').val( JSON.stringify(geography_fids) );
 
         if (totalfids === 0) {
-            alert("Please complete Step 1");
+            alert("Please complete the scenario form");
             $("#formtabs a[href='#geographytab']").tab('show');
         } else if (totalpenalties === 0 || totaltargets === 0) {
-            alert("Please complete Step 2");
+            alert("Please complete the scenario form");
             $("#formtabs a[href='#speciestab']").tab('show');
         } else if ($(frm).find('input[name="name"]').val() === '') {
-            alert("Please complete Step 4");
+            alert("Please complete the scenario form");
             $("#formtabs a[href='#generaltab']").tab('show');
             $(frm).find('input[name="name"]').focus();
         } else {

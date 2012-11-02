@@ -519,7 +519,7 @@ function scenariosViewModel() {
       }
    };
 
-  self.selectFeature = function(feature, event) {
+  self.selectScenario = function(feature, event) {
     if (!self.planningUnitsLoadComplete()) { return false; }
     //$('#layer-select-toggle').prop("checked", false).change();
 
@@ -534,7 +534,7 @@ function scenariosViewModel() {
     self.showScenarioList(false);
   };
 
-  self.selectFeatureById = function (id) {
+  self.selectScenarioById = function (id) {
     var pageSize = self.scenarioList().length / self.listDisplayCount;
     $.each(self.scenarioList(), function (i, feature) {
       if (feature.uid() === id) {
@@ -591,7 +591,7 @@ function scenariosViewModel() {
     .success( function() { 
         if (scenario_uid) {
             var theScenario = self.getScenarioByUid(scenario_uid);
-            self.selectFeature(theScenario);
+            self.selectScenario(theScenario);
         } 
      })
     .error(function() { self.scenarioLoadError(true); })

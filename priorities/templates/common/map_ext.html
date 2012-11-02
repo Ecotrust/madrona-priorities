@@ -79,7 +79,7 @@
                                                 <tbody data-bind="foreach: scenarioListPaginated">
                                                     <tr class="scenario-row" 
                                                         data-bind="attr: {'data-original-title': description}, 
-                                                                click: $parent.selectFeature, 
+                                                                click: $parent.selectScenario, 
                                                                 css: {'active': $data === $parent.selectedFeature() }">
                                                         <td class="scenario-name">
                                                             <span data-bind="visible: expired()">
@@ -171,7 +171,7 @@
                                                 <img style="padding-left: 12px;" data-bind="visible: !$parent.formLoadComplete()" 
                                                     alt="loading" src="/media/img/ajax-loader.gif" />
                                             </div>
-                                            <h4><div data-bind="text: name"></div></h4>
+                                            <h4 data-bind="text: name"></h4>
                                             <p data-bind="text: description"></p>
                                             <div id="scenario-show-container" style="margin-top: 18px;">
                                                 <span data-bind="visible: !$parent.reportLoadComplete()">

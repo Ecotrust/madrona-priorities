@@ -11,7 +11,8 @@ function progressViewModel() {
     if (scenario_uid) {
         app.viewModel.scenarios.loadScenarios(scenario_uid);
     }
-    self.done(true);
+    // not "done" until the new report loads, just keep the 100% progress bar up and spinning
+    // self.done(true);
   };
   self.checkTimer = function() {
     var checkProgress = function () {

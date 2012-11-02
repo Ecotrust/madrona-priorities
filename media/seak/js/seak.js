@@ -206,9 +206,9 @@ function init_map() {
             tmpObj[fullName] = obj[key];
         }
 
-        for(var key in tmpObj) {
-            if(tmpObj.hasOwnProperty(key)) {
-                keys.push(key);
+        for(var thekey in tmpObj) {
+            if(tmpObj.hasOwnProperty(thekey)) {
+                keys.push(thekey);
             }
         }
 

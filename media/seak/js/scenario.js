@@ -100,7 +100,7 @@ function scenariosViewModel() {
     if (self.dataMode() == mode) {
         // no need to switch or reload
         return;
-    };
+    }
     self.dataMode(mode);
     self.selectedFeature(false);
     self.showScenarioList(true);
@@ -419,7 +419,7 @@ function scenariosViewModel() {
             } else {
                 layer.activateLayer();
             }
-        };
+        }
   };
   self.showDeleteDialog = function () {
     $("#scenario-delete-dialog").modal("show");

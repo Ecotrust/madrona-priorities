@@ -206,7 +206,7 @@
                                 </div>
                                 <div class="span10">
                                     <span class="text-success slider-label slider-label-left"><small>{% flatblock 'target-low' 3600 %}</small></span>
-                                    <span> <div class="slider-range slider-range-dual" id="dualrange---{{cf.id_string}}"></div> </span>
+                                    <span> <div class="slider-range slider-range-single" id="singlerange---{{cf.id_string}}"></div> </span>
                                     <span class="text-success slider-label slider-label-right"><small>{% flatblock 'target-high' 3600 %}</small></span>
                                 </div>
                                 <div class="{% if slider_show_input %}span1{% else %}debug-only{% endif %}">
@@ -215,15 +215,6 @@
                                 </div>
                             </div>
 
-                            <!--
-                            <span class="text-success slider-label slider-label-left"><small>{% flatblock 'target-low' 3600 %}</small></span>
-                            <span> <div class="slider-range slider-range-dual" id="dualrange---{{cf.id_string}}"></div> </span>
-                            <span class="text-success slider-label slider-label-right"><small>{% flatblock 'target-high' 3600 %}</small></span>
-                            <span style="pull-right">
-                                <input type="text" class="{% if slider_show_input %}input-mini{% else %}debug-only{% endif %} targetvalue" id="target---{{cf.id_string}}" value="0.0"/>
-                                <input type="text" class="debug-only penaltyvalue" id="penalty---{{cf.id_string}}" value="0.0"/>
-                            </span>
-                            -->
                             {% elif slider_mode == 'dual' %}
                             <div class="row-fluid">
                                 <div class="span2" style="padding-right:13px;">

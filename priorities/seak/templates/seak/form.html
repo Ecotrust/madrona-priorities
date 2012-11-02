@@ -177,7 +177,7 @@
                     <td>
                         <div class="slider-collapse aggregate hide" id="#slider-collapse-{{category.grouper|slugify}}">
                             <span class="slider-label slider-label-left">{% flatblock 'target-low' 3600 %}</span>
-                            <div class="slider-range slider-range-dual" id="dualrange---CATEGORY-{{category.grouper|slugify}}"></div> 
+                            <div class="slider-range slider-range-single" id="singlerange---CATEGORY-{{category.grouper|slugify}}"></div> 
                             <span class="slider-label slider-label-right">{% flatblock 'target-high' 3600 %}</span>
                             <a class="pull-right btn btn-mini apply">Apply to all {{category.grouper}}</a>
                         </div>
@@ -218,7 +218,7 @@
                             {% elif slider_mode == 'dual' %}
                             <div class="row-fluid">
                                 <div class="span2" style="padding-right:13px;">
-                                    <p class="text-info">{% flatblock 'target' 3600 %}</p>
+                                    <p class="text-info" style="width:65px;">{% flatblock 'target' 3600 %}</p>
                                 </div>
                                 <div class="span9">
                                     <span class="text-success slider-label slider-label-left"><small>{% flatblock 'target-low' 3600 %}</small></span>
@@ -231,7 +231,7 @@
                             </div>
                             <div class="row-fluid">
                                 <div class="span2" style="padding-right:13px;">
-                                    <p class="text-info">{% flatblock 'penalty' 3600 %}</p>
+                                    <p class="text-info" style="width:65px;">{% flatblock 'penalty' 3600 %}</p>
                                 </div>
                                 <div class="span9">
                                     <span class="text-success slider-label slider-label-left"><small>{% flatblock 'penalty-low' 3600 %}</small></span>

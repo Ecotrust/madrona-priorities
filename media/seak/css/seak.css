@@ -263,10 +263,6 @@ ul.map-legend-group {
 ul#map-legend-attr { 
     display:none;
 }
-.alert-info {
-    background-color: #013435;
-}
-
 input.input-micro {
     width: 30px;
 }

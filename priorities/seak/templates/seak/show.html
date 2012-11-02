@@ -10,7 +10,7 @@
 {% block progress %}
 <input type="hidden" id="selected_progress_url" value="{% url analysis-progress instance.uid %}" />
 {% if not instance.done %}
-<div class="alert" 
+<div class="alert alert-info" 
      data-bind="visible: !done(), css: {'alert-error': error(), 'alert': !error()}">
     <div id="scenario_progress_html">
         <p data-bind="html: progressHtml"><!-- {{ instance.status_html|safe }} --></p>

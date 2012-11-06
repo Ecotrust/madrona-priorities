@@ -1,23 +1,20 @@
-Update procedure.
-Matt Perry
-11/03/2011
+1. Clear browser cache
 
-When the shapefile or fish list is updated, 
-these procedures MUST be run.
+2. re-import planning units
+# modify and run import.sh
 
-1.Move updated shapefile and fish list to production server into the /usr/local/apps/usfw/data/ dir. Masters on Terra:
-  a. G:\projects\projects2010\USFWS_Priorities\Util\tables\Tool_Inputs\PrioritySpeciesList_MASTER_FOR_WEB.xls
-  b. G:\projects\projects2010\USFWS_Priorities\Analysis\HUC8_FocalFishxxxxxxxx.shp
-  c. Check them before uploading and edit accordingly
+3. stop server, manage.py clear_cache, restart
+sudo s2dissite <apache site name>
+sudo /etc/init.d/apache2 reload
 
-2. cd /usr/local/apps/usfw/watershed-priorities/util
-3. source /usr/local/apps/usfw/env/bin/activate
-4. edit import_fish_data.py to point to filepaths (if changed)
-5. run python import_fish_data.py (Populates the database)
-6. run go.sh (which calls generate_fish_list.py and regenerates fish list input form)
-7. touch ../wsgi.py (restart wsgi server)
+4. clear tilestache cache
+tilestache-clean.py -c tile_config/tiles.cfg -l ALL -b 41 -125 47 -115 3 4 5 6 7 
+tilestache-clean.py -e json -c tile_config/tiles.cfg -l utfgrid -b 41 -125 47 -115 3 4 5 6 7 8
 
+5. Optional, To reseed
+tilestache-seed.py -c tile_config/tiles.cfg -l planning_units -e png -b 41 -125 47 -115 3 4 5 6 7 
+tilestache-seed.py -c tile_config/tiles.cfg -l utfgrid -e json -b 41 -125 47 -115 3 4 5 6 7 
 
--------
-to update KML, use Arc2Earth and upload to admin
-TODO where to back up on server?
+6. Reload site
+sudo s2ensite <apache site name>
+sudo /etc/init.d/apache2 reload

@@ -10,9 +10,11 @@ It is designed so that the code could be easily repurposed for other projects...
 
 ## To install a new priorities tool.
 
-1. **Spatial data prep**. Decide on polygon planning units and summarize targets and costs to the planning units. See `docs/data_prep.md`
+* **Spatial data prep**. Decide on polygon planning units and summarize targets and costs to the planning units. See `docs/data_prep.md`
 
-2. Clone the **git repository** and create a new branch
+
+
+* Clone the **git repository** and create a new branch
 
 ```
 cd /usr/local/apps/src
@@ -22,13 +24,13 @@ git checkout <NEW_PROJECT_NAME>
 git push -u origin <NEW_PROJECT_NAME> 
 ```
 
-3. Install a virtualenv, madrona, python dependencies, postgres, django etc. (see `INSTALL.md`)
+* **Install** a virtualenv, madrona, python dependencies, postgres, django etc. (see `docs/INSTALL.md`)
 
-4. Import the data. (see `seak/import.sh`)
+* **Import** the data. (see `seak/import.sh`)
 
 ### optional
 
-5. Update the dataset with the import.sh script (see `docs/updating.txt`)
+* **Update** the dataset with the import.sh script (see `docs/updating.txt`)
 
-6. Modify code to add features. Do this *in the project branch*, keeping the commits atomic, and merging back into master. 
+* Modify code to **add features**. Do this *in the project branch*, keeping the commits atomic, and merging back into master. 
 Merge carefully and don't bring merge over any project-specific changes.

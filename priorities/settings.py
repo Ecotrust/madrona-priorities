@@ -1,13 +1,13 @@
 # Django settings for omm project.
 from madrona.common.default_settings import *
 
-APP_NAME = "BLM Juniper Management Priorities Tool"
+APP_NAME = "BLM Aquatic Management Priorities Tool"
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 DATABASES = {
     'default': {
         'ENGINE': 'django.contrib.gis.db.backends.postgis',
-        'NAME': 'juniper',
+        'NAME': 'aquatics-blm',
         'USER': 'postgres', }
 }
 

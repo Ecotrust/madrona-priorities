@@ -2,8 +2,8 @@ import sys
 import site
 import os
 
-project = '/usr/local/apps/juniper-blm/priorities'
-ve = '/usr/local/apps/juniper-blm/env'
+project = '/usr/local/apps/aquatics-blm/priorities'
+ve = '/usr/local/apps/aquatics-blm/env'
 vepath = os.path.join(ve, 'lib/python2.6/site-packages')
 
 prev_sys_path = list(sys.path)

@@ -401,7 +401,10 @@
                 $('#info').hide();
             });
         });
+        OpenLayers.IMAGE_RELOAD_ATTEMPTS = 3; 
     </script>
 {% endblock content %}
 
-{% block scripts %}<script src="{{MEDIA_URL}}OpenLayers.js"></script>{% endblock scripts %}
+{% block scripts %}
+<script src="{{MEDIA_URL}}OpenLayers.js"></script>
+{% endblock scripts %}

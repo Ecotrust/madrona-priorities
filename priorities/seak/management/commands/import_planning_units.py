@@ -252,6 +252,7 @@ class Command(BaseCommand):
         all_dbf_fieldnames.append(params['name_field'])
 
         cfg = {
+            "logging": "warning",
             "cache": {
                 "name": "Multi",
                 "tiers": [

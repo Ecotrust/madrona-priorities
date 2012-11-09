@@ -257,7 +257,7 @@ class Command(BaseCommand):
                 "name": "Multi",
                 "tiers": [
                     #{ "name": "Memcache", "servers": ["127.0.0.1:11211"] },
-                    { "name": "Disk", "path": "/tmp/juniper-stache" }
+                    { "name": "Disk", "path": "/tmp/%s-stache" % slugify(settings.APP_NAME) }
                 ]
             },
             "layers": {

@@ -36,3 +36,4 @@ tile_config/*
 wsgi.py
 env/*
 marxan_bin/*
+logs/*

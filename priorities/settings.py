@@ -99,7 +99,8 @@ dblogger = logging.getLogger('django.db.backends')
 dblogger.setLevel(logging.INFO)
 
 SLIDER_MODE = "single" # 'dual' OR 'single'
-SLIDER_SHOW_INPUT = False # do we show the target/penalty input text values?
+SLIDER_SHOW_RAW = False
+SLIDER_SHOW_PROPORTION = True
 VARIABLE_GEOGRAPHY = True # do we allow variable geographies (True) or just use all planning units (False)?
 
 #############################################################

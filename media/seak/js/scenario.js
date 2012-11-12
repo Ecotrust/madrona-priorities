@@ -174,8 +174,8 @@ function scenariosViewModel() {
                     // Sets the targets and penalties based on the single slider value
                     // slider val is 0 to 100 while targets/penalties are 0 to 1
                     // assume that the slider always tracks target directly (ie 0.75 target == 75 slider)
-                    $( "#penalty---" + id ).val( ui.value / 100.0 );
-                    $( "#target---" + id ).val( ui.value / 100.0 );
+                    $( "#penalty---" + id ).val( ui.value );
+                    $( "#target---" + id ).val( ui.value );
                 }
             });
         });
@@ -189,7 +189,7 @@ function scenariosViewModel() {
                 min: 0,
                 max: 100,
                 slide: function( event, ui ) {
-                    $( "#penalty---" + id ).val( ui.value / 100.0 );
+                    $( "#penalty---" + id ).val( ui.value );
                 }
             });
         });
@@ -203,7 +203,7 @@ function scenariosViewModel() {
                 min: 0,
                 max: 100,
                 slide: function( event, ui ) {
-                    $( "#target---" + id ).val( ui.value / 100.0 );
+                    $( "#target---" + id ).val( ui.value );
                 }
             });
         });
@@ -242,14 +242,14 @@ function scenariosViewModel() {
             // Apply Targets and Penalties
             var in_targets = JSON.parse($('#id_input_targets').val());
             $.each(in_targets, function(key, val) {
-                $("#target---" + key).val(val);
+                $("#target---" + key).val(val * 100);
                 $("#targetrange---" + key).slider("value", val * 100);  
                 $("#singlerange---" + key).slider("value", val * 100); 
                 // TODO $("#sliderdisplay---" + key).text(val * 100);
             });
             var in_penalties = JSON.parse($('#id_input_penalties').val());
             $.each(in_penalties, function(key, val) {
-                $("#penalty---" + key).val(val);
+                $("#penalty---" + key).val(val * 100);
                 $("#penaltyrange---" + key).slider("value", val * 100);  
             });
        } // end EDIT mode
@@ -324,8 +324,8 @@ function scenariosViewModel() {
             var id = "#" + xid;
             xid = xid.replace(/^target---/,''); //  Remove preceding identifier
             xid = xid.replace(/---$/,''); // Remove trailing ---
-            targets[xid] = parseFloat($(id).val());
-            totaltargets += parseFloat($(id).val());
+            targets[xid] = parseFloat($(id).val()) / 100.0;
+            totaltargets += targets[xid];
         });
         // Get penalties 
         $("#form-cfs tr.cf-row:not(.hide) input.penaltyvalue").each( function(index, elem) {
@@ -333,8 +333,8 @@ function scenariosViewModel() {
             var id = "#" + xid;
             xid = xid.replace(/^penalty---/,''); 
             xid = xid.replace(/---$/,'');
-            penalties[xid] = parseFloat($(id).val());
-            totalpenalties += parseFloat($(id).val());
+            penalties[xid] = parseFloat($(id).val()) / 100.0;
+            totalpenalties += penalties[xid];
         });
         // Initialize costs to zero
         $('#form-costs input:checkbox.costvalue').each( function(index) {

@@ -829,12 +829,14 @@ class Scenario(Analysis):
             'defined_geographies': DefinedGeography.objects.all(),
             'costs': Cost.objects.all(),
             'slider_mode': settings.SLIDER_MODE,
-            'slider_show_input': settings.SLIDER_SHOW_INPUT,
+            'slider_show_raw': settings.SLIDER_SHOW_RAW,
+            'slider_show_proportion': settings.SLIDER_SHOW_PROPORTION,
             'variable_geography': settings.VARIABLE_GEOGRAPHY,
         }
         show_context = {
             'slider_mode': settings.SLIDER_MODE,
-            'slider_show_input': settings.SLIDER_SHOW_INPUT,
+            'slider_show_raw': settings.SLIDER_SHOW_RAW,
+            'slider_show_proportion': settings.SLIDER_SHOW_PROPORTION,
         }
         icon_url = 'common/images/watershed.png'
         links = (

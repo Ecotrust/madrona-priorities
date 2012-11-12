@@ -200,46 +200,73 @@
                         <th style="width:156px;">{{cf.name}}</th>
                         <td> 
                             {% if slider_mode == 'single' %}
-                            
                             <div class="row-fluid">
+                                <!-- SINGLE SLIDER -->
                                 <div class="span1" style="padding-right:13px;">
                                 </div>
-                                <div class="span10">
+                                <div class="span10" style="vertical-align:middle;">
                                     <span class="text-success slider-label slider-label-left"><small>{% flatblock 'target-low' 3600 %}</small></span>
                                     <span> <div class="slider-range slider-range-single" id="singlerange---{{cf.id_string}}"></div> </span>
                                     <span class="text-success slider-label slider-label-right"><small>{% flatblock 'target-high' 3600 %}</small></span>
                                 </div>
-                                <div class="{% if slider_show_input %}span1{% else %}debug-only{% endif %}">
-                                    <input type="text" class="input-mini targetvalue" id="target---{{cf.id_string}}" value="0.0"/>
-                                    <input type="text" class="debug-only penaltyvalue" id="penalty---{{cf.id_string}}" value="0.0"/>
+                                <div class="span1">
+                                    {% if slider_show_proportion %}
+                                    <div class="input-append">
+                                        <input type="text" class="input-mini targetvalue" id="target---{{cf.id_string}}" value="0.0"/>
+                                        <input type="text" class="debug-only penaltyvalue" id="penalty---{{cf.id_string}}" value="0.0"/>
+                                        <span class="add-on small">%</span>
+                                    </div>
+                                    {% endif %} 
+
+                                    {% if slider_show_raw %}
+                                    <div class="input-append">
+                                        <input type="text" class="input-mini targetvalue" id="rawtarget---{{cf.id_string}}" value="0.0"/>
+                                        <input type="text" class="debug-only penaltyvalue" id="rawpenalty---{{cf.id_string}}" value="0.0"/>
+                                        <span class="add-on small">{{cf.units}}</span>
+                                    </div>
+                                    {% endif %} 
                                 </div>
                             </div>
 
                             {% elif slider_mode == 'dual' %}
                             <div class="row-fluid">
+                                <!-- TARGET SLIDER -->
                                 <div class="span2" style="padding-right:13px;">
                                     <p class="text-info" style="width:65px;">{% flatblock 'target' 3600 %}</p>
                                 </div>
-                                <div class="span9">
+                                <div class="span9" style="vertical-align:middle;">
                                     <span class="text-success slider-label slider-label-left"><small>{% flatblock 'target-low' 3600 %}</small></span>
                                     <div class="slider-range slider-range-target" id="targetrange---{{cf.id_string}}"></div> 
                                     <span class="text-success slider-label slider-label-right"><small>{% flatblock 'target-high' 3600 %}</small></span>
                                 </div>
-                                <div class="{% if slider_show_input %}span1{% else %}debug-only{% endif %}">
-                                    <input type="text" class="{% if slider_show_input %}input-micro{% else %}debug-only{% endif %} targetvalue" id="target---{{cf.id_string}}" value="0.0"/>
+                                <div class="span1">
+                                    {% if slider_show_proportion %}
+                                    <input type="text" class="input-micro targetvalue" id="target---{{cf.id_string}}" value="0.0"/>
+                                    {% endif %}
+
+                                    {% if slider_show_raw %}
+                                    <input type="text" class="input-micro targetvalue" id="rawtarget---{{cf.id_string}}" value="0.0"/>
+                                    {% endif %}
                                 </div>
                             </div>
                             <div class="row-fluid">
+                                <!-- PENALTY SLIDER -->
                                 <div class="span2" style="padding-right:13px;">
                                     <p class="text-info" style="width:65px;">{% flatblock 'penalty' 3600 %}</p>
                                 </div>
-                                <div class="span9">
+                                <div class="span9" style="vertical-align:middle;">
                                     <span class="text-success slider-label slider-label-left"><small>{% flatblock 'penalty-low' 3600 %}</small></span>
                                     <div class="slider-range slider-range-penalty" id="penaltyrange---{{cf.id_string}}"></div> 
                                     <span class="text-success slider-label slider-label-right"><small>{% flatblock 'penalty-high' 3600 %}</small></span>
                                 </div>
-                                <div class="{% if slider_show_input %}span1{% else %}debug-only{% endif %}">
-                                    <input type="text" class="{% if slider_show_input %}input-micro{% else %}debug-only{% endif %} penaltyvalue" id="penalty---{{cf.id_string}}" value="0.0"/>
+                                <div class="span1">
+                                    {% if slider_show_proportion %}
+                                    <input type="text" class="input-micro penaltyvalue" id="penalty---{{cf.id_string}}" value="0.0"/>
+                                    {% endif %}
+
+                                    {% if slider_show_raw %}
+                                    <input type="text" class="input-micro penaltyvalue" id="rawpenalty---{{cf.id_string}}" value="0.0"/>
+                                    {% endif %}
                                 </div>
                             </div>
                             {% endif %}

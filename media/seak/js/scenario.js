@@ -145,9 +145,31 @@ function scenariosViewModel() {
       formUrl = formUrl.getUrl([uid]);
     }
 
-        selectFeatureControl.unselectAll();
-        selectGeographyControl.activate();
-        pu_layer.styleMap.styles['default'].defaultStyle.display = true;
+    selectFeatureControl.unselectAll();
+    selectGeographyControl.activate();
+    pu_layer.styleMap.styles['default'].defaultStyle.display = true;
+
+    // Get a lookup dict for id to dbf fieldname conversion
+    var lookup_url = "/seak/id_lookup.json";
+    var idLookup;
+    var xhr = $.ajax({
+        url: lookup_url, 
+        cache: true,
+        dataType: 'json', 
+        success: function(data) { 
+            idLookup = data; 
+        }
+    })
+    .error( function() { 
+        idLookup = null; 
+    });
+
+    // Call to get a raw value from a slider value
+    var getRawTarget = function(val, id) {
+        var dbfFieldname = idLookup[id];
+        var raw = Math.round(val/100.0 * cfTotals[dbfFieldname]); 
+        return raw;
+    }; 
 
     // clean up and show the form
     var jqxhr = $.get(formUrl, function(data) {
@@ -157,7 +179,6 @@ function scenariosViewModel() {
       self.showScenarioFormPanel(true);
     })
     .success( function() {
-         // ----
         self.showScenarioList(false);
         self.selectedFeature(false);
         self.showScenarioList(false);
@@ -170,12 +191,15 @@ function scenariosViewModel() {
                 value: 0,
                 min: 0,
                 max: 100,
-                slide: function( event, ui ) {
-                    // Sets the targets and penalties based on the single slider value
-                    // slider val is 0 to 100 while targets/penalties are 0 to 1
-                    // assume that the slider always tracks target directly (ie 0.75 target == 75 slider)
+                change: function( event, ui ) {
                     $( "#penalty---" + id ).val( ui.value );
                     $( "#target---" + id ).val( ui.value );
+                    $( "#rawtarget---" + id ).val( getRawTarget(ui.value, id) );
+                },
+                slide: function( event, ui ) {
+                    $( "#penalty---" + id ).val( ui.value );
+                    $( "#target---" + id ).val( ui.value );
+                    $( "#rawtarget---" + id ).val( getRawTarget(ui.value, id) );
                 }
             });
         });
@@ -188,6 +212,9 @@ function scenariosViewModel() {
                 value: 0,
                 min: 0,
                 max: 100,
+                change: function( event, ui ) {
+                    $( "#penalty---" + id ).val( ui.value );
+                },
                 slide: function( event, ui ) {
                     $( "#penalty---" + id ).val( ui.value );
                 }
@@ -202,8 +229,13 @@ function scenariosViewModel() {
                 value: 0,
                 min: 0,
                 max: 100,
+                change: function( event, ui ) {
+                    $( "#target---" + id ).val( ui.value );
+                    $( "#rawtarget---" + id ).val( getRawTarget(ui.value, id) );
+                },
                 slide: function( event, ui ) {
                     $( "#target---" + id ).val( ui.value );
+                    $( "#rawtarget---" + id ).val( getRawTarget(ui.value, id) );
                 }
             });
         });
@@ -270,6 +302,7 @@ function scenariosViewModel() {
             }
 
             // The newly selected tab 
+            fieldInfo = getGeographyFieldInfo()
             switch (e.target.id) {
                 case "tab-geography":
                     selectGeographyControl.activate();
@@ -278,7 +311,7 @@ function scenariosViewModel() {
                 case "tab-costs":
                     // Show only controls for fields in all planning units
                     $('tr.cost-row').addClass('hide');
-                    costFields = getCostFields();
+                    costFields = fieldInfo.costList;
                     $.each(costFields, function(idx, val) {
                         $('tr#row-' + val).removeClass('hide');
                     });
@@ -286,7 +319,7 @@ function scenariosViewModel() {
                 case "tab-species":
                     // Show only controls for fields in all planning units
                     $('tr.cf-row').addClass('hide');
-                    cfFields = getCfFields();
+                    cfFields = fieldInfo.cfList;
                     $.each(cfFields, function(idx, val) {
                         $('tr#row-' + val).removeClass('hide');
                     });
@@ -295,6 +328,12 @@ function scenariosViewModel() {
                         if($(this).find('tr.cf-row:not(.hide)').length === 0) { 
                             $(this).addClass('hide');
                         }
+                    });
+                    cfTotals = fieldInfo.cfTotals;
+                    $.each( $(".slider-range"), function(idx, a){ 
+                        // set the value to trigger slider change event
+                        var b = $(a).slider("value"); 
+                        $(a).slider("value", b); 
                     });
                     break;
             }

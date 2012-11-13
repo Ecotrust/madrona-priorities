@@ -153,14 +153,11 @@
         <h4>{% flatblock 'form-conservationfeature-header' 3600 %}</h4>
         <div> {% flatblock 'form-conservationfeature-description' 3600 %}</div>
         <br/>
-        <br/>
         <form action="#" id="form-cfs">
           <table class="table table-condensed">
             <tr>
                 <th> {% flatblock 'show-conservation-features' 3600 %} </th>
                 <th> {% flatblock 'relative-importance' 3600 %}</th>
-                <th class="debug-only"> target </th>
-                <th class="debug-only"> penalty </th>
             </tr>
           </table>
           <div id="accordion1" class="accordion">
@@ -210,19 +207,19 @@
                                     <span class="text-success slider-label slider-label-right"><small>{% flatblock 'target-high' 3600 %}</small></span>
                                 </div>
                                 <div class="span1">
-                                    {% if slider_show_proportion %}
                                     <div class="input-append">
-                                        <input type="text" class="input-mini targetvalue" id="target---{{cf.id_string}}" value="0.0"/>
                                         <input type="text" class="debug-only penaltyvalue" id="penalty---{{cf.id_string}}" value="0.0"/>
-                                        <span class="add-on small">%</span>
+                                        <input type="text" class="{% if not slider_show_proportion %}debug-only {% endif %}input-mini targetvalue" 
+                                               id="target---{{cf.id_string}}" value="0.0"/>
+                                        {% if slider_show_proportion %}
+                                        <span class="add-on">%</span>
+                                        {% endif %}
                                     </div>
-                                    {% endif %} 
 
                                     {% if slider_show_raw %}
                                     <div class="input-append">
-                                        <input type="text" class="input-mini targetvalue" id="rawtarget---{{cf.id_string}}" value="0.0"/>
-                                        <input type="text" class="debug-only penaltyvalue" id="rawpenalty---{{cf.id_string}}" value="0.0"/>
-                                        <span class="add-on small">{{cf.units}}</span>
+                                        <input type="text" class="input-mini rawtargetvalue" id="rawtarget---{{cf.id_string}}" value="0.0"/>
+                                        <span class="add-on"><small>{{cf.units}}</small></span>
                                     </div>
                                     {% endif %} 
                                 </div>
@@ -240,12 +237,11 @@
                                     <span class="text-success slider-label slider-label-right"><small>{% flatblock 'target-high' 3600 %}</small></span>
                                 </div>
                                 <div class="span1">
-                                    {% if slider_show_proportion %}
-                                    <input type="text" class="input-micro targetvalue" id="target---{{cf.id_string}}" value="0.0"/>
-                                    {% endif %}
+                                    <input type="text" class="{% if not slider_show_proportion %}debug-only {% endif %}input-micro targetvalue" 
+                                           id="target---{{cf.id_string}}" value="0.0"/>
 
                                     {% if slider_show_raw %}
-                                    <input type="text" class="input-micro targetvalue" id="rawtarget---{{cf.id_string}}" value="0.0"/>
+                                    <input type="text" class="input-mini rawtargetvalue" id="rawtarget---{{cf.id_string}}" value="0.0"/>
                                     {% endif %}
                                 </div>
                             </div>
@@ -260,12 +256,11 @@
                                     <span class="text-success slider-label slider-label-right"><small>{% flatblock 'penalty-high' 3600 %}</small></span>
                                 </div>
                                 <div class="span1">
-                                    {% if slider_show_proportion %}
-                                    <input type="text" class="input-micro penaltyvalue" id="penalty---{{cf.id_string}}" value="0.0"/>
-                                    {% endif %}
+                                    <input type="text" class="{% if not slider_show_proportion %}debug-only {% endif %}input-micro penaltyvalue" 
+                                           id="penalty---{{cf.id_string}}" value="0.0"/>
 
                                     {% if slider_show_raw %}
-                                    <input type="text" class="input-micro penaltyvalue" id="rawpenalty---{{cf.id_string}}" value="0.0"/>
+                                    <input type="text" class="input-mini penaltyvalue" id="rawpenalty---{{cf.id_string}}" value="0.0"/>
                                     {% endif %}
                                 </div>
                             </div>

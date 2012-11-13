@@ -6,31 +6,37 @@ var selectFeatureControl;
 var keyboardControl;
 var selectGeographyControl;
 
-function getCfFields() {
-    // Find the set of conservation features represented in ALL of the selected planning units.
+function getGeographyFieldInfo() {
+    // Find the conservation features, totals and costs represented in ALL of the selected planning units.
     if (pu_layer.selectedFeatures.length >= 1) {
-        var tmpList = pu_layer.selectedFeatures[0].attributes.cf_fields;
-        $.each( pu_layer.selectedFeatures, function(idx, feat) { 
-            fieldList = feat.attributes.cf_fields;
-            tmpList = tmpList.intersect(fieldList); 
+        var costList = pu_layer.selectedFeatures[0].attributes.cost_fields;
+        var cfList = pu_layer.selectedFeatures[0].attributes.cf_fields;
+        var cfTotals = {};
+        $.each( cfList, function(idx, cf) { 
+            cfTotals[cf] = 0;
         });
-        return tmpList;
-    } else { 
-        return [];
-    }
-}
+        var tmpList;
+        $.each( pu_layer.selectedFeatures, function(idx, feat) { 
+            // handle costs
+            tmpList = feat.attributes.cost_fields;
+            costList = costList.intersect(tmpList); 
 
-function getCostFields() {
-    // Find the set of costs represented in ALL of the selected planning units.
-    if (pu_layer.selectedFeatures.length >= 1) {
-        var tmpList = pu_layer.selectedFeatures[0].attributes.cost_fields;
-        $.each( pu_layer.selectedFeatures, function(idx, feat) { 
-            fieldList = feat.attributes.cost_fields;
-            tmpList = tmpList.intersect(fieldList); 
+            // handle conservation features
+            tmpList = feat.attributes.cf_fields;
+            cfList = cfList.intersect(tmpList); 
+
+            // get cf values and add to total
+            $.each( cfList, function(idx, cf) { 
+                cfTotals[cf] += feat.attributes.cf_values[cf]; 
+            });
         });
-        return tmpList;
+        return {
+            'costList': costList, 
+            'cfList': cfList, 
+            'cfTotals': cfTotals
+        };
     } else { 
-        return [];
+        return {}; 
     }
 }
 

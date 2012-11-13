@@ -99,8 +99,8 @@ dblogger = logging.getLogger('django.db.backends')
 dblogger.setLevel(logging.INFO)
 
 SLIDER_MODE = "single" # 'dual' OR 'single'
-SLIDER_SHOW_RAW = False
-SLIDER_SHOW_PROPORTION = True
+SLIDER_SHOW_RAW = True 
+SLIDER_SHOW_PROPORTION = False
 VARIABLE_GEOGRAPHY = True # do we allow variable geographies (True) or just use all planning units (False)?
 
 #############################################################

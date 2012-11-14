@@ -167,7 +167,7 @@ function scenariosViewModel() {
     // Call to get a raw value from a slider value
     var getRawTarget = function(val, id) {
         var dbfFieldname = idLookup[id];
-        var raw = Math.round(val/100.0 * cfTotals[dbfFieldname]); 
+        var raw = (val/100.0 * cfTotals[dbfFieldname]).format(-2, ',', '.'); 
         return raw;
     }; 
 

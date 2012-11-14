@@ -36,15 +36,6 @@
     }
   }, 
   {
-    "pk": 10, 
-    "model": "flatblocks.flatblock", 
-    "fields": {
-      "content": "Conservation Features", 
-      "header": "", 
-      "slug": "show-conservation-features"
-    }
-  }, 
-  {
     "pk": 11, 
     "model": "flatblocks.flatblock", 
     "fields": {
@@ -69,15 +60,6 @@
       "content": "Results Summary", 
       "header": "", 
       "slug": "show-results-summary"
-    }
-  }, 
-  {
-    "pk": 20, 
-    "model": "flatblocks.flatblock", 
-    "fields": {
-      "content": "Percent of Total Available Value", 
-      "header": "", 
-      "slug": "show-percent-met"
     }
   }, 
   {
@@ -117,15 +99,6 @@
     }
   }, 
   {
-    "pk": 24, 
-    "model": "flatblocks.flatblock", 
-    "fields": {
-      "content": "Importance Weighting", 
-      "header": "", 
-      "slug": "relative-importance"
-    }
-  }, 
-  {
     "pk": 21, 
     "model": "flatblocks.flatblock", 
     "fields": {
@@ -159,15 +132,6 @@
       "content": "<h3>Scenario should be rerun</h3> New data has been loaded into the prioritization tool since this scenario was created. It is <em>highly</em> recommended that you Edit and rerun the scenario to make sure the results are still valid with the current data.", 
       "header": "", 
       "slug": "scenario-expired-message"
-    }
-  }, 
-  {
-    "pk": 13, 
-    "model": "flatblocks.flatblock", 
-    "fields": {
-      "content": "A <strong>low</strong> importance indicates \"<em>do not consider in the prioritization process</em>\"<br/> A <strong>high</strong> importance indicates very high priority (i.e. \"<em>Attempt to capture almost all of the available habitat</em>\"). \r\n", 
-      "header": "", 
-      "slug": "form-conservationfeature-description"
     }
   }, 
   {
@@ -240,15 +204,6 @@
       "content": "A juniper management prioritization support tool for Eastern Oregon. ", 
       "header": "", 
       "slug": "about-intro"
-    }
-  }, 
-  {
-    "pk": 12, 
-    "model": "flatblocks.flatblock", 
-    "fields": {
-      "content": "Set Objectives", 
-      "header": "", 
-      "slug": "form-conservationfeature-header"
     }
   }, 
   {
@@ -339,6 +294,51 @@
       "content": "high", 
       "header": "", 
       "slug": "penalty-high"
+    }
+  }, 
+  {
+    "pk": 24, 
+    "model": "flatblocks.flatblock", 
+    "fields": {
+      "content": "Target Acreage", 
+      "header": "", 
+      "slug": "relative-importance"
+    }
+  }, 
+  {
+    "pk": 10, 
+    "model": "flatblocks.flatblock", 
+    "fields": {
+      "content": "Management Objectives", 
+      "header": "", 
+      "slug": "show-conservation-features"
+    }
+  }, 
+  {
+    "pk": 20, 
+    "model": "flatblocks.flatblock", 
+    "fields": {
+      "content": "Total Habitat Captured", 
+      "header": "", 
+      "slug": "show-percent-met"
+    }
+  }, 
+  {
+    "pk": 12, 
+    "model": "flatblocks.flatblock", 
+    "fields": {
+      "content": "Set Targets", 
+      "header": "", 
+      "slug": "form-conservationfeature-header"
+    }
+  }, 
+  {
+    "pk": 13, 
+    "model": "flatblocks.flatblock", 
+    "fields": {
+      "content": "For each management objective, specify the desired acreage to target for removal.", 
+      "header": "", 
+      "slug": "form-conservationfeature-description"
     }
   }
 ]

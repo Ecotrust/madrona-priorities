@@ -44,12 +44,12 @@
              <table class="table">
              <thead> 
                 <th>{% flatblock 'show-conservation-features' 3600 %}</th>
-                {% if slider_mode != "dual"%}
+                {% if slider_mode == "single"%}
                     <th colspan="2"> {% flatblock 'relative-importance' 3600 %}</th>
                     <th class="debug-only">{% flatblock 'penalty' 3600 %}</th>
-                {% else %}
-                    <th colspan="2">{% flatblock 'target' 3600 %}</th>
-                    <th colspan="2">{% flatblock 'penalty' 3600 %}</th>
+                {% elif slider_mode == "dual" %}
+                    <th>{% flatblock 'target' 3600 %}</th>
+                    <th>{% flatblock 'penalty' 3600 %}</th>
                 {% endif %}
              </thead>
              <tbody>
@@ -57,15 +57,38 @@
                 {% for k,v in results.targets_penalties.items %}
                 <tr class="{% if v.target > 0 %}targeted{% else %}not-targeted{% endif %}"> 
                     <td>{{v.label}}</td>
-                    {% if slider_mode != "dual"%}
-                        <td> <div class="progress" style="width:120px; margin:0;"><div class="bar" style="width:{{v.target|percentage}}"></div></div> </td>
-                        <td>{{v.target|multiply:100|floatformat}} / 100</td>
+                    {% if slider_mode == "single"%}
+                        <td>
+                            <div class="progress" style="width:120px; margin:0;">
+                                <div class="bar" style="width:{{v.target|percentage}}"></div>
+                            </div>
+                        </td>
+                        <td class="{% if not slider_show_proportion %}debug-only{% endif %}">{{v.target|percentage}}</td>
                         <td class="debug-only">{{v.penalty|percentage}}</td>
-                    {% else %}
-                        <td>{{v.target|percentage}}</td>
-                        <td> <div class="progress" style="width:120px; margin:0;"><div class="bar" style="width:{{v.target|percentage}}"></div></div> </td>
-                        <td>{{v.penalty|percentage}}</td>
-                        <td> <div class="progress" style="width:120px; margin:0;"><div class="bar" style="width:{{v.penalty|percentage}}"></div></div> </td>
+                        <!--
+                        <td class="{% if not slider_show_raw %}debug-only{% endif %}">{{v.target}}</td>
+                        -->
+                    {% elif slider_mode == 'dual' %}
+                        <td> 
+                            <div class="row-fluid">
+                                <span class="span6">
+                                    <div class="progress" style="width:120px; margin:0;">
+                                        <div class="bar" style="width:{{v.target|percentage}}"></div>
+                                    </div> 
+                                </span>
+                                <span class="span6">{{v.target|percentage}}</span>
+                            </div>
+                        </td>
+                        <td> 
+                            <div class="row-fluid">
+                                <span class="span6">
+                                    <div class="progress" style="width:120px; margin:0;">
+                                        <div class="bar" style="width:{{v.penalty|percentage}}"></div>
+                                    </div> 
+                                </span>
+                                <span class="span6">{{v.penalty|percentage}}</span>
+                            </div>
+                        </td>
                     {% endif %}
                 </tr>
                 {% endfor %}
@@ -135,6 +158,7 @@
                 });
              </script>
         </div>
+
         <div id="species" class="tab-pane">
             <div class="box">
                 <p>{% flatblock 'show-targets-explanation' 3600 %}</p>
@@ -151,9 +175,13 @@
                 <tbody>
                 {% for s in results.species %}
                 <tr class="{% if s.target == 0 %}nogoal{% else %}hit{% endif %} {%if s.target_prop == 0%}not-targeted{%endif%}">
-                    <td> <strong>{{s.name}}</strong></td>
+                    <td> <strong>{{s.level1}} > {{s.name}}</strong></td>
                     <td> <div class="progress" style="width:120px; margin:0;" ><div class="bar" style="width:{{s.pcttotal|percentage}}"></div></div></td>
-                    <td> {{s.pcttotal|percentage:1}} {{s.units}} </td>
+                    {% if slider_show_raw %}
+                    <td> {{s.held|floatformat:0|intcomma}} {{s.units}} ({{s.pcttotal|percentage:1}}) </td>
+                    {% else %}
+                    <td> {{s.pcttotal|percentage:1}} of total {{s.units}} </td>
+                    {% endif %} 
                     <td class="debug-only"> {% if s.target == 0 %} - {% else %} 
                         {% if s.met %}&#10003;{% else %} NO<br/>(Goal was {{s.target_prop|percentage:0}}){% endif %} 
                          {% endif %}

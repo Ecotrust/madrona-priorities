@@ -36,6 +36,15 @@
     }
   }, 
   {
+    "pk": 11, 
+    "model": "flatblocks.flatblock", 
+    "fields": {
+      "content": "Planning Units", 
+      "header": "", 
+      "slug": "show-planning-units"
+    }
+  }, 
+  {
     "pk": 8, 
     "model": "flatblocks.flatblock", 
     "fields": {

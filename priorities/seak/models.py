@@ -352,7 +352,9 @@ class Scenario(Analysis):
         avgtarget = float(sum(nonzero_targets))/float(len(nonzero_targets))
 
         # ignore input, choose a scalefactor automatically based on avg and max target
-        self.input_scalefactor = 0.5 + (avgtarget * 2) + (maxtarget * 2)
+        self.input_scalefactor = 1 + (avgtarget * 2) + (maxtarget * 2) + settings.ADD_SCALEFACTOR_CONSTANT
+        if self.input_scalefactor < 0.5: # min of 0.5
+            self.input_scalefactor = 0.5
 
         # Apply the target and penalties
         logger.debug("Apply the targets and penalties")

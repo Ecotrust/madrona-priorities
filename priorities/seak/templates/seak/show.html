@@ -33,6 +33,9 @@
         <li><a href="#species" data-toggle="tab"><span>{% flatblock 'show-conservation-features' 3600 %}</span></a></li>
         <li><a href="#watersheds" data-toggle="tab"><span>{% flatblock 'show-planning-units' 3600 %}</span></a></li>
         {% endif %}
+        {% if show_raw_costs %}
+        <li><a href="#costs" data-toggle="tab"><span>{% flatblock 'show-total-costs' 3600 %}</span></a></li>
+        {% endif %}
     </ul>
 
     {% set results = instance.results %}
@@ -116,13 +119,14 @@
         <div id="watersheds" class="tab-pane">
             <div class="box">
                 <p>{% flatblock 'optimal-prioritization-scenario' 3600 %} includes {{results.num_units}} {% flatblock 'show-planning-units' 3600 %} covering {{results.area|floatformat:0|intcomma}} {% flatblock 'area-units' 3600 %}. </p>
+
                 <table class="table">
                 <thead>
                     <tr>
                     <th scope="col"> {% flatblock 'show-planning-units' 3600 %} </th> 
-                    {%for k,v in results.units.1.costs_class.items %}
+                    {%for k,v in results.units.1.costs.items %}
                         {% if v > 0 %}
-                        <th scope="col">{{k|deslug}}</th>
+                        <th style="max-width: 95px;" scope="col">{{k|deslug}}</th>
                         {% endif %}
                     {%endfor%}
                     <tr>
@@ -131,11 +135,17 @@
                 {% for w in results.units %}
                 <tr id="purow-{{w.uid}}">
                     <td>{{w.name}}</td>
-                    {%for k,v in w.costs_class.items %}
-                    <td><p class="debug-only" style="font-size: 7pt;">{{k}}</p><span class="badge {% if v == 'low' %}badge-success{% elif v == 'med' %}badge-warning{% elif v == 'high' %}badge-important{% endif %}">{{v}}&nbsp;</span></td>
+
+                    {% for k,v in w.costs.items %}
+                    <td>
+                        <span class="badge {% if v.class == 'low' %}badge-success{% elif v.class == 'med' %}badge-warning{% elif v.class == 'high' %}badge-important{% endif %}">
+                            {{v.class}}{% if show_raw_costs %}: {{v.raw|floatformat:0|intcomma}}{% endif %}
+                            {# v.scaled #}
+                        </span>
+                    </td>
+                    {% endfor %}
                     <td class="centroid-x" style="display:none">{{w.centroidx}}</td>
                     <td class="centroid-y" style="display:none">{{w.centroidy}}</td>
-                    {% endfor %}
                 </tr>
                 {% endfor %}
                 </tbody>
@@ -155,6 +165,19 @@
                 });
              </script>
         </div>
+
+        {% if show_raw_costs %}
+        <div id="costs" class="tab-pane">
+            <div class="box">
+                <h5>  Total Costs </h5>
+                <dl>
+                    {% for k,v in results.total_costs.items %}
+                    <dt>{{k|deslug}}</dt><dd>{{v|floatformat:0|intcomma}}</dd>
+                    {% endfor %}
+                </dl>
+            </div>
+        </div>
+        {% endif %}
 
         <div id="species" class="tab-pane">
             <div class="box">

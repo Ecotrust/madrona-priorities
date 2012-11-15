@@ -528,27 +528,29 @@ class Scenario(Analysis):
         for pu in bestpus:
             centroid = pu.centroid 
             costs = {}
-            costs_class = {}
+            raw_costs = dict([(x.cost.slug, x.amount) for x in pu.puvscost_set.all()])
             for cname, pucosts in scaled_costs.iteritems():
                 thecost = pucosts[pu.fid]
                 breaks = scaled_breaks[cname]
-                costs[cname] = thecost
                 # classify the costs into categories
                 if thecost <=  breaks[1]:
-                    costs_class[cname] = 'low'
+                    theclass = 'low'
                 elif thecost > breaks[2]: 
-                    costs_class[cname] = 'high'
+                    theclass = 'high'
                 else:
-                    costs_class[cname] = 'med' 
+                    theclass = 'med' 
+                costs[cname] = {'raw': raw_costs[cname],'scaled': thecost, 'class': theclass}
 
             best.append({'name': pu.name, 
                          'fid': pu.fid, 
                          'costs': costs,
-                         'costs_class': costs_class,
                          'centroidx': centroid[0],
                          'centroidy': centroid[1]})
 
         sum_area = sum([x.area for x in bestpus])
+        summed_costs = {}
+        for c in scaled_costs.keys(): # just use to get the keys
+            summed_costs[c] = sum(x['costs'][c]['raw'] for x in best)
 
         # Parse mvbest
         fh = open(os.path.join(self.outdir, "output", "seak_mvbest.csv"), 'r')
@@ -606,6 +608,7 @@ class Scenario(Analysis):
             'geography': geography,
             'targets_penalties': targets_penalties,
             'area': sum_area, 
+            'total_costs': summed_costs, 
             'num_units': len(best),
             'num_met': num_met,
             'num_species': num_target_species, #len(species),
@@ -841,6 +844,7 @@ class Scenario(Analysis):
             'slider_mode': settings.SLIDER_MODE,
             'slider_show_raw': settings.SLIDER_SHOW_RAW,
             'slider_show_proportion': settings.SLIDER_SHOW_PROPORTION,
+            'show_raw_costs': settings.SHOW_RAW_COSTS,
         }
         icon_url = 'common/images/watershed.png'
         links = (

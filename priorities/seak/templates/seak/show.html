@@ -115,7 +115,7 @@
 
         <div id="watersheds" class="tab-pane">
             <div class="box">
-                <p>The optimal prioritization scenario includes {{results.num_units}} {% flatblock 'show-planning-units' 3600 %} covering {{results.area|floatformat:0|intcomma}} km<sup>2</sup>. </p>
+                <p>{% flatblock 'optimal-prioritization-scenario' 3600 %} includes {{results.num_units}} {% flatblock 'show-planning-units' 3600 %} covering {{results.area|floatformat:0|intcomma}} {% flatblock 'area-units' 3600 %}. </p>
                 <table class="table">
                 <thead>
                     <tr>

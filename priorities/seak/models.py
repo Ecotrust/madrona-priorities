@@ -138,14 +138,18 @@ class PlanningUnit(models.Model):
     name = models.CharField(max_length=99)
     geometry = models.MultiPolygonField(srid=settings.GEOMETRY_DB_SRID, 
             null=True, blank=True, verbose_name="Planning Unit Geometry")
+    calculated_area = models.FloatField(null=True, blank=True) # pre-calculated in GIS
     objects = models.GeoManager()
     date_modified = models.DateTimeField(auto_now=True)
 
     @property
-    @cachemethod("PlanningUnit_%(fid)s_area")
+    #@cachemethod("PlanningUnit_%(fid)s_area")
     def area(self):
-        # TODO don't assume storing meters and returning km^2
-        area = self.geometry.area / float(1000*1000)
+        if self.calculated_area:
+            area = self.calculated_area
+        else:
+            # assume storing meters and returning acres
+            area = self.geometry.area * 0.000247105
         return area
 
     @property

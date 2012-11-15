@@ -179,8 +179,9 @@ class Command(BaseCommand):
 
         sheet = book.sheet_by_name("PlanningUnits")
         headers = [str(x.strip()) for x in sheet.row_values(0)] #returns all the CELLS of row 0,
-        fieldnames = ['name_field', 'fid_field', 'null_value']
-        assert len(headers) == len(fieldnames)
+        fieldnames = ['name_field', 'fid_field', 'null_value', 'area_field']
+        if len(headers) != len(fieldnames):
+            raise Exception("The PlanningUnits sheet has errors: expecting these headers\n  %s\nBut found\n  %s" % (fieldnames, headers))
         for h in range(len(headers)): 
             if headers[h] != fieldnames[h]:
                 print "WARNING: field %s is '%s' in the xls file but model is expecting \
@@ -193,6 +194,7 @@ class Command(BaseCommand):
         mapping = {
             'name' : params['name_field'],
             'fid' : params['fid_field'], 
+            'calculated_area': params['area_field'],
             'geometry' : 'MULTIPOLYGON',
         }
 

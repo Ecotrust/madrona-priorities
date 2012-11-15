@@ -358,5 +358,14 @@
       "header": "", 
       "slug": "show-planning-units"
     }
+  }, 
+  {
+    "pk": 41, 
+    "model": "flatblocks.flatblock", 
+    "fields": {
+      "content": "Total Costs", 
+      "header": "", 
+      "slug": "show-total-costs"
+    }
   }
 ]

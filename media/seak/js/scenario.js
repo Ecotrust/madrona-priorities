@@ -171,18 +171,8 @@ function scenariosViewModel() {
         return raw;
     }; 
 
-    // clean up and show the form
-    var jqxhr = $.get(formUrl, function(data) {
-      $('#scenarios-form-container').empty().append(data);
-      var $form = $('#scenarios-form-container').find('form#featureform');
-      $form.find('input:submit').remove();
-      self.showScenarioFormPanel(true);
-    })
-    .success( function() {
-        self.showScenarioList(false);
-        self.selectedFeature(false);
-        self.showScenarioList(false);
-
+    var applySliders = function() {
+        getGeographyFieldInfo();
         $.each( $(".slider-range-single"), function(k, sliderrange) {
             var id = $(sliderrange).attr('id');
             id = id.replace("singlerange---", '');
@@ -239,6 +229,19 @@ function scenariosViewModel() {
                 }
             });
         });
+    };
+
+    // clean up and show the form
+    var jqxhr = $.get(formUrl, function(data) {
+      $('#scenarios-form-container').empty().append(data);
+      var $form = $('#scenarios-form-container').find('form#featureform');
+      $form.find('input:submit').remove();
+      self.showScenarioFormPanel(true);
+    })
+    .success( function() {
+        self.showScenarioList(false);
+        self.selectedFeature(false);
+        self.showScenarioList(false);
 
         // If we're in EDIT mode, set the form values 
         if ($('#id_input_targets').val() && 
@@ -284,7 +287,7 @@ function scenariosViewModel() {
                 $("#penalty---" + key).val(val * 100);
                 $("#penaltyrange---" + key).slider("value", val * 100);  
             });
-       } // end EDIT mode
+        } // end EDIT mode
 
         // Bindings for tab navigation
         $('a[data-toggle="tab"]').on('show', function (e) {
@@ -292,6 +295,7 @@ function scenariosViewModel() {
             // The tab that was previously selected
             switch (e.relatedTarget.id) {
                 case "tab-geography":
+                    // TODO deactivate utfgrid
                     selectGeographyControl.deactivate();
                     keyboardControl.deactivate();
                     break;
@@ -302,7 +306,6 @@ function scenariosViewModel() {
             }
 
             // The newly selected tab 
-            fieldInfo = getGeographyFieldInfo()
             switch (e.target.id) {
                 case "tab-geography":
                     selectGeographyControl.activate();
@@ -310,16 +313,16 @@ function scenariosViewModel() {
                     break;
                 case "tab-costs":
                     // Show only controls for fields in all planning units
+                    getGeographyFieldInfo();
                     $('tr.cost-row').addClass('hide');
-                    costFields = fieldInfo.costList;
                     $.each(costFields, function(idx, val) {
                         $('tr#row-' + val).removeClass('hide');
                     });
                     break;
                 case "tab-species":
+                    applySliders();
                     // Show only controls for fields in all planning units
                     $('tr.cf-row').addClass('hide');
-                    cfFields = fieldInfo.cfList;
                     $.each(cfFields, function(idx, val) {
                         $('tr#row-' + val).removeClass('hide');
                     });
@@ -329,7 +332,6 @@ function scenariosViewModel() {
                             $(this).addClass('hide');
                         }
                     });
-                    cfTotals = fieldInfo.cfTotals;
                     $.each( $(".slider-range"), function(idx, a){ 
                         // set the value to trigger slider change event
                         var b = $(a).slider("value"); 

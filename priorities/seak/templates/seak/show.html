@@ -63,11 +63,8 @@
                                 <div class="bar" style="width:{{v.target|percentage}}"></div>
                             </div>
                         </td>
-                        <td class="{% if not slider_show_proportion %}debug-only{% endif %}">{{v.target|percentage}}</td>
+                        <td>{{v.target|percentage}}</td>
                         <td class="debug-only">{{v.penalty|percentage}}</td>
-                        <!--
-                        <td class="{% if not slider_show_raw %}debug-only{% endif %}">{{v.target}}</td>
-                        -->
                     {% elif slider_mode == 'dual' %}
                         <td> 
                             <div class="row-fluid">

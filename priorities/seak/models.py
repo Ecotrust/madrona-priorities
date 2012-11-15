@@ -95,6 +95,7 @@ class ConservationFeature(models.Model):
     level5 = models.CharField(max_length=99, null=True, blank=True)
     dbf_fieldname = models.CharField(max_length=15, null=True, blank=True)
     units = models.CharField(max_length=90, null=True, blank=True)
+    desc = models.TextField(null=True, blank=True)
     uid = models.IntegerField(primary_key=True)
 
     @property

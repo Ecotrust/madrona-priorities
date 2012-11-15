@@ -92,13 +92,13 @@ class Command(BaseCommand):
         headers = [str(x).strip() for x in sheet.row_values(0)] #returns all the CELLS of row 0,
 
         fieldnames = ['name', 'uid', 'level1', 'level2', 'level3', 
-                      'level4', 'level5', 'dbf_fieldname', 'units']
+                      'level4', 'level5', 'dbf_fieldname', 'units','desc']
 
-        assert len(headers) == len(fieldnames)
+        if len(headers) != len(fieldnames):
+            raise Exception("The ConservationFeatures sheet has errors: expecting these headers\n  %s\nBut found\n  %s" % (fieldnames, headers))
         for h in range(len(headers)): 
             if headers[h] != fieldnames[h]:
-                print "WARNING: field %s is '%s' in the xls file but model is \
-                        expecting '%s' ... OK?" % (h, headers[h], fieldnames[h])
+                print "WARNING: field %s is '%s' in the xls file but model is expecting '%s' ... OK?" % (h, headers[h], fieldnames[h])
 
         uids = []
         for i in xrange(1, sheet.nrows):
@@ -146,7 +146,8 @@ class Command(BaseCommand):
 
         fieldnames = ['name', 'uid', 'dbf_fieldname', 'units', 'desc']
 
-        assert len(headers) == len(fieldnames)
+        if len(headers) != len(fieldnames):
+            raise Exception("The Costs sheet has errors: expecting these headers\n  %s\nBut found\n  %s" % (fieldnames, headers))
         for h in range(len(headers)): 
             if headers[h] != fieldnames[h]:
                 print "WARNING: field %s is '%s' in the xls file but model is expecting '%s' ... OK?" % (h, 

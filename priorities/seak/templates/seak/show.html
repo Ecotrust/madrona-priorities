@@ -77,7 +77,7 @@
             <h4>{% flatblock 'constraints' 3600 %}</h4>
              <table class="table">
              {%for k,v in results.costs.items %}
-             {% if v > 0%}<tr><td> &#10003; {{k}}</td></tr> 
+             {% if v > 0%}<tr><td> &#10003; {{k|deslug}}</td></tr> 
              {% else %}<tr class="debug-only"><td> &nbsp; <del>{{k}}</del></td></tr> 
              {% endif %} 
              {%endfor%}

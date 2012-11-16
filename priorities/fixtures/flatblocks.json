@@ -367,5 +367,14 @@
       "header": "", 
       "slug": "show-total-costs"
     }
+  }, 
+  {
+    "pk": 42, 
+    "model": "flatblocks.flatblock", 
+    "fields": {
+      "content": "Or, if you need to fine-tune the geography, you can use the map draw a box around additional watersheds. To navigate, use the keyboard controls (+/- to zoom, arrow keys to pan). If you need to undo the selection, click on the map away from the study region.", 
+      "header": "", 
+      "slug": "geography-fine-tune"
+    }
   }
 ]

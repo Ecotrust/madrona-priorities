@@ -299,7 +299,7 @@ function scenariosViewModel() {
             // The tab that was previously selected
             switch (e.relatedTarget.id) {
                 case "tab-geography":
-                    // TODO deactivate utfgrid
+                    utfClickControl.activate();
                     selectGeographyControl.deactivate();
                     keyboardControl.deactivate();
                     break;
@@ -314,6 +314,7 @@ function scenariosViewModel() {
                 case "tab-geography":
                     selectGeographyControl.activate();
                     keyboardControl.activate();
+                    utfClickControl.deactivate();
                     break;
                 case "tab-costs":
                     // Show only controls for fields in all planning units

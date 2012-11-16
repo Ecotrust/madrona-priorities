@@ -5,6 +5,7 @@ var markers;
 var selectFeatureControl;
 var keyboardControl;
 var selectGeographyControl;
+var utfClickControl;
 var costFields = [];
 var cfFields = [];
 var cfTotals = {};
@@ -168,7 +169,7 @@ function init_map() {
         pu_layer,
         {
             clickout: true, 
-            toggle: false,
+            toggle: true,
             multiple: true, 
             hover: false,
             toggleKey: "ctrlKey", // ctrl key removes from selection
@@ -262,11 +263,11 @@ function init_map() {
         $("#info-content").html(msg);
     };
 
-    var ctl = new OpenLayers.Control.UTFGrid({
+    utfClickControl = new OpenLayers.Control.UTFGrid({
         callback: utfgridCallback,
         handlerMode: "click"
     });
-    map.addControl(ctl);
+    map.addControl(utfClickControl);
 
     var nameCallback = function(infoLookup) {
         $("#watershed-name").hide();

@@ -120,7 +120,7 @@
     "pk": 18, 
     "model": "flatblocks.flatblock", 
     "fields": {
-      "content": "<h3>Scenario should be rerun</h3> New data has been loaded into the prioritization tool since this scenario was created. It is <em>highly</em> recommended that you Edit and rerun the scenario to make sure the results are still valid with the current data.", 
+      "content": "<h4>Scenario should be rerun</h4> New data has been loaded into the prioritization tool since this scenario was created. We recommended that you <em>Edit</em> and rerun the scenario to make sure the results are still valid with the current data.", 
       "header": "", 
       "slug": "scenario-expired-message"
     }

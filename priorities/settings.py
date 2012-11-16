@@ -154,4 +154,3 @@ if DEBUG:
         INSTALLED_APPS += ('gunicorn',)
     except ImportError:
         pass
-

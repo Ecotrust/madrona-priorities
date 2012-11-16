@@ -5,15 +5,19 @@ var markers;
 var selectFeatureControl;
 var keyboardControl;
 var selectGeographyControl;
+var utfClickControl;
+var costFields = [];
+var cfFields = [];
+var cfTotals = {};
 
 function getGeographyFieldInfo() {
     // Find the conservation features, totals and costs represented in ALL of the selected planning units.
     if (pu_layer.selectedFeatures.length >= 1) {
         var costList = pu_layer.selectedFeatures[0].attributes.cost_fields;
         var cfList = pu_layer.selectedFeatures[0].attributes.cf_fields;
-        var cfTotals = {};
+        var cfListTotals = {};
         $.each( cfList, function(idx, cf) { 
-            cfTotals[cf] = 0;
+            cfListTotals[cf] = 0;
         });
         var tmpList;
         $.each( pu_layer.selectedFeatures, function(idx, feat) { 
@@ -27,13 +31,16 @@ function getGeographyFieldInfo() {
 
             // get cf values and add to total
             $.each( cfList, function(idx, cf) { 
-                cfTotals[cf] += feat.attributes.cf_values[cf]; 
+                cfListTotals[cf] += feat.attributes.cf_values[cf]; 
             });
         });
+        costFields = costList;
+        cfFields = cfList;
+        cfTotals = cfListTotals;
         return {
             'costList': costList, 
             'cfList': cfList, 
-            'cfTotals': cfTotals
+            'cfTotals': cfListTotals
         };
     } else { 
         return {}; 
@@ -162,7 +169,7 @@ function init_map() {
         pu_layer,
         {
             clickout: true, 
-            toggle: false,
+            toggle: true,
             multiple: true, 
             hover: false,
             toggleKey: "ctrlKey", // ctrl key removes from selection
@@ -256,11 +263,11 @@ function init_map() {
         $("#info-content").html(msg);
     };
 
-    var ctl = new OpenLayers.Control.UTFGrid({
+    utfClickControl = new OpenLayers.Control.UTFGrid({
         callback: utfgridCallback,
         handlerMode: "click"
     });
-    map.addControl(ctl);
+    map.addControl(utfClickControl);
 
     var nameCallback = function(infoLookup) {
         $("#watershed-name").hide();

@@ -102,6 +102,9 @@ SLIDER_MODE = "single" # 'dual' OR 'single'
 SLIDER_SHOW_RAW = True 
 SLIDER_SHOW_PROPORTION = False
 VARIABLE_GEOGRAPHY = True # do we allow variable geographies (True) or just use all planning units (False)?
+SHOW_RAW_COSTS = True # in report
+
+ADD_SCALEFACTOR_CONSTANT = 3 # 0==moderately weight costs, 5==meet targets at (almost) any cost
 
 #############################################################
 try:

@@ -36,15 +36,6 @@
     }
   }, 
   {
-    "pk": 11, 
-    "model": "flatblocks.flatblock", 
-    "fields": {
-      "content": "Planning Units", 
-      "header": "", 
-      "slug": "show-planning-units"
-    }
-  }, 
-  {
     "pk": 8, 
     "model": "flatblocks.flatblock", 
     "fields": {
@@ -339,6 +330,51 @@
       "content": "For each management objective, specify the desired acreage to target for removal.", 
       "header": "", 
       "slug": "form-conservationfeature-description"
+    }
+  }, 
+  {
+    "pk": 39, 
+    "model": "flatblocks.flatblock", 
+    "fields": {
+      "content": "acres", 
+      "header": "", 
+      "slug": "area-units"
+    }
+  }, 
+  {
+    "pk": 40, 
+    "model": "flatblocks.flatblock", 
+    "fields": {
+      "content": "The optimal prioritization scenario", 
+      "header": "", 
+      "slug": "optimal-prioritization-scenario"
+    }
+  }, 
+  {
+    "pk": 11, 
+    "model": "flatblocks.flatblock", 
+    "fields": {
+      "content": "Watersheds", 
+      "header": "", 
+      "slug": "show-planning-units"
+    }
+  }, 
+  {
+    "pk": 41, 
+    "model": "flatblocks.flatblock", 
+    "fields": {
+      "content": "Total Costs", 
+      "header": "", 
+      "slug": "show-total-costs"
+    }
+  }, 
+  {
+    "pk": 42, 
+    "model": "flatblocks.flatblock", 
+    "fields": {
+      "content": "Or, if you need to fine-tune the geography, you can use the map draw a box around additional watersheds. To navigate, use the keyboard controls (+/- to zoom, arrow keys to pan). If you need to undo the selection, click on the map away from the study region.", 
+      "header": "", 
+      "slug": "geography-fine-tune"
     }
   }
 ]

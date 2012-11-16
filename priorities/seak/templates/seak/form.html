@@ -97,13 +97,12 @@
         {% endif %}
         </script>
         <br/>
-        <p>Or, if you need to fine-tune the geography, you can use the map to click or draw a box around additional {% flatblock 'planning-units' 3600 %}. To remove or de-select {% flatblock 'planning-units' 3600 %}, hold the Ctrl key and click. To navigate, use the keyboard controls (+/- to zoom, arrow keys to pan). If you need to undo the entire selection, click on the map away from the study region.</p>
-        <!-- TODO this doesnt work in IE, use  -->
+        <p>{% flatblock 'geography-fine-tune' 3600 %}</p>
+        <!--
         <a href="javascript:$('#step1Movie').toggle();" class="btn btn-mini">Need Help <i class="icon-white icon-question-sign"></i></a>
         <br/>
         <br/>
         <div id="step1Movie" style="display:none;">
-            <!-- TODO animated gif instead -->
             <object style="width: 397px; height: 370px;" type="application/x-shockwave-flash" data="/media/seak/swf/select.swf">
                 <param name="movie" value="select.swf" />
                 <param name="quality" value="high" />
@@ -111,6 +110,7 @@
                 <p>You do not have the latest version of Flash installed. Please visit this link to download it: <a href="http://www.adobe.com/products/flashplayer/">http://www.adobe.com/products/flashplayer/</a></p>
             </object>
         </div>
+        -->
         <br/>
 
         <div id="currentGeographySelection">

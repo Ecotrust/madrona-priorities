@@ -171,18 +171,8 @@ function scenariosViewModel() {
         return raw;
     }; 
 
-    // clean up and show the form
-    var jqxhr = $.get(formUrl, function(data) {
-      $('#scenarios-form-container').empty().append(data);
-      var $form = $('#scenarios-form-container').find('form#featureform');
-      $form.find('input:submit').remove();
-      self.showScenarioFormPanel(true);
-    })
-    .success( function() {
-        self.showScenarioList(false);
-        self.selectedFeature(false);
-        self.showScenarioList(false);
-
+    var applySliders = function() {
+        getGeographyFieldInfo();
         $.each( $(".slider-range-single"), function(k, sliderrange) {
             var id = $(sliderrange).attr('id');
             id = id.replace("singlerange---", '');
@@ -239,6 +229,19 @@ function scenariosViewModel() {
                 }
             });
         });
+    };
+
+    // clean up and show the form
+    var jqxhr = $.get(formUrl, function(data) {
+      $('#scenarios-form-container').empty().append(data);
+      var $form = $('#scenarios-form-container').find('form#featureform');
+      $form.find('input:submit').remove();
+      self.showScenarioFormPanel(true);
+    })
+    .success( function() {
+        self.showScenarioList(false);
+        self.selectedFeature(false);
+        self.showScenarioList(false);
 
         // If we're in EDIT mode, set the form values 
         if ($('#id_input_targets').val() && 
@@ -261,6 +264,8 @@ function scenariosViewModel() {
                 selectGeographyControl.select(f);
             });
              
+            applySliders();
+
             // Apply Costs
             var in_costs = JSON.parse($('#id_input_relativecosts').val());
             $.each(in_costs, function(key, val) {
@@ -277,14 +282,16 @@ function scenariosViewModel() {
                 $("#target---" + key).val(val * 100);
                 $("#targetrange---" + key).slider("value", val * 100);  
                 $("#singlerange---" + key).slider("value", val * 100); 
-                // TODO $("#sliderdisplay---" + key).text(val * 100);
             });
             var in_penalties = JSON.parse($('#id_input_penalties').val());
             $.each(in_penalties, function(key, val) {
                 $("#penalty---" + key).val(val * 100);
                 $("#penaltyrange---" + key).slider("value", val * 100);  
             });
-       } // end EDIT mode
+            // end "if EDIT" mode
+        } else {
+            applySliders();
+        }
 
         // Bindings for tab navigation
         $('a[data-toggle="tab"]').on('show', function (e) {
@@ -292,6 +299,7 @@ function scenariosViewModel() {
             // The tab that was previously selected
             switch (e.relatedTarget.id) {
                 case "tab-geography":
+                    utfClickControl.activate();
                     selectGeographyControl.deactivate();
                     keyboardControl.deactivate();
                     break;
@@ -302,24 +310,24 @@ function scenariosViewModel() {
             }
 
             // The newly selected tab 
-            fieldInfo = getGeographyFieldInfo()
             switch (e.target.id) {
                 case "tab-geography":
                     selectGeographyControl.activate();
                     keyboardControl.activate();
+                    utfClickControl.deactivate();
                     break;
                 case "tab-costs":
                     // Show only controls for fields in all planning units
+                    getGeographyFieldInfo();
                     $('tr.cost-row').addClass('hide');
-                    costFields = fieldInfo.costList;
                     $.each(costFields, function(idx, val) {
                         $('tr#row-' + val).removeClass('hide');
                     });
                     break;
                 case "tab-species":
+                    getGeographyFieldInfo();
                     // Show only controls for fields in all planning units
                     $('tr.cf-row').addClass('hide');
-                    cfFields = fieldInfo.cfList;
                     $.each(cfFields, function(idx, val) {
                         $('tr#row-' + val).removeClass('hide');
                     });
@@ -329,7 +337,6 @@ function scenariosViewModel() {
                             $(this).addClass('hide');
                         }
                     });
-                    cfTotals = fieldInfo.cfTotals;
                     $.each( $(".slider-range"), function(idx, a){ 
                         // set the value to trigger slider change event
                         var b = $(a).slider("value"); 

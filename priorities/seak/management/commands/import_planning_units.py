@@ -92,13 +92,13 @@ class Command(BaseCommand):
         headers = [str(x).strip() for x in sheet.row_values(0)] #returns all the CELLS of row 0,
 
         fieldnames = ['name', 'uid', 'level1', 'level2', 'level3', 
-                      'level4', 'level5', 'dbf_fieldname', 'units']
+                      'level4', 'level5', 'dbf_fieldname', 'units','desc']
 
-        assert len(headers) == len(fieldnames)
+        if len(headers) != len(fieldnames):
+            raise Exception("The ConservationFeatures sheet has errors: expecting these headers\n  %s\nBut found\n  %s" % (fieldnames, headers))
         for h in range(len(headers)): 
             if headers[h] != fieldnames[h]:
-                print "WARNING: field %s is '%s' in the xls file but model is \
-                        expecting '%s' ... OK?" % (h, headers[h], fieldnames[h])
+                print "WARNING: field %s is '%s' in the xls file but model is expecting '%s' ... OK?" % (h, headers[h], fieldnames[h])
 
         uids = []
         for i in xrange(1, sheet.nrows):
@@ -146,7 +146,8 @@ class Command(BaseCommand):
 
         fieldnames = ['name', 'uid', 'dbf_fieldname', 'units', 'desc']
 
-        assert len(headers) == len(fieldnames)
+        if len(headers) != len(fieldnames):
+            raise Exception("The Costs sheet has errors: expecting these headers\n  %s\nBut found\n  %s" % (fieldnames, headers))
         for h in range(len(headers)): 
             if headers[h] != fieldnames[h]:
                 print "WARNING: field %s is '%s' in the xls file but model is expecting '%s' ... OK?" % (h, 
@@ -179,8 +180,9 @@ class Command(BaseCommand):
 
         sheet = book.sheet_by_name("PlanningUnits")
         headers = [str(x.strip()) for x in sheet.row_values(0)] #returns all the CELLS of row 0,
-        fieldnames = ['name_field', 'fid_field', 'null_value']
-        assert len(headers) == len(fieldnames)
+        fieldnames = ['name_field', 'fid_field', 'null_value', 'area_field']
+        if len(headers) != len(fieldnames):
+            raise Exception("The PlanningUnits sheet has errors: expecting these headers\n  %s\nBut found\n  %s" % (fieldnames, headers))
         for h in range(len(headers)): 
             if headers[h] != fieldnames[h]:
                 print "WARNING: field %s is '%s' in the xls file but model is expecting \
@@ -193,6 +195,7 @@ class Command(BaseCommand):
         mapping = {
             'name' : params['name_field'],
             'fid' : params['fid_field'], 
+            'calculated_area': params['area_field'],
             'geometry' : 'MULTIPOLYGON',
         }
 
@@ -252,11 +255,12 @@ class Command(BaseCommand):
         all_dbf_fieldnames.append(params['name_field'])
 
         cfg = {
+            "logging": "warning",
             "cache": {
                 "name": "Multi",
                 "tiers": [
                     #{ "name": "Memcache", "servers": ["127.0.0.1:11211"] },
-                    { "name": "Disk", "path": "/tmp/juniper-stache" }
+                    { "name": "Disk", "path": "/tmp/%s-stache" % slugify(settings.APP_NAME) }
                 ]
             },
             "layers": {

@@ -145,23 +145,34 @@ function scenariosViewModel() {
       formUrl = formUrl.getUrl([uid]);
     }
 
-        selectFeatureControl.unselectAll();
-        selectGeographyControl.activate();
-        pu_layer.styleMap.styles['default'].defaultStyle.display = true;
+    selectFeatureControl.unselectAll();
+    selectGeographyControl.activate();
+    pu_layer.styleMap.styles['default'].defaultStyle.display = true;
 
-    // clean up and show the form
-    var jqxhr = $.get(formUrl, function(data) {
-      $('#scenarios-form-container').empty().append(data);
-      var $form = $('#scenarios-form-container').find('form#featureform');
-      $form.find('input:submit').remove();
-      self.showScenarioFormPanel(true);
+    // Get a lookup dict for id to dbf fieldname conversion
+    var lookup_url = "/seak/id_lookup.json";
+    var idLookup;
+    var xhr = $.ajax({
+        url: lookup_url, 
+        cache: true,
+        dataType: 'json', 
+        success: function(data) { 
+            idLookup = data; 
+        }
     })
-    .success( function() {
-         // ----
-        self.showScenarioList(false);
-        self.selectedFeature(false);
-        self.showScenarioList(false);
+    .error( function() { 
+        idLookup = null; 
+    });
 
+    // Call to get a raw value from a slider value
+    var getRawTarget = function(val, id) {
+        var dbfFieldname = idLookup[id];
+        var raw = (val/100.0 * cfTotals[dbfFieldname]).format(-2, ',', '.'); 
+        return raw;
+    }; 
+
+    var applySliders = function() {
+        getGeographyFieldInfo();
         $.each( $(".slider-range-single"), function(k, sliderrange) {
             var id = $(sliderrange).attr('id');
             id = id.replace("singlerange---", '');
@@ -170,12 +181,15 @@ function scenariosViewModel() {
                 value: 0,
                 min: 0,
                 max: 100,
+                change: function( event, ui ) {
+                    $( "#penalty---" + id ).val( ui.value );
+                    $( "#target---" + id ).val( ui.value );
+                    $( "#rawtarget---" + id ).val( getRawTarget(ui.value, id) );
+                },
                 slide: function( event, ui ) {
-                    // Sets the targets and penalties based on the single slider value
-                    // slider val is 0 to 100 while targets/penalties are 0 to 1
-                    // assume that the slider always tracks target directly (ie 0.75 target == 75 slider)
-                    $( "#penalty---" + id ).val( ui.value / 100.0 );
-                    $( "#target---" + id ).val( ui.value / 100.0 );
+                    $( "#penalty---" + id ).val( ui.value );
+                    $( "#target---" + id ).val( ui.value );
+                    $( "#rawtarget---" + id ).val( getRawTarget(ui.value, id) );
                 }
             });
         });
@@ -188,8 +202,11 @@ function scenariosViewModel() {
                 value: 0,
                 min: 0,
                 max: 100,
+                change: function( event, ui ) {
+                    $( "#penalty---" + id ).val( ui.value );
+                },
                 slide: function( event, ui ) {
-                    $( "#penalty---" + id ).val( ui.value / 100.0 );
+                    $( "#penalty---" + id ).val( ui.value );
                 }
             });
         });
@@ -202,11 +219,29 @@ function scenariosViewModel() {
                 value: 0,
                 min: 0,
                 max: 100,
+                change: function( event, ui ) {
+                    $( "#target---" + id ).val( ui.value );
+                    $( "#rawtarget---" + id ).val( getRawTarget(ui.value, id) );
+                },
                 slide: function( event, ui ) {
-                    $( "#target---" + id ).val( ui.value / 100.0 );
+                    $( "#target---" + id ).val( ui.value );
+                    $( "#rawtarget---" + id ).val( getRawTarget(ui.value, id) );
                 }
             });
         });
+    };
+
+    // clean up and show the form
+    var jqxhr = $.get(formUrl, function(data) {
+      $('#scenarios-form-container').empty().append(data);
+      var $form = $('#scenarios-form-container').find('form#featureform');
+      $form.find('input:submit').remove();
+      self.showScenarioFormPanel(true);
+    })
+    .success( function() {
+        self.showScenarioList(false);
+        self.selectedFeature(false);
+        self.showScenarioList(false);
 
         // If we're in EDIT mode, set the form values 
         if ($('#id_input_targets').val() && 
@@ -229,6 +264,8 @@ function scenariosViewModel() {
                 selectGeographyControl.select(f);
             });
              
+            applySliders();
+
             // Apply Costs
             var in_costs = JSON.parse($('#id_input_relativecosts').val());
             $.each(in_costs, function(key, val) {
@@ -242,17 +279,19 @@ function scenariosViewModel() {
             // Apply Targets and Penalties
             var in_targets = JSON.parse($('#id_input_targets').val());
             $.each(in_targets, function(key, val) {
-                $("#target---" + key).val(val);
+                $("#target---" + key).val(val * 100);
                 $("#targetrange---" + key).slider("value", val * 100);  
                 $("#singlerange---" + key).slider("value", val * 100); 
-                // TODO $("#sliderdisplay---" + key).text(val * 100);
             });
             var in_penalties = JSON.parse($('#id_input_penalties').val());
             $.each(in_penalties, function(key, val) {
-                $("#penalty---" + key).val(val);
+                $("#penalty---" + key).val(val * 100);
                 $("#penaltyrange---" + key).slider("value", val * 100);  
             });
-       } // end EDIT mode
+            // end "if EDIT" mode
+        } else {
+            applySliders();
+        }
 
         // Bindings for tab navigation
         $('a[data-toggle="tab"]').on('show', function (e) {
@@ -260,6 +299,7 @@ function scenariosViewModel() {
             // The tab that was previously selected
             switch (e.relatedTarget.id) {
                 case "tab-geography":
+                    utfClickControl.activate();
                     selectGeographyControl.deactivate();
                     keyboardControl.deactivate();
                     break;
@@ -274,19 +314,20 @@ function scenariosViewModel() {
                 case "tab-geography":
                     selectGeographyControl.activate();
                     keyboardControl.activate();
+                    utfClickControl.deactivate();
                     break;
                 case "tab-costs":
                     // Show only controls for fields in all planning units
+                    getGeographyFieldInfo();
                     $('tr.cost-row').addClass('hide');
-                    costFields = getCostFields();
                     $.each(costFields, function(idx, val) {
                         $('tr#row-' + val).removeClass('hide');
                     });
                     break;
                 case "tab-species":
+                    getGeographyFieldInfo();
                     // Show only controls for fields in all planning units
                     $('tr.cf-row').addClass('hide');
-                    cfFields = getCfFields();
                     $.each(cfFields, function(idx, val) {
                         $('tr#row-' + val).removeClass('hide');
                     });
@@ -295,6 +336,11 @@ function scenariosViewModel() {
                         if($(this).find('tr.cf-row:not(.hide)').length === 0) { 
                             $(this).addClass('hide');
                         }
+                    });
+                    $.each( $(".slider-range"), function(idx, a){ 
+                        // set the value to trigger slider change event
+                        var b = $(a).slider("value"); 
+                        $(a).slider("value", b); 
                     });
                     break;
             }
@@ -324,8 +370,8 @@ function scenariosViewModel() {
             var id = "#" + xid;
             xid = xid.replace(/^target---/,''); //  Remove preceding identifier
             xid = xid.replace(/---$/,''); // Remove trailing ---
-            targets[xid] = parseFloat($(id).val());
-            totaltargets += parseFloat($(id).val());
+            targets[xid] = parseFloat($(id).val()) / 100.0;
+            totaltargets += targets[xid];
         });
         // Get penalties 
         $("#form-cfs tr.cf-row:not(.hide) input.penaltyvalue").each( function(index, elem) {
@@ -333,8 +379,8 @@ function scenariosViewModel() {
             var id = "#" + xid;
             xid = xid.replace(/^penalty---/,''); 
             xid = xid.replace(/---$/,'');
-            penalties[xid] = parseFloat($(id).val());
-            totalpenalties += parseFloat($(id).val());
+            penalties[xid] = parseFloat($(id).val()) / 100.0;
+            totalpenalties += penalties[xid];
         });
         // Initialize costs to zero
         $('#form-costs input:checkbox.costvalue').each( function(index) {

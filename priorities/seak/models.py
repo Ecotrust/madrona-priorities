@@ -95,6 +95,7 @@ class ConservationFeature(models.Model):
     level5 = models.CharField(max_length=99, null=True, blank=True)
     dbf_fieldname = models.CharField(max_length=15, null=True, blank=True)
     units = models.CharField(max_length=90, null=True, blank=True)
+    desc = models.TextField(null=True, blank=True)
     uid = models.IntegerField(primary_key=True)
 
     @property
@@ -138,14 +139,18 @@ class PlanningUnit(models.Model):
     name = models.CharField(max_length=99)
     geometry = models.MultiPolygonField(srid=settings.GEOMETRY_DB_SRID, 
             null=True, blank=True, verbose_name="Planning Unit Geometry")
+    calculated_area = models.FloatField(null=True, blank=True) # pre-calculated in GIS
     objects = models.GeoManager()
     date_modified = models.DateTimeField(auto_now=True)
 
     @property
-    @cachemethod("PlanningUnit_%(fid)s_area")
+    #@cachemethod("PlanningUnit_%(fid)s_area")
     def area(self):
-        # TODO don't assume storing meters and returning km^2
-        area = self.geometry.area / float(1000*1000)
+        if self.calculated_area:
+            area = self.calculated_area
+        else:
+            # assume storing meters and returning acres
+            area = self.geometry.area * 0.000247105
         return area
 
     @property
@@ -347,7 +352,9 @@ class Scenario(Analysis):
         avgtarget = float(sum(nonzero_targets))/float(len(nonzero_targets))
 
         # ignore input, choose a scalefactor automatically based on avg and max target
-        self.input_scalefactor = 0.5 + (avgtarget * 2) + (maxtarget * 2)
+        self.input_scalefactor = 1 + (avgtarget * 2) + (maxtarget * 2) + settings.ADD_SCALEFACTOR_CONSTANT
+        if self.input_scalefactor < 0.5: # min of 0.5
+            self.input_scalefactor = 0.5
 
         # Apply the target and penalties
         logger.debug("Apply the targets and penalties")
@@ -524,27 +531,29 @@ class Scenario(Analysis):
         for pu in bestpus:
             centroid = pu.centroid 
             costs = {}
-            costs_class = {}
+            raw_costs = dict([(x.cost.slug, x.amount) for x in pu.puvscost_set.all()])
             for cname, pucosts in scaled_costs.iteritems():
                 thecost = pucosts[pu.fid]
                 breaks = scaled_breaks[cname]
-                costs[cname] = thecost
                 # classify the costs into categories
                 if thecost <=  breaks[1]:
-                    costs_class[cname] = 'low'
+                    theclass = 'low'
                 elif thecost > breaks[2]: 
-                    costs_class[cname] = 'high'
+                    theclass = 'high'
                 else:
-                    costs_class[cname] = 'med' 
+                    theclass = 'med' 
+                costs[cname] = {'raw': raw_costs[cname],'scaled': thecost, 'class': theclass}
 
             best.append({'name': pu.name, 
                          'fid': pu.fid, 
                          'costs': costs,
-                         'costs_class': costs_class,
                          'centroidx': centroid[0],
                          'centroidy': centroid[1]})
 
         sum_area = sum([x.area for x in bestpus])
+        summed_costs = {}
+        for c in scaled_costs.keys(): # just use to get the keys
+            summed_costs[c] = sum(x['costs'][c]['raw'] for x in best)
 
         # Parse mvbest
         fh = open(os.path.join(self.outdir, "output", "seak_mvbest.csv"), 'r')
@@ -602,6 +611,7 @@ class Scenario(Analysis):
             'geography': geography,
             'targets_penalties': targets_penalties,
             'area': sum_area, 
+            'total_costs': summed_costs, 
             'num_units': len(best),
             'num_met': num_met,
             'num_species': num_target_species, #len(species),
@@ -829,12 +839,15 @@ class Scenario(Analysis):
             'defined_geographies': DefinedGeography.objects.all(),
             'costs': Cost.objects.all(),
             'slider_mode': settings.SLIDER_MODE,
-            'slider_show_input': settings.SLIDER_SHOW_INPUT,
+            'slider_show_raw': settings.SLIDER_SHOW_RAW,
+            'slider_show_proportion': settings.SLIDER_SHOW_PROPORTION,
             'variable_geography': settings.VARIABLE_GEOGRAPHY,
         }
         show_context = {
             'slider_mode': settings.SLIDER_MODE,
-            'slider_show_input': settings.SLIDER_SHOW_INPUT,
+            'slider_show_raw': settings.SLIDER_SHOW_RAW,
+            'slider_show_proportion': settings.SLIDER_SHOW_PROPORTION,
+            'show_raw_costs': settings.SHOW_RAW_COSTS,
         }
         icon_url = 'common/images/watershed.png'
         links = (

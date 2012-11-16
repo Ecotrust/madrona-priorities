@@ -97,13 +97,12 @@
         {% endif %}
         </script>
         <br/>
-        <p>Or, if you need to fine-tune the geography, you can use the map to click or draw a box around additional {% flatblock 'planning-units' 3600 %}. To remove or de-select {% flatblock 'planning-units' 3600 %}, hold the Ctrl key and click. To navigate, use the keyboard controls (+/- to zoom, arrow keys to pan). If you need to undo the entire selection, click on the map away from the study region.</p>
-        <!-- TODO this doesnt work in IE, use  -->
+        <p>{% flatblock 'geography-fine-tune' 3600 %}</p>
+        <!--
         <a href="javascript:$('#step1Movie').toggle();" class="btn btn-mini">Need Help <i class="icon-white icon-question-sign"></i></a>
         <br/>
         <br/>
         <div id="step1Movie" style="display:none;">
-            <!-- TODO animated gif instead -->
             <object style="width: 397px; height: 370px;" type="application/x-shockwave-flash" data="/media/seak/swf/select.swf">
                 <param name="movie" value="select.swf" />
                 <param name="quality" value="high" />
@@ -111,6 +110,7 @@
                 <p>You do not have the latest version of Flash installed. Please visit this link to download it: <a href="http://www.adobe.com/products/flashplayer/">http://www.adobe.com/products/flashplayer/</a></p>
             </object>
         </div>
+        -->
         <br/>
 
         <div id="currentGeographySelection">
@@ -153,14 +153,11 @@
         <h4>{% flatblock 'form-conservationfeature-header' 3600 %}</h4>
         <div> {% flatblock 'form-conservationfeature-description' 3600 %}</div>
         <br/>
-        <br/>
         <form action="#" id="form-cfs">
           <table class="table table-condensed">
             <tr>
                 <th> {% flatblock 'show-conservation-features' 3600 %} </th>
                 <th> {% flatblock 'relative-importance' 3600 %}</th>
-                <th class="debug-only"> target </th>
-                <th class="debug-only"> penalty </th>
             </tr>
           </table>
           <div id="accordion1" class="accordion">
@@ -176,9 +173,9 @@
                     </th>
                     <td>
                         <div class="slider-collapse aggregate hide" id="#slider-collapse-{{category.grouper|slugify}}">
-                            <span class="slider-label slider-label-left">{% flatblock 'target-low' 3600 %}</span>
+                            <span class="text-success slider-label slider-label-left"><small>{% flatblock 'target-low' 3600 %}</small></span>
                             <div class="slider-range slider-range-single" id="singlerange---CATEGORY-{{category.grouper|slugify}}"></div> 
-                            <span class="slider-label slider-label-right">{% flatblock 'target-high' 3600 %}</span>
+                            <span class="text-success slider-label slider-label-right"><small>{% flatblock 'target-high' 3600 %}</small></span>
                             <a class="pull-right btn btn-mini apply">Apply to all {{category.grouper}}</a>
                         </div>
                     </td>
@@ -200,46 +197,81 @@
                         <th style="width:156px;">{{cf.name}}</th>
                         <td> 
                             {% if slider_mode == 'single' %}
-                            
                             <div class="row-fluid">
+                                <!-- SINGLE SLIDER -->
                                 <div class="span1" style="padding-right:13px;">
                                 </div>
-                                <div class="span10">
+                                <div class="span10" style="vertical-align:middle;">
                                     <span class="text-success slider-label slider-label-left"><small>{% flatblock 'target-low' 3600 %}</small></span>
                                     <span> <div class="slider-range slider-range-single" id="singlerange---{{cf.id_string}}"></div> </span>
                                     <span class="text-success slider-label slider-label-right"><small>{% flatblock 'target-high' 3600 %}</small></span>
                                 </div>
-                                <div class="{% if slider_show_input %}span1{% else %}debug-only{% endif %}">
-                                    <input type="text" class="input-mini targetvalue" id="target---{{cf.id_string}}" value="0.0"/>
-                                    <input type="text" class="debug-only penaltyvalue" id="penalty---{{cf.id_string}}" value="0.0"/>
+                                <div class="span1">
+                                    <div class="input-append">
+                                        <input type="text" class="debug-only penaltyvalue" id="penalty---{{cf.id_string}}" value="0.0"/>
+                                        <input type="text" class="{% if not slider_show_proportion %}debug-only {% endif %}input-mini targetvalue" 
+                                               id="target---{{cf.id_string}}" value="0.0"/>
+                                        {% if slider_show_proportion %}
+                                        <span class="add-on">%</span>
+                                        {% endif %}
+                                    </div>
+
+                                    {% if slider_show_raw %}
+                                    <div class="input-append">
+                                        <input type="text" class="input-small rawtargetvalue" id="rawtarget---{{cf.id_string}}" value="0.0"/>
+                                        <span class="add-on"><small>{{cf.units}}</small></span>
+                                    </div>
+                                    {% endif %} 
                                 </div>
                             </div>
 
                             {% elif slider_mode == 'dual' %}
                             <div class="row-fluid">
+                                <!-- TARGET SLIDER -->
                                 <div class="span2" style="padding-right:13px;">
                                     <p class="text-info" style="width:65px;">{% flatblock 'target' 3600 %}</p>
                                 </div>
-                                <div class="span9">
+                                <div class="span9" style="vertical-align:middle;">
                                     <span class="text-success slider-label slider-label-left"><small>{% flatblock 'target-low' 3600 %}</small></span>
                                     <div class="slider-range slider-range-target" id="targetrange---{{cf.id_string}}"></div> 
                                     <span class="text-success slider-label slider-label-right"><small>{% flatblock 'target-high' 3600 %}</small></span>
                                 </div>
-                                <div class="{% if slider_show_input %}span1{% else %}debug-only{% endif %}">
-                                    <input type="text" class="{% if slider_show_input %}input-micro{% else %}debug-only{% endif %} targetvalue" id="target---{{cf.id_string}}" value="0.0"/>
+                                <div class="span1">
+                                    <div class="input-append">
+                                        <input type="text" class="{% if not slider_show_proportion %}debug-only {% endif %}input-micro targetvalue" 
+                                            id="target---{{cf.id_string}}" value="0.0"/>
+                                        {% if slider_show_proportion %}
+                                        <span class="add-on">%</span>
+                                        {% endif %}
+                                    </div>
+
+                                    {% if slider_show_raw %}
+                                    <div class="input-append">
+                                        <input type="text" class="input-small rawtargetvalue" id="rawtarget---{{cf.id_string}}" value="0.0"/>
+                                        <span class="add-on"><small>{{cf.units}}</small></span>
+                                    </div>
+                                    {% endif %}
                                 </div>
                             </div>
                             <div class="row-fluid">
+                                <!-- PENALTY SLIDER -->
                                 <div class="span2" style="padding-right:13px;">
                                     <p class="text-info" style="width:65px;">{% flatblock 'penalty' 3600 %}</p>
                                 </div>
-                                <div class="span9">
+                                <div class="span9" style="vertical-align:middle;">
                                     <span class="text-success slider-label slider-label-left"><small>{% flatblock 'penalty-low' 3600 %}</small></span>
                                     <div class="slider-range slider-range-penalty" id="penaltyrange---{{cf.id_string}}"></div> 
                                     <span class="text-success slider-label slider-label-right"><small>{% flatblock 'penalty-high' 3600 %}</small></span>
                                 </div>
-                                <div class="{% if slider_show_input %}span1{% else %}debug-only{% endif %}">
-                                    <input type="text" class="{% if slider_show_input %}input-micro{% else %}debug-only{% endif %} penaltyvalue" id="penalty---{{cf.id_string}}" value="0.0"/>
+                                <div class="span1">
+                                    <!-- penalty sliders don't have a "raw" value -->
+                                    <div class="input-append">
+                                        <input type="text" class="{% if not slider_show_proportion %}debug-only {% endif %}input-micro penaltyvalue" 
+                                            id="penalty---{{cf.id_string}}" value="0.0"/>
+                                        {% if slider_show_proportion %}
+                                        <span class="add-on">%</span>
+                                        {% endif %}
+                                    </div>
                                 </div>
                             </div>
                             {% endif %}
@@ -261,9 +293,9 @@
                 e.preventDefault();
                 var targetval = $(this).parent().parent().parent().parent().find('.targetvalue').val();
                 var penaltyval = $(this).parent().parent().parent().parent().find('.penaltyvalue').val();
-                $(this).closest('.accordion-group-objective').find('.accordion-body .slider-range-dual').slider('value', 100 * penaltyval); 
-                $(this).closest('.accordion-group-objective').find('.accordion-body .slider-range-penalty').slider('value', 100 * penaltyval); 
-                $(this).closest('.accordion-group-objective').find('.accordion-body .slider-range-target').slider('value', 100 * targetval); 
+                $(this).closest('.accordion-group-objective').find('.accordion-body .slider-range-single').slider('value', penaltyval); 
+                $(this).closest('.accordion-group-objective').find('.accordion-body .slider-range-penalty').slider('value', penaltyval); 
+                $(this).closest('.accordion-group-objective').find('.accordion-body .slider-range-target').slider('value', targetval); 
                 $(this).closest('.accordion-group-objective').find('.accordion-body .penaltyvalue').val(penaltyval).change();
                 $(this).closest('.accordion-group-objective').find('.accordion-body .targetvalue').val(targetval).change();
             });

@@ -266,3 +266,6 @@ ul#map-legend-attr {
 input.input-micro {
     width: 30px;
 }
+.accordion-heading {
+    background-color: whiteSmoke;
+}

@@ -264,6 +264,8 @@ function scenariosViewModel() {
                 selectGeographyControl.select(f);
             });
              
+            applySliders();
+
             // Apply Costs
             var in_costs = JSON.parse($('#id_input_relativecosts').val());
             $.each(in_costs, function(key, val) {
@@ -280,14 +282,16 @@ function scenariosViewModel() {
                 $("#target---" + key).val(val * 100);
                 $("#targetrange---" + key).slider("value", val * 100);  
                 $("#singlerange---" + key).slider("value", val * 100); 
-                // TODO $("#sliderdisplay---" + key).text(val * 100);
             });
             var in_penalties = JSON.parse($('#id_input_penalties').val());
             $.each(in_penalties, function(key, val) {
                 $("#penalty---" + key).val(val * 100);
                 $("#penaltyrange---" + key).slider("value", val * 100);  
             });
-        } // end EDIT mode
+            // end "if EDIT" mode
+        } else {
+            applySliders();
+        }
 
         // Bindings for tab navigation
         $('a[data-toggle="tab"]').on('show', function (e) {
@@ -320,7 +324,7 @@ function scenariosViewModel() {
                     });
                     break;
                 case "tab-species":
-                    applySliders();
+                    getGeographyFieldInfo();
                     // Show only controls for fields in all planning units
                     $('tr.cf-row').addClass('hide');
                     $.each(cfFields, function(idx, val) {

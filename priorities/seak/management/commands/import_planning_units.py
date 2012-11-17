@@ -209,7 +209,8 @@ class Command(BaseCommand):
             print ".... not loading shp"
 
         pus = PlanningUnit.objects.all()
-        assert len(layer) == len(pus)
+        if len(layer) != len(pus):
+            raise Exception("Layer has %d features but %s planning units are loaded" % (len(layer),len(pus)))
 
         print
         print "Generating tile configuration files"
@@ -345,7 +346,7 @@ class Command(BaseCommand):
             print " ",url
             theme_name = cf.level1
             theme, created = Theme.objects.get_or_create(name="auto_%s" % theme_name, display_name=theme_name)
-            desc = cf.units
+            desc = cf.desc
             lyr = Layer.objects.create(name=cf.name, layer_type="XYZ", url=url, 
                     opacity=1.0, description=desc, legend=legend, legend_title=cf.name)
             lyr.themes.add(theme)

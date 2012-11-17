@@ -835,9 +835,9 @@ class Scenario(Analysis):
         show_template = 'seak/show.html'
         form_template = 'seak/form.html'
         form_context = {
-            'cfs': ConservationFeature.objects.all().order_by('level1'),
+            'cfs': ConservationFeature.objects.all().order_by('level1', 'name'),
             'defined_geographies': DefinedGeography.objects.all(),
-            'costs': Cost.objects.all(),
+            'costs': Cost.objects.all().order_by('name'),
             'slider_mode': settings.SLIDER_MODE,
             'slider_show_raw': settings.SLIDER_SHOW_RAW,
             'slider_show_proportion': settings.SLIDER_SHOW_PROPORTION,

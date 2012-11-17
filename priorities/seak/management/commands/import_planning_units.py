@@ -209,7 +209,8 @@ class Command(BaseCommand):
             print ".... not loading shp"
 
         pus = PlanningUnit.objects.all()
-        assert len(layer) == len(pus)
+        if len(layer) != len(pus):
+            raise Exception("Layer has %d features but %s planning units are loaded" % (len(layer),len(pus)))
 
         print
         print "Generating tile configuration files"

@@ -91,14 +91,18 @@ class Command(BaseCommand):
         sheet = book.sheet_by_name("ConservationFeatures")
         headers = [str(x).strip() for x in sheet.row_values(0)] #returns all the CELLS of row 0,
 
-        fieldnames = ['name', 'uid', 'level1', 'level2', 'level3', 
-                      'level4', 'level5', 'dbf_fieldname', 'units','desc']
+        fieldnames = ['name', 'uid', 'level1', 'level2', 'dbf_fieldname', 'units','desc']
 
-        if len(headers) != len(fieldnames):
+        if len(headers) < len(fieldnames):
             raise Exception("The ConservationFeatures sheet has errors: expecting these headers\n  %s\nBut found\n  %s" % (fieldnames, headers))
-        for h in range(len(headers)): 
-            if headers[h] != fieldnames[h]:
-                print "WARNING: field %s is '%s' in the xls file but model is expecting '%s' ... OK?" % (h, headers[h], fieldnames[h])
+
+        for h in range(len(fieldnames)): 
+            if headers[h].lower() != fieldnames[h].lower():
+                raise Exception("field %s is '%s' in the xls file but model is expecting '%s' ... OK?" % (h, headers[h], fieldnames[h]))
+
+        extra_fields = headers[len(fieldnames):] 
+        if len(extra_fields) > 0:
+            print "WARNING: extra fields in ConservationFeatures sheet not being used\n    ", extra_fields
 
         uids = []
         for i in xrange(1, sheet.nrows):
@@ -146,12 +150,16 @@ class Command(BaseCommand):
 
         fieldnames = ['name', 'uid', 'dbf_fieldname', 'units', 'desc']
 
-        if len(headers) != len(fieldnames):
+        if len(headers) < len(fieldnames):
             raise Exception("The Costs sheet has errors: expecting these headers\n  %s\nBut found\n  %s" % (fieldnames, headers))
-        for h in range(len(headers)): 
-            if headers[h] != fieldnames[h]:
-                print "WARNING: field %s is '%s' in the xls file but model is expecting '%s' ... OK?" % (h, 
-                        headers[h], fieldnames[h])
+
+        for h in range(len(fieldnames)): 
+            if headers[h].lower() != fieldnames[h].lower():
+                raise Exception("field %s is '%s' in the xls file but model is expecting '%s' ... OK?" % (h, headers[h], fieldnames[h]))
+
+        extra_fields = headers[len(fieldnames):] 
+        if len(extra_fields) > 0:
+            print "WARNING: extra fields in Cost sheet not being used\n    ", extra_fields
 
         for i in xrange(1, sheet.nrows):
             vals = sheet.row_values(i)
@@ -174,8 +182,7 @@ class Command(BaseCommand):
 
         # Load PU from shpfile
         print
-        print "WARNING It is your responsibility to make sure the shapefile projection below \
-                matches srid %s" % settings.GEOMETRY_DB_SRID
+        print "WARNING It is your responsibility to make sure the shapefile projection below matches srid %s" % settings.GEOMETRY_DB_SRID
         print layer.srs
 
         sheet = book.sheet_by_name("PlanningUnits")
@@ -195,9 +202,14 @@ class Command(BaseCommand):
         mapping = {
             'name' : params['name_field'],
             'fid' : params['fid_field'], 
-            'calculated_area': params['area_field'],
             'geometry' : 'MULTIPOLYGON',
         }
+
+        print "#################################\n" *5
+        print params['area_field']
+        print "#################################\n" *5
+        if params['area_field']:
+            mapping['calculated_area'] = params['area_field']
 
         NULL_VALUE = params['null_value']
         FID_FIELD = params['fid_field']

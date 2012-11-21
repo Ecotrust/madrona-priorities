@@ -90,9 +90,6 @@ class ConservationFeature(models.Model):
     name = models.CharField(max_length=99)
     level1 = models.CharField(max_length=99)
     level2 = models.CharField(max_length=99, null=True, blank=True)
-    level3 = models.CharField(max_length=99, null=True, blank=True)
-    level4 = models.CharField(max_length=99, null=True, blank=True)
-    level5 = models.CharField(max_length=99, null=True, blank=True)
     dbf_fieldname = models.CharField(max_length=15, null=True, blank=True)
     units = models.CharField(max_length=90, null=True, blank=True)
     desc = models.TextField(null=True, blank=True)
@@ -101,13 +98,13 @@ class ConservationFeature(models.Model):
     @property
     def level_string(self):
         """ All levels concatenated with --- delim """
-        levels = [self.level1, self.level2, self.level3, self.level4, self.level5]
+        levels = [self.level1, self.level2] #, self.level3, self.level4, self.level5]
         return '---'.join([slugify(x.lower()) for x in levels])
 
     @property
     def id_string(self):
         """ Relevant levels concatenated with --- delim """
-        levels = [self.level1, self.level2, self.level3, self.level4, self.level5]
+        levels = [self.level1, self.level2] #, self.level3, self.level4, self.level5]
         return '---'.join([slugify(x.lower()) for x in levels if x not in ['', None]])
 
     def __unicode__(self):

@@ -8,13 +8,17 @@
     <meta name="author" content="">
 
     <script type="text/javascript">
-      var madrona = { features: {} }
+        var madrona = { features: {} }
+        {% if js_opts_json %}
+        var js_opts = {{ js_opts_json|safe }}; 
+        {% endif %}
     </script>
 
     <link href="{{MEDIA_URL}}bootstrap/css/bootstrap.spacelab.css" rel="stylesheet">
     {% load compressed %}{% compressed_css 'application' %}
     <link href="{{MEDIA_URL}}bootstrap/css/bootstrap-responsive.css" rel="stylesheet"> 
 
+    <script type="text/javascript" src="{{MEDIA_URL}}common/js/sugar-1.3.6.min.js"></script>
     <script type="text/javascript" src="{{MEDIA_URL}}common/js/jquery.min.js"></script>
     <script type="text/javascript" src="{{MEDIA_URL}}common/js/jquery-ui.min.js"></script>
     <script type="text/javascript" src="{{MEDIA_URL}}bootstrap/js/bootstrap.min.js"></script>

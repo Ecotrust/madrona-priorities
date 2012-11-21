@@ -1,13 +1,13 @@
 # Django settings for omm project.
 from madrona.common.default_settings import *
 
-APP_NAME = "BLM Aquatic Management Priorities Tool"
+APP_NAME = "Madrona Priorities Tool"
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 DATABASES = {
     'default': {
         'ENGINE': 'django.contrib.gis.db.backends.postgis',
-        'NAME': 'aquatics-blm',
+        'NAME': 'juniper',
         'USER': 'postgres', }
 }
 
@@ -99,8 +99,21 @@ dblogger = logging.getLogger('django.db.backends')
 dblogger.setLevel(logging.INFO)
 
 SLIDER_MODE = "single" # 'dual' OR 'single'
-SLIDER_SHOW_INPUT = False # do we show the target/penalty input text values?
+SLIDER_SHOW_RAW = True 
+SLIDER_SHOW_PROPORTION = False
+SLIDER_START_COLLAPSED = False
 VARIABLE_GEOGRAPHY = True # do we allow variable geographies (True) or just use all planning units (False)?
+SHOW_RAW_COSTS = True # in report
+
+JS_OPTS = {
+    'start_zoom': 6,  
+    'num_levels': 7,  
+    'center': {'lon': -120.2, 'lat': 45.5},
+    'extent': [-126.1, 40.9, -116.0, 49.6],
+    'name_field': 'HU_10_NAME',
+}
+
+ADD_SCALEFACTOR_CONSTANT = 3 # 0==moderately weight costs, 5==meet targets at (almost) any cost
 
 #############################################################
 try:

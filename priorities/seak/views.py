@@ -23,6 +23,9 @@ def map(request, template_name='common/map_ext.html', extra_context=None):
     """
     if not extra_context:
         extra_context = {}
+        
+    extra_context['js_opts_json'] = json.dumps(settings.JS_OPTS)
+
     context = RequestContext(request, {
         'api_key': settings.GOOGLE_API_KEY, 
         'session_key': request.session.session_key,
@@ -124,10 +127,13 @@ def planning_units_geojson(request):
 
     feature_jsons = []
     for pu in PlanningUnit.objects.all():
+        cf_values = dict([(x.cf.dbf_fieldname, x.amount) for x in pu.puvscf_set.all()])
+
         fgj = get_feature_json(pu.geometry.json, json.dumps(
             {'name': pu.name, 
              'fid': pu.fid, 
              'cf_fields': pu.conservation_feature_fields,
+             'cf_values': cf_values,
              'cost_fields': pu.cost_fields,
              'area': pu.area}
         )) 
@@ -203,4 +209,13 @@ def field_lookup(request):
         flut[c.dbf_fieldname] = "%s: %s" % (constraint_text, c.name)
     for c in ConservationFeature.objects.all():
         flut[c.dbf_fieldname] = "%s: %s" % (c.level1, c.name)
+    return HttpResponse(json.dumps(flut), content_type='application/json')
+
+@cache_page(60 * 60 * 8)
+@cache_control(must_revalidate=False, max_age=60 * 60 * 8)
+def id_lookup(request):
+    from seak.models import ConservationFeature
+    flut = {}
+    for c in ConservationFeature.objects.all():
+        flut[c.id_string] = c.dbf_fieldname
     return HttpResponse(json.dumps(flut), content_type='application/json')

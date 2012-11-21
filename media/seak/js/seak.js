@@ -5,70 +5,74 @@ var markers;
 var selectFeatureControl;
 var keyboardControl;
 var selectGeographyControl;
+var utfClickControl;
+var costFields = [];
+var cfFields = [];
+var cfTotals = {};
 
-function getCfFields() {
-    // Find the set of conservation features represented in ALL of the selected planning units.
+function getGeographyFieldInfo() {
+    // Find the conservation features, totals and costs represented in ALL of the selected planning units.
     if (pu_layer.selectedFeatures.length >= 1) {
-        var tmpList = pu_layer.selectedFeatures[0].attributes.cf_fields;
-        $.each( pu_layer.selectedFeatures, function(idx, feat) { 
-            fieldList = feat.attributes.cf_fields;
-            tmpList = tmpList.intersect(fieldList); 
+        var costList = pu_layer.selectedFeatures[0].attributes.cost_fields;
+        var cfList = pu_layer.selectedFeatures[0].attributes.cf_fields;
+        var cfListTotals = {};
+        $.each( cfList, function(idx, cf) { 
+            cfListTotals[cf] = 0;
         });
-        return tmpList;
-    } else { 
-        return [];
-    }
-}
+        var tmpList;
+        $.each( pu_layer.selectedFeatures, function(idx, feat) { 
+            // handle costs
+            tmpList = feat.attributes.cost_fields;
+            costList = costList.intersect(tmpList); 
 
-function getCostFields() {
-    // Find the set of costs represented in ALL of the selected planning units.
-    if (pu_layer.selectedFeatures.length >= 1) {
-        var tmpList = pu_layer.selectedFeatures[0].attributes.cost_fields;
-        $.each( pu_layer.selectedFeatures, function(idx, feat) { 
-            fieldList = feat.attributes.cost_fields;
-            tmpList = tmpList.intersect(fieldList); 
+            // handle conservation features
+            tmpList = feat.attributes.cf_fields;
+            cfList = cfList.intersect(tmpList); 
+
+            // get cf values and add to total
+            $.each( cfList, function(idx, cf) { 
+                cfListTotals[cf] += feat.attributes.cf_values[cf]; 
+            });
         });
-        return tmpList;
+        costFields = costList;
+        cfFields = cfList;
+        cfTotals = cfListTotals;
+        return {
+            'costList': costList, 
+            'cfList': cfList, 
+            'cfTotals': cfListTotals
+        };
     } else { 
-        return [];
+        return {}; 
     }
 }
 
 function init_map() {
     var latlon = new OpenLayers.Projection("EPSG:4326");
     var merc = new OpenLayers.Projection("EPSG:900913");
-    var extent = new OpenLayers.Bounds(-125.04, 41.5, -116.0, 46.4);
+    var extent = new OpenLayers.Bounds(js_opts.extent);
     extent.transform(latlon, merc);
 
     map = new OpenLayers.Map({
         div: "map",
-        //div: null,
         projection: "EPSG:900913",
         displayProjection: "EPSG:4326",
         controls: [
             new OpenLayers.Control.Navigation(),
             new OpenLayers.Control.Zoom(),
             new OpenLayers.Control.Attribution()
-            /*
-            new OpenLayers.Control.LayerSwitcher({
-                'div': OpenLayers.Util.getElement('layerswitcher')
-            })
-            */
         ],
-        //zoom: 6,
-        minZoomLevel: 6,
-        restrictedExtent: extent, //new OpenLayers.Bounds(-19140016, 2626698, -10262137, 11307047),
-        //maxExtent: extent, //new OpenLayers.Bounds(-19140016, 2626698, -10262137, 11307047),
-        numZoomLevels: 7
+        minZoomLevel: js_opts.start_zoom,
+        restrictedExtent: extent,
+        numZoomLevels: js_opts.num_levels 
     });
 
     markers = new OpenLayers.Layer.Markers( "Markers", {displayInLayerSwitcher: false});
 
     var terrain = new OpenLayers.Layer.XYZ( "National Geographic Base Map",
-        //"http://d.tiles.mapbox.com/v3/examples.map-4l7djmvo/${z}/${x}/${y}.png",
         "http://server.arcgisonline.com/ArcGIS/rest/services/NatGeo_World_Map/MapServer/tile/${z}/${y}/${x}",
         {sphericalMercator: true, 
-         opacity: 0.75,
+         opacity: 0.35,
          attribution: "National Geographic, Esri, DeLorme, NAVTEQ, UNEP-WCMC, USGS, NASA, ESA, METI, NRCAN, GEBCO, NOAA, iPC" } 
     );
 
@@ -156,7 +160,7 @@ function init_map() {
         pu_layer,
         {
             clickout: true, 
-            toggle: false,
+            toggle: true,
             multiple: true, 
             hover: false,
             toggleKey: "ctrlKey", // ctrl key removes from selection
@@ -233,7 +237,7 @@ function init_map() {
                     msg += "<tr><td width=\"75%\">"+ idx + "</td><td>" + val + "</td></tr>";
                 }
             } 
-            if(idx.toLowerCase() == "watershed_") { // assume "name" 
+            if(idx == js_opts.name_field) { // assume "name" 
                 puname = val;
             }
         };
@@ -250,17 +254,17 @@ function init_map() {
         $("#info-content").html(msg);
     };
 
-    var ctl = new OpenLayers.Control.UTFGrid({
+    utfClickControl = new OpenLayers.Control.UTFGrid({
         callback: utfgridCallback,
         handlerMode: "click"
     });
-    map.addControl(ctl);
+    map.addControl(utfClickControl);
 
     var nameCallback = function(infoLookup) {
         $("#watershed-name").hide();
         $.each(infoLookup, function(k, info) {
-            if (info && info.data && info.data.WATERSHED_) {
-                $("#watershed-name").html(info.data.WATERSHED_);
+            if (info && info.data && info.data[js_opts.name_field]) {
+                $("#watershed-name").html(info.data[js_opts.name_field]);
                 $("#watershed-name").show();
             }
         });
@@ -271,6 +275,7 @@ function init_map() {
     });
     map.addControl(ctl2);
 
-    map.setCenter(new OpenLayers.LonLat(-15400000, 6700000), 6);
-    //map.zoomToMaxExtent();
+    var pt = new OpenLayers.LonLat(js_opts.center.lon, js_opts.center.lat);
+    pt.transform(latlon, merc);
+    map.setCenter(pt, js_opts.start_zoom);
 }

@@ -12,8 +12,6 @@ It is designed so that the code could be easily repurposed for other projects...
 
 * **Spatial data prep**. Decide on polygon planning units and summarize targets and costs to the planning units. See `docs/data_prep.md`
 
-
-
 * Clone the **git repository** and create a new branch
 
 ```
@@ -32,5 +30,6 @@ git push -u origin <NEW_PROJECT_NAME>
 
 * **Update** the dataset with the import.sh script (see `docs/updating.txt`)
 
-* Modify code to **add features**. Do this *in the project branch*, keeping the commits atomic, and merging back into master. 
-Merge carefully and don't bring merge over any project-specific changes.
+* Modify code in the `master` branch to **add new features**. Keep the commits atomic and merge/cherry-pick back into project branches as needed.  Merge carefully and don't bring merge over any project-specific changes.
+
+* Modify the project branches for **project-specific tweaks**. Don't push these changes back into the `master` branch.

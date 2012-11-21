@@ -33,6 +33,8 @@ class Command(BaseCommand):
             xls = args[1]
             assert os.path.exists(shp)
             assert os.path.exists(xls)
+            print "Using %s as the data layer" % shp
+            print "Using %s as the xls metadata" % shp
         except (AssertionError, IndexError):
             raise CommandError("Specify shp and xls file\n \
                     python manage.py import_planning_units test.shp test.xls <optional: full res shp>")
@@ -41,7 +43,6 @@ class Command(BaseCommand):
             fullres_shp = args[2]
             assert os.path.exists(fullres_shp)
         except (AssertionError, IndexError):
-            print
             print "Using %s as the full-res display layer" % shp
             fullres_shp = shp
 
@@ -91,14 +92,18 @@ class Command(BaseCommand):
         sheet = book.sheet_by_name("ConservationFeatures")
         headers = [str(x).strip() for x in sheet.row_values(0)] #returns all the CELLS of row 0,
 
-        fieldnames = ['name', 'uid', 'level1', 'level2', 'level3', 
-                      'level4', 'level5', 'dbf_fieldname', 'units']
+        fieldnames = ['name', 'uid', 'level1', 'level2', 'dbf_fieldname', 'units','desc']
 
-        assert len(headers) == len(fieldnames)
-        for h in range(len(headers)): 
-            if headers[h] != fieldnames[h]:
-                print "WARNING: field %s is '%s' in the xls file but model is \
-                        expecting '%s' ... OK?" % (h, headers[h], fieldnames[h])
+        if len(headers) < len(fieldnames):
+            raise Exception("The ConservationFeatures sheet has errors: expecting these headers\n  %s\nBut found\n  %s" % (fieldnames, headers))
+
+        for h in range(len(fieldnames)): 
+            if headers[h].lower() != fieldnames[h].lower():
+                raise Exception("field %s is '%s' in the xls file but model is expecting '%s'." % (h, headers[h], fieldnames[h]))
+
+        extra_fields = headers[len(fieldnames):] 
+        if len(extra_fields) > 0:
+            print "WARNING: extra fields in ConservationFeatures sheet not being used\n    ", extra_fields
 
         uids = []
         for i in xrange(1, sheet.nrows):
@@ -146,11 +151,16 @@ class Command(BaseCommand):
 
         fieldnames = ['name', 'uid', 'dbf_fieldname', 'units', 'desc']
 
-        assert len(headers) == len(fieldnames)
-        for h in range(len(headers)): 
-            if headers[h] != fieldnames[h]:
-                print "WARNING: field %s is '%s' in the xls file but model is expecting '%s' ... OK?" % (h, 
-                        headers[h], fieldnames[h])
+        if len(headers) < len(fieldnames):
+            raise Exception("The Costs sheet has errors: expecting these headers\n  %s\nBut found\n  %s" % (fieldnames, headers))
+
+        for h in range(len(fieldnames)): 
+            if headers[h].lower() != fieldnames[h].lower():
+                raise Exception("field %s is '%s' in the xls file but model is expecting '%s'." % (h, headers[h], fieldnames[h]))
+
+        extra_fields = headers[len(fieldnames):] 
+        if len(extra_fields) > 0:
+            print "WARNING: extra fields in Cost sheet not being used\n    ", extra_fields
 
         for i in xrange(1, sheet.nrows):
             vals = sheet.row_values(i)
@@ -173,14 +183,14 @@ class Command(BaseCommand):
 
         # Load PU from shpfile
         print
-        print "WARNING It is your responsibility to make sure the shapefile projection below \
-                matches srid %s" % settings.GEOMETRY_DB_SRID
+        print "WARNING It is your responsibility to make sure the shapefile projection below matches srid %s" % settings.GEOMETRY_DB_SRID
         print layer.srs
 
         sheet = book.sheet_by_name("PlanningUnits")
         headers = [str(x.strip()) for x in sheet.row_values(0)] #returns all the CELLS of row 0,
-        fieldnames = ['name_field', 'fid_field', 'null_value']
-        assert len(headers) == len(fieldnames)
+        fieldnames = ['name_field', 'fid_field', 'null_value', 'area_field']
+        if len(headers) != len(fieldnames):
+            raise Exception("The PlanningUnits sheet has errors: expecting these headers\n  %s\nBut found\n  %s" % (fieldnames, headers))
         for h in range(len(headers)): 
             if headers[h] != fieldnames[h]:
                 print "WARNING: field %s is '%s' in the xls file but model is expecting \
@@ -196,6 +206,9 @@ class Command(BaseCommand):
             'geometry' : 'MULTIPOLYGON',
         }
 
+        if params['area_field']:
+            mapping['calculated_area'] = params['area_field']
+
         NULL_VALUE = params['null_value']
         FID_FIELD = params['fid_field']
 
@@ -206,7 +219,8 @@ class Command(BaseCommand):
             print ".... not loading shp"
 
         pus = PlanningUnit.objects.all()
-        assert len(layer) == len(pus)
+        if len(layer) != len(pus):
+            raise Exception("Layer has %d features but %s planning units are loaded" % (len(layer),len(pus)))
 
         print
         print "Generating tile configuration files"
@@ -252,11 +266,12 @@ class Command(BaseCommand):
         all_dbf_fieldnames.append(params['name_field'])
 
         cfg = {
+            "logging": "warning",
             "cache": {
                 "name": "Multi",
                 "tiers": [
                     #{ "name": "Memcache", "servers": ["127.0.0.1:11211"] },
-                    { "name": "Disk", "path": "/tmp/juniper-stache" }
+                    { "name": "Disk", "path": "/tmp/%s-stache" % slugify(settings.APP_NAME) }
                 ]
             },
             "layers": {
@@ -341,7 +356,7 @@ class Command(BaseCommand):
             print " ",url
             theme_name = cf.level1
             theme, created = Theme.objects.get_or_create(name="auto_%s" % theme_name, display_name=theme_name)
-            desc = cf.units
+            desc = cf.desc
             lyr = Layer.objects.create(name=cf.name, layer_type="XYZ", url=url, 
                     opacity=1.0, description=desc, legend=legend, legend_title=cf.name)
             lyr.themes.add(theme)

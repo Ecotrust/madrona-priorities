@@ -1,7 +1,7 @@
 # Django settings for omm project.
 from madrona.common.default_settings import *
 
-APP_NAME = "BLM Juniper Management Priorities Tool"
+APP_NAME = "Madrona Priorities Tool"
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 DATABASES = {
@@ -101,6 +101,7 @@ dblogger.setLevel(logging.INFO)
 SLIDER_MODE = "single" # 'dual' OR 'single'
 SLIDER_SHOW_RAW = True 
 SLIDER_SHOW_PROPORTION = False
+SLIDER_START_COLLAPSED = False
 VARIABLE_GEOGRAPHY = True # do we allow variable geographies (True) or just use all planning units (False)?
 SHOW_RAW_COSTS = True # in report
 

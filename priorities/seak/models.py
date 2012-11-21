@@ -838,6 +838,7 @@ class Scenario(Analysis):
             'slider_mode': settings.SLIDER_MODE,
             'slider_show_raw': settings.SLIDER_SHOW_RAW,
             'slider_show_proportion': settings.SLIDER_SHOW_PROPORTION,
+            'slider_start_collapsed': settings.SLIDER_START_COLLAPSED,
             'variable_geography': settings.VARIABLE_GEOGRAPHY,
         }
         show_context = {

@@ -33,6 +33,8 @@ class Command(BaseCommand):
             xls = args[1]
             assert os.path.exists(shp)
             assert os.path.exists(xls)
+            print "Using %s as the data layer" % shp
+            print "Using %s as the xls metadata" % shp
         except (AssertionError, IndexError):
             raise CommandError("Specify shp and xls file\n \
                     python manage.py import_planning_units test.shp test.xls <optional: full res shp>")
@@ -41,7 +43,6 @@ class Command(BaseCommand):
             fullres_shp = args[2]
             assert os.path.exists(fullres_shp)
         except (AssertionError, IndexError):
-            print
             print "Using %s as the full-res display layer" % shp
             fullres_shp = shp
 
@@ -98,7 +99,7 @@ class Command(BaseCommand):
 
         for h in range(len(fieldnames)): 
             if headers[h].lower() != fieldnames[h].lower():
-                raise Exception("field %s is '%s' in the xls file but model is expecting '%s' ... OK?" % (h, headers[h], fieldnames[h]))
+                raise Exception("field %s is '%s' in the xls file but model is expecting '%s'." % (h, headers[h], fieldnames[h]))
 
         extra_fields = headers[len(fieldnames):] 
         if len(extra_fields) > 0:
@@ -155,7 +156,7 @@ class Command(BaseCommand):
 
         for h in range(len(fieldnames)): 
             if headers[h].lower() != fieldnames[h].lower():
-                raise Exception("field %s is '%s' in the xls file but model is expecting '%s' ... OK?" % (h, headers[h], fieldnames[h]))
+                raise Exception("field %s is '%s' in the xls file but model is expecting '%s'." % (h, headers[h], fieldnames[h]))
 
         extra_fields = headers[len(fieldnames):] 
         if len(extra_fields) > 0:
@@ -205,9 +206,6 @@ class Command(BaseCommand):
             'geometry' : 'MULTIPOLYGON',
         }
 
-        print "#################################\n" *5
-        print params['area_field']
-        print "#################################\n" *5
         if params['area_field']:
             mapping['calculated_area'] = params['area_field']
 

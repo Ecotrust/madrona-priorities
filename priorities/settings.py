@@ -105,6 +105,14 @@ SLIDER_START_COLLAPSED = False
 VARIABLE_GEOGRAPHY = True # do we allow variable geographies (True) or just use all planning units (False)?
 SHOW_RAW_COSTS = True # in report
 
+JS_OPTS = {
+    'start_zoom': 6,  
+    'num_levels': 7,  
+    'center': {'lon': -120.2, 'lat': 45.5},
+    'extent': [-126.1, 40.9, -116.0, 49.6],
+    'name_field': 'HU_10_NAME',
+}
+
 ADD_SCALEFACTOR_CONSTANT = 3 # 0==moderately weight costs, 5==meet targets at (almost) any cost
 
 #############################################################

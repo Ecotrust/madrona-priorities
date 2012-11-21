@@ -8,7 +8,10 @@
     <meta name="author" content="">
 
     <script type="text/javascript">
-      var madrona = { features: {} }
+        var madrona = { features: {} }
+        {% if js_opts_json %}
+        var js_opts = {{ js_opts_json|safe }}; 
+        {% endif %}
     </script>
 
     <link href="{{MEDIA_URL}}bootstrap/css/bootstrap.custom.css" rel="stylesheet">

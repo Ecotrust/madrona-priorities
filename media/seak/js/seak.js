@@ -50,35 +50,26 @@ function getGeographyFieldInfo() {
 function init_map() {
     var latlon = new OpenLayers.Projection("EPSG:4326");
     var merc = new OpenLayers.Projection("EPSG:900913");
-    var extent = new OpenLayers.Bounds(-125.04, 41.5, -116.0, 46.4);
+    var extent = new OpenLayers.Bounds(js_opts.extent);
     extent.transform(latlon, merc);
 
     map = new OpenLayers.Map({
         div: "map",
-        //div: null,
         projection: "EPSG:900913",
         displayProjection: "EPSG:4326",
         controls: [
             new OpenLayers.Control.Navigation(),
             new OpenLayers.Control.Zoom(),
             new OpenLayers.Control.Attribution()
-            /*
-            new OpenLayers.Control.LayerSwitcher({
-                'div': OpenLayers.Util.getElement('layerswitcher')
-            })
-            */
         ],
-        //zoom: 6,
-        minZoomLevel: 6,
-        restrictedExtent: extent, //new OpenLayers.Bounds(-19140016, 2626698, -10262137, 11307047),
-        //maxExtent: extent, //new OpenLayers.Bounds(-19140016, 2626698, -10262137, 11307047),
-        numZoomLevels: 7
+        minZoomLevel: js_opts.start_zoom,
+        restrictedExtent: extent,
+        numZoomLevels: js_opts.num_levels 
     });
 
     markers = new OpenLayers.Layer.Markers( "Markers", {displayInLayerSwitcher: false});
 
     var terrain = new OpenLayers.Layer.XYZ( "National Geographic Base Map",
-        //"http://d.tiles.mapbox.com/v3/examples.map-4l7djmvo/${z}/${x}/${y}.png",
         "http://server.arcgisonline.com/ArcGIS/rest/services/NatGeo_World_Map/MapServer/tile/${z}/${y}/${x}",
         {sphericalMercator: true, 
          opacity: 0.35,
@@ -246,7 +237,7 @@ function init_map() {
                     msg += "<tr><td width=\"75%\">"+ idx + "</td><td>" + val + "</td></tr>";
                 }
             } 
-            if(idx.toLowerCase() == "watershed_") { // assume "name" 
+            if(idx == js_opts.name_field) { // assume "name" 
                 puname = val;
             }
         };
@@ -272,8 +263,8 @@ function init_map() {
     var nameCallback = function(infoLookup) {
         $("#watershed-name").hide();
         $.each(infoLookup, function(k, info) {
-            if (info && info.data && info.data.WATERSHED_) {
-                $("#watershed-name").html(info.data.WATERSHED_);
+            if (info && info.data && info.data[js_opts.name_field]) {
+                $("#watershed-name").html(info.data[js_opts.name_field]);
                 $("#watershed-name").show();
             }
         });
@@ -284,6 +275,7 @@ function init_map() {
     });
     map.addControl(ctl2);
 
-    map.setCenter(new OpenLayers.LonLat(-15400000, 6700000), 6);
-    //map.zoomToMaxExtent();
+    var pt = new OpenLayers.LonLat(js_opts.center.lon, js_opts.center.lat);
+    pt.transform(latlon, merc);
+    map.setCenter(pt, js_opts.start_zoom);
 }

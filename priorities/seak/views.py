@@ -23,6 +23,9 @@ def map(request, template_name='common/map_ext.html', extra_context=None):
     """
     if not extra_context:
         extra_context = {}
+        
+    extra_context['js_opts_json'] = json.dumps(settings.JS_OPTS)
+
     context = RequestContext(request, {
         'api_key': settings.GOOGLE_API_KEY, 
         'session_key': request.session.session_key,

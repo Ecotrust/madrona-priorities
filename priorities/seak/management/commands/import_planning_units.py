@@ -34,7 +34,7 @@ class Command(BaseCommand):
             assert os.path.exists(shp)
             assert os.path.exists(xls)
             print "Using %s as the data layer" % shp
-            print "Using %s as the xls metadata" % shp
+            print "Using %s as the xls metadata" % xls
         except (AssertionError, IndexError):
             raise CommandError("Specify shp and xls file\n \
                     python manage.py import_planning_units test.shp test.xls <optional: full res shp>")
@@ -309,25 +309,41 @@ class Command(BaseCommand):
             vals = [x for x in vals if x >= 0 ]
             breaks = sorted(get_jenks_breaks(vals, 4))
             breaks = [0.000001 if x == 0.0 else x for x in breaks]
-            #print fieldname, breaks, min(vals), max(vals)
+
+            colors = {
+                'c1': '#CC4C02', # high 
+                'c2': '#FE9929', 
+                'c3': '#FED98E', 
+                'c4': '#FFFFD4', # low
+                'c5': '#FFFFFF', # zero
+            }
+
+            tdict = {"fieldname": fieldname, 'b1': breaks[1], 'b2': breaks[2], 'b3': breaks[3]}
+            tdict.update(colors)
+ 
             extra_rules = """
                 <Rule>
                     <Filter>([%(fieldname)s] &gt;= %(b3)f)</Filter>
-                    <PolygonSymbolizer fill="#CC4C02" fill-opacity="1.0" />
+                    <PolygonSymbolizer fill="%(c1)s" fill-opacity="1.0" />
                 </Rule>
                 <Rule>
                     <Filter>([%(fieldname)s] &gt;= %(b2)f)</Filter>
-                    <PolygonSymbolizer fill="#FE9929" fill-opacity="1.0" />
+                    <PolygonSymbolizer fill="%(c2)s" fill-opacity="1.0" />
                 </Rule>
                 <Rule>
                     <Filter>([%(fieldname)s] &gt;= %(b1)f)</Filter>
-                    <PolygonSymbolizer fill="#FED98E" fill-opacity="1.0" />
+                    <PolygonSymbolizer fill="%(c3)s" fill-opacity="1.0" />
                 </Rule>
                 <Rule>
-                    <Filter>([%(fieldname)s] &gt;= 0)</Filter>
-                    <PolygonSymbolizer fill="#FFFFD4" fill-opacity="1.0" />
+                    <Filter>([%(fieldname)s] &gt; 0)</Filter>
+                    <PolygonSymbolizer fill="%(c4)s" fill-opacity="1.0" />
                 </Rule>
-            """ % {"fieldname": fieldname, 'b1': breaks[1], 'b2': breaks[2], 'b3': breaks[3]}
+                <Rule>
+                    <Filter>([%(fieldname)s] = 0)</Filter>
+                    <PolygonSymbolizer fill="%(c5)s" fill-opacity="1.0" />
+                </Rule>
+            """ % tdict 
+
             xml = xml_template % {'shppath': os.path.abspath(fullres_shp), 'extra_rules': extra_rules} 
             with open(os.path.join(settings.TILE_CONFIG_DIR, fieldname + '.xml'), 'w') as fh:
                 print "  writing %s.xml" % fieldname

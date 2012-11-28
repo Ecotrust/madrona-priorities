@@ -1,6 +1,6 @@
 import os
 from django.core.management.base import BaseCommand, CommandError
-from seak.models import ConservationFeature, PlanningUnit, Cost, PuVsCf, PuVsCost, DefinedGeography
+from seak.models import ConservationFeature, PlanningUnit, Cost, Aux, PuVsCf, PuVsCost, PuVsAux, DefinedGeography
 from django.contrib.gis.utils import LayerMapping
 from django.contrib.gis.gdal import DataSource
 from django.template.defaultfilters import slugify
@@ -50,7 +50,7 @@ class Command(BaseCommand):
         import_shp = True
         app = 'seak'
 
-        modls = ['ConservationFeature',  'Cost', 'PuVsCf', 'PuVsCost']
+        modls = ['ConservationFeature',  'Cost', 'Aux', 'PuVsCf', 'PuVsCost', 'PuVsAux']
         if import_shp:
             modls.append('PlanningUnit')
 
@@ -72,7 +72,7 @@ class Command(BaseCommand):
         # Clear them out
         print
         print "Cleaning out old tables"
-        ms = [ConservationFeature, Cost, PuVsCf, PuVsCost, DefinedGeography]
+        ms = [ConservationFeature, Cost, Aux, PuVsCf, PuVsCost, PuVsAux,DefinedGeography]
         if import_shp:
             ms.append(PlanningUnit)
         for m in ms: 
@@ -174,6 +174,44 @@ class Command(BaseCommand):
 
         for c in cs:
             fname = c.dbf_fieldname
+            if fname not in layer.fields:
+                if find_possible(fname, layer.fields):
+                    raise Exception("DBF has no field named `%s`.\n Did you mean `%s`" % (fname,
+                        find_possible(fname, layer.fields)))
+                raise Exception("DBF has no field named %s (it IS case sensitive).\n\n %s" % (fname, 
+                    layer.fields))
+
+        # Load Aux from xls
+        print
+        print "Loading Auxillayr Data fields"
+        sheet = book.sheet_by_name("Other Fields")
+        headers = [str(x).strip() for x in sheet.row_values(0)] #returns all the CELLS of row 0,
+
+        fieldnames = ['name', 'uid', 'dbf_fieldname', 'units', 'desc']
+
+        if len(headers) < len(fieldnames):
+            raise Exception("The Other Fields sheet has errors: expecting these headers\n  %s\nBut found\n  %s" % (fieldnames, headers))
+
+        for h in range(len(fieldnames)): 
+            if headers[h].lower() != fieldnames[h].lower():
+                raise Exception("field %s is '%s' in the xls file but model is expecting '%s'." % (h, headers[h], fieldnames[h]))
+
+        extra_fields = headers[len(fieldnames):] 
+        if len(extra_fields) > 0:
+            print "WARNING: extra fields in Other Fields sheet not being used\n    ", extra_fields
+
+        for i in xrange(1, sheet.nrows):
+            vals = sheet.row_values(i)
+            print vals
+            params = dict(zip(fieldnames, vals))
+            aux = Aux(**params)
+            aux.save()
+
+        auxs = Aux.objects.all()
+        assert len(auxs) == sheet.nrows - 1
+
+        for aux in auxs:
+            fname = aux.dbf_fieldname
             if fname not in layer.fields:
                 if find_possible(fname, layer.fields):
                     raise Exception("DBF has no field named `%s`.\n Did you mean `%s`" % (fname,
@@ -412,9 +450,17 @@ class Command(BaseCommand):
         lyr.save()
 
         print 
-        print "Loading costs and conservation features associated with each planning unit"
+        print "Loading costs, conservation features and auxillary data associated with each planning unit"
         for feature in layer:
             pu = pus.get(fid=feature.get(mapping['fid']))
+
+            for aux in auxs:
+                amt = feature.get(aux.dbf_fieldname)
+                if amt == NULL_VALUE:
+                    amt = None
+                obj = PuVsAux(pu=pu, aux=aux, value=amt)
+                obj.save()
+
             for cf in cfs_with_fields:
                 amt = feature.get(cf.dbf_fieldname)
                 if amt == NULL_VALUE:
@@ -437,6 +483,7 @@ class Command(BaseCommand):
 
         assert len(PuVsCf.objects.all()) == len(pus) * len(cfs_with_fields)
         assert len(PuVsCost.objects.all()) == len(pus) * len(cs)
+        assert len(PuVsAux.objects.all()) == len(pus) * len(auxs)
 
         # Load Geographies from xls
         print

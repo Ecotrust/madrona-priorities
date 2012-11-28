@@ -376,5 +376,14 @@
       "header": "", 
       "slug": "geography-fine-tune"
     }
-  }
+  },
+  {
+    "pk": 43, 
+    "model": "flatblocks.flatblock", 
+    "fields": {
+      "content": "Other Data", 
+      "header": "", 
+      "slug": "show-aux"
+    }
+  } 
 ]

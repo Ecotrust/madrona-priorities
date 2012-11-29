@@ -327,7 +327,7 @@
     "pk": 13, 
     "model": "flatblocks.flatblock", 
     "fields": {
-      "content": "For each management objective, specify the desired acreage to target for removal.", 
+      "content": "For each species, specify a target percentage of the habitat to capture as well as a penalty (or relative importance) score.", 
       "header": "", 
       "slug": "form-conservationfeature-description"
     }

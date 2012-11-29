@@ -205,7 +205,7 @@
                                     <span class="text-success slider-label slider-label-right"><small>{% flatblock 'target-high' 3600 %}</small></span>
                                 </div>
                                 <div class="span1">
-                                    <div class="input-append">
+                                    <div>
                                         <input type="text" class="debug-only penaltyvalue" id="penalty---{{cf.id_string}}" value="0.0"/>
                                         <input type="text" class="{% if not slider_show_proportion %}debug-only {% endif %}input-mini targetvalue" 
                                                id="target---{{cf.id_string}}" value="0.0"/>
@@ -235,7 +235,7 @@
                                     <span class="text-success slider-label slider-label-right"><small>{% flatblock 'target-high' 3600 %}</small></span>
                                 </div>
                                 <div class="span2">
-                                    <div class="input-append">
+                                    <div>
                                         <input type="text" class="{% if not slider_show_proportion %}debug-only {% endif %}input-micro targetvalue" 
                                             id="target---{{cf.id_string}}" value="0.0"/>
                                         {% if slider_show_proportion %}
@@ -263,12 +263,9 @@
                                 </div>
                                 <div class="span2">
                                     <!-- penalty sliders don't have a "raw" value -->
-                                    <div class="input-append">
+                                    <div>
                                         <input type="text" class="{% if not slider_show_proportion %}debug-only {% endif %}input-micro penaltyvalue" 
                                             id="penalty---{{cf.id_string}}" value="0.0"/>
-                                        {% if slider_show_proportion %}
-                                        <span>%</span>
-                                        {% endif %}
                                     </div>
                                 </div>
                             </div>

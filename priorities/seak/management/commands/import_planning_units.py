@@ -42,6 +42,7 @@ class Command(BaseCommand):
         try:
             fullres_shp = args[2]
             assert os.path.exists(fullres_shp)
+            print "Using %s as the full-res display layer" % fullres_shp
         except (AssertionError, IndexError):
             print "Using %s as the full-res display layer" % shp
             fullres_shp = shp
@@ -183,7 +184,7 @@ class Command(BaseCommand):
 
         # Load Aux from xls
         print
-        print "Loading Auxillayr Data fields"
+        print "Loading Auxillary Data fields"
         sheet = book.sheet_by_name("Other Fields")
         headers = [str(x).strip() for x in sheet.row_values(0)] #returns all the CELLS of row 0,
 

@@ -336,7 +336,7 @@
     "pk": 39, 
     "model": "flatblocks.flatblock", 
     "fields": {
-      "content": "acres", 
+      "content": "square km", 
       "header": "", 
       "slug": "area-units"
     }

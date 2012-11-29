@@ -183,7 +183,7 @@
     "pk": 4, 
     "model": "flatblocks.flatblock", 
     "fields": {
-      "content": "Welcome to the BLM Juniper Management Tool", 
+      "content": "Welcome to the BLM Aquatic Priorities Tool", 
       "header": "", 
       "slug": "about-header"
     }
@@ -192,7 +192,7 @@
     "pk": 5, 
     "model": "flatblocks.flatblock", 
     "fields": {
-      "content": "A juniper management prioritization support tool for Eastern Oregon. ", 
+      "content": "Prioritization tool for Aquatic species in Oregon and eastern Washington. ", 
       "header": "", 
       "slug": "about-intro"
     }
@@ -228,7 +228,7 @@
     "pk": 1, 
     "model": "flatblocks.flatblock", 
     "fields": {
-      "content": "Oregon Juniper Management Tool", 
+      "content": "BLM Aquatics Priorities Tool", 
       "header": "", 
       "slug": "title"
     }

@@ -3,8 +3,7 @@ Jenks Natiural Breaks algorithm in python
 http://danieljlewis.org/2010/06/07/jenks-natural-breaks-algorithm-in-python/
 """
 
-def get_jenks_breaks( dataList, numClass ):
-    dataList.sort()
+def get_mats(dataList, numClass):
     mat1 = []
     for i in range(0,len(dataList)+1):
         temp = []
@@ -25,13 +24,22 @@ def get_jenks_breaks( dataList, numClass ):
         for j in range(2,len(dataList)+1):
             mat2[j][i] = float('inf')
 
+    return mat1, mat2
+
+def get_jenks_breaks( dataList, numClass ):
+    dataList.sort()
+
+    mat1, mat2 = get_mats(dataList, numClass)
+
     v = 0.0
-    for l in range(2,len(dataList)+1):
+ 
+    class_range = range(2, numClass+1)
+    for x in range(2,len(dataList)+1):
         s1 = 0.0
         s2 = 0.0
         w = 0.0
-        for m in range(1,l+1):
-            i3 = l - m + 1
+        for m in range(1,x+1):
+            i3 = x - m + 1
             val = float(dataList[i3-1])
             s2 += val * val
             s1 += val
@@ -39,12 +47,12 @@ def get_jenks_breaks( dataList, numClass ):
             v = s2 - (s1 * s1) / w
             i4 = i3 - 1
             if i4 != 0:
-                for j in range(2,numClass+1):
-                    if mat2[l][j] >= (v + mat2[i4][j - 1]):
-                        mat1[l][j] = i3
-                        mat2[l][j] = v + mat2[i4][j - 1]
-        mat1[l][1] = 1
-        mat2[l][1] = v
+                for j in class_range: 
+                    if mat2[x][j] >= (v + mat2[i4][j - 1]):
+                        mat1[x][j] = i3
+                        mat2[x][j] = v + mat2[i4][j - 1]
+        mat1[x][1] = 1
+        mat2[x][1] = v
 
     k = len(dataList)
     kclass = []
@@ -80,10 +88,10 @@ def getGVF( dataList, numClass ):
     SDCM = 0.0
     for i in range(0,numClass):
         if breaks[i] == 0:
-                classStart = 0
+            classStart = 0
         else:
-                classStart = dataList.index(breaks[i])
-                classStart += 1
+            classStart = dataList.index(breaks[i])
+            classStart += 1
 
         classEnd = dataList.index(breaks[i+1])
         classList = dataList[classStart:classEnd+1]
@@ -99,6 +107,5 @@ def getGVF( dataList, numClass ):
 
 if __name__ == '__main__':
     import random
-    dataset = sorted([float(random.randint(0,100)) for r in xrange(15)])
-    print dataset
-    print get_jenks_breaks(dataset, 4)
+    dataset = sorted([float(random.randint(0,100)) for r in xrange(75)])
+    #print get_jenks_breaks(dataset, 4)

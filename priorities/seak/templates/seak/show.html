@@ -30,11 +30,14 @@
     <ul class="nav nav-tabs" style="margin-bottom:0px;">
         <li class="active"><a href="#Inputs" data-toggle="tab"><span>{% flatblock 'show-inputs' 3600 %}</span></a></li>
         {% if instance.done %}
-        <li><a href="#species" data-toggle="tab"><span>{% flatblock 'show-conservation-features' 3600 %}</span></a></li>
-        <li><a href="#watersheds" data-toggle="tab"><span>{% flatblock 'show-planning-units' 3600 %}</span></a></li>
-        {% if show_raw_costs %}
-        <li><a href="#costs" data-toggle="tab"><span>{% flatblock 'show-total-costs' 3600 %}</span></a></li>
-        {% endif %}
+            <li><a href="#species" data-toggle="tab"><span>{% flatblock 'show-conservation-features' 3600 %}</span></a></li>
+            <li><a href="#watersheds" data-toggle="tab"><span>{% flatblock 'show-planning-units' 3600 %}</span></a></li>
+            {% if show_raw_costs %}
+                <li><a href="#costs" data-toggle="tab"><span>{% flatblock 'show-total-costs' 3600 %}</span></a></li>
+            {% endif %}
+            {% if show_aux %}
+                <li><a href="#aux" data-toggle="tab"><span>{% flatblock 'show-aux' 3600 %}</span></a></li>
+            {% endif %}
         {% endif %}
     </ul>
 
@@ -175,6 +178,23 @@
                     <dt>{{k|deslug}}</dt><dd>{{v|floatformat:0|intcomma}}</dd>
                     {% endfor %}
                 </dl>
+            </div>
+        </div>
+        {% endif %}
+
+        {% if show_aux %}
+        <div id="aux" class="tab-pane">
+            <div class="box">
+                <h5> {% flatblock 'show-aux' 3600 %} </h5>
+                {% for w in results.units %}
+                <div class="row-fluid">
+                    <span class="span4"><strong>{{w.name}}</strong></span>
+                    {% for k,v in w.auxs.items %}
+                    <span class="badge"> {{k}}: {{v}} </span>
+                    {% endfor %}
+                </div>
+                {% endfor %}
+
             </div>
         </div>
         {% endif %}

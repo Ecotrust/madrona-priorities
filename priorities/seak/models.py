@@ -110,6 +110,17 @@ class ConservationFeature(models.Model):
     def __unicode__(self):
         return u'%s' % self.name
 
+class Aux(models.Model):
+    '''
+    Django model representing Auxillary data (typically planning unit metrics to be used in reports
+    but *not* in the prioritization as costs or targets)
+    '''
+    name = models.CharField(max_length=99)
+    uid = models.IntegerField(primary_key=True)
+    dbf_fieldname = models.CharField(max_length=15, null=True, blank=True)
+    units = models.CharField(max_length=16, null=True, blank=True)
+    desc = models.TextField()
+
 class Cost(models.Model):
     '''
     Django model representing Costs (typically planning unit metrics which are considered
@@ -208,6 +219,26 @@ class PuVsCost(models.Model):
     amount = models.FloatField(null=True, blank=True)
     class Meta:
         unique_together = ("pu", "cost")
+
+class PuVsAux(models.Model):
+    '''
+    Auxillary data values per planning unit
+    i.e. data associated with planning units 
+         useful for reports, data not used as a cost or a target.
+    '''
+    pu = models.ForeignKey(PlanningUnit)
+    aux = models.ForeignKey(Aux)
+    value = models.TextField(null=True, blank=True)
+    class Meta:
+        unique_together = ("pu", "aux")
+
+    @property
+    def amount(self):
+        try:
+            amt = float(self.value)
+        except:
+            amt = None
+        return amt
 
 def scale_list(vals, floor=None):
     """
@@ -541,9 +572,12 @@ class Scenario(Analysis):
                     theclass = 'med' 
                 costs[cname] = {'raw': raw_costs[cname],'scaled': thecost, 'class': theclass}
 
+            auxs = dict([(x.aux.name, x.value) for x in pu.puvsaux_set.all()])
+
             best.append({'name': pu.name, 
                          'fid': pu.fid, 
                          'costs': costs,
+                         'auxs': auxs,
                          'centroidx': centroid[0],
                          'centroidy': centroid[1]})
 
@@ -846,6 +880,7 @@ class Scenario(Analysis):
             'slider_show_raw': settings.SLIDER_SHOW_RAW,
             'slider_show_proportion': settings.SLIDER_SHOW_PROPORTION,
             'show_raw_costs': settings.SHOW_RAW_COSTS,
+            'show_aux': settings.SHOW_AUX,
         }
         icon_url = 'common/images/watershed.png'
         links = (

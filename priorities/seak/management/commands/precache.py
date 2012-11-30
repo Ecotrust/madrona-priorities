@@ -32,9 +32,13 @@ class Command(BaseCommand):
             ('planning_units', 'png'),
         ]
 
+        for layer in layers:
+            cmd = "tilestache-seed.py -c ../tile_config/tiles.cfg -l %s -e %s -b %s %s" % (layer[0], layer[1], extent, ' '.join(zooms[:-2]))
+            print cmd
+            os.popen(cmd)
+
         layers.extend([(x.dbf_fieldname, 'png') for x in Cost.objects.all()])
         layers.extend([(x.dbf_fieldname, 'png') for x in ConservationFeature.objects.all()])
-        print layers
 
         for z in zooms:
             for layer in layers:

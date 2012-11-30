@@ -152,7 +152,7 @@ class PlanningUnit(models.Model):
     date_modified = models.DateTimeField(auto_now=True)
 
     @property
-    #@cachemethod("PlanningUnit_%(fid)s_area")
+    @cachemethod("PlanningUnit_%(fid)s_area")
     def area(self):
         if self.calculated_area:
             area = self.calculated_area

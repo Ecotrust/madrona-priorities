@@ -1,22 +1,31 @@
 <VirtualHost *:80>
-    ServerName <DEFAULT>.labs.ecotrust.org
+    ServerName APPNAME.labs.ecotrust.org
 
-    WSGIScriptAlias / /usr/local/apps/<DEFAULT>/deploy/wsgi.py
-    WSGIDaemonProcess <DEFAULT> user=www-data group=www-data threads=1 processes=2
-    WSGIProcessGroup <DEFAULT>
+    KeepAliveTimeout 5
 
-    ErrorLog "/usr/local/apps/<DEFAULT>/logs/apache-error.log"
-    CustomLog "/usr/local/apps/<DEFAULT>/logs/apache-access.log" combined
+    WSGIScriptAlias /tiles /usr/local/apps/APPNAME/deploy/tilestache_wsgi.py
+    WSGIScriptAlias / /usr/local/apps/APPNAME/deploy/wsgi.py
+    WSGIDaemonProcess aquaticsblm user=www-data group=www-data threads=1 processes=2
+    WSGIProcessGroup aquaticsblm 
 
-    Alias /media /usr/local/apps/<DEFAULT>/mediaroot
+    <IfModule mod_rewrite.c>
+        RewriteEngine On
+        RewriteCond  /usr/local/apps/APPNAME/MAINTENANCE_MODE -f
+        #RewriteCond %{REMOTE_ADDR} !^your.IP.address.here$
+        RewriteRule ^(.+) /usr/local/apps/APPNAME/media/down.html [L]
+    </IfModule>
+
+    ErrorLog "/usr/local/apps/APPNAME/logs/apache-error.log"
+    CustomLog "/usr/local/apps/APPNAME/logs/apache-access.log" combined
 
     ServerAdmin webmaster@localhost
 
     DocumentRoot /var/www
     <Directory />
         Options FollowSymLinks
-        AllowOverride None
+        #AllowOverride None
     </Directory>
+
     <Directory /var/www/>
         Options Indexes FollowSymLinks MultiViews
         AllowOverride None
@@ -24,23 +33,34 @@
         allow from all
     </Directory>
 
+    <Location /tiles>
+        SetEnv no-gzip 1
+        Order allow,deny
+        Allow from all
+    </Location>
+
+    Alias /media /usr/local/apps/APPNAME/mediaroot
     <Location /media>
         #GZIP media files just not images or for IE6
         SetOutputFilter DEFLATE
         SetEnvIfNoCase Request_URI \
         \.(?:gif|jpe?g|png)$ no-gzip dont-vary   
         BrowserMatch \bMSIE\s6 no-gzip
+
         Order allow,deny
         Allow from all
     </Location>
 
     <LocationMatch "\.png$">
         ErrorDocument 404 /media/tiles/blank.png
+        SetEnv no-gzip 1
     </LocationMatch>
 
     <LocationMatch "\.json$">
         ErrorDocument 404 /media/tiles/blank.json
         ForceType application/json
     </LocationMatch>
+
 </VirtualHost>
 
+#WSGIRestrictStdin Off

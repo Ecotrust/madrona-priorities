@@ -1,18 +1,16 @@
 1. Clear browser cache
 
-2. stop server
-sudo a2dissite <apache site name>
-sudo /etc/init.d/apache2 reload
+2. Put site in maintenance mode
+touch ../MAINTENANCE_MODE
 
 3. Clear server cache
 python manage.py clear_cache
 
-4. clear tilestache cache
+4. clear tilestache cache (manually)
 sudo rm -rf /tmp/<slugified app name>-stache
 
-5. Optional, precache some urls and tiles
+5. Optional, precache some urls and tiles (you can stop this any time if you don't need deep precaching)
 python manage.py precache
 
-6. Reload site
-sudo a2ensite <apache site name>
-sudo /etc/init.d/apache2 reload
+6. Bring site out of maintenance mode
+rm ../MAINTENANCE_MODE

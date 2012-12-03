@@ -10,6 +10,17 @@ var costFields = [];
 var cfFields = [];
 var cfTotals = {};
 
+Math.sigfig = function (num, sig) {
+    if (num == 0)
+        return 0;
+    if (Math.round(num) == num)
+        return num;
+    var digits = Math.round((-Math.log(Math.abs(num)) / Math.LN10) + (sig || 2));
+    if (digits < 1)
+        digits = 1;
+    return num.toFixed(digits-1);
+}
+
 function getGeographyFieldInfo() {
     // Find the conservation features, totals and costs represented in ALL of the selected planning units.
     if (pu_layer.selectedFeatures.length >= 1) {
@@ -230,14 +241,17 @@ function init_map() {
         var puname = "Watershed Info"; 
         $("#info").hide();
         var fnc = function(idx, val) {
-            if (val >= 0) { // Assume negative is null
-                try {
-                    msg += "<tr><td width=\"75%\">"+ idx + "</td><td>" + val.toPrecision(6) + "</td></tr>";
-                } catch (err) {
-                    msg += "<tr><td width=\"75%\">"+ idx + "</td><td>" + val + "</td></tr>";
+            if (val >= 0) { // Assume negative is null 
+                if (val > 0 || js_opts.show_zeros) {
+                    var sigfigs = js_opts.sigfigs || 3;
+                    try {
+                        msg += "<tr><td width=\"75%\">"+ idx + "</td><td>" + Math.sigfig(val, sigfigs) + "</td></tr>";
+                    } catch (err) {
+                        msg += "<tr><td width=\"75%\">"+ idx + "</td><td>" + val + "</td></tr>";
+                    }
                 }
             } 
-            if(idx == js_opts.name_field) { // assume "name" 
+            if(idx == js_opts.name_field) { 
                 puname = val;
             }
         };

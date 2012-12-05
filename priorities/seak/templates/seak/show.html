@@ -127,6 +127,7 @@
                 <thead>
                     <tr>
                     <th scope="col"> {% flatblock 'show-planning-units' 3600 %} </th> 
+                    <th> BLM Land (%) </th>
                     {%for k,v in results.units.1.costs.items %}
                         {% if v > 0 %}
                         <th style="max-width: 95px;" scope="col">{{k|deslug}}</th>
@@ -138,6 +139,14 @@
                 {% for w in results.units %}
                 <tr id="purow-{{w.uid}}">
                     <td>{{w.name}}</td>
+
+                    <td>
+                        {% for k,v in w.auxs.items %}
+                        {% if k == 'Proportion of BLM land' %}
+                        {{v|percentage:2}}
+                        {% endif %}
+                        {% endfor %}
+                    </td>
 
                     {% for k,v in w.costs.items %}
                     <td>

@@ -269,3 +269,6 @@ input.input-micro {
 .accordion-heading {
     background-color: whiteSmoke;
 }
+.label-success, .badge-success {
+    background-color: #99C46A;
+}

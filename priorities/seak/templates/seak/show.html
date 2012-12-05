@@ -218,7 +218,7 @@
                     <tr>
                         <th scope="col"> {% flatblock 'show-conservation-features' 3600 %} </th>
                         <th scope="col" colspan="2"> {% flatblock 'show-percent-met' 3600 %}</th>
-                        <th class="debug-only" scope="col" width="80"> Goal Met?</th>
+                        <th scope="col"> Goal Met?</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -231,9 +231,12 @@
                     {% else %}
                     <td> {{s.pcttotal|percentage:1}} of total {{s.units}} </td>
                     {% endif %} 
-                    <td class="debug-only"> {% if s.target == 0 %} - {% else %} 
-                        {% if s.met %}&#10003;{% else %} NO<br/>(Goal was {{s.target_prop|percentage:0}}){% endif %} 
-                         {% endif %}
+                    <td> 
+                        {% if s.target == 0 %} - {% else %} 
+                            {% if s.met %}&#10003;{% else %} NO<br/>
+                            (<span class="small"><em>Goal was {{s.target_prop|percentage:0}}</em></span>)
+                            {% endif %} 
+                        {% endif %}
                     </td>
                 </tr>
                 {% endfor %}

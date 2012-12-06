@@ -280,10 +280,20 @@ tbody.pu-show {
     table-layout: fixed;
 }
 
-td.pu-show:nth-child(1), th.pu-show:nth-child(1) { width: 250px; }
+td.pu-show:nth-child(1), th.pu-show:nth-child(1) { 
+    width: 250px; 
+    text-align: left;
+}
 
-td.pu-show, th.pu-show { 
+th.pu-show { 
     width: 150px; 
+    min-width: 100px; 
+    text-align: center;
+}
+td.pu-show { 
+    width: 150px; 
+    min-width: 100px; 
+    text-align: right;
 }
 
 thead.pu-show {

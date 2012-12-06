@@ -123,24 +123,29 @@
             <div class="box">
                 <p>{% flatblock 'optimal-prioritization-scenario' 3600 %} includes {{results.num_units}} {% flatblock 'show-planning-units' 3600 %} covering {{results.area|floatformat:0|intcomma}} {% flatblock 'area-units' 3600 %}. </p>
 
-                <table class="table">
-                <thead>
-                    <tr>
-                    <th scope="col"> {% flatblock 'show-planning-units' 3600 %} </th> 
+                <!-- IE < 10 does not like a tbody w height.  The workaround applies the scrolling to a wrapped <div>. -->
+                <!--[if lte IE 9]>
+                <div class="old_ie_wrapper">
+                <!--<![endif]-->
+
+                <table class="table pu-show">
+                <thead class="pu-show">
+                    <tr class="pu-show">
+                    <th class="pu-show" scope="col"> {% flatblock 'show-planning-units' 3600 %} </th> 
                     {%for k,v in results.units.1.costs.items %}
                         {% if v > 0 %}
-                        <th style="max-width: 95px;" scope="col">{{k|deslug}}</th>
+                        <th class="pu-show" scope="col">{{k|deslug}}</th>
                         {% endif %}
                     {%endfor%}
                     <tr>
                 </thead>
-                <tbody id="best-pus">
+                <tbody class="pu-show" id="best-pus">
                 {% for w in results.units %}
                 <tr id="purow-{{w.uid}}">
-                    <td>{{w.name}}</td>
+                    <td class="pu-show">{{w.name}}</td>
 
                     {% for k,v in w.costs.items %}
-                    <td>
+                    <td class="pu-show">
                         <span class="badge {% if v.class == 'low' %}badge-success{% elif v.class == 'med' %}badge-warning{% elif v.class == 'high' %}badge-important{% endif %}">
                             {{v.class}}{% if show_raw_costs %}: {{v.raw|floatformat:0|intcomma}}{% endif %}
                             {# v.scaled #}
@@ -153,6 +158,11 @@
                 {% endfor %}
                 </tbody>
                 </table>
+
+                <!--[if lte IE 9]>
+                </div>
+                <!--<![endif]-->
+
             </div>
              <script> 
                 var best = $('tbody#best-pus');

@@ -122,7 +122,7 @@ tr.not-targeted {
     display: none;
 }
 div.tab-content-show {
-    height: 430px;
+    /* height: 430px; */
 }
 #layerswitcher {
     text-align:left;
@@ -269,6 +269,42 @@ input.input-micro {
 .accordion-heading {
     background-color: whiteSmoke;
 }
+
 .label-success, .badge-success {
     background-color: #99C46A;
+}
+
+/* Scrolling tables */
+
+tbody.pu-show {
+    table-layout: fixed;
+}
+
+td.pu-show:nth-child(1), th.pu-show:nth-child(1) { width: 250px; }
+
+td.pu-show, th.pu-show { 
+    width: 150px; 
+}
+
+thead.pu-show {
+    position: relative;
+    display: block;
+    border-bottom: 2px solid lightGrey;
+}
+
+tbody.pu-show {
+    display: block;
+    height: 300px;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+.old_ie_wrapper {
+    height: 300px;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+.old_ie_wrapper tbody { 
+    height: auto; 
 }

@@ -118,6 +118,8 @@ JS_OPTS = {
 
 ADD_SCALEFACTOR_CONSTANT = 3 # 0==moderately weight costs, 5==meet targets at (almost) any cost
 
+CACHE_TIMEOUT = 60 * 60 * 24 * 365
+
 #############################################################
 try:
     from settings_local import *

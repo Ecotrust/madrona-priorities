@@ -112,6 +112,8 @@ JS_OPTS = {
     'center': {'lon': -120.2, 'lat': 45.5},
     'extent': [-126.1, 40.9, -116.0, 49.6],
     'name_field': 'HU_10_NAME',
+    'sigfigs': 3,
+    'zoom_on_select': False,
 }
 
 ADD_SCALEFACTOR_CONSTANT = 3 # 0==moderately weight costs, 5==meet targets at (almost) any cost

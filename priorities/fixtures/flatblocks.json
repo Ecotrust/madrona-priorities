@@ -394,5 +394,14 @@
       "header": "", 
       "slug": "help"
     }
+  },
+  {
+    "pk": 45, 
+    "model": "flatblocks.flatblock", 
+    "fields": {
+      "content": "Watersheds", 
+      "header": "", 
+      "slug": "show-planning-units-tab"
+    }
   }
 ]

@@ -2,19 +2,5 @@
 {% load flatblock_tags %}
 {% load appname %}
 {% block content %}
-<div>
-    <h2> Using the Tool to create custom prioritizations </h2>
-    <p>
-      <ul>
-          <li><p>The <strong>goal</strong> or proportion of total value to conserve for each {% flatblock 'conservation_feature' 3600 %}.</p></li>
-          <li><p>The <strong>importance weighting</strong> which indicates the relative importance of each {% flatblock 'conservation_feature' 3600 %}.</p></li>
-          <li><p>The inclusion of <strong>{% flatblock 'costs' 3600 %}</strong> such as climate change, invasives and watershed condition.</p></li>
-      </ul>
-    </p>
-</div>    
-
-<div>
-    <h2> Learn More </h2>
-</div>    
-
+{% flatblock 'help' 3600 %}
 {% endblock content %}

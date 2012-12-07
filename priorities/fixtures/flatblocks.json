@@ -385,5 +385,14 @@
       "header": "", 
       "slug": "show-aux"
     }
-  } 
+  }, 
+  {
+    "pk": 44, 
+    "model": "flatblocks.flatblock", 
+    "fields": {
+      "content": "<h1>Help</h1>", 
+      "header": "", 
+      "slug": "help"
+    }
+  }
 ]

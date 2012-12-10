@@ -224,7 +224,7 @@ select#layer-select {
     line-height: 22px;
 }
 .highlighted-planningunit {
-    background-color: #c9c9c9;
+    font-weight: bold;
 }
 .table-category-header {
     background-color: #e9e9e9;

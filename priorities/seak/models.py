@@ -881,6 +881,7 @@ class Scenario(Analysis):
             'slider_show_proportion': settings.SLIDER_SHOW_PROPORTION,
             'show_raw_costs': settings.SHOW_RAW_COSTS,
             'show_aux': settings.SHOW_AUX,
+            'show_goal_met': settings.SHOW_GOAL_MET,
         }
         icon_url = 'common/images/watershed.png'
         links = (

@@ -105,6 +105,7 @@ SLIDER_START_COLLAPSED = False
 VARIABLE_GEOGRAPHY = True # do we allow variable geographies (True) or just use all planning units (False)?
 SHOW_RAW_COSTS = True # in report
 SHOW_AUX = True # in report
+SHOW_GOAL_MET = True # in report
 
 JS_OPTS = {
     'start_zoom': 6,  

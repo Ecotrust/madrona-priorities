@@ -293,3 +293,20 @@ function init_map() {
     pt.transform(latlon, merc);
     map.setCenter(pt, js_opts.start_zoom);
 }
+
+// dataTables plugin to sort by hidden title attribute
+jQuery.extend( jQuery.fn.dataTableExt.oSort, {
+    "title-numeric-pre": function ( a ) {
+        var x = a.match(/title="*(-?[0-9\.]+)/)[1];
+        return parseFloat( x );
+    },
+
+    "title-numeric-asc": function ( a, b ) {
+        return ((a < b) ? -1 : ((a > b) ? 1 : 0));
+    },
+
+    "title-numeric-desc": function ( a, b ) {
+        return ((a < b) ? 1 : ((a > b) ? -1 : 0));
+    }
+} );
+

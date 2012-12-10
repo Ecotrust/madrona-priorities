@@ -9,8 +9,15 @@ python manage.py clear_cache
 4. clear tilestache cache (manually)
 sudo rm -rf /tmp/<slugified app name>-stache
 
-5. Optional, precache some urls and tiles (you can stop this any time if you don't need deep precaching)
+5. Load data
+sh local_import.sh # copy import.sh and customize
+
+6. Optional, precache some urls and tiles (you can stop this any time if you don't need deep precaching)
 python manage.py precache
 
-6. Bring site out of maintenance mode
+7. Restart the application server and the celeryd process
+touch ../deploy/wsgi.py
+# restart celeryd ?
+
+8. Bring site out of maintenance mode
 rm ../MAINTENANCE_MODE

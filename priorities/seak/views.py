@@ -209,7 +209,7 @@ def field_lookup(request):
         units_txt = ""
         if c.units:
             units_txt = " (%s)" % c.units
-        flut[c.dbf_fieldname] = "%s: %s" % (constraint_text, units_txt)
+        flut[c.dbf_fieldname] = "%s: %s%s" % (constraint_text, c.name, units_txt)
     for c in ConservationFeature.objects.all():
         units_txt = ""
         if c.units:

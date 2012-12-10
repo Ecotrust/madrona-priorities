@@ -206,9 +206,15 @@ def field_lookup(request):
         constraint_text = "Constraints"
     flut = {}
     for c in Cost.objects.all():
-        flut[c.dbf_fieldname] = "%s: %s" % (constraint_text, c.name)
+        units_txt = ""
+        if c.units:
+            units_txt = " (%s)" % c.units
+        flut[c.dbf_fieldname] = "%s: %s" % (constraint_text, units_txt)
     for c in ConservationFeature.objects.all():
-        flut[c.dbf_fieldname] = "%s: %s" % (c.level1, c.name)
+        units_txt = ""
+        if c.units:
+            units_txt = " (%s)" % c.units
+        flut[c.dbf_fieldname] = "%s: %s%s" % (c.level1, c.name, units_txt)
     return HttpResponse(json.dumps(flut), content_type='application/json')
 
 @cache_page(settings.CACHE_TIMEOUT)

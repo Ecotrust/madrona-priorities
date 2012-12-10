@@ -115,8 +115,8 @@ def watershed_marxan(request, instance):
     response.write(zip_stream)
     return response
 
-@cache_page(60 * 60)
-@cache_control(must_revalidate=False, max_age=60 * 60 * 8)
+@cache_page(settings.CACHE_TIMEOUT)
+@cache_control(must_revalidate=False, max_age=settings.CACHE_TIMEOUT)
 def planning_units_geojson(request):
     def get_feature_json(geom_json, prop_json):
         return """{
@@ -186,8 +186,8 @@ def shared_scenarios_geojson(request):
 
     return HttpResponse(geojson, content_type='application/json')
 
-@cache_page(60 * 60 * 8)
-@cache_control(must_revalidate=False, max_age=60 * 60 * 8)
+@cache_page(settings.CACHE_TIMEOUT)
+@cache_control(must_revalidate=False, max_age=settings.CACHE_TIMEOUT)
 def tiles(request):
     path_info = request.path_info.replace('/tiles', '')
     (mimestr, bytestotal) = TileStache.requestHandler(config_hint=settings.TILE_CONFIG, 
@@ -195,8 +195,8 @@ def tiles(request):
     return HttpResponse(bytestotal, content_type=mimestr)
 
 
-@cache_page(60 * 60 * 8)
-@cache_control(must_revalidate=False, max_age=60 * 60 * 8)
+@cache_page(settings.CACHE_TIMEOUT)
+@cache_control(must_revalidate=False, max_age=settings.CACHE_TIMEOUT)
 def field_lookup(request):
     from seak.models import Cost, ConservationFeature
     from flatblocks.models import FlatBlock
@@ -206,13 +206,19 @@ def field_lookup(request):
         constraint_text = "Constraints"
     flut = {}
     for c in Cost.objects.all():
-        flut[c.dbf_fieldname] = "%s: %s" % (constraint_text, c.name)
+        units_txt = ""
+        if c.units:
+            units_txt = " (%s)" % c.units
+        flut[c.dbf_fieldname] = "%s: %s" % (constraint_text, units_txt)
     for c in ConservationFeature.objects.all():
-        flut[c.dbf_fieldname] = "%s: %s" % (c.level1, c.name)
+        units_txt = ""
+        if c.units:
+            units_txt = " (%s)" % c.units
+        flut[c.dbf_fieldname] = "%s: %s%s" % (c.level1, c.name, units_txt)
     return HttpResponse(json.dumps(flut), content_type='application/json')
 
-@cache_page(60 * 60 * 8)
-@cache_control(must_revalidate=False, max_age=60 * 60 * 8)
+@cache_page(settings.CACHE_TIMEOUT)
+@cache_control(must_revalidate=False, max_age=settings.CACHE_TIMEOUT)
 def id_lookup(request):
     from seak.models import ConservationFeature
     flut = {}

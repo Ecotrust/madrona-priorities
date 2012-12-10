@@ -98,13 +98,14 @@ LOG_LEVEL = logging.INFO
 dblogger = logging.getLogger('django.db.backends')
 dblogger.setLevel(logging.INFO)
 
-SLIDER_MODE = "single" # 'dual' OR 'single'
-SLIDER_SHOW_RAW = True 
-SLIDER_SHOW_PROPORTION = False
-SLIDER_START_COLLAPSED = False
+SLIDER_MODE = "dual" # 'dual' OR 'single'
+SLIDER_SHOW_RAW = False
+SLIDER_SHOW_PROPORTION = True
+SLIDER_START_COLLAPSED = True
 VARIABLE_GEOGRAPHY = True # do we allow variable geographies (True) or just use all planning units (False)?
 SHOW_RAW_COSTS = False # in report
 SHOW_AUX = False # in report
+SHOW_GOAL_MET = True # in report
 
 JS_OPTS = {
     'start_zoom': 6,  
@@ -112,9 +113,13 @@ JS_OPTS = {
     'center': {'lon': -120.2, 'lat': 45.5},
     'extent': [-126.1, 40.9, -116.0, 49.6],
     'name_field': 'HU_10_NAME',
+    'sigfigs': 3,
+    'zoom_on_select': False,
 }
 
 ADD_SCALEFACTOR_CONSTANT = 3 # 0==moderately weight costs, 5==meet targets at (almost) any cost
+
+CACHE_TIMEOUT = 60 * 60 * 24 * 365
 
 #############################################################
 try:

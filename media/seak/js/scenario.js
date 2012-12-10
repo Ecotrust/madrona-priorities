@@ -574,7 +574,7 @@ function scenariosViewModel() {
     self.selectedFeature(feature); 
     self.toggleScenarioLayer('on');
     bbox = feature.bbox();
-    if (bbox && bbox.length === 4) {
+    if (js_opts.zoom_on_select && bbox && bbox.length === 4) {
         map.zoomToExtent(bbox);
     }
     self.showScenarioList(false);

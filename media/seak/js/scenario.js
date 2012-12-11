@@ -258,10 +258,11 @@ function scenariosViewModel() {
             var in_geog = JSON.parse($('#id_input_geography').val());
             $.each(in_geog, function (i, fid) {
                 var f = pu_layer.getFeaturesByAttribute("fid",fid)[0];
-                if (!f) {
+                if (f) {
+                    selectGeographyControl.select(f);
+                } else {
                     console.log("warning: fid " + fid + " is not valid");
                 }
-                selectGeographyControl.select(f);
             });
              
             applySliders();

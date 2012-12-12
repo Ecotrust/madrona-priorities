@@ -32,8 +32,9 @@ class Command(BaseCommand):
             ('planning_units', 'png'),
         ]
 
+        tilecfg = os.path.abspath(os.path.join(os.path.dirname(__file__),'..','..','..','..','tile_config','tiles.cfg'))
         for layer in layers:
-            cmd = "tilestache-seed.py -c ../tile_config/tiles.cfg -l %s -e %s -b %s %s" % (layer[0], layer[1], extent, ' '.join(zooms[:-2]))
+            cmd = "tilestache-seed.py -c %s -l %s -e %s -b %s %s" % (tilecfg, layer[0], layer[1], extent, ' '.join(zooms[:-2]))
             print cmd
             os.popen(cmd)
 
@@ -42,6 +43,6 @@ class Command(BaseCommand):
 
         for z in zooms[:3]: # cache first three zoom levels only
             for layer in layers:
-                cmd = "tilestache-seed.py -c ../tile_config/tiles.cfg -l %s -e %s -b %s %s" % (layer[0], layer[1], extent, z)
+                cmd = "tilestache-seed.py -c %s -l %s -e %s -b %s %s" % (tilecfg, layer[0], layer[1], extent, z)
                 print cmd
                 os.popen(cmd)

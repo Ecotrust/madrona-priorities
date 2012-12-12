@@ -56,9 +56,9 @@ def import_dataset():
         maintenance_on()
 
         # upload data if not there already
-        with settings(warn_only=True):
-            if run("test -d priorities/data/%s" % dirname).failed:
-                put(local_data_dir, 'priorities/data/')  
+        #with settings(warn_only=True):
+        #    if run("test -d priorities/data/%s" % dirname).failed:
+        put(local_data_dir, 'priorities/data/')  
 
         # Clear server cache
         virtualenv("python priorities/manage.py clear_cache")

@@ -46,7 +46,10 @@ def deploy():
         virtualenv("python priorities/manage.py syncdb")
         virtualenv("python priorities/manage.py migrate")
         run("touch deploy/wsgi.py")
-    maintenance_off()
+
+    print "###########################################################"
+    print "Test and run `fab maintenance_off` when ready"
+    print "###########################################################"
 
 def import_dataset():
     """

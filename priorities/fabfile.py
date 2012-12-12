@@ -102,3 +102,10 @@ def import_dataset():
     print "Test and run `fab maintenance_off` when ready"
     print "###########################################################"
 
+def local_import():
+        command = "python manage.py import_planning_units \
+                %(data)s/%(pu_simple)s \
+                %(data)s/%(xls)s \
+                %(data)s/%(pu)s" % {'data': local_data_dir, 'pu_simple': pu_simple, 'xls': xls, 'pu': pu })
+        local(env.activate + '&&' + command)
+

@@ -40,7 +40,7 @@ class Command(BaseCommand):
         layers.extend([(x.dbf_fieldname, 'png') for x in Cost.objects.all()])
         layers.extend([(x.dbf_fieldname, 'png') for x in ConservationFeature.objects.all()])
 
-        for z in zooms:
+        for z in zooms[:3]: # cache first three zoom levels only
             for layer in layers:
                 cmd = "tilestache-seed.py -c ../tile_config/tiles.cfg -l %s -e %s -b %s %s" % (layer[0], layer[1], extent, z)
                 print cmd

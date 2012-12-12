@@ -1,28 +1,19 @@
 
+Assume you have tested locally, pushed changes to the the project branch and are ready to roll the 
+changes out to a remote server.
 
-# TODO all this goes in fabfile.py
+```
+fab deploy
+```
 
+If you want to upload a new dataset, update the local_data.py file and run
 
-1. Clear browser cache
+```
+fab import_dataset
+ssh <remote server>
+# restart celeryd
+exit
+fab maintenance off # go live
+```
 
-2. Put site in maintenance mode
-touch ../MAINTENANCE_MODE
-
-3. Clear server cache
-python manage.py clear_cache
-
-4. clear tilestache cache (manually)
-sudo rm -rf /tmp/<slugified app name>-stache
-
-5. Load data
-sh local_import.sh # copy import.sh and customize
-
-6. Optional, precache some urls and tiles (you can stop this any time if you don't need deep precaching)
-python manage.py precache
-
-7. Restart the application server and the celeryd process
-touch ../deploy/wsgi.py
-# restart celeryd ?
-
-8. Bring site out of maintenance mode
-rm ../MAINTENANCE_MODE
+The `fab maintenance_on` and `fab maintenance_off` switches can be used to take down the live site.

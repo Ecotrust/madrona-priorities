@@ -13,10 +13,6 @@ env.activate = 'source %s' % os.path.join(env.directory, 'env-%s' % APP,'bin','a
 env.deploy_user = 'www-data'
 
 
-def test():
-    with cd(LOCAL_DATA_DIR):
-        run('ls -alt')
-
 def virtualenv(command, user=None):
     with cd(env.directory):
         if not user:
@@ -25,16 +21,22 @@ def virtualenv(command, user=None):
             sudo(env.activate + '&&' + command, user=user)
 
 def maintenance_on():
+    """
+    Maintenance mode ON (i.e. Site goes down for maintenance )
+    """
     with cd(env.directory):
         run('touch MAINTENANCE_MODE')
 
 def maintenance_off():
+    """
+    Maintenance mode OFF (i.e. Site is back online )
+    """
     with cd(env.directory):
         run('rm MAINTENANCE_MODE')
 
 def deploy():
     """
-    Update to new revision
+    Update remote server to new code revision.
     """
     maintenance_on()
     with cd(env.directory):
@@ -48,7 +50,7 @@ def deploy():
 
 def import_dataset():
     """
-    upload a new dataset
+    Upload a new dataset. Edit local_data.py first!
     """
     pass
 
@@ -68,6 +70,8 @@ def import_dataset():
 
         # make sure postgres user can write out
         sudo("chmod 777 marxan_output/template") # TODO probably a better way to handle this
+        sudo("chgrp www-data marxan_output")
+        sudo("chmod 775 marxan_output")
 
         # Load data
         virtualenv("python priorities/manage.py import_planning_units \
@@ -76,11 +80,12 @@ def import_dataset():
                 %(data)s/%(pu)s" % {'data': 'priorities/data/' + dirname, 'pu_simple': pu_simple, 'xls': xls, 'pu': pu })
 
         # precache
+        run("sudo chmod 777 -R %s" % STACHE_DIR)
         virtualenv("python priorities/manage.py precache")
 
         # perms for tilestache dir
         run("sudo chown www-data -R %s" % STACHE_DIR)
-        run("sudo chmod 777 -R %s" % STACHE_DIR)
+        run("sudo chmod 755 -R %s" % STACHE_DIR)
 
         # Restart the application server and the celeryd process
         run("touch deploy/wsgi.py")
@@ -96,4 +101,11 @@ def import_dataset():
     print "###########################################################"
     print "Test and run `fab maintenance_off` when ready"
     print "###########################################################"
+
+def local_import():
+        command = "python manage.py import_planning_units \
+                %(data)s/%(pu_simple)s \
+                %(data)s/%(xls)s \
+                %(data)s/%(pu)s" % {'data': local_data_dir, 'pu_simple': pu_simple, 'xls': xls, 'pu': pu })
+        local(env.activate + '&&' + command)
 

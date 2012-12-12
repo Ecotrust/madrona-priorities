@@ -70,6 +70,8 @@ def import_dataset():
 
         # make sure postgres user can write out
         sudo("chmod 777 marxan_output/template") # TODO probably a better way to handle this
+        sudo("chgrp www-data marxan_output")
+        sudo("chmod 775 marxan_output")
 
         # Load data
         virtualenv("python priorities/manage.py import_planning_units \

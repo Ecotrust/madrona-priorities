@@ -1,3 +1,8 @@
+
+
+# TODO all this goes in fabfile.py
+
+
 1. Clear browser cache
 
 2. Put site in maintenance mode

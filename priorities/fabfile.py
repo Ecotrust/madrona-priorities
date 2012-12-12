@@ -13,10 +13,6 @@ env.activate = 'source %s' % os.path.join(env.directory, 'env-%s' % APP,'bin','a
 env.deploy_user = 'www-data'
 
 
-def test():
-    with cd(LOCAL_DATA_DIR):
-        run('ls -alt')
-
 def virtualenv(command, user=None):
     with cd(env.directory):
         if not user:
@@ -25,16 +21,22 @@ def virtualenv(command, user=None):
             sudo(env.activate + '&&' + command, user=user)
 
 def maintenance_on():
+    """
+    Maintenance mode ON (i.e. Site goes down for maintenance )
+    """
     with cd(env.directory):
         run('touch MAINTENANCE_MODE')
 
 def maintenance_off():
+    """
+    Maintenance mode OFF (i.e. Site is back online )
+    """
     with cd(env.directory):
         run('rm MAINTENANCE_MODE')
 
 def deploy():
     """
-    Update to new revision
+    Update remote server to new code revision.
     """
     maintenance_on()
     with cd(env.directory):
@@ -48,7 +50,7 @@ def deploy():
 
 def import_dataset():
     """
-    upload a new dataset
+    Upload a new dataset. Edit local_data.py first!
     """
     pass
 
@@ -56,9 +58,9 @@ def import_dataset():
         maintenance_on()
 
         # upload data if not there already
-        with settings(warn_only=True):
-            if run("test -d priorities/data/%s" % dirname).failed:
-                put(local_data_dir, 'priorities/data/')  
+        #with settings(warn_only=True):
+        #    if run("test -d priorities/data/%s" % dirname).failed:
+        put(local_data_dir, 'priorities/data/')  
 
         # Clear server cache
         virtualenv("python priorities/manage.py clear_cache")
@@ -76,11 +78,12 @@ def import_dataset():
                 %(data)s/%(pu)s" % {'data': 'priorities/data/' + dirname, 'pu_simple': pu_simple, 'xls': xls, 'pu': pu })
 
         # precache
+        run("sudo chmod 777 -R %s" % STACHE_DIR)
         virtualenv("python priorities/manage.py precache")
 
         # perms for tilestache dir
         run("sudo chown www-data -R %s" % STACHE_DIR)
-        run("sudo chmod 777 -R %s" % STACHE_DIR)
+        run("sudo chmod 755 -R %s" % STACHE_DIR)
 
         # Restart the application server and the celeryd process
         run("touch deploy/wsgi.py")

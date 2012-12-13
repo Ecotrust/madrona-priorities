@@ -52,8 +52,7 @@
                  <tr>
                     <th>{% flatblock 'show-conservation-features' 3600 %}</th>
                     {% if slider_mode == "single"%}
-                        <th colspan="2"> {% flatblock 'relative-importance' 3600 %}</th>
-                        <th class="debug-only">{% flatblock 'penalty' 3600 %}</th>
+                        <th> {% flatblock 'relative-importance' 3600 %}</th>
                     {% elif slider_mode == "dual" %}
                         <th>{% flatblock 'target' 3600 %}</th>
                         <th>{% flatblock 'penalty' 3600 %}</th>
@@ -68,11 +67,8 @@
                     {% if slider_mode == "single"%}
                         <td>
                             <span class="hide" title="{{v.penalty}}"></span>
-                            <span class="debug-only">{{v.penalty|percentage}}</span>
-                        </td>
-                        <td>
-                            <span class="hide" title="{{v.target}}"></span>
-                            <span>{{v.target|percentage}}</span>
+                            <span>{{v.penalty|percentage}}</span>
+                            <span class="debug-only">(target:{{v.target|percentage}})</span>
                         </td>
                     {% elif slider_mode == 'dual' %}
                         <td> 
@@ -249,7 +245,7 @@
                 "sScrollY": divHeight + "px",
                 "bScrollCollapse": true,
                 "aoColumnDefs": [
-                    { "sType": 'title-numeric', "aTargets": [ 1, 2 ] } 
+                { "sType": 'title-numeric', "aTargets": [ 1{% if slider_mode == "dual" %}, 2{% endif %} ] } 
                 ]
             });
 

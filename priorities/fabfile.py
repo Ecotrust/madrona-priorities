@@ -34,6 +34,18 @@ def maintenance_off():
     with cd(env.directory):
         run('rm MAINTENANCE_MODE')
 
+def fix_permissions():
+    """
+    Make sure all directories have appropriate permissions
+    """
+    with cd(env.directory):
+        sudo("chgrp www-data -R marxan_output")
+        sudo("chmod 775 -R marxan_output")
+        sudo("chmod 777 marxan_output/template") # TODO probably a better way to handle this
+        run("sudo chown www-data -R %s" % STACHE_DIR)
+        run("sudo chmod 755 -R %s" % STACHE_DIR)
+        run("sudo chown www-data -R mediaroot")
+
 def deploy():
     """
     Update remote server to new code revision.

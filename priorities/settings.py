@@ -80,7 +80,6 @@ CACHES = {
         'LOCATION': 'juniper-cache', 
     }
 }
-USE_CACHE = False
 
 # Use redis_sessions if available
 try:

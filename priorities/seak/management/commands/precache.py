@@ -1,7 +1,7 @@
 import os
 from django.core.management.base import BaseCommand, CommandError
 from django.conf import settings
-from seak.models import Cost, ConservationFeature
+from seak.models import Cost, ConservationFeature, Scenario
 
 class Command(BaseCommand):
 
@@ -17,6 +17,10 @@ class Command(BaseCommand):
         print "Caching the layer_manager response..."
         request = RequestFactory().get('/layer_manager/layers.json')
         get_json(request)
+
+        print "Caching scenario results..."
+        for scenario in Scenario.objects.all():
+            a = scenario.results
 
         print "Caching some tiles..."
         sz = settings.JS_OPTS['start_zoom']

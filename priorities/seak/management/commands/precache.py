@@ -1,7 +1,7 @@
 import os
 from django.core.management.base import BaseCommand, CommandError
 from django.conf import settings
-from seak.models import Cost, ConservationFeature
+from seak.models import Cost, ConservationFeature, Scenario
 
 class Command(BaseCommand):
 
@@ -17,6 +17,10 @@ class Command(BaseCommand):
         print "Caching the layer_manager response..."
         request = RequestFactory().get('/layer_manager/layers.json')
         get_json(request)
+
+        print "Caching scenario results..."
+        for scenario in Scenario.objects.all():
+            a = scenario.results
 
         print "Caching some tiles..."
         sz = settings.JS_OPTS['start_zoom']
@@ -41,7 +45,7 @@ class Command(BaseCommand):
         layers.extend([(x.dbf_fieldname, 'png') for x in Cost.objects.all()])
         layers.extend([(x.dbf_fieldname, 'png') for x in ConservationFeature.objects.all()])
 
-        for z in zooms[:3]: # cache first three zoom levels only
+        for z in zooms[:2]: # cache first two zoom levels only
             for layer in layers:
                 cmd = "tilestache-seed.py -c %s -l %s -e %s -b %s %s" % (tilecfg, layer[0], layer[1], extent, z)
                 print cmd

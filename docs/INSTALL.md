@@ -32,6 +32,7 @@ createdb <PROJECT_NAME> -U postgres
 # set up settings_local.py for DB and redis
 python manage.py syncdb
 python manage.py migrate
+python manage.py site <FULL_HOST_NAME>
 python manage.py enable_sharing --all
 python manage.py loaddata fixtures/flatblocks.json
 python manage.py loaddata fixtures/project_base_data.json 
@@ -48,6 +49,8 @@ touch MAINTENANCE_MODE
 sudo a2ensite <PROJECT_NAME>.labs.ecotrust.org
 sudo /etc/init.d/apache2 reload
 ```
+* Create a `logs/celery.log` file, `chmod 775` it and put it in the `www-data` group.
+* Install the `celeryd.init` script according to the instructions in the header
 
 # Next steps
 

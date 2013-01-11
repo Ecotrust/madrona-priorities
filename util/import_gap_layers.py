@@ -20,7 +20,7 @@ with open("gap_services.csv",'r') as fh:
         infourl = url.replace("/Mapserver/export", '')
         theme, created = Theme.objects.get_or_create(name="gap_%s" % sp['Category'], display_name="Northwest Gap Analysis - %s" % sp['Category'])
         lyr = Layer.objects.create(name=sp['Common Name'], layer_type="ArcRest", url=url, 
-                opacity=0.5, description="%s (%s). <br/> For more info, see http://gap.uidaho.edu/index.php/species-modeling/" % (sp['Common Name'], 
+                opacity=0.5, description="%s (%s). For more info, see http://gap.uidaho.edu/index.php/species-modeling/" % (sp['Common Name'], 
                     sp['Scientific Name']), legend="/media/img/gap_legend.png", legend_title=sp['Common Name'] + " modeled presence/absence")
         lyr.themes.add(theme)
         lyr.save()

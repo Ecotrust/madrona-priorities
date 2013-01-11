@@ -58,10 +58,15 @@ def deploy():
         virtualenv("python priorities/manage.py syncdb")
         virtualenv("python priorities/manage.py migrate")
         run("touch deploy/wsgi.py")
+        restart_celery()
 
     print "###########################################################"
     print "Test and run `fab maintenance_off` when ready"
     print "###########################################################"
+
+def restart_celery():
+    sudo("/etc/init.d/celeryd_%s restart" % APP)
+    sudo("/etc/init.d/celeryd_%s status" % APP)
 
 def import_dataset():
     """
@@ -95,23 +100,17 @@ def import_dataset():
                 %(data)s/%(pu)s" % {'data': 'priorities/data/' + dirname, 'pu_simple': pu_simple, 'xls': xls, 'pu': pu })
 
         # precache
-        run("sudo chmod 777 -R %s" % STACHE_DIR)
+        sudo("chmod 777 -R %s" % STACHE_DIR)
         virtualenv("python priorities/manage.py precache")
 
         # perms for tilestache dir
-        run("sudo chown www-data -R %s" % STACHE_DIR)
-        run("sudo chmod 755 -R %s" % STACHE_DIR)
+        sudo("chown www-data -R %s" % STACHE_DIR)
+        sudo("chmod 755 -R %s" % STACHE_DIR)
 
         # Restart the application server and the celeryd process
         run("touch deploy/wsgi.py")
         run("touch deploy/tilestache_wsgi.py")
-
-        # restart celeryd TODO 
-        print
-        print "##### !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
-        print " TODO: you need to restart `celeryd` on the server manually!"
-        print "##### !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
-        print 
+        restart_celery()
 
     print "###########################################################"
     print "Test and run `fab maintenance_off` when ready"

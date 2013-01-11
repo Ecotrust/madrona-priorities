@@ -7,6 +7,7 @@ import os
 APP = 'nplcc'
 BRANCH = APP
 STACHE_DIR = "/tmp/nplcc-stache" 
+ME = 'mperry'
 env.directory = '/usr/local/apps/%s' % APP
 env.hosts = ['ninkasi.ecotrust.org']
 env.activate = 'source %s' % os.path.join(env.directory, 'env-%s' % APP,'bin','activate')
@@ -44,7 +45,9 @@ def fix_permissions():
         sudo("chmod 777 marxan_output/template") # TODO probably a better way to handle this
         run("sudo chown www-data -R %s" % STACHE_DIR)
         run("sudo chmod 755 -R %s" % STACHE_DIR)
-        run("sudo chown www-data -R mediaroot")
+        run("sudo chown www-data:%s -R mediaroot" % ME)
+        run("sudo chmod 775 -R mediaroot")
+
 
 def deploy():
     """

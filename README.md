@@ -35,3 +35,10 @@ git push -u origin <NEW_PROJECT_NAME>
 * Modify code in the `master` branch to **add new features**. Keep the commits atomic and merge/cherry-pick back into project branches as needed.  Merge carefully and don't bring merge over any project-specific changes.
 
 * Modify the project branches for **project-specific tweaks**. Don't push these changes back into the `master` branch.
+* 
+
+## Examples
+* http://aquatics-blm.labs.ecotrust.org/
+* http://juniper.labs.ecotrust.org/
+* http://nplcc.labs.ecotrust.org/
+* http://aquatic-priorities.apps.ecotrust.org/

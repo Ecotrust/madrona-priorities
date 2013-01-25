@@ -124,5 +124,5 @@ def local_import():
                 %(data)s/%(pu_simple)s \
                 %(data)s/%(xls)s \
                 %(data)s/%(pu)s" % {'data': local_data_dir, 'pu_simple': pu_simple, 'xls': xls, 'pu': pu }
-        local(env.activate + '&&' + command)
+        local(command)
 

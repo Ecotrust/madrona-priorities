@@ -27,6 +27,11 @@ def get_mats(dataList, numClass):
     return mat1, mat2
 
 def get_jenks_breaks( dataList, numClass ):
+    if len(dataList) == 0:
+        raise Exception("dataList passed to get_jenks_breaks was empty")
+    elif len(dataList) == 1:
+        dataList *= 2 # need at least two elements in list
+
     dataList.sort()
 
     mat1, mat2 = get_mats(dataList, numClass)

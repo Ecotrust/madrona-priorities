@@ -5,13 +5,13 @@
 
     WSGIScriptAlias /tiles /usr/local/apps/APPNAME/deploy/tilestache_wsgi.py
     WSGIScriptAlias / /usr/local/apps/APPNAME/deploy/wsgi.py
-    WSGIDaemonProcess aquaticsblm user=www-data group=www-data threads=1 processes=2
-    WSGIProcessGroup aquaticsblm 
+    WSGIDaemonProcess APPNAME user=www-data group=www-data threads=1 processes=2
+    WSGIProcessGroup APPNAME
 
     <IfModule mod_rewrite.c>
         RewriteEngine On
         RewriteCond  /usr/local/apps/APPNAME/MAINTENANCE_MODE -f
-        #RewriteCond %{REMOTE_ADDR} !^your.IP.address.here$
+        RewriteCond %{REMOTE_ADDR} !^192\.168\.50
         RewriteRule ^(.+) /usr/local/apps/APPNAME/media/down.html [L]
     </IfModule>
 

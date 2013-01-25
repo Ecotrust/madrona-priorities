@@ -35,20 +35,13 @@ def cachemethod(cache_key, timeout=60*60*24*365):
     '''
     def paramed_decorator(func):
         def decorated(self):
-            if not settings.USE_CACHE:
-                res = func(self)
-                return res
-
             key = cache_key % self.__dict__
-            #logger.debug("\nCACHING %s" % key)
             res = cache.get(key)
             if res == None:
-                #logger.debug("   Cache MISS")
                 res = func(self)
                 cache.set(key, res, timeout)
-                #logger.debug("   Cache SET")
-                if cache.get(key) != res:
-                    logger.error("*** Cache GET was NOT successful, %s" % key)
+                #if cache.get(key) != res:
+                #    logger.error("*** Cache GET was NOT successful, %s" % key)
             return res
         return decorated 
     return paramed_decorator

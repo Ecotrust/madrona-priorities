@@ -4,13 +4,13 @@ from fabric.contrib.console import confirm
 from local_data import *
 import os
 
-APP = 'nplcc'
+APP = 'aquatics-blm'
 BRANCH = APP
-STACHE_DIR = "/tmp/nplcc-stache" 
+STACHE_DIR = "/tmp/blm-aquatics-tool-stache" 
 ME = 'mperry'
 env.directory = '/usr/local/apps/%s' % APP
 env.hosts = ['ninkasi.ecotrust.org']
-env.activate = 'source %s' % os.path.join(env.directory, 'env-%s' % APP,'bin','activate')
+env.activate = 'source %s' % os.path.join(env.directory, 'env/bin/activate')
 env.deploy_user = 'www-data'
 
 

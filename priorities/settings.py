@@ -66,7 +66,6 @@ MEDIA_ROOT = os.path.realpath(os.path.join(os.path.dirname(__file__), '..', 'med
 TILE_CONFIG_DIR = os.path.realpath(os.path.join(os.path.dirname(__file__), '..', 'tile_config'))
 
 ENFORCE_SUPPORTED_BROWSER = False
-
 # ecotrust.org
 GOOGLE_API_KEY = 'ABQIAAAAIcPbR_l4h09mCMF_dnut8RQbjMqOReB17GfUbkEwiTsW0KzXeRQ-3JgvCcGix8CM65XAjBAn6I0bAQ'
 
@@ -97,7 +96,7 @@ LOG_LEVEL = logging.INFO
 dblogger = logging.getLogger('django.db.backends')
 dblogger.setLevel(logging.INFO)
 
-SLIDER_MODE = "dual" # 'dual' OR 'single'
+SLIDER_MODE = "single" # 'dual' OR 'single'
 SLIDER_SHOW_RAW = False
 SLIDER_SHOW_PROPORTION = True
 SLIDER_START_COLLAPSED = True

@@ -123,7 +123,7 @@ class Cost(models.Model):
     uid = models.IntegerField(primary_key=True)
     dbf_fieldname = models.CharField(max_length=15, null=True, blank=True)
     units = models.CharField(max_length=16, null=True, blank=True)
-    desc = models.TextField()
+    desc = models.TextField(null=True, blank=True)
 
     @property
     def slug(self):

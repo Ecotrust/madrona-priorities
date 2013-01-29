@@ -43,9 +43,7 @@ def watershed_shapefile(request, instances):
         p = w.geometry
         if p.geom_type == 'Polygon':
             p = MultiPolygon(p)
-        auxs = dict([(x.aux.dbf_fieldname, x.value) for x in w.puvsaux_set.all()])
         results[fid] = {'pu': w, 'geometry': p, 'name': w.name, 'hits': 0, 'bests': 0} 
-        results[fid].update(auxs)
 
     stamp = int(time.time() * 1000.0)
 
@@ -83,8 +81,7 @@ Includes scenarios:
 
     for fid in results.keys():
         r = results[fid]
-        PlanningUnitShapes.objects.create(stamp=stamp, fid=fid, name=r['name'], pu=r['pu'],
-                                          geometry=r['geometry'], bests=r['bests'], hits=r['hits'])
+        PlanningUnitShapes.objects.create(stamp=stamp, fid=fid, **r)
     allpus = PlanningUnitShapes.objects.filter(stamp=stamp)
     shp_response = ShpResponder(allpus, readme=readme)
     filename = '_'.join([slugify(i.pk) for i in instances])

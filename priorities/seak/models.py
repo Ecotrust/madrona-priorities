@@ -923,3 +923,4 @@ class PlanningUnitShapes(models.Model):
     name = models.CharField(max_length=99, null=True)
     geometry = models.MultiPolygonField(srid=settings.GEOMETRY_DB_SRID, 
             null=True, blank=True, verbose_name="Planning Unit Geometry")
+    blmratio = models.FloatField(default=0)

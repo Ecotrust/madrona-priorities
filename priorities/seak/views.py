@@ -43,7 +43,9 @@ def watershed_shapefile(request, instances):
         p = w.geometry
         if p.geom_type == 'Polygon':
             p = MultiPolygon(p)
+        auxs = dict([(x.aux.dbf_fieldname, x.value) for x in w.puvsaux_set.all()])
         results[fid] = {'pu': w, 'geometry': p, 'name': w.name, 'hits': 0, 'bests': 0} 
+        results[fid].update(auxs)
 
     stamp = int(time.time() * 1000.0)
 

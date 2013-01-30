@@ -99,7 +99,7 @@ dblogger.setLevel(logging.INFO)
 
 SLIDER_MODE = "single" # 'dual' OR 'single'
 SLIDER_SHOW_RAW = False
-SLIDER_SHOW_PROPORTION = False
+SLIDER_SHOW_PROPORTION = True
 SLIDER_START_COLLAPSED = False
 VARIABLE_GEOGRAPHY = True # do we allow variable geographies (True) or just use all planning units (False)?
 SHOW_RAW_COSTS = False # in report

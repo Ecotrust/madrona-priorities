@@ -12,7 +12,7 @@ import csv
 Layer.objects.filter(themes__name__startswith="gap_").delete()
 Theme.objects.filter(name__startswith="gap_").delete()
 
-with open("gap_services.csv",'r') as fh:
+with open("gap_services.csv",'rU') as fh:
     species_list = csv.DictReader(fh)
     for sp in species_list:
         print sp['Common Name']

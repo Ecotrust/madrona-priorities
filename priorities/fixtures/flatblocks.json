@@ -1,110 +1,29 @@
 [
   {
-    "pk": 6, 
+    "pk": 42, 
     "model": "flatblocks.flatblock", 
     "fields": {
-      "content": "About...", 
+      "content": "Or, if you need to fine-tune the geography, you can use the map. Draw a box around additional watersheds you wish to include in your prioritization.  To deselect all watersheds, click anywhere on the map (rather than drawing a box). To navigate, use the keyboard controls (+/- to zoom, arrow keys to pan). ", 
       "header": "", 
-      "slug": "about-content"
+      "slug": "geography-fine-tune"
     }
   }, 
   {
-    "pk": 16, 
+    "pk": 12, 
     "model": "flatblocks.flatblock", 
     "fields": {
-      "content": "watersheds", 
+      "content": "Set Objectives for Priority Species", 
       "header": "", 
-      "slug": "planning-units"
+      "slug": "form-conservationfeature-header"
     }
   }, 
   {
-    "pk": 17, 
+    "pk": 14, 
     "model": "flatblocks.flatblock", 
     "fields": {
-      "content": "Select the watersheds that define your geographic region of interest.", 
+      "content": "In addition to priority species, prioritize watersheds based the following factors.", 
       "header": "", 
-      "slug": "form-geography-header"
-    }
-  }, 
-  {
-    "pk": 15, 
-    "model": "flatblocks.flatblock", 
-    "fields": {
-      "content": "Setting prioritization constraints helps by avoiding costly or high-risk regions.", 
-      "header": "", 
-      "slug": "form-costs-description"
-    }
-  }, 
-  {
-    "pk": 8, 
-    "model": "flatblocks.flatblock", 
-    "fields": {
-      "content": "Inputs", 
-      "header": "", 
-      "slug": "show-inputs"
-    }
-  }, 
-  {
-    "pk": 9, 
-    "model": "flatblocks.flatblock", 
-    "fields": {
-      "content": "Results Summary", 
-      "header": "", 
-      "slug": "show-results-summary"
-    }
-  }, 
-  {
-    "pk": 23, 
-    "model": "flatblocks.flatblock", 
-    "fields": {
-      "content": "Geography", 
-      "header": "", 
-      "slug": "geography"
-    }
-  }, 
-  {
-    "pk": 25, 
-    "model": "flatblocks.flatblock", 
-    "fields": {
-      "content": "There are currently no shared scenarios available.\r\n<br/><br/>\r\nYour colleagues can share their prioritization scenarios allowing you to view results and copy them to your own work space for further modification.", 
-      "header": "", 
-      "slug": "new-share-scenario"
-    }
-  }, 
-  {
-    "pk": 26, 
-    "model": "flatblocks.flatblock", 
-    "fields": {
-      "content": "Manage", 
-      "header": "", 
-      "slug": "manage"
-    }
-  }, 
-  {
-    "pk": 27, 
-    "model": "flatblocks.flatblock", 
-    "fields": {
-      "content": "Collaborate", 
-      "header": "", 
-      "slug": "shared"
-    }
-  }, 
-  {
-    "pk": 21, 
-    "model": "flatblocks.flatblock", 
-    "fields": {
-      "content": "Objectives", 
-      "header": "", 
-      "slug": "targets"
-    }
-  }, 
-  {
-    "pk": 22, 
-    "model": "flatblocks.flatblock", 
-    "fields": {
-      "content": "Constraints", 
-      "header": "", 
-      "slug": "constraints"
+      "slug": "form-costs-header"
     }
   }, 
   {
@@ -114,123 +33,6 @@
       "content": "You haven't created any prioritization scenarios yet.\r\n<br/><br/>\r\nYou can create customized prioritization scenarios, view the results on the map, study the output reports, export to various format, save them for future use, edit them and share them with colleagues. ", 
       "header": "", 
       "slug": "new-manage-scenario"
-    }
-  }, 
-  {
-    "pk": 18, 
-    "model": "flatblocks.flatblock", 
-    "fields": {
-      "content": "<h3>Scenario should be rerun</h3> New data has been loaded into the prioritization tool since this scenario was created. It is <em>highly</em> recommended that you Edit and rerun the scenario to make sure the results are still valid with the current data.", 
-      "header": "", 
-      "slug": "scenario-expired-message"
-    }
-  }, 
-  {
-    "pk": 19, 
-    "model": "flatblocks.flatblock", 
-    "fields": {
-      "content": "For each conservation objective, the chart below shows how much of the total potentially available convservation value is represented by this solution.", 
-      "header": "", 
-      "slug": "show-targets-explanation"
-    }
-  }, 
-  {
-    "pk": 14, 
-    "model": "flatblocks.flatblock", 
-    "fields": {
-      "content": "In addition to focal species, prioritize watersheds based the following factors.", 
-      "header": "", 
-      "slug": "form-costs-header"
-    }
-  }, 
-  {
-    "pk": 28, 
-    "model": "flatblocks.flatblock", 
-    "fields": {
-      "content": "Included in current scenario", 
-      "header": "", 
-      "slug": "legend-included"
-    }
-  }, 
-  {
-    "pk": 31, 
-    "model": "flatblocks.flatblock", 
-    "fields": {
-      "content": "Relative Value", 
-      "header": "", 
-      "slug": "legend-relative-value"
-    }
-  }, 
-  {
-    "pk": 29, 
-    "model": "flatblocks.flatblock", 
-    "fields": {
-      "content": "Priority geography", 
-      "header": "", 
-      "slug": "legend-potential"
-    }
-  }, 
-  {
-    "pk": 32, 
-    "model": "flatblocks.flatblock", 
-    "fields": {
-      "content": "<em>* Note: some datasets are not available for your selected geography and were excluded from this analysis.</em>", 
-      "header": "", 
-      "slug": "form-geography-note"
-    }
-  }, 
-  {
-    "pk": 4, 
-    "model": "flatblocks.flatblock", 
-    "fields": {
-      "content": "Welcome to the NPLCC Prioritization Tool", 
-      "header": "", 
-      "slug": "about-header"
-    }
-  }, 
-  {
-    "pk": 5, 
-    "model": "flatblocks.flatblock", 
-    "fields": {
-      "content": "A prioritization support tool for the North Pacific region. ", 
-      "header": "", 
-      "slug": "about-intro"
-    }
-  }, 
-  {
-    "pk": 2, 
-    "model": "flatblocks.flatblock", 
-    "fields": {
-      "content": "NPLCC prioritization tool", 
-      "header": "", 
-      "slug": "home_text"
-    }
-  }, 
-  {
-    "pk": 30, 
-    "model": "flatblocks.flatblock", 
-    "fields": {
-      "content": "All planning units", 
-      "header": "", 
-      "slug": "legend-allpus"
-    }
-  }, 
-  {
-    "pk": 7, 
-    "model": "flatblocks.flatblock", 
-    "fields": {
-      "content": ".spruce", 
-      "header": "", 
-      "slug": "theme"
-    }
-  }, 
-  {
-    "pk": 1, 
-    "model": "flatblocks.flatblock", 
-    "fields": {
-      "content": "NPLCC", 
-      "header": "", 
-      "slug": "title"
     }
   }, 
   {
@@ -288,48 +90,12 @@
     }
   }, 
   {
-    "pk": 24, 
+    "pk": 6, 
     "model": "flatblocks.flatblock", 
     "fields": {
-      "content": "Target", 
+      "content": "<h2>Introduction</h2>\r\n\r\n<p>\r\nFederal, State and local land managers and land management agencies are increasingly interested in identifying priority habitat and ecosystems at multiple scales, and the ability to assess these priorities with respect to vulnerabilities such as threats imposed by the potential effects of climate change.  However, their efforts to do so are hampered by a lack of appropriate tools and access to the latest and best region wide data sets, in particular, data sets pertaining to climate change.  Managing for multiple objectives requires new data, as well as the ability to compile, sort, and quantitatively analyze them, particularly with respect to tradeoffs and synergies among a diverse set of objectives.\r\n</P>\r\n\r\n<P>\r\nNatural resource planners currently have very limited access to the myriad of current data sets generated by universities, government agencies, non-profits and other NPLCC stakeholders. Without easy access and the ability to interpret these data, stakeholders interested in addressing restoration and conservation issues are at a disadvantage. In September, 2011, The North Pacific LCC awarded Ecotrust a grant to develop a conservation priorities tool intended to address the problems.  This spatially explicit, on-line tool is intended to assist the North Pacific LCC and other natural resource managers, individuals, and community organizations in accessing disparate data sources for understanding and visualizing a wide variety of data sets pertaining to species, threats and potential effects of climate change on freshwater and forest ecosystems throughout the North Pacific LCC geographic area. \r\n</P>\r\n\r\n\r\n<P>\r\nUtilizing the codebase developed as part of the <a href=\"http://madrona.ecotrust.org\"> Madrona </a> framework, we developed the NPLCC prioritization tool - an open-source Decision Support Tool, freely available online, where climate and natural resource conservation data can be readily visualized and explored. This dynamic tool gives users the ability to instantly identify climate change vulnerability and visualize the results of a range of assumptions by running analyses based on users\u2019 selection of input parameters. This Decision Support Tool advances resource conservation by fostering the collaboration and communication of scientists, policy-makers, natural resource planners and managers, and landowners.  \r\n</P>\r\n\r\n<P>\r\nThe tool includes a wide array of spatially explicit data pertaining to aquatic and terrestrial species including data on a variety of mammal, bird and fish species.  Users can explore these raw data sets as well as the data summarized to level 5 Hydro 1-k watersheds (a geographic database produced by the USGS providing comprehensive and consistent global coverage of topographically derived basin boundaries).  As well, users can explore data pertaining to climate change and a wide variety of anthropogenic threats to watershed condition and species health.  These data also are provided in their raw form as well as summarized to hydro 1k level 5 watersheds.  Please see detailed documentation for the <a href=\"/media/docs/NPLCC_FocalSpecies.pdf\"> focal species </a>, <a href=\"/media/docs/NPLCC_Climate.pdf\"> climate change </a> and <a href=\"/media/docs/NPLCC_WC.pdf\"> watershed condition</a> to gain a better understanding of what data exist in the tool, where we obtained it and how it was collected and processed.\r\n</P>\r\n</P>\r\n<p> \r\nAt the heart of the tool is a prioritization process that allows users to specify an area of interest, species of interest and constraints (such as vulnerability to climate change or threats to watershed condition).  The process results in a set of level 5 hydro-1k watersheds that represents priority watersheds to meet the user defined objectives. The process draws on computational heuristic application known as Marxan (a widely used and well vetted conservation planning tool) on the backend and provides an easy to use interface that facilitates user input and interaction with the back end model.  While freely available, Marxan is generally inaccessible to all but a handful of highly technical users.  This tool, albeit for only generalized use and visualization, for the first time provides an easy to use interface for Marxan that allows resource managers, conservation planners, concerned citizens and other non-technical users to  develop generalized priorities using this sophisticated process.  Please read the detailed <a href=\"/media/docs/prioritization_process.pdf\">documentation</a> to gain an understanding of the purpose, limitations and products associated with the prioritization process model.  \r\n</p>\r\n\r\n\r\n<h2>Data and Methods</h2>\r\n<p>\r\nThis tool allows users to identify priority species and consider current and future landscape conditions in order to create watershed priorities across or within the North Pacific LCC region. The data and analyses that inform the tool's inputs are described below. Please see the <a href=\"/media/docs/NPLCC_DataDictionary.pdf\">data dictionary</a> for a detailed list of data sources used to inform this tool.\r\n</p>\r\n\r\n<h3>Wildlife Data</h3>\r\n<p>\r\nThe tool includes a variety of species distribution data from fish to birds to mammals. These data were collected from a variety of sources, at varying scales, geographic coverage, and units of analysis. See the <a href=\"/media/docs/NPLCC_FocalSpecies.pdf\">detailed documentation on focal species</a> for additional information, including the geographic coverage of each species included in the tool. \r\n</p>\r\n\r\n\r\n<h3>Watershed Condition</h3>\r\n<p>\r\nHealthy, functioning watersheds are essential for sustaining species populations as well as fundamental ecosystem services. In order to include the most comprehensive data in the tool, as well as to facilitate cross-region priority setting, we used only datasets that spanned the entire North Pacific region. Please see the <a href=\"/media/docs/NPLCC_WC.pdf\">detailed documentation</a> for a description of the approach to watershed condition mapping. \r\n</p>\r\n\r\n\r\n\r\n<h3>Vulnerability to Climate Change</h3>\r\n<p>\r\nClimate change has the potential to alter freshwater habitat in complex ways that we have yet to fully understand. These changes will greatly affect the health and distribution of native plant and wildlife species. Although a comprehensive, downscaled climate impacts dataset was not available to us, but there are two major data-mapping efforts that supplement each other to cover the region: Climate Impacts Group (CIG), of the University of Washington, and the Scenarios Network for Alaska & Arctic Planning (SNAP) have created downscaled datasets modeling the effects of climate change for the greater Columbia River Basin and Alaska and British Columbia, respectively. Stream flow data from CIG, Trout Unlimited, and the USDA Forest Service are available within the same region as CIG\u2019s temperature and precipitation data as well. Additionally, species-specific climate niche data are available for the entire North Pacific region. Each metric was summarized to the watershed level using hydrologic boundary data from Wild Salmon Center \r\n\r\nTo address these potential effects, we identified vulnerability to climate change based on projected changes in air temperature, stream flow regime, and wildfire risk . Areas that are relatively more vulnerable to climate change then are avoided (if possible) in the prioritization process when climate change vulnerability is considered. See the detailed documentation on the approach to identifying <a href=\"/media/docs/NPLCC_Climate.pdf\">climate change vulnerability</a> for additional information. \r\n</p>", 
       "header": "", 
-      "slug": "relative-importance"
-    }
-  }, 
-  {
-    "pk": 10, 
-    "model": "flatblocks.flatblock", 
-    "fields": {
-      "content": "Conservation Features", 
-      "header": "", 
-      "slug": "show-conservation-features"
-    }
-  }, 
-  {
-    "pk": 20, 
-    "model": "flatblocks.flatblock", 
-    "fields": {
-      "content": "Total Habitat Captured", 
-      "header": "", 
-      "slug": "show-percent-met"
-    }
-  }, 
-  {
-    "pk": 12, 
-    "model": "flatblocks.flatblock", 
-    "fields": {
-      "content": "Set Targets", 
-      "header": "", 
-      "slug": "form-conservationfeature-header"
-    }
-  }, 
-  {
-    "pk": 13, 
-    "model": "flatblocks.flatblock", 
-    "fields": {
-      "content": "For each management objective, specify the desired proportion of habitat to target.", 
-      "header": "", 
-      "slug": "form-conservationfeature-description"
+      "slug": "about-content"
     }
   }, 
   {
@@ -351,15 +117,6 @@
     }
   }, 
   {
-    "pk": 11, 
-    "model": "flatblocks.flatblock", 
-    "fields": {
-      "content": "Watersheds", 
-      "header": "", 
-      "slug": "show-planning-units"
-    }
-  }, 
-  {
     "pk": 41, 
     "model": "flatblocks.flatblock", 
     "fields": {
@@ -368,15 +125,6 @@
       "slug": "show-total-costs"
     }
   }, 
-  {
-    "pk": 42, 
-    "model": "flatblocks.flatblock", 
-    "fields": {
-      "content": "Or, if you need to fine-tune the geography, you can use the map draw a box around additional watersheds. To navigate, use the keyboard controls (+/- to zoom, arrow keys to pan). If you need to undo the selection, click on the map away from the study region.", 
-      "header": "", 
-      "slug": "geography-fine-tune"
-    }
-  },
   {
     "pk": 43, 
     "model": "flatblocks.flatblock", 
@@ -387,21 +135,273 @@
     }
   }, 
   {
-    "pk": 44, 
-    "model": "flatblocks.flatblock", 
-    "fields": {
-      "content": "<h1>Help</h1>", 
-      "header": "", 
-      "slug": "help"
-    }
-  },
-  {
     "pk": 45, 
     "model": "flatblocks.flatblock", 
     "fields": {
       "content": "Watersheds", 
       "header": "", 
       "slug": "show-planning-units-tab"
+    }
+  }, 
+  {
+    "pk": 7, 
+    "model": "flatblocks.flatblock", 
+    "fields": {
+      "content": ".cerulean", 
+      "header": "", 
+      "slug": "theme"
+    }
+  }, 
+  {
+    "pk": 16, 
+    "model": "flatblocks.flatblock", 
+    "fields": {
+      "content": "watersheds", 
+      "header": "", 
+      "slug": "planning-units"
+    }
+  }, 
+  {
+    "pk": 17, 
+    "model": "flatblocks.flatblock", 
+    "fields": {
+      "content": "Select the watersheds that define your geographic region of interest.", 
+      "header": "", 
+      "slug": "form-geography-header"
+    }
+  }, 
+  {
+    "pk": 15, 
+    "model": "flatblocks.flatblock", 
+    "fields": {
+      "content": "Setting prioritization constraints helps by avoiding costly or high-risk regions.", 
+      "header": "", 
+      "slug": "form-costs-description"
+    }
+  }, 
+  {
+    "pk": 1, 
+    "model": "flatblocks.flatblock", 
+    "fields": {
+      "content": "NPLCC Prioritization Tool", 
+      "header": "", 
+      "slug": "title"
+    }
+  }, 
+  {
+    "pk": 10, 
+    "model": "flatblocks.flatblock", 
+    "fields": {
+      "content": "Conservation Features", 
+      "header": "", 
+      "slug": "show-conservation-features"
+    }
+  }, 
+  {
+    "pk": 11, 
+    "model": "flatblocks.flatblock", 
+    "fields": {
+      "content": "Planning Units", 
+      "header": "", 
+      "slug": "show-planning-units"
+    }
+  }, 
+  {
+    "pk": 8, 
+    "model": "flatblocks.flatblock", 
+    "fields": {
+      "content": "Inputs", 
+      "header": "", 
+      "slug": "show-inputs"
+    }
+  }, 
+  {
+    "pk": 9, 
+    "model": "flatblocks.flatblock", 
+    "fields": {
+      "content": "Results Summary", 
+      "header": "", 
+      "slug": "show-results-summary"
+    }
+  }, 
+  {
+    "pk": 21, 
+    "model": "flatblocks.flatblock", 
+    "fields": {
+      "content": "Objectives", 
+      "header": "", 
+      "slug": "targets"
+    }
+  }, 
+  {
+    "pk": 22, 
+    "model": "flatblocks.flatblock", 
+    "fields": {
+      "content": "Constraints", 
+      "header": "", 
+      "slug": "constraints"
+    }
+  }, 
+  {
+    "pk": 18, 
+    "model": "flatblocks.flatblock", 
+    "fields": {
+      "content": "<h3>Scenario should be rerun</h3> New data has been loaded into the prioritization tool since this scenario was created. It is <em>highly</em> recommended that you Edit and rerun the scenario to make sure the results are still valid with the current data.", 
+      "header": "", 
+      "slug": "scenario-expired-message"
+    }
+  }, 
+  {
+    "pk": 13, 
+    "model": "flatblocks.flatblock", 
+    "fields": {
+      "content": "A <strong>low</strong> importance indicates \"<em>do not consider in the prioritization process</em>\"<br/> A <strong>high</strong> importance indicates very high priority (i.e. \"<em>Attempt to capture almost all of the available habitat</em>\"). \r\n", 
+      "header": "", 
+      "slug": "form-conservationfeature-description"
+    }
+  }, 
+  {
+    "pk": 19, 
+    "model": "flatblocks.flatblock", 
+    "fields": {
+      "content": "For each conservation objective, the chart below shows how much of the total potentially available convservation value is represented by this solution.", 
+      "header": "", 
+      "slug": "show-targets-explanation"
+    }
+  }, 
+  {
+    "pk": 25, 
+    "model": "flatblocks.flatblock", 
+    "fields": {
+      "content": "There are currently no shared scenarios available.\r\n<br/><br/>\r\nYour colleagues can share their prioritization scenarios allowing you to view results and copy them to your own workspace for further modification.", 
+      "header": "", 
+      "slug": "new-share-scenario"
+    }
+  }, 
+  {
+    "pk": 44, 
+    "model": "flatblocks.flatblock", 
+    "fields": {
+      "content": "<html>\r\n<p>\r\n<b>\r\n<h2>NPLCC Help \u2013 how to use the tool:</h2>\r\n</b>\r\n</p>\r\n<p>\r\n<h3>Data Visualization</h3></p>\r\n<p>The data tab in the tool gives you access to all base layers, prioritization inputs and raw data collected for this project.  To view a data layer merely navigate to the appropriate subject heading and click on the data layer name.\r\n</p> \r\n<center><img src=\"media/images/data_tab_img.jpg\"></Center>\r\n<p>\r\nTo access additional information about the data set itself click on the <img src=\"media/images/info_icon.jpg\"> icon to the right of the data layer name.  You will see a box with additional information and links to metadata (when available) pop up in the lower left hand corner of the map.  As you turn layers on a check box will appear to the left of the data layer name meaning that these layers are active.  The layers will also show up under the \u201cActive\u201d tab.  Using this tab, you can rearrange the draw order of the layers by clicking on any layer in the list and dragging it either up or down, modify the opacity (that is the ability to see through the layer to underlying layers) by adjusting the slider bar that will appear when you click on the <img src=\"media/images/opacity_icon.jpg\">  icon (you must click the icon a second time to make the slider bar disappear) and toggle the visibility.  Note that layers will remain active until you remove them from this list by clicking on the <img src=\"media/images/remove_layer_icon.jpg\">  icon.\r\n</p>\r\n \r\n<p>\r\n<h3> Navigation</h3>\r\n</p>\r\n <p>\r\n You can use the <img src=\"media/images/zoom_icon.jpg\"> icon in the upper left hand corner of the map to zoon in or out (you can also use a mouse wheel to zoom in or out or double click on the map to zoom in or the + / - keys on your keyboard).  You can also define a specific area to zoom in to by holding the shift key down on your keyboard and drawing a box that defines the extent to which you would like to zoom.  You can pan by holding down your mouse button and dragging the map in the direction you wish to zoom.  When selecting geographies for new scenarios, holding the mouse button down and dragging the map will result in adding watersheds to your prioritization scenario rather than panning.\r\n</p>\r\n\r\n<p>\r\n<center><img src=\"media/images/define_extent_img.jpg\"></Center>\r\n</p>\r\n\r\n<p>\r\nWhen you mouse over watersheds, the name of the watershed will appear in a box in the upper left hand corner of the map.  Clicking once on any watershed will return a list of data values available for that watershed.  \r\n</p>\r\n<img src=\"media/images/attribute_box_img.jpg\">\r\n<p>\r\nPlease note that not all data is available for all areas so only the attributes that represent the data for the location of the subject watershed will be displayed.\r\n</p>\r\n\r\n<p>\r\n<h3>Creating scenarios</H3>\r\n</P>\r\n<P>\r\nUnder the \u201cScenarios\u201d tab you can view, edit, copy, delete and create new scenarios.  There are two lists available for you under the scenarios tab \u2013 scenarios you have created yourself and \u201cshared scenarios\u201d that have been created by others and shared with you or a group that you belong to. \r\n</P>\r\n<P>\r\nTo create a new scenario, click the \"create new\" button <img src=\"media/images/create_new_img.jpg\"> in the lower left hand corner of the scenario pane.  This will take you to a series of windows that step you through the scenario creation process.\r\n</p>\r\n\r\n\r\n\r\n<p>\r\nPlease read the detailed <a href=\"media/docs.html\">documentation</a> to gain an understanding of the purpose, limitations, and products associated with this tool.  All users are able to create priority scenarios, pan and zoom using the map tool, and explore input data sets pertaining to a wide variety of terestrial and aquatic species as well as data specific to climate change, watershed condition, and aquatic invasive species. In order to create scenarios, you must be a registered user and signed in. Simply click on \"register\" in the top right corner of the title bar and follow the simple steps. Registered users may sign in by clicking on the \u201csign in\u201d menu in the upper right hand corner of each page.\r\n\r\n</p>\r\n", 
+      "header": "", 
+      "slug": "help"
+    }
+  }, 
+  {
+    "pk": 2, 
+    "model": "flatblocks.flatblock", 
+    "fields": {
+      "content": "<P>\r\nRegistered users can create, edit and share scenarios by specifying the importance of given species for select geographies while considering potential threats and vulnerabilities.  The output of a scenario is a set of watersheds that represent specified objectives.  To create, edit or share scenarios, you must be signed in.  If you don't have a login account, merely click the \"register\" button below.\r\n</P>\r\n<p>\r\n</p>", 
+      "header": "", 
+      "slug": "home_text"
+    }
+  }, 
+  {
+    "pk": 26, 
+    "model": "flatblocks.flatblock", 
+    "fields": {
+      "content": "Prioritize", 
+      "header": "", 
+      "slug": "manage"
+    }
+  }, 
+  {
+    "pk": 20, 
+    "model": "flatblocks.flatblock", 
+    "fields": {
+      "content": "Percent of Total Available Value", 
+      "header": "", 
+      "slug": "show-percent-met"
+    }
+  }, 
+  {
+    "pk": 23, 
+    "model": "flatblocks.flatblock", 
+    "fields": {
+      "content": "Geography", 
+      "header": "", 
+      "slug": "geography"
+    }
+  }, 
+  {
+    "pk": 27, 
+    "model": "flatblocks.flatblock", 
+    "fields": {
+      "content": "Collaborate", 
+      "header": "", 
+      "slug": "shared"
+    }
+  }, 
+  {
+    "pk": 24, 
+    "model": "flatblocks.flatblock", 
+    "fields": {
+      "content": "Importance Weighting", 
+      "header": "", 
+      "slug": "relative-importance"
+    }
+  }, 
+  {
+    "pk": 28, 
+    "model": "flatblocks.flatblock", 
+    "fields": {
+      "content": "Included in current scenario", 
+      "header": "", 
+      "slug": "legend-included"
+    }
+  }, 
+  {
+    "pk": 30, 
+    "model": "flatblocks.flatblock", 
+    "fields": {
+      "content": "All NPLCC planning units", 
+      "header": "", 
+      "slug": "legend-allpus"
+    }
+  }, 
+  {
+    "pk": 31, 
+    "model": "flatblocks.flatblock", 
+    "fields": {
+      "content": "Relative Value", 
+      "header": "", 
+      "slug": "legend-relative-value"
+    }
+  }, 
+  {
+    "pk": 29, 
+    "model": "flatblocks.flatblock", 
+    "fields": {
+      "content": "Priority geography", 
+      "header": "", 
+      "slug": "legend-potential"
+    }
+  }, 
+  {
+    "pk": 32, 
+    "model": "flatblocks.flatblock", 
+    "fields": {
+      "content": "<em>* Note: some datasets are not available for your selected geography and were excluded from this analysis.</em>", 
+      "header": "", 
+      "slug": "form-geography-note"
+    }
+  }, 
+  {
+    "pk": 5, 
+    "model": "flatblocks.flatblock", 
+    "fields": {
+      "content": "<h3>A watershed visualization and priorities decision support system for the North Pacific LCC developed by Ecotrust.</h3> ", 
+      "header": "", 
+      "slug": "about-intro"
+    }
+  }, 
+  {
+    "pk": 4, 
+    "model": "flatblocks.flatblock", 
+    "fields": {
+      "content": "Welcome to the NPLCC Priorities Tool", 
+      "header": "", 
+      "slug": "about-header"
     }
   }
 ]

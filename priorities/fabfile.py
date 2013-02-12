@@ -4,9 +4,9 @@ from fabric.contrib.console import confirm
 from local_data import *
 import os
 
-APP = 'nplcc'
+APP = 'usfw2'
 BRANCH = APP
-STACHE_DIR = "/tmp/nplcc-stache" 
+STACHE_DIR = "/tmp/usfw2-stache" 
 ME = 'mperry'
 env.directory = '/usr/local/apps/%s' % APP
 env.hosts = ['ninkasi.ecotrust.org']
@@ -40,9 +40,11 @@ def fix_permissions():
     Make sure all directories have appropriate permissions
     """
     with cd(env.directory):
+        run("mkdir -p marxan_output/template")
         sudo("chgrp www-data -R marxan_output")
         sudo("chmod 775 -R marxan_output")
         sudo("chmod 777 marxan_output/template") # TODO probably a better way to handle this
+        run("mkdir -p %s" % STACHE_DIR)
         run("sudo chown www-data -R %s" % STACHE_DIR)
         run("sudo chmod 755 -R %s" % STACHE_DIR)
         run("sudo chown www-data:%s -R mediaroot" % ME)
@@ -126,3 +128,7 @@ def local_import():
                 %(data)s/%(pu)s" % {'data': local_data_dir, 'pu_simple': pu_simple, 'xls': xls, 'pu': pu }
         local(env.activate + '&&' + command)
 
+
+"""
+pip install -I -U --force-reinstall -r requirements.txt
+"""

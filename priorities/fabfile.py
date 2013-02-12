@@ -2,7 +2,7 @@ from __future__ import with_statement
 from fabric.api import *
 from fabric.contrib.console import confirm
 from local_data import *
-import os
+import posixpath
 
 APP = 'usfw2'
 BRANCH = APP
@@ -10,16 +10,16 @@ STACHE_DIR = "/tmp/usfw2-stache"
 ME = 'mperry'
 env.directory = '/usr/local/apps/%s' % APP
 env.hosts = ['ninkasi.ecotrust.org']
-env.activate = 'source %s' % os.path.join(env.directory, 'env-%s' % APP,'bin','activate')
+env.activate = 'source %s' % posixpath.join(env.directory, 'env-%s' % APP,'bin','activate')
 env.deploy_user = 'www-data'
 
 
 def virtualenv(command, user=None):
     with cd(env.directory):
         if not user:
-            run(env.activate + '&&' + command)
+            run(env.activate + ' && ' + command)
         else:
-            sudo(env.activate + '&&' + command, user=user)
+            sudo(env.activate + ' && ' + command, user=user)
 
 def maintenance_on():
     """
@@ -49,6 +49,8 @@ def fix_permissions():
         run("sudo chmod 755 -R %s" % STACHE_DIR)
         run("sudo chown www-data:%s -R mediaroot" % ME)
         run("sudo chmod 775 -R mediaroot")
+        run("sudo chown root:www-data -R logs")
+        run("sudo chmod 775 -R logs")
 
 
 def deploy():
@@ -85,7 +87,7 @@ def import_dataset():
         # upload data if not there already
         #with settings(warn_only=True):
         #    if run("test -d priorities/data/%s" % dirname).failed:
-        put(local_data_dir, 'priorities/data/')  
+        #put(local_data_dir, 'priorities/data/')  
 
         # Clear server cache
         virtualenv("python priorities/manage.py clear_cache")

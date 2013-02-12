@@ -1,10 +1,13 @@
 xlrd>=0.7.8
 django-redis-sessions
 python-memcached
-tilestache
 modestmaps
 django-celery<3.0.0
 celery<=2.5.5
 django-redis
 redis
 fabric
+kombu
+-e git+https://github.com/Ecotrust/madrona.git@master#egg=madrona
+-e git+git://github.com/migurski/TileStache.git@master#egg=TileStache
+

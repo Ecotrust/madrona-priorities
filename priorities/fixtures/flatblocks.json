@@ -183,7 +183,7 @@
     "pk": 4, 
     "model": "flatblocks.flatblock", 
     "fields": {
-      "content": "Welcome to the BLM Juniper Management Tool", 
+      "content": "Welcome to the Aquatic Priorities Tool", 
       "header": "", 
       "slug": "about-header"
     }
@@ -192,7 +192,7 @@
     "pk": 5, 
     "model": "flatblocks.flatblock", 
     "fields": {
-      "content": "A juniper management prioritization support tool for Eastern Oregon. ", 
+      "content": "A aquatic prioritization support tool for Oregon, Washington and Idaho. ", 
       "header": "", 
       "slug": "about-intro"
     }
@@ -201,7 +201,7 @@
     "pk": 2, 
     "model": "flatblocks.flatblock", 
     "fields": {
-      "content": "Ecotrust and the BLM have partnered to develop a conservation decision support system for Juniper management in Oregon.\r\n\r\nThis system will enable stakeholders to engage in strategic landscape-scale planning for Juniper management and sage grouse habitat conservation priorities for Oregon BLM lands.", 
+      "content": "Ecotrust and the USFW have partnered to develop a conservation decision support system for aquatic habitat management.", 
       "header": "", 
       "slug": "home_text"
     }
@@ -228,7 +228,7 @@
     "pk": 1, 
     "model": "flatblocks.flatblock", 
     "fields": {
-      "content": "Oregon Juniper Management Tool", 
+      "content": "Aquatic Priorties Tool", 
       "header": "", 
       "slug": "title"
     }

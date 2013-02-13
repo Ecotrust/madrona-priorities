@@ -119,7 +119,7 @@ label.olButton {
     float: right;
 }
 tr.not-targeted {
-    display: none;
+    color: #888 !important;
 }
 div.tab-content-show {
     /* height: 430px; */

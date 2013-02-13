@@ -192,17 +192,23 @@
                     </thead>
                     <tbody>
                     {% for s in results.species %}
-                    <tr class="{% if s.target == 0 %}nogoal{% else %}hit{% endif %} {%if s.target_prop == 0%}not-targeted{%endif%}"> 
+                        <tr class="{% if s.target == 0 or s.target_prop == 0 %}not-targeted{% else %}hit{% endif %}"> 
                             <td>{{s.level1}}</td>
                             <td>{{s.name}}</td>
                             <td> 
                                 <span class="hide" title="{{s.pcttotal}}"></span>
                                 <span>
-                                    {% if slider_show_raw %}
-                                        {{s.held|floatformat:0|intcomma}} {{s.units}} ({{s.pcttotal|percentage:1}})
+                                    {% if s.target_prop > 0 %}
+                                        {% if slider_show_raw %}
+                                            {{s.held|floatformat:0|intcomma}} {{s.units}} ({{s.pcttotal|percentage:1}})
+                                        {% else %}
+                                            <strong>{{s.pcttotal|percentage:1}}</strong> of total {{s.units}}
+                                        {% endif %} 
                                     {% else %}
-                                        <strong>{{s.pcttotal|percentage:1}}</strong> of total {{s.units}}
-                                    {% endif %} 
+                                        {# TODO report percentage of total even if not targeted ? #}
+                                        <em>{{s.pcttotal|percentage:1}} of total {{s.units}}</em>
+                                        {# <em>{{s.held|floatformat:0|intcomma}} {{s.units}} ({{s.pcttotal|percentage:1}})</em>* #}
+                                    {% endif %}
                                 </span>
                             </td>
                             <td> 

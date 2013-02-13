@@ -120,6 +120,7 @@ label.olButton {
 }
 tr.not-targeted {
     color: #888 !important;
+    font-style:italic;
 }
 div.tab-content-show {
     /* height: 430px; */

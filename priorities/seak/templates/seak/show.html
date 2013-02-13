@@ -33,8 +33,8 @@
             <li><a href="#species" class="report-tab" id="tab-report-species" data-toggle="tab"><span>{% flatblock 'show-conservation-features' 3600 %}</span></a></li>
             <li><a href="#watersheds" class="report-tab" id="tab-report-pus" data-toggle="tab"><span>{% flatblock 'show-planning-units-tab' 3600 %}</span></a></li>
             {% if show_raw_costs %}
-                <li><a href="#costs" data-toggle="tab"><span>{% flatblock 'show-total-costs' 3600 %}</span></a></li>
-            {% endif %}
+            <!-- <li><a href="#costs" data-toggle="tab"><span>{% flatblock 'show-total-costs' 3600 %}</span></a></li> -->
+            {% endif %} 
             {% if show_aux %}
                 <li><a href="#aux" data-toggle="tab"><span>{% flatblock 'show-aux' 3600 %}</span></a></li>
             {% endif %}
@@ -108,7 +108,7 @@
 
         <div id="watersheds" class="tab-pane">
             <div>
-                <p>{% flatblock 'optimal-prioritization-scenario' 3600 %} includes {{results.num_units}} {% flatblock 'show-planning-units' 3600 %} covering {{results.area|floatformat:0|intcomma}} {% flatblock 'area-units' 3600 %}. </p>
+                <p>{% flatblock 'optimal-prioritization-scenario' 3600 %} includes {{results.num_units}} {% flatblock 'show-planning-units' 3600 %} covering {{results.area|floatformat:0|intcomma}} {% flatblock 'area-units' 3600 %}. {% flatblock 'show-explain-constraints' 3600 %}</p>
 
                 <table class="table interactive-table" id="pu-table">
                 <thead>
@@ -123,9 +123,10 @@
                     {% for w in results.units %}
                     <tr>
                         <td>
-                            {{w.name}}
-                            <span class="hide centroid-x" title="{{w.centroidx}}"></span>
-                            <span class="hide centroid-y" title="{{w.centroidy}}"></span>
+                            <span title="{{w.name}}"></span>
+                            {{w.name}} 
+                            <span class="hide centroid-x" data-coord="{{w.centroidx}}"></span>
+                            <span class="hide centroid-y" data-coord="{{w.centroidy}}"></span>
                         </td>
                         {% for k,v in w.costs.items %}
                         <td>
@@ -135,7 +136,6 @@
                                 {% if show_raw_costs %}
                                 : {{v.raw|floatformat:0|intcomma}}
                                 {% endif %}
-                                {# v.scaled #}
                             </span>
                         </td>
                         {% endfor %}
@@ -147,6 +147,7 @@
         </div>
 
         {% if show_raw_costs %}
+        <!--
         <div id="costs" class="tab-pane">
             <div>
                 <h5>  Total Costs </h5>
@@ -157,7 +158,8 @@
                 </dl>
             </div>
         </div>
-        {% endif %}
+        -->
+        {% endif %} 
 
         {% if show_aux %}
         <div id="aux" class="tab-pane">
@@ -205,19 +207,17 @@
                                             <strong>{{s.pcttotal|percentage:1}}</strong> of total {{s.units}}
                                         {% endif %} 
                                     {% else %}
-                                        {# TODO report percentage of total even if not targeted ? #}
-                                        <em>{{s.pcttotal|percentage:1}} of total {{s.units}}</em>
-                                        {# <em>{{s.held|floatformat:0|intcomma}} {{s.units}} ({{s.pcttotal|percentage:1}})</em>* #}
+                                        {{s.pcttotal|percentage:1}} of total {{s.units}}
                                     {% endif %}
                                 </span>
                             </td>
                             <td> 
                                 <span class="hide" title="{% if s.met %}1{% else %}0{% endif %}"></span>
-                                {% if s.target == 0 %} - {% else %} 
+                                {% if s.target == 0 %} n/a {% else %} 
                                     {% if s.met %}
                                         &#10003;
                                     {% else %} 
-                                        NO<br/>(Goal was {{s.target_prop|percentage:0}})
+                                    <strong>No</strong><br/>(Goal was {{s.target_prop|percentage:0}})
                                     {% endif %} 
                                 {% endif %}
                             </td>
@@ -250,9 +250,11 @@
                 "bPaginate": false,
                 "sScrollY": divHeight + "px",
                 "bScrollCollapse": true,
-                "aoColumnDefs": [
-                { "sType": 'title-numeric', "aTargets": [ 1{% if slider_mode == "dual" %}, 2{% endif %} ] } 
-                ]
+                "aaSorting": [[1, "desc"], [0, "asc"]],
+                "aoColumnDefs": [{
+                    "sType": 'title-numeric', 
+                    "aTargets": [ 1{% if slider_mode == "dual" %}, 2{% endif %} ] 
+                }]
             });
 
             app.interactiveTables.speciesTable = $("table#species-table").dataTable({
@@ -263,6 +265,7 @@
                 "bPaginate": false,
                 "sScrollY": divHeight + "px",
                 "bScrollCollapse": true,
+                "aaSorting": [[2, "desc"]],
                 "aoColumnDefs": [
                     { "bVisible": {% if show_goal_met %}true{% else %}false{% endif %}, "aTargets": [ 3 ] }, 
                     { "sType": "title-numeric", "aTargets": [ 2, 3 ] } 
@@ -277,9 +280,8 @@
                 "bPaginate": false,
                 "sScrollY": divHeight + "px",
                 "bScrollCollapse": true,
-                "sType": "title-numeric",
                 "aoColumnDefs": [
-                    { "sType": null, "aTargets": [ 0 ] }
+                    { "sType": "title-numeric", "aTargets": ["_all"] }
                 ]
             });
 
@@ -288,8 +290,8 @@
                 markers.clearMarkers();
                 best.find('tr.highlighted-planningunit').removeClass('highlighted-planningunit');
                 $(this).addClass('highlighted-planningunit');
-                var x = $(this).find('td:first span.centroid-x').attr('title');
-                var y = $(this).find('td:first span.centroid-y').attr('title');
+                var x = $(this).find('td:first span.centroid-x').attr('data-coord');
+                var y = $(this).find('td:first span.centroid-y').attr('data-coord');
                 var lonLat = new OpenLayers.LonLat(x,y);
                 markers.addMarker(new OpenLayers.Marker(lonLat));
                 map.setCenter([x,y]);

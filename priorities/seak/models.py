@@ -603,11 +603,10 @@ class Scenario(Analysis):
             except KeyError:
                 continue
             sheld = float(line[3])
+            stotal = sum([x.amount for x in consfeat.puvscf_set.filter(pu__in=potentialpus) if x.amount])
             try:
-                stotal = float(starget/starget_prop)
                 spcttotal = sheld/stotal 
             except ZeroDivisionError:
-                stotal = 0
                 spcttotal = 0
             smpm = float(line[9])
             if starget == 0:

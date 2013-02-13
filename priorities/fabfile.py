@@ -45,8 +45,8 @@ def fix_permissions():
         sudo("chmod 775 -R marxan_output")
         sudo("chmod 777 marxan_output/template") # TODO probably a better way to handle this
         run("mkdir -p %s" % STACHE_DIR)
-        run("sudo chown www-data -R %s" % STACHE_DIR)
-        run("sudo chmod 755 -R %s" % STACHE_DIR)
+        run("sudo chown www-data:www-data -R %s" % STACHE_DIR)
+        run("sudo chmod 775 -R %s" % STACHE_DIR)
         run("sudo chown www-data:%s -R mediaroot" % ME)
         run("sudo chmod 775 -R mediaroot")
         run("sudo chown root:www-data -R logs")

@@ -1,13 +1,13 @@
 # Django settings for omm project.
 from madrona.common.default_settings import *
 
-APP_NAME = "Madrona Priorities Tool"
+APP_NAME = "usfw2"
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 DATABASES = {
     'default': {
         'ENGINE': 'django.contrib.gis.db.backends.postgis',
-        'NAME': 'juniper',
+        'NAME': 'wp',
         'USER': 'postgres', }
 }
 
@@ -108,10 +108,10 @@ SHOW_GOAL_MET = True # in report
 
 JS_OPTS = {
     'start_zoom': 6,  
-    'num_levels': 7,  
-    'center': {'lon': -120.2, 'lat': 45.5},
-    'extent': [-126.1, 40.9, -116.0, 49.6],
-    'name_field': 'HU_10_NAME',
+    'num_levels': 8,  
+    'center': {'lon': -118.2, 'lat': 45.5},
+    'extent': [-127.1, 40.0, -106.0, 51.0],
+    'name_field': 'SUBBASIN',
     'sigfigs': 3,
     'zoom_on_select': False,
 }

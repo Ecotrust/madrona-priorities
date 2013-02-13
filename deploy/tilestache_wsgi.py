@@ -3,7 +3,7 @@ import site
 import os
 
 project = '/usr/local/apps/usfw2/priorities'
-ve = '/usr/local/apps/usfw2/env'
+ve = '/usr/local/apps/usfw2/env-usfw2'
 vepath = os.path.join(ve, 'lib/python2.6/site-packages')
 
 prev_sys_path = list(sys.path)

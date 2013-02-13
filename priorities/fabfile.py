@@ -124,11 +124,13 @@ def import_dataset():
     print "###########################################################"
 
 def local_import():
-        command = "python manage.py import_planning_units \
-                %(data)s/%(pu_simple)s \
-                %(data)s/%(xls)s \
-                %(data)s/%(pu)s" % {'data': local_data_dir, 'pu_simple': pu_simple, 'xls': xls, 'pu': pu }
-        local(env.activate + '&&' + command)
+        command = """python manage.py import_planning_units \\
+                %(data)s/%(pu_simple)s \\
+                %(data)s/%(xls)s \\
+                %(data)s/%(pu)s""" % {'data': local_data_dir, 'pu_simple': pu_simple, 'xls': xls, 'pu': pu }
+        print "--------"
+        print command
+        print "--------"
 
 
 """

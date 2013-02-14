@@ -123,9 +123,10 @@
                     {% for w in results.units %}
                     <tr>
                         <td>
+                            <span title="{{w.name}}"></span>
                             {{w.name}}
-                            <span class="hide centroid-x" title="{{w.centroidx}}"></span>
-                            <span class="hide centroid-y" title="{{w.centroidy}}"></span>
+                            <span class="hide centroid-x" data-coord="{{w.centroidx}}"></span>
+                            <span class="hide centroid-y" data-coord="{{w.centroidy}}"></span>
                         </td>
                         {% for k,v in w.costs.items %}
                         <td>
@@ -244,9 +245,11 @@
                 "bPaginate": false,
                 "sScrollY": divHeight + "px",
                 "bScrollCollapse": true,
-                "aoColumnDefs": [
-                { "sType": 'title-numeric', "aTargets": [ 1{% if slider_mode == "dual" %}, 2{% endif %} ] } 
-                ]
+                "aaSorting": [[1, "desc"], [0, "asc"]],
+                "aoColumnDefs": [{
+                    "sType": 'title-numeric', 
+                    "aTargets": [ 1{% if slider_mode == "dual" %}, 2{% endif %} ] 
+                }]
             });
 
             app.interactiveTables.speciesTable = $("table#species-table").dataTable({
@@ -257,6 +260,7 @@
                 "bPaginate": false,
                 "sScrollY": divHeight + "px",
                 "bScrollCollapse": true,
+                "aaSorting": [[2, "desc"]],
                 "aoColumnDefs": [
                     { "bVisible": {% if show_goal_met %}true{% else %}false{% endif %}, "aTargets": [ 3 ] }, 
                     { "sType": "title-numeric", "aTargets": [ 2, 3 ] } 
@@ -272,9 +276,10 @@
                 "sScrollY": divHeight + "px",
                 "bScrollCollapse": true,
                 "sType": "title-numeric",
+                "sType": "title-numeric",
                 "aoColumnDefs": [
-                    { "sType": null, "aTargets": [ 0 ] }
-                ]
+                    { "sType": "title-numeric", "aTargets": ["_all"] }
+                 ]
             });
 
             var best = $('tbody#best-pus');
@@ -282,8 +287,8 @@
                 markers.clearMarkers();
                 best.find('tr.highlighted-planningunit').removeClass('highlighted-planningunit');
                 $(this).addClass('highlighted-planningunit');
-                var x = $(this).find('td:first span.centroid-x').attr('title');
-                var y = $(this).find('td:first span.centroid-y').attr('title');
+                var x = $(this).find('td:first span.centroid-x').attr('data-coord');
+                var y = $(this).find('td:first span.centroid-y').attr('data-coord');
                 var lonLat = new OpenLayers.LonLat(x,y);
                 markers.addMarker(new OpenLayers.Marker(lonLat));
                 map.setCenter([x,y]);

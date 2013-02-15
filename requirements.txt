@@ -1,7 +1,8 @@
 xlrd>=0.7.8
 django-redis-sessions
 python-memcached
-tilestache
+-e git+git://github.com/migurski/TileStache.git@master#egg=TileStache
+-e git+https://github.com/Ecotrust/madrona.git@master#egg=madrona
 modestmaps
 django-celery<3.0.0
 celery<=2.5.5

@@ -1,4 +1,5 @@
 *.pyc
+.vagrant
 marinemap.egg-info*
 marinemap.r*.css
 marinemap.r*.js

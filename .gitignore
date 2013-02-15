@@ -41,3 +41,4 @@ logs/*
 local_import.sh
 local_data.py
 MAINTENANCE_MODE
+.vagrant

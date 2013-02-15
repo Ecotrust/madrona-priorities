@@ -55,7 +55,7 @@ STATICMAP_HEIGHT_BUFFER = None
 
 CELERY_IMPORT = ('seak.tasks',)
 
-MARXAN_BIN =  '/usr/local/marxan243/MarOpt_v243_Linux32' # or 64 bit?
+MARXAN_BIN =  os.path.realpath(os.path.join(os.path.dirname(__file__), '..', 'marxan_bin', 'MarOpt_v243_Linux32')) # or 64 bit?
 MARXAN_OUTDIR =  os.path.realpath(os.path.join(os.path.dirname(__file__), '..', 'marxan_output'))
 MARXAN_TEMPLATEDIR = os.path.join(MARXAN_OUTDIR, 'template')
 MARXAN_NUMREPS = 20
@@ -111,7 +111,7 @@ JS_OPTS = {
     'num_levels': 7,  
     'center': {'lon': -120.2, 'lat': 45.5},
     'extent': [-126.1, 40.9, -116.0, 49.6],
-    'name_field': 'HU_10_NAME',
+    'name_field': 'WATERSHED_',
     'sigfigs': 3,
     'zoom_on_select': False,
 }

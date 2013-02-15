@@ -1,4 +1,5 @@
 from fabric.api import *
+import posixpath
 
 vars = {
     'app_dir': '/usr/local/apps/madrona-priorities/priorities',
@@ -54,7 +55,12 @@ def create_superuser():
 
 def import_data():
     """ Fetches and installs data fixtures (WARNING: 5+GB of data; hence not checking fixtures into the repo) """
-    run('cd %(app_dir)s && %(venv)s/bin/python manage.py import_data' % vars)
+    vars['data_dir']  = posixpath.join(vars['app_dir'], '..', 'testdata')
+    run('cd %(app_dir)s && %(venv)s/bin/python manage.py \
+            import_planning_units \
+            %(data_dir)s/planning_units.shp \
+            %(data_dir)s/metrics.xls \
+            %(data_dir)s/planning_units.shp' % vars)
 
 
 def init():
@@ -77,7 +83,7 @@ def update():
 
 
 def _install_marxan():
-    run('echo "######################### INSTALL MARXAN????"')
+    run('cd %(app_dir)s && cd .. && if [ ! -d "marxan_bin" ]; then wget http://labs.ecotrust.org/priorities/marxan243.tar.gz && tar -xzvf marxan243.tar.gz; fi' % vars)
 
 
 def _load_fixtures():

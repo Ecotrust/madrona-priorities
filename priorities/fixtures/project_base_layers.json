@@ -61,6 +61,55 @@
     }
   }, 
   {
+    "pk": 152, 
+    "model": "layer_manager.layer", 
+    "fields": {
+      "layer_type": "Vector", 
+      "fact_sheet": "", 
+      "themes": [
+        1
+      ], 
+      "default_on": false, 
+      "map_tiles": "", 
+      "compress_display": false, 
+      "legend_subtitle": "", 
+      "bookmark": "", 
+      "vector_graphic": "", 
+      "kml": "", 
+      "source": "", 
+      "lookup_table": [], 
+      "utfurl": "", 
+      "thumbnail": "", 
+      "data_download": "", 
+      "metadata": "", 
+      "opacity": 1.0, 
+      "vector_color": "green", 
+      "attribute_event": "mouseover", 
+      "description": "", 
+      "attribute_fields": [
+        96, 
+        97, 
+        98
+      ], 
+      "learn_more": "", 
+      "data_overview": "", 
+      "attribute_title": "rwar", 
+      "is_sublayer": false, 
+      "lookup_field": "", 
+      "legend": "", 
+      "data_status": "", 
+      "vector_fill": 0.20000000000000001, 
+      "data_source": "", 
+      "data_notes": "", 
+      "name": "Utilization Centers", 
+      "url": "http://juniper.labs.ecotrust.org/media/geojson/utilization_centers.geojson", 
+      "arcgis_layers": "", 
+      "subdomains": "", 
+      "legend_title": "", 
+      "sublayers": []
+    }
+  }, 
+  {
     "pk": 2, 
     "model": "layer_manager.layer", 
     "fields": {

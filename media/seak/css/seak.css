@@ -140,6 +140,18 @@ div.tab-content-show {
     margin-left: 46px;
     background: rgba(162,205,181,0.8); /* Works on all modern browsers */
 }
+#vector-attributes {
+    position: absolute; 
+    z-index: 1043;
+    float:right;
+    text-align:left;
+    font-size: 85%;
+    font-weight: bold;
+    width: 252px;
+    margin: 6px;
+    margin-left: 46px;
+    background: rgba(162,205,181,1.0); /* Works on all modern browsers */
+}
 #info {
     position: absolute; 
     z-index: 1042;

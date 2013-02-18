@@ -167,7 +167,7 @@
                 <div class="accordion-heading">
                     <table style="width:100%;">
                     <tr>
-                    <th style="width:156px;text-align:left;">
+                    <th style="text-align:left;">
                        <a class="accordion-toggle" data-toggle="collapse" 
                            href="#collapse-{{category.grouper|slugify}}"> <i class="category-icon icon-minus"></i> {{category.grouper}} </a>
                     </th>
@@ -194,7 +194,7 @@
                 <table class="table table-condensed table-striped table-hover table-bordered" style="width:100%; margin-bottom:0px;">
                 {% for cf in category.list %} 
                     <tr class="cf-row" id="row-{{cf.dbf_fieldname}}">
-                        <th style="width:156px;">{{cf.name}}</th>
+                        <td style="width:156px;">{{cf.name}}</td>
                         <td> 
                             {% if slider_mode == 'single' %}
                             <div class="row-fluid">
@@ -283,7 +283,7 @@
             </div>
             {% endfor %}
             <div>
-                <p style="margin-top: 12px; font-size: 75%">{% flatblock 'form-geography-note' 3600 %}</p>
+                <p class="debug-only" style="margin-top: 12px; font-size: 75%">{% flatblock 'form-geography-note' 3600 %}</p>
             </div>
           </div>
         </form>
@@ -329,7 +329,7 @@
           </table>
         </form>
         <div>
-            <p style="margin-top: 12px; font-size: 75%">{% flatblock 'form-geography-note' 3600 %}</p>
+            <p class="debug-only" style="margin-top: 12px; font-size: 75%">{% flatblock 'form-geography-note' 3600 %}</p>
         </div>
     </div>
     </div>

@@ -11,16 +11,16 @@
                         <div class="tabbable">
                             <ul class="nav nav-tabs" id="formtabs" style="margin-bottom:0px;">
                                 <li class="active">
-                                    <a href="#data-tab-content" id="data-tab" data-toggle="tab">Data</a>
+                                <a href="#data-tab-content" id="data-tab" data-toggle="tab">{% flatblock 'tab-title-data' 3600 %}</a>
+                                </li>
+                                <li>
+                                    <a href="#active-tab-content" id="active-tab" data-toggle="tab">{% flatblock 'tab-title-active' 3600 %}</a>
+                                </li>
+                                <li>
+                                    <a href="#legend-tab-content" id="legend-tab" data-toggle="tab">{% flatblock 'tab-title-legend' 3600 %}</a>
                                 </li>
                                 <li data-bind="click: scenarios.switchMode.bind($data, 'manage')"> 
-                                    <a href="#scenario-tab-content" id="scenario-tab" data-toggle="tab">Scenarios</a>
-                                </li>
-                                <li>
-                                    <a href="#active-tab-content" id="active-tab" data-toggle="tab">Active</a>
-                                </li>
-                                <li>
-                                    <a href="#legend-tab-content" id="legend-tab" data-toggle="tab">Legend</a>
+                                    <a href="#scenario-tab-content" id="scenario-tab" data-toggle="tab">{% flatblock 'tab-title-scenario' 3600 %}</a>
                                 </li>
                             </ul>
                             <div class="tab-content">
@@ -301,12 +301,15 @@
                         <span data-bind="text: app.viewModel.layers.attributeData()[0].data"></span>
                     </span>
                     <span data-bind="if: app.viewModel.layers.attributeData()[1]">
-                    ,
-                        <span data-bind="text: app.viewModel.layers.attributeData()[1].data"></span>
+                        (<span data-bind="text: app.viewModel.layers.attributeData()[1].data"></span>)
                     </span>
+                    <br/>
                     <span data-bind="if: app.viewModel.layers.attributeData()[2]">
-                    ,
                         <span data-bind="text: app.viewModel.layers.attributeData()[2].data"></span>
+                    </span>
+                    <span data-bind="if: app.viewModel.layers.attributeData()[3]">
+                    ,
+                        <span data-bind="text: app.viewModel.layers.attributeData()[3].data"></span>
                     </span>
                 </div>
                 <div id="info" class="well">

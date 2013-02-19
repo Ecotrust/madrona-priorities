@@ -24,7 +24,8 @@ settings.MARXAN_NUMITNS = 550000
 
 NUMREPS = 5 
 NUMITER = 20
-SCHEDULE = {'tmin': 1, 'tmax': 15, 'steps': NUMITER}
+MIN_START_ENERGY = 55
+SCHEDULE = {'tmin': 1, 'tmax': 10, 'steps': NUMITER}
 #-----------------------------------------------#
 
 user, created = User.objects.get_or_create(username=username)
@@ -126,8 +127,12 @@ def run(schedule=None):
         return energy
 
     # init
-    numstart = random.randint(10, 30)
-    state = random.sample(cfkeys, numstart)
+    start_energy = 999999
+    while start_energy > MIN_START_ENERGY:
+        numstart = random.randint(10, 30)
+        state = random.sample(cfkeys, numstart)
+        start_energy = reserve_energy(state)
+        print "Starting energy is ", start_energy
 
     annealer = Annealer(reserve_energy, reserve_move)
 

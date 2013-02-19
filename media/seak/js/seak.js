@@ -80,11 +80,21 @@ function init_map() {
 
     markers = new OpenLayers.Layer.Markers( "Markers", {displayInLayerSwitcher: false});
 
+<<<<<<< HEAD
     var terrain = new OpenLayers.Layer.XYZ( "National Geographic Base Map",
         "http://server.arcgisonline.com/ArcGIS/rest/services/NatGeo_World_Map/MapServer/tile/${z}/${y}/${x}",
         {sphericalMercator: true, 
          opacity: 0.35,
          attribution: "National Geographic, Esri, DeLorme, NAVTEQ, UNEP-WCMC, USGS, NASA, ESA, METI, NRCAN, GEBCO, NOAA, iPC" } 
+=======
+    var terrain = new OpenLayers.Layer.XYZ( "Terrain Base Map",
+        //"http://d.tiles.mapbox.com/v3/examples.map-4l7djmvo/${z}/${x}/${y}.png",
+        //"http://server.arcgisonline.com/ArcGIS/rest/services/NatGeo_World_Map/MapServer/tile/${z}/${y}/${x}",
+        "http://server.arcgisonline.com/ArcGIS/rest/services/World_Terrain_Base/MapServer/tile/${z}/${y}/${x}.jpg",
+        {sphericalMercator: true, 
+         opacity: 1.0,
+         attribution: "ESRI" } 
+>>>>>>> watershed well and basemap
     );
 
     var pu_utfgrid = new OpenLayers.Layer.UTFGrid({
@@ -275,7 +285,7 @@ function init_map() {
     map.addControl(utfClickControl);
 
     var nameCallback = function(infoLookup) {
-        $("#watershed-name").hide();
+        $(".watershed-well").hide();
         $.each(infoLookup, function(k, info) {
             if (info && info.data && info.data[js_opts.name_field]) {
                 $("#watershed-name").html(info.data[js_opts.name_field]);

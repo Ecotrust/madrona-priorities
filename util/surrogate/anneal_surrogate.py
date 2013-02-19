@@ -13,20 +13,23 @@ import time
 import random
 from anneal import Annealer
 import numpy as np
-
-user, created = User.objects.get_or_create(username='mperry')
-
-settings.MARXAN_NUMREPS = 3
-settings.MARXAN_NUMITNS = 100000
+from datetime import datetime
 
 #-----------------------------------------------#
 #-------------- Configuration ------------------#
 #-----------------------------------------------#
-NUMREPS = 30
-NUMITER = 200
-SCHEDULE = {'tmin': 1, 'tmax': 1000, 'steps': 20}
-#SCHEDULE = None
+username = 'surrogate'
+settings.MARXAN_NUMREPS = 3
+settings.MARXAN_NUMITNS = 550000
+
+NUMREPS = 5 
+NUMITER = 20
+SCHEDULE = {'tmin': 1, 'tmax': 15, 'steps': NUMITER}
 #-----------------------------------------------#
+
+user, created = User.objects.get_or_create(username=username)
+wp = Scenario.objects.filter(user__username=username)
+wp.delete()
 
 geography_list = [x.fid for x in PlanningUnit.objects.all()]
 
@@ -46,8 +49,6 @@ for c in cfs:
 num_cfs = len(cfkeys)
 
 def run(schedule=None):
-    numstart = random.randint(10, 40)
-    state = random.sample(cfkeys, numstart)
 
     def reserve_move(state):
         """
@@ -77,7 +78,7 @@ def run(schedule=None):
         the Marxan objective function (see Appendix B in Marxan manual)
         but at least we have access to it!
         """
-        energy = 0
+        start = datetime.now()
 
         target_dict = {}
         penalty_dict = {}
@@ -118,27 +119,23 @@ def run(schedule=None):
         res = wp.results
         energy = res['surrogate']['objective_score']
 
-        print "-----------------"
-        print json.dumps(res['surrogate'], indent=2)
-        print "..."
+        elapsed = datetime.now() - start 
+
+        print "Scenario %d\t\t%s secs\t\tscore = %s" % (wp.id, elapsed.seconds + elapsed.microseconds/1000000.0, energy)
 
         return energy
 
-    annealer = Annealer(reserve_energy, reserve_move)
-    if schedule is None:
-       # Automatically chosen temperature schedule
-       schedule = annealer.auto(state, minutes=0.3)
+    # init
+    numstart = random.randint(10, 30)
+    state = random.sample(cfkeys, numstart)
 
-    try:
-        schedule['steps'] = NUMITER
-    except:
-        pass # just keep the auto one
+    annealer = Annealer(reserve_energy, reserve_move)
 
     print '---\nAnnealing from %.2f to %.2f over %i steps:' % (schedule['tmax'], 
             schedule['tmin'], schedule['steps'])
 
     state, e = annealer.anneal(state, schedule['tmax'], schedule['tmin'], 
-                               schedule['steps'], updates=schedule['steps'])
+                               schedule['steps'], updates=int(schedule['steps']/3.))
 
     print "Reserve cost = %r" % reserve_energy(state)
     state.sort()

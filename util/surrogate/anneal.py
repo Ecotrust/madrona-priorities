@@ -116,9 +116,12 @@ class Annealer:
                     (T, E, time_string(elapsed) )
             else:
                 remain = ( steps - step ) * ( elapsed / step )
+                print 
+                print ' Temperature        Energy    Accept   Improve     Elapsed   Remaining'
                 print '%12.2f  %12.2f  %7.2f%%  %7.2f%%  %s  %s' % \
                     (T, E, 100.0*acceptance, 100.0*improvement,
                         time_string(elapsed), time_string(remain))
+                print
         
         # Precompute factor for exponential cooling from Tmax to Tmin
         if Tmin <= 0.0:

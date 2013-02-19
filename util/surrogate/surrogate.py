@@ -12,7 +12,7 @@ from django.conf import settings
 import time
 import random
 
-user, created = User.objects.get_or_create(username='mperry')
+user, created = User.objects.get_or_create(username='surrogate')
 
 settings.MARXAN_NUMREPS = 3 # 7x less
 settings.MARXAN_NUMITNS = 100000  # 10x less

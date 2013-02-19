@@ -66,8 +66,8 @@
                     <td>{{v.label}}</td>
                     {% if slider_mode == "single"%}
                         <td>
-                            <span class="hide" title="{{v.penalty}}"></span>
-                            <span>{{v.penalty|percentage}}</span>
+                            <span class="hide" title="{{v.target}}"></span>
+                            <span>{{v.target|percentage}}</span>
                             <span class="debug-only">(target:{{v.target|percentage}})</span>
                         </td>
                     {% elif slider_mode == 'dual' %}

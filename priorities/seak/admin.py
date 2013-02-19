@@ -1,4 +1,4 @@
-from seak.models import Folder, ConservationFeature, PlanningUnit, PuVsCf, PuVsCost, Cost
+from seak.models import Folder, ConservationFeature, PlanningUnit, PuVsCf, PuVsCost, Cost, Scenario
 from django.contrib import admin
 
 admin.site.register(Folder)
@@ -7,6 +7,7 @@ admin.site.register(PlanningUnit)
 admin.site.register(Cost)
 admin.site.register(PuVsCf)
 admin.site.register(PuVsCost)
+admin.site.register(Scenario)
 
 # Override flatblock admin
 from flatblocks.models import FlatBlock

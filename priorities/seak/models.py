@@ -629,6 +629,26 @@ class Scenario(Analysis):
             name = k.replace("-", " ").title()
             costs[name] = v
 
+        surrogate = {
+            'species_targeted': 0,  # cost = this
+            'species_represented_50': 0, 
+            'species_not_represented': 0, 
+        }
+        missed = []
+        implied_target = 0.5
+     
+        for s in species:
+            if s['target'] > 0 and s['target_prop'] > 0:
+                surrogate['species_targeted'] += 1
+            else:
+                if s['pcttotal'] >= implied_target:
+                    surrogate['species_represented_50'] += 1
+                else:
+                    missed.append( 2 * (implied_target - s['pcttotal']) / implied_target )
+                    surrogate['species_not_represented'] += 1
+
+        surrogate['objective_score'] = surrogate['species_targeted'] + sum(missed)
+
         res = {
             'costs': costs, #cost_weights
             'geography': geography,
@@ -641,6 +661,7 @@ class Scenario(Analysis):
             'units': best,
             'species': species, 
             'bbox': bbox,
+            'surrogate': surrogate,
         }
 
         return res

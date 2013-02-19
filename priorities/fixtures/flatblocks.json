@@ -1,155 +1,11 @@
 [
   {
-    "pk": 6, 
-    "model": "flatblocks.flatblock", 
-    "fields": {
-      "content": "<p>\r\nPlease read the detailed <a href=\"/docs.html\">documentation</a> to gain an understanding of the purpose, limitations and products associated with this tool.  All users are able to view priorities, pan and zoom using the map tool and explore input data sets pertaining to aquatic species as well as inputs into the climate change, watershed condition and aquatic invasives analyses.  Registered users sign in by clicking on the \u201csign in\u201d menu in the upper right hand corner.\r\n</p>\r\n\r\n<h3>Review Regional Aquatic Priorities</h3>\r\n<p>\r\nThe map to the right represents regional aquatic priorities identified by USFWS using this decision support tool.  On this map, the darker areas represent those areas that are considered high priority. For additional information on how these priorities were created the detailed <a href=\"/docs.html\">documentation</a>.\r\n</p>\r\n\r\n<p>\r\nClick the \u201cdata and priorities\u201d tab at the top of this page and there you will see the priorities layer at the top of the tree view under the \u201cRegional Priorities\u201d heading. You can click on each sub-basin in the map for additional information specific to the level of importance, sub-basin name and area and prioritization constraints such as vulnerability to climate change, watershed condition and vulnerability to aquatic invasives.\r\n</p>\r\n\r\n<h3>Explore data inputs</h3>\r\n<p>\r\nAlso available to explore are data used to generate the priorities including species specific information and watershed factors related to climate change, watershed condition and aquatic invasives.  These data are under the heading \u201cPriorities input data\u201d.  To explore these layers, click on the arrow next to the heading and a tree view will expand exposing the layers.  Click on the check box next to the desired layer and you will see it appear on the map.  Many of these data are imbedded in subsequent sub-folders.  For additional information on any of these data layers, please see the <a href=\"/home/data_dictionary.pdf\">data dictionary</a>.\r\n\r\n</p>\r\n", 
-      "header": "", 
-      "slug": "about-content"
-    }
-  }, 
-  {
-    "pk": 16, 
-    "model": "flatblocks.flatblock", 
-    "fields": {
-      "content": "watersheds", 
-      "header": "", 
-      "slug": "planning-units"
-    }
-  }, 
-  {
-    "pk": 17, 
-    "model": "flatblocks.flatblock", 
-    "fields": {
-      "content": "Select the watersheds that define your geographic region of interest.", 
-      "header": "", 
-      "slug": "form-geography-header"
-    }
-  }, 
-  {
-    "pk": 15, 
-    "model": "flatblocks.flatblock", 
-    "fields": {
-      "content": "Setting prioritization constraints helps by avoiding costly or high-risk regions.", 
-      "header": "", 
-      "slug": "form-costs-description"
-    }
-  }, 
-  {
-    "pk": 11, 
-    "model": "flatblocks.flatblock", 
-    "fields": {
-      "content": "Planning Units", 
-      "header": "", 
-      "slug": "show-planning-units"
-    }
-  }, 
-  {
-    "pk": 8, 
-    "model": "flatblocks.flatblock", 
-    "fields": {
-      "content": "Inputs", 
-      "header": "", 
-      "slug": "show-inputs"
-    }
-  }, 
-  {
-    "pk": 9, 
-    "model": "flatblocks.flatblock", 
-    "fields": {
-      "content": "Results Summary", 
-      "header": "", 
-      "slug": "show-results-summary"
-    }
-  }, 
-  {
-    "pk": 23, 
-    "model": "flatblocks.flatblock", 
-    "fields": {
-      "content": "Geography", 
-      "header": "", 
-      "slug": "geography"
-    }
-  }, 
-  {
-    "pk": 25, 
-    "model": "flatblocks.flatblock", 
-    "fields": {
-      "content": "There are currently no shared scenarios available.\r\n<br/><br/>\r\nYour colleagues can share their prioritization scenarios allowing you to view results and copy them to your own work space for further modification.", 
-      "header": "", 
-      "slug": "new-share-scenario"
-    }
-  }, 
-  {
-    "pk": 26, 
-    "model": "flatblocks.flatblock", 
-    "fields": {
-      "content": "Manage", 
-      "header": "", 
-      "slug": "manage"
-    }
-  }, 
-  {
-    "pk": 27, 
-    "model": "flatblocks.flatblock", 
-    "fields": {
-      "content": "Collaborate", 
-      "header": "", 
-      "slug": "shared"
-    }
-  }, 
-  {
-    "pk": 21, 
-    "model": "flatblocks.flatblock", 
-    "fields": {
-      "content": "Objectives", 
-      "header": "", 
-      "slug": "targets"
-    }
-  }, 
-  {
-    "pk": 22, 
-    "model": "flatblocks.flatblock", 
-    "fields": {
-      "content": "Constraints", 
-      "header": "", 
-      "slug": "constraints"
-    }
-  }, 
-  {
-    "pk": 3, 
-    "model": "flatblocks.flatblock", 
-    "fields": {
-      "content": "You haven't created any prioritization scenarios yet.\r\n<br/><br/>\r\nYou can create customized prioritization scenarios, view the results on the map, study the output reports, export to various format, save them for future use, edit them and share them with colleagues. ", 
-      "header": "", 
-      "slug": "new-manage-scenario"
-    }
-  }, 
-  {
-    "pk": 18, 
-    "model": "flatblocks.flatblock", 
-    "fields": {
-      "content": "<h4>Scenario should be rerun</h4> New data has been loaded into the prioritization tool since this scenario was created. We recommended that you <em>Edit</em> and rerun the scenario to make sure the results are still valid with the current data.", 
-      "header": "", 
-      "slug": "scenario-expired-message"
-    }
-  }, 
-  {
     "pk": 19, 
     "model": "flatblocks.flatblock", 
     "fields": {
       "content": "For each conservation objective, the chart below shows how much of the total potentially available convservation value is represented by this solution.", 
       "header": "", 
       "slug": "show-targets-explanation"
-    }
-  }, 
-  {
-    "pk": 14, 
-    "model": "flatblocks.flatblock", 
-    "fields": {
-      "content": "In addition to focal species, prioritize watersheds based the following factors.", 
-      "header": "", 
-      "slug": "form-costs-header"
     }
   }, 
   {
@@ -192,7 +48,7 @@
     "pk": 4, 
     "model": "flatblocks.flatblock", 
     "fields": {
-      "content": "Welcome to the Madrona Priorities Tool", 
+      "content": "Welcome to the BLM Juniper Management Tool", 
       "header": "", 
       "slug": "about-header"
     }
@@ -201,7 +57,7 @@
     "pk": 5, 
     "model": "flatblocks.flatblock", 
     "fields": {
-      "content": "A prioritization tool for xyz. ", 
+      "content": "A juniper management prioritization support tool for Eastern Oregon. ", 
       "header": "", 
       "slug": "about-intro"
     }
@@ -210,7 +66,7 @@
     "pk": 2, 
     "model": "flatblocks.flatblock", 
     "fields": {
-      "content": "This system will enable stakeholders to engage in strategic landscape-scale planning for conservation priorities.", 
+      "content": "Ecotrust and the BLM have partnered to develop a conservation decision support system for Juniper management in Oregon.\r\n\r\nThis system will enable stakeholders to engage in strategic landscape-scale planning for Juniper management and sage grouse habitat conservation priorities for Oregon BLM lands.", 
       "header": "", 
       "slug": "home_text"
     }
@@ -237,7 +93,7 @@
     "pk": 1, 
     "model": "flatblocks.flatblock", 
     "fields": {
-      "content": "Madrona Priorities Tool", 
+      "content": "Oregon Juniper Management Tool", 
       "header": "", 
       "slug": "title"
     }
@@ -315,30 +171,12 @@
     }
   }, 
   {
-    "pk": 20, 
-    "model": "flatblocks.flatblock", 
-    "fields": {
-      "content": "Total Habitat Captured", 
-      "header": "", 
-      "slug": "show-percent-met"
-    }
-  }, 
-  {
     "pk": 12, 
     "model": "flatblocks.flatblock", 
     "fields": {
       "content": "Set Targets", 
       "header": "", 
       "slug": "form-conservationfeature-header"
-    }
-  }, 
-  {
-    "pk": 13, 
-    "model": "flatblocks.flatblock", 
-    "fields": {
-      "content": "For each management objective, specify the desired acreage to target for removal.", 
-      "header": "", 
-      "slug": "form-conservationfeature-description"
     }
   }, 
   {
@@ -369,6 +207,69 @@
     }
   }, 
   {
+    "pk": 42, 
+    "model": "flatblocks.flatblock", 
+    "fields": {
+      "content": "Or, if you need to fine-tune the geography, you can use the map draw a box around additional watersheds. To navigate, use the keyboard controls (+/- to zoom, arrow keys to pan). If you need to undo the selection, click on the map away from the study region.", 
+      "header": "", 
+      "slug": "geography-fine-tune"
+    }
+  }, 
+  {
+    "pk": 13, 
+    "model": "flatblocks.flatblock", 
+    "fields": {
+      "content": "For each management objective, specify the acreage targeted for treatment.", 
+      "header": "", 
+      "slug": "form-conservationfeature-description"
+    }
+  }, 
+  {
+    "pk": 44, 
+    "model": "flatblocks.flatblock", 
+    "fields": {
+      "content": "Select Data to Map", 
+      "header": "", 
+      "slug": "tab-title-data"
+    }
+  }, 
+  {
+    "pk": 46, 
+    "model": "flatblocks.flatblock", 
+    "fields": {
+      "content": "View Map Legend", 
+      "header": "", 
+      "slug": "tab-title-legend"
+    }
+  }, 
+  {
+    "pk": 14, 
+    "model": "flatblocks.flatblock", 
+    "fields": {
+      "content": "Set prioritization costs", 
+      "header": "", 
+      "slug": "form-costs-header"
+    }
+  }, 
+  {
+    "pk": 15, 
+    "model": "flatblocks.flatblock", 
+    "fields": {
+      "content": "In addition to the areas you targeted earlier, prioritize watersheds based the following factors.", 
+      "header": "", 
+      "slug": "form-costs-description"
+    }
+  }, 
+  {
+    "pk": 20, 
+    "model": "flatblocks.flatblock", 
+    "fields": {
+      "content": "Total Acres Captured", 
+      "header": "", 
+      "slug": "show-percent-met"
+    }
+  }, 
+  {
     "pk": 41, 
     "model": "flatblocks.flatblock", 
     "fields": {
@@ -378,39 +279,138 @@
     }
   }, 
   {
-    "pk": 42, 
+    "pk": 6, 
     "model": "flatblocks.flatblock", 
     "fields": {
-      "content": "Or, if you need to fine-tune the geography, you can use the map draw a box around additional watersheds. To navigate, use the keyboard controls (+/- to zoom, arrow keys to pan). If you need to undo the selection, click on the map away from the study region.", 
+      "content": "<p>\r\nPlease read the detailed <a href=\"/docs.html\">documentation</a> to gain a better understanding of the purpose, limitations and products associated with this tool. All users are able to design the map by selecting what data layers to show, explore the map using pan and zoom functionality, and investigate data sets pertaining to juniper as well as wildlife species, protected lands and management. Registered users sign in by clicking on the \u201csign in\u201d menu in the upper right hand corner.\r\n\r\n<h3>Build a Map</h3>\r\n<p>\r\nTo begin exploring the Juniper Management Tool, click the \u201cSelect Data to Map\u201d tab at the top of the map page.  You will see six data themes that organize the spatial data into logical groupings. The <B>Base Map</B> heading layer at the top of the tree view will have different base maps to choose from, such as aerial imagery, topography or terrain.  These base maps were created by third party organizations, such as ESRI, National Geographic and Google. Ecotrust also created a base map specifically for this project.  Under <B>Base Layers</B> heading you can select data that will help orient you in the map, such as cities, highways and primary rivers.  The map will initially have the following layers selected as a base map for you: watershed boundaries, juniper utilization centers, roads, cities and basic terrain.  To see a specific watershed name simply hover your mouse over the watershed.  You can click on each watershed in the map for additional summarized information such the acreage of juniper phases, protected lands, sage grouse and pygmy rabbit habitat, and costs associated with various treatment options.\r\n</p>\r\n\r\n<h3>Explore Data Layers and Watershed Summarized Information</h3>\r\n<p>\r\nOnce your base map has been defined, there are additional data themes that organize pertinent data for juniper management, such as wildlife species and juniper phases. Other data sets available for viewing are data used to generate the priorities including species specific information and cost factors related to different treatment types and geographic variables.  These data are under the heading \u201cSummarized Data\u201d. To explore these layers, click on the arrow next to the heading and a tree view will expand exposing the layers. Click on the check box next to the desired layer and you will see it appear on the map. Many of these data are imbedded in subsequent sub-folders. For additional information on any of these data layers, please see the <a href=\"/home/data_dictionary.pdf\">data dictionary</a>. \r\n\r\n</p>\r\n", 
       "header": "", 
-      "slug": "geography-fine-tune"
+      "slug": "about-content"
     }
-  },
+  }, 
+  {
+    "pk": 16, 
+    "model": "flatblocks.flatblock", 
+    "fields": {
+      "content": "watersheds", 
+      "header": "", 
+      "slug": "planning-units"
+    }
+  }, 
+  {
+    "pk": 8, 
+    "model": "flatblocks.flatblock", 
+    "fields": {
+      "content": "Inputs", 
+      "header": "", 
+      "slug": "show-inputs"
+    }
+  }, 
+  {
+    "pk": 9, 
+    "model": "flatblocks.flatblock", 
+    "fields": {
+      "content": "Results Summary", 
+      "header": "", 
+      "slug": "show-results-summary"
+    }
+  }, 
+  {
+    "pk": 25, 
+    "model": "flatblocks.flatblock", 
+    "fields": {
+      "content": "There are currently no shared scenarios available.\r\n<br/><br/>\r\nYour colleagues can share their prioritization scenarios allowing you to view results and copy them to your own work space for further modification.", 
+      "header": "", 
+      "slug": "new-share-scenario"
+    }
+  }, 
+  {
+    "pk": 26, 
+    "model": "flatblocks.flatblock", 
+    "fields": {
+      "content": "Manage", 
+      "header": "", 
+      "slug": "manage"
+    }
+  }, 
+  {
+    "pk": 3, 
+    "model": "flatblocks.flatblock", 
+    "fields": {
+      "content": "You haven't created any prioritization scenarios yet.\r\n<br/><br/>\r\nYou can create customized prioritization scenarios, view the results on the map, study the output reports, export to various format, save them for future use, edit them and share them with colleagues. ", 
+      "header": "", 
+      "slug": "new-manage-scenario"
+    }
+  }, 
+  {
+    "pk": 23, 
+    "model": "flatblocks.flatblock", 
+    "fields": {
+      "content": "Select target", 
+      "header": "", 
+      "slug": "geography"
+    }
+  }, 
+  {
+    "pk": 17, 
+    "model": "flatblocks.flatblock", 
+    "fields": {
+      "content": "Select the watersheds that best define areas of your management interest.", 
+      "header": "", 
+      "slug": "form-geography-header"
+    }
+  }, 
+  {
+    "pk": 18, 
+    "model": "flatblocks.flatblock", 
+    "fields": {
+      "content": "<h4>Scenario should be rerun</h4> New data has been loaded into the prioritization tool since this scenario was created. We recommended that you <em>Edit</em> and rerun the scenario to make sure the results are still valid with the current data.", 
+      "header": "", 
+      "slug": "scenario-expired-message"
+    }
+  }, 
+  {
+    "pk": 27, 
+    "model": "flatblocks.flatblock", 
+    "fields": {
+      "content": "Collaborate", 
+      "header": "", 
+      "slug": "shared"
+    }
+  }, 
+  {
+    "pk": 21, 
+    "model": "flatblocks.flatblock", 
+    "fields": {
+      "content": "Objectives", 
+      "header": "", 
+      "slug": "targets"
+    }
+  }, 
+  {
+    "pk": 22, 
+    "model": "flatblocks.flatblock", 
+    "fields": {
+      "content": "Costs", 
+      "header": "", 
+      "slug": "constraints"
+    }
+  }, 
   {
     "pk": 43, 
     "model": "flatblocks.flatblock", 
     "fields": {
-      "content": "Other Data", 
+      "content": "Build Scenarios", 
       "header": "", 
-      "slug": "show-aux"
+      "slug": "tab-title-scenario"
     }
   }, 
-  {
-    "pk": 44, 
-    "model": "flatblocks.flatblock", 
-    "fields": {
-      "content": "<h1>Help</h1>", 
-      "header": "", 
-      "slug": "help"
-    }
-  },
   {
     "pk": 45, 
     "model": "flatblocks.flatblock", 
     "fields": {
-      "content": "Watersheds", 
+      "content": "View Data Selected", 
       "header": "", 
-      "slug": "show-planning-units-tab"
+      "slug": "tab-title-active"
     }
   }
 ]

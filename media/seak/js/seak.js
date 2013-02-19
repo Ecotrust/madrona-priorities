@@ -294,15 +294,15 @@ function init_map() {
     map.setCenter(pt, js_opts.start_zoom);
 }
 
-// dataTables plugin to sort strings by hidden title attribute
+// dataTables plugin to sort number OR string by hidden title attribute
 jQuery.extend( jQuery.fn.dataTableExt.oSort, {
     "title-numeric-pre": function ( a ) {
-        try { 
-            var x = a.match(/title="*(-?[0-9\.]+)/)[1];
-            return parseFloat( x );
-        } catch(err) {
-            return a.match(/title="(.*?)"/)[1].toLowerCase();
-        }
+      try { 
+          var x = a.match(/title="*(-?[0-9\.]+)/)[1];
+          return parseFloat( x );
+      } catch(err) {
+          return a.match(/title="(.*?)"/)[1].toLowerCase();
+      }
     },
 
     "title-numeric-asc": function ( a, b ) {

@@ -128,7 +128,7 @@ div.tab-content-show {
     text-align:left;
     margin: 4px;
 }
-#watershed-name {
+.watershed-well {
     position: absolute; 
     z-index: 1042;
     float:right;

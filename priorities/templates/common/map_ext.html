@@ -293,7 +293,9 @@
                 <div data-bind="if: !scenarios.planningUnitsLoadComplete()" id="map-loading"> 
                     <img alt="loading" src="/media/img/ajax-loader.gif"/> 
                 </div>
-                <div id="watershed-name" class="well hide">
+                <div class="watershed-well well hide">
+                    <h4> Watershed </h4>
+                    <p id="watershed-name"></p>
                 </div>
                 <div id="vector-attributes" class="well" data-bind="visible: app.viewModel.layers.attributeData().length">
                     <h4> Utilization Center </h4>

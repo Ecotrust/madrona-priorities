@@ -59,7 +59,7 @@ MARXAN_BIN =  '/usr/local/marxan243/MarOpt_v243_Linux32' # or 64 bit?
 MARXAN_OUTDIR =  os.path.realpath(os.path.join(os.path.dirname(__file__), '..', 'marxan_output'))
 MARXAN_TEMPLATEDIR = os.path.join(MARXAN_OUTDIR, 'template')
 MARXAN_NUMREPS = 20
-MARXAN_NUMITNS = 1000000
+MARXAN_NUMITNS = 2000000
 
 LOG_FILE = os.path.realpath(os.path.join(os.path.dirname(__file__), '..', 'logs', 'seak.log'))
 MEDIA_ROOT = os.path.realpath(os.path.join(os.path.dirname(__file__), '..', 'mediaroot'))
@@ -116,7 +116,7 @@ JS_OPTS = {
     'zoom_on_select': False,
 }
 
-ADD_SCALEFACTOR_CONSTANT = 3 # 0==moderately weight costs, 5==meet targets at (almost) any cost
+ADD_SCALEFACTOR_CONSTANT = 5 # 0==moderately weight costs, 5==meet targets at (almost) any cost
 
 CACHE_TIMEOUT = 60 * 60 * 24 * 365
 

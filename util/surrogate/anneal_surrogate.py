@@ -22,15 +22,15 @@ username = 'surrogate'
 settings.MARXAN_NUMREPS = 3
 settings.MARXAN_NUMITNS = 550000
 
-NUMREPS = 5 
+NUMREPS = 50
 NUMITER = 20
-MIN_START_ENERGY = 55
+MAX_START_ENERGY = 55
 SCHEDULE = {'tmin': 1, 'tmax': 10, 'steps': NUMITER}
 #-----------------------------------------------#
 
 user, created = User.objects.get_or_create(username=username)
 wp = Scenario.objects.filter(user__username=username)
-wp.delete()
+#wp.delete()
 
 geography_list = [x.fid for x in PlanningUnit.objects.all()]
 
@@ -128,7 +128,7 @@ def run(schedule=None):
 
     # init
     start_energy = 999999
-    while start_energy > MIN_START_ENERGY:
+    while start_energy > MAX_START_ENERGY:
         numstart = random.randint(10, 30)
         state = random.sample(cfkeys, numstart)
         start_energy = reserve_energy(state)

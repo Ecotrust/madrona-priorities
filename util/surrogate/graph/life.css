@@ -4,17 +4,11 @@ body, div, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, figure, form, fi
 	padding: 0;
 }
 body {
-    font-family: serif;
     padding-top: 20px; 
+    background-color: #e2e2e4 !important;
 }
-h1 {
-    font-family: serif;
-    font-size: 3.0em;
-}
-h2 {
-    font-family: serif;
-    font-size: 1.5em;
-    text-transform: uppercase;
+.well {
+    background: white !important; 
 }
 p { line-height: 1.4em; margin-bottom: 1.0em; }
 a { color: #821122; }
@@ -40,30 +34,43 @@ a { color: #821122; }
 
 #text-filters {
     font-family: Arial, sans-serif;
-    margin-bottom: 20px;
-    float: right
+    margin-bottom: 2px;
+    float: right;
 }
+ #text-filter {
+    height: 16px; 
+    width: 146px; 
+ }
 
 #vis {
     min-height: 550px;
+    border-top: 1px solid #e2e2e2; 
 }
+
 #blurb {
-    height: 60px;
-    border-top: 1px solid #e2e2e2;
-    padding-top: 20px;
+    height: 20px;
+    padding-top: 5px;
+    padding-left: 65px;
+    float:right;
 }
 
 path {
-    stroke: #d2d2d2;
-    stroke-width: 0.9;
+    stroke: #a2a2a2;
+    stroke-width: 2.9;
+    stroke-opacity: 0.1;
 	fill: none;
 }
 path.current, path.highlight.current {
     stroke: #000;
     stroke-width: 2.2;
+    stroke-opacity: 1.0;
     z-index: 999999 !important;
 }
-.highlight { z-index: 999999 !important; stroke-width: 2.2px; } 
+.highlight { 
+    stroke-opacity: 1.0;
+    z-index: 999999 !important; 
+    stroke-width: 2.2px; 
+} 
 
 .widespread-salmon.highlight { stroke: #895881; }
 .widespread-steelhead.highlight { stroke: #ED7C31; }

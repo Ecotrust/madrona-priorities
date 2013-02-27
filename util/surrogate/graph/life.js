@@ -115,9 +115,9 @@ vis.append("svg:line")
 vis.append("svg:text")
     .attr("class", "x label")
     .attr("text-anchor", "end")
-    .attr("x", w/2.0 + 200)
+    .attr("x", w/2.0 + 100)
     .attr("y", h - 6)
-    .text("Targeted percent of habitat for single species");
+    .text("Single species target proportion ");
 
 vis.append("svg:text")
     .attr("class", "y label")
@@ -125,7 +125,7 @@ vis.append("svg:text")
     .attr("y", 1)
     .attr("x", -60)
     .attr("transform", "rotate(-90)")
-    .text("Number of species represented in single-species solution")
+    .text("Total number of species represented")
     .attr("dy", ".75em");
 
 vis.selectAll(".xLabel")

@@ -1,0 +1,102 @@
+/* Normalize */
+body, div, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, figure, form, fieldset, input, p, blockquote, th, td, legend {
+	margin: 0;
+	padding: 0;
+}
+body {
+    font-family: serif;
+    padding-top: 20px; 
+}
+h1 {
+    font-family: serif;
+    font-size: 3.0em;
+}
+h2 {
+    font-family: serif;
+    font-size: 1.5em;
+    text-transform: uppercase;
+}
+p { line-height: 1.4em; margin-bottom: 1.0em; }
+a { color: #821122; }
+#content {
+    width: 925px;
+    margin: 0 auto;
+}
+#filters {
+    font-family: Arial, sans-serif;
+    margin-bottom: 20px;
+}
+#filters a {
+    color: #000;
+    font-size: 12px;
+    padding: 5px;
+    background: #e2e2e2;
+    cursor: pointer;
+    margin-right: 3px;
+}
+#filters a:last-child {
+    margin-right: 0;
+}
+
+#text-filters {
+    font-family: Arial, sans-serif;
+    margin-bottom: 20px;
+    float: right
+}
+
+#vis {
+    min-height: 550px;
+}
+#blurb {
+    height: 60px;
+    border-top: 1px solid #e2e2e2;
+    padding-top: 20px;
+}
+
+path {
+    stroke: #d2d2d2;
+    stroke-width: 0.9;
+	fill: none;
+}
+path.current, path.highlight.current {
+    stroke: #000;
+    stroke-width: 2.2;
+    z-index: 999999 !important;
+}
+.highlight { z-index: 999999 !important; stroke-width: 2.2px; } 
+
+.widespread-salmon.highlight { stroke: #895881; }
+.widespread-steelhead.highlight { stroke: #ED7C31; }
+.widespread-trout.highlight { stroke: #82A5C0; }
+.widespread-lamprey.highlight { stroke: #00BBD6; }
+.locally-endemic.highlight { stroke: #6E9E75; }
+
+#filters a.widespread-salmon { background: #895881; color: #fff; }
+#filters a.widespread-steelhead { background: #ED7C31; color: #fff; }
+#filters a.widespread-trout { background: #82A5C0; color: #fff; }
+#filters a.widespread-lamprey { background: #00BBD6; color: #fff; }
+#filters a.locally-endemic { background: #6E9E75; color: #fff; }
+
+line {
+    stroke: black;
+}
+
+text {
+    font-family: Helvetica, Arial, sans-serif;
+    font-size: 11px;
+}
+.axis {
+    stroke-width: 0.8;
+    stroke: #000;
+}
+.xTicks, .yTicks {
+    stroke-width: 0.6;
+    stroke: #000;
+}
+
+.label {
+    font-size: 12pt;
+}
+
+#cite { font-size: 0.8em; text-align: right; margin-top:10px; padding-bottom: 20px; }
+#cite a { background: #e2e2e2; text-decoration: none; color: #821122; }

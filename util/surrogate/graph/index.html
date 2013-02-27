@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Surrogate Species</title>
+	<link rel="stylesheet" type="text/css" href="./life.css" />
+    <script type="text/javascript" src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+	<script type="text/javascript" src="d3.js"></script>
+	<script type="text/javascript" src="d3.time.js"></script>
+	<script type="text/javascript" src="d3.csv.js"></script>
+  </head>
+<body>
+<div id="main-wrapper">
+    <div id="content">
+        <div style="float:right"><img src="./ecotrust.jpg" title="Ecotrust" width="50" height="50" / ></div>
+        <h1>Surrogate Species</h1>
+        <p>Conserving landscape-scale habitats on a species-by-species basis is impractical. Instead we can target conservation of a select group of "surrogate species" while still supporting habitat for a wide range of species.</p>      
+        <p>Here we show how targeting single species at different levels effects the amount of habitat overlap with other species.</p>      
+        <div id="text-filters">
+            <input type="text" id="text-filter"></input> 
+        </div>
+        <div id="filters">
+            <!-- <a id="EAS">East Asia and Pacific</a> -->
+        </div><!-- @end #filters -->
+
+        <div id="blurb">
+            <div id="default-blurb"><em>Mouse over graph to indentify individual species/ESUs</em></div>
+            <div id="blurb-content"></div>
+        </div>
+
+
+        <div id="vis"></div>
+        <div id="cite">Source: Ecotrust</div>
+        
+    </div><!-- @end content -->
+</div><!-- @end #main-wrapper -->
+<script type="text/javascript" src="./life.js"></script>
+</body>
+</html>

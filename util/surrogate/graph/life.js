@@ -171,7 +171,7 @@ function onmouseover(d, i) {
     d3.select(this)
         .attr("class", currClass + " current");
  
-    var blurb = '<p class="badge badge-info">' + species + '</p>';
+    var blurb = '<p style="font-size:12pt;" class="text-success">' + species + '</p>';
     $("#default-blurb").empty();
     $("#default-blurb").hide();
     $("#blurb-content").html(blurb);

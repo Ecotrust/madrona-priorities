@@ -631,23 +631,29 @@ class Scenario(Analysis):
 
         surrogate = {
             'species_targeted': 0,  # cost = this
-            'species_represented_50': 0, 
-            'species_not_represented': 0, 
+            'species_represented': 0, 
+            'species_missed': 0, 
+            'species_under_represented': 0, 
         }
-        missed = []
-        implied_target = 0.5
+        score = 0
+        implied_target = 1.0
      
         for s in species:
             if s['target'] > 0 and s['target_prop'] > 0:
                 surrogate['species_targeted'] += 1
+                score += 2
             else:
                 if s['pcttotal'] >= implied_target:
-                    surrogate['species_represented_50'] += 1
+                    surrogate['species_represented'] += 1
+                    score += 0 
+                elif s['pcttotal'] < 0.00001:
+                    surrogate['species_missed'] += 1
+                    score += 2
                 else:
-                    missed.append( 2 * (implied_target - s['pcttotal']) / implied_target )
-                    surrogate['species_not_represented'] += 1
+                    surrogate['species_under_represented'] += 1
+                    score += (implied_target - s['pcttotal']) / implied_target
 
-        surrogate['objective_score'] = surrogate['species_targeted'] + sum(missed)
+        surrogate['objective_score'] = surrogate['species_targeted'] + score
 
         res = {
             'costs': costs, #cost_weights

@@ -95,6 +95,7 @@ d3.text('single_nocost.csv', 'text/csv', function(text) {
         $(this).toggleClass(categoryId);
         showCategory(categoryId);
     });
+    $("a#widespread-trout").click();
 });  
     
 

@@ -16,9 +16,6 @@
                                 <li>
                                     <a href="#active-tab-content" id="active-tab" data-toggle="tab">{% flatblock 'tab-title-active' 3600 %}</a>
                                 </li>
-                                <li>
-                                    <a href="#legend-tab-content" id="legend-tab" data-toggle="tab">{% flatblock 'tab-title-legend' 3600 %}</a>
-                                </li>
                                 <li data-bind="click: scenarios.switchMode.bind($data, 'manage')"> 
                                     <a href="#scenario-tab-content" id="scenario-tab" data-toggle="tab">{% flatblock 'tab-title-scenario' 3600 %}</a>
                                 </li>
@@ -26,9 +23,6 @@
                             <div class="tab-content">
                                 <div id="active-tab-content" class="tab-pane">
                                     <div>{% include "layer_manager/active.html" %}</div>
-                                </div>
-                                <div id="legend-tab-content" class="tab-pane">
-                                    <div>{% include "layer_manager/legend.html" %}</div>
                                 </div>
                                 <div id="data-tab-content" class="tab-pane active"> 
                                     <div>{% flatblock "pre-layer-list" 3600 %}</div>
@@ -290,6 +284,22 @@
 
           <div class="span6">
             <div class="outermap well">
+
+                <div id="layerswitcher-container">
+                    <button id="layerswitcher-button" class="btn btn-mini" 
+                        data-toggle="collapse" data-target="#layerswitcher-list">
+                        <p class="small">
+                            <i class="icon-align-justify"></i> 
+                            {% flatblock 'tab-title-legend' 3600 %} 
+                        </p>
+                    </button>
+                    <div class="clearfix"></div>
+                    <div id="layerswitcher-list" class="collapse"> 
+                        <div class="well" id="layerswitcher">{% include "layer_manager/legend.html" %}</div>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+
                 <div data-bind="if: !scenarios.planningUnitsLoadComplete()" id="map-loading"> 
                     <img alt="loading" src="/media/img/ajax-loader.gif"/> 
                 </div>

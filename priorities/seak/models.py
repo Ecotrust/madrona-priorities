@@ -606,6 +606,8 @@ class Scenario(Analysis):
             try:
                 stotal = float(starget/starget_prop)
                 spcttotal = sheld/stotal 
+                if spcttotal > 1.0:
+                    spcttotal = 1.0  # gaurd against rouding errors that might show > 100%
             except ZeroDivisionError:
                 stotal = 0
                 spcttotal = 0

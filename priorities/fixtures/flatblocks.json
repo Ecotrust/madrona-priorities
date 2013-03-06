@@ -1,11 +1,65 @@
 [
   {
+    "pk": 18, 
+    "model": "flatblocks.flatblock", 
+    "fields": {
+      "content": "<h3>Scenario should be rerun</h3> New data has been loaded into the prioritization tool since this scenario was created. It is <em>highly</em> recommended that you edit and rerun the scenario to make sure the results are still valid with the current data.", 
+      "header": "", 
+      "slug": "scenario-expired-message"
+    }
+  }, 
+  {
+    "pk": 45, 
+    "model": "flatblocks.flatblock", 
+    "fields": {
+      "content": "Watersheds", 
+      "header": "", 
+      "slug": "show-planning-units-tab"
+    }
+  }, 
+  {
     "pk": 6, 
     "model": "flatblocks.flatblock", 
     "fields": {
-      "content": "<p>\r\nPlease read the detailed <a href=\"/docs.html\">documentation</a> to gain an understanding of the purpose, limitations and products associated with this tool.  All users are able to view priorities, pan and zoom using the map tool and explore input data sets pertaining to aquatic species as well as inputs into the climate change, watershed condition and aquatic invasives analyses.  Registered users sign in by clicking on the \u201csign in\u201d menu in the upper right hand corner.\r\n</p>\r\n\r\n<h3>Review Regional Aquatic Priorities</h3>\r\n<p>\r\nThe map to the right represents regional aquatic priorities identified by USFWS using this decision support tool.  On this map, the darker areas represent those areas that are considered high priority. For additional information on how these priorities were created the detailed <a href=\"/docs.html\">documentation</a>.\r\n</p>\r\n\r\n<p>\r\nClick the \u201cdata and priorities\u201d tab at the top of this page and there you will see the priorities layer at the top of the tree view under the \u201cRegional Priorities\u201d heading. You can click on each sub-basin in the map for additional information specific to the level of importance, sub-basin name and area and prioritization constraints such as vulnerability to climate change, watershed condition and vulnerability to aquatic invasives.\r\n</p>\r\n\r\n<h3>Explore data inputs</h3>\r\n<p>\r\nAlso available to explore are data used to generate the priorities including species specific information and watershed factors related to climate change, watershed condition and aquatic invasives.  These data are under the heading \u201cPriorities input data\u201d.  To explore these layers, click on the arrow next to the heading and a tree view will expand exposing the layers.  Click on the check box next to the desired layer and you will see it appear on the map.  Many of these data are imbedded in subsequent sub-folders.  For additional information on any of these data layers, please see the <a href=\"/home/data_dictionary.pdf\">data dictionary</a>.\r\n\r\n</p>\r\n", 
+      "content": "<h2>Introduction</h2>\r\n<p>\r\nThis tool was created by Ecotrust for the U.S. Bureau of Land Management for use in their regional management activities. \r\n</p>\r\n\r\n<p>\r\nPlease read the detailed documentation below to gain an understanding of the purpose, limitations, and products associated with this tool.  All users are able to view priorities, pan and zoom using the map tool, and explore data sets pertaining to aquatic species, climate change, watershed condition, and aquatic invasive species analyses. Registered users may sign in by clicking on the \u201csign in\u201d menu in the upper right hand corner of each page.\r\n</p>\r\n\r\n<h2>Data and Methods</h2>\r\n<p>\r\nThis tool allows users to identify priority species and consider current and future landscape conditions in order to create watershed priorities across or within the North Pacific LCC region. The data and analyses that inform the tool's inputs are described below. Please see the <a href=\"/media/docs/BLMDataDictionary.pdf\">data dictionary</a> for a detailed list of data sources used to inform this tool.\r\n</p>\r\n\r\n<h3>Focal fish species data development</h3>\r\n<p>\r\nThe tool includes a variety of fish species distribution data, from wide-ranging salmon and steelhead to locally endemic fishes found in a few watersheds. These data were collected from a variety of sources, at varying scales and units of analysis. See the <a href=\"/media/docs/FocalFish.pdf\">detailed documentation on focal fish species</a> for additional information.\r\n</p>\r\n\r\n\r\n\r\n<h3>Watershed Condition</h3>\r\n<p>\r\nHealthy, functioning watersheds are essential for sustaining fish populations as well as fundamental ecosystem services. We relied on common indicators of watershed impairment, including water quality and human disturbance, to classify the relative ecological condition of each sub-basin. The subsequent relative watershed condition scores, if used in the prioritization process, will drive priorities toward less impaired watersheds. We developed our watershed condition index based on a combination of well-vetted existing approaches. Please see the <a href=\"/media/docs/WC.pdf\">detailed documentation</a> for a description of the approach to watershed condition mapping. \r\n</p>\r\n\r\n\r\n\r\n<h3>Vulnerability to Climate Change</h3>\r\n<p>\r\nClimate change has the potential to alter freshwater habitat in complex ways that we have yet to fully understand. These changes will greatly affect the health and distribution of fish species, particularly those adapted to cold water. To address these potential effects, we identified vulnerability to climate change based on projected changes in air temperature, stream flow regime, and wildfire risk . Areas that are relatively more vulnerable to climate change then are avoided (if possible) in the prioritization process when climate change vulnerability is considered. See the detailed documentation on the approach to identifying <a href=\"/media/docs/Climate.pdf\">climate change vulnerability</a> for additional information. \r\n</p>\r\n\r\n\r\n\r\n<h3>Vulnerability to Aquatic Invasion</h3>\r\n<p>\r\nThe introduction of non-native species is a major threat to the biodiversity of aquatic ecosystems, second only to habitat loss from development. An understanding of current and potential invasion is essential for conservation planning efforts. In this tool, we modeled vulnerability to aquatic species invasion using current non-native species distribution, water quality, and the distribution of common sources of invasion. Please see the detailed description of our <a href=\"/media/docs/AIS.pdf\">vulnerability to invasion</a> approach for additional information. \r\n</p>\r\n\r\n\r\n", 
       "header": "", 
       "slug": "about-content"
+    }
+  }, 
+  {
+    "pk": 3, 
+    "model": "flatblocks.flatblock", 
+    "fields": {
+      "content": "You haven't created any prioritization scenarios yet.\r\n<br/><br/>\r\nYou can create customized prioritization scenarios, view the results in the map, study the output reports, export to various formats, save them for future use, or edit and share them with colleagues. ", 
+      "header": "", 
+      "slug": "new-manage-scenario"
+    }
+  }, 
+  {
+    "pk": 5, 
+    "model": "flatblocks.flatblock", 
+    "fields": {
+      "content": "A prioritization tool for freshwater fish species in Oregon and eastern Washington", 
+      "header": "", 
+      "slug": "about-intro"
+    }
+  }, 
+  {
+    "pk": 19, 
+    "model": "flatblocks.flatblock", 
+    "fields": {
+      "content": "For each conservation objective, the chart below shows how much of the total potentially available conservation value is represented by this solution.", 
+      "header": "", 
+      "slug": "show-targets-explanation"
+    }
+  }, 
+  {
+    "pk": 10, 
+    "model": "flatblocks.flatblock", 
+    "fields": {
+      "content": "Focal Species", 
+      "header": "", 
+      "slug": "show-conservation-features"
     }
   }, 
   {
@@ -108,33 +162,6 @@
     }
   }, 
   {
-    "pk": 3, 
-    "model": "flatblocks.flatblock", 
-    "fields": {
-      "content": "You haven't created any prioritization scenarios yet.\r\n<br/><br/>\r\nYou can create customized prioritization scenarios, view the results on the map, study the output reports, export to various format, save them for future use, edit them and share them with colleagues. ", 
-      "header": "", 
-      "slug": "new-manage-scenario"
-    }
-  }, 
-  {
-    "pk": 18, 
-    "model": "flatblocks.flatblock", 
-    "fields": {
-      "content": "<h3>Scenario should be rerun</h3> New data has been loaded into the prioritization tool since this scenario was created. It is <em>highly</em> recommended that you Edit and rerun the scenario to make sure the results are still valid with the current data.", 
-      "header": "", 
-      "slug": "scenario-expired-message"
-    }
-  }, 
-  {
-    "pk": 19, 
-    "model": "flatblocks.flatblock", 
-    "fields": {
-      "content": "For each conservation objective, the chart below shows how much of the total potentially available convservation value is represented by this solution.", 
-      "header": "", 
-      "slug": "show-targets-explanation"
-    }
-  }, 
-  {
     "pk": 14, 
     "model": "flatblocks.flatblock", 
     "fields": {
@@ -186,24 +213,6 @@
       "content": "Welcome to the BLM Aquatic Priorities Tool", 
       "header": "", 
       "slug": "about-header"
-    }
-  }, 
-  {
-    "pk": 5, 
-    "model": "flatblocks.flatblock", 
-    "fields": {
-      "content": "Prioritization tool for Aquatic species in Oregon and eastern Washington. ", 
-      "header": "", 
-      "slug": "about-intro"
-    }
-  }, 
-  {
-    "pk": 2, 
-    "model": "flatblocks.flatblock", 
-    "fields": {
-      "content": "Ecotrust and the BLM have partnered to develop a conservation decision support system for Juniper management in Oregon.\r\n\r\nThis system will enable stakeholders to engage in strategic landscape-scale planning for Juniper management and sage grouse habitat conservation priorities for Oregon BLM lands.", 
-      "header": "", 
-      "slug": "home_text"
     }
   }, 
   {
@@ -297,15 +306,6 @@
     }
   }, 
   {
-    "pk": 10, 
-    "model": "flatblocks.flatblock", 
-    "fields": {
-      "content": "Management Objectives", 
-      "header": "", 
-      "slug": "show-conservation-features"
-    }
-  }, 
-  {
     "pk": 20, 
     "model": "flatblocks.flatblock", 
     "fields": {
@@ -360,15 +360,6 @@
     }
   }, 
   {
-    "pk": 41, 
-    "model": "flatblocks.flatblock", 
-    "fields": {
-      "content": "Total Costs", 
-      "header": "", 
-      "slug": "show-total-costs"
-    }
-  }, 
-  {
     "pk": 42, 
     "model": "flatblocks.flatblock", 
     "fields": {
@@ -376,7 +367,7 @@
       "header": "", 
       "slug": "geography-fine-tune"
     }
-  },
+  }, 
   {
     "pk": 43, 
     "model": "flatblocks.flatblock", 
@@ -387,21 +378,30 @@
     }
   }, 
   {
+    "pk": 41, 
+    "model": "flatblocks.flatblock", 
+    "fields": {
+      "content": "Total Costs", 
+      "header": "", 
+      "slug": "show-total-costs"
+    }
+  }, 
+  {
+    "pk": 2, 
+    "model": "flatblocks.flatblock", 
+    "fields": {
+      "content": "Ecotrust and the BLM have partnered to develop a conservation decision support system for aquatic species conservation in Oregon and eastern Washington.", 
+      "header": "", 
+      "slug": "home_text"
+    }
+  }, 
+  {
     "pk": 44, 
     "model": "flatblocks.flatblock", 
     "fields": {
-      "content": "<h1>Help</h1>", 
+      "content": "<h1>Help</h1>\r\n", 
       "header": "", 
       "slug": "help"
-    }
-  },
-  {
-    "pk": 45, 
-    "model": "flatblocks.flatblock", 
-    "fields": {
-      "content": "Watersheds", 
-      "header": "", 
-      "slug": "show-planning-units-tab"
     }
   }
 ]

@@ -77,9 +77,12 @@ contact: mperry@ecotrust.org
 Includes scenarios:
     %s
 
-    'bests' contains the number of scenarios in which the subbasin was included in the best run
-    'hits' contains the number of times the subbasin was included in any run, cumulative across scenarios.
+    'bests' contains the number of scenarios in which the watershed was included in the best run
+    'hits' contains the number of times the watershed was included in any run, cumulative across scenarios.
+    'blmratio' is the percentage of BLM land for each watershed
     """ % ('\n    '.join([i.name for i in instances]), )
+
+    readme = readme.replace("\n","\r\n")
 
     for fid in results.keys():
         r = results[fid]

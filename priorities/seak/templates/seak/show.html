@@ -116,7 +116,11 @@
                         <th> {% flatblock 'show-planning-units' 3600 %} </th> 
                         <th class="pu-show"> BLM Land (%) </th>
                         {%for k,v in results.units.1.costs.items %}
-                            {% if v > 0 %}<th>{{k|deslug}}</th> {% endif %}
+                        {% if v > 0 %}
+                            <th>
+                                {% if k == 'watershed-condition' %}Watershed Impairment{% else %}{{k|deslug}}{% endif %}
+                            </th> 
+                        {% endif %}
                         {%endfor%}
                     </tr>
                 </thead>

@@ -144,7 +144,7 @@
                         <td>
                             {% for k,v in w.auxs.items %}
                             {% if k == 'Density of Fish Bearing Streams on BLM land' %}
-                            {% if v %}{{v|percentage:2}}{% else %}--{% endif %}
+                            {% if v %}{{v|floatformat:5}}{% else %}--{% endif %}
                             {% endif %}
                             {% endfor %}
                         </td>

@@ -1,4 +1,3 @@
-
 Assume you have tested locally, pushed changes to the the project branch and are ready to roll the 
 changes out to a remote server.
 
@@ -6,14 +5,26 @@ changes out to a remote server.
 fab deploy
 ```
 
+
 If you want to upload a new dataset, update the local_data.py file and run
 
 ```
-fab import_dataset
+#scp to remote server
 ssh <remote server>
-# restart celeryd
-exit
-fab maintenance off # go live
+source <venv>/bin/activate
+cd <src>/priorities
+touch ../MAINTENANCE_MODE
+# edit local_import.sh
+sh local_import.sh
+python manage.py clear_cache
+rm -rf /tmp/<app>-stache
+python manage.py precache
+chmod 775 /tmp/<app>-stache
+chown mperry:www-data /tmp/<app>-stache
+touch ../deploy/wsgi.py
+sudo service celeryd_<app> restart
+# TEST
+touch ../MAINTENANCE_MODE
 ```
 
 The `fab maintenance_on` and `fab maintenance_off` switches can be used to take down the live site.

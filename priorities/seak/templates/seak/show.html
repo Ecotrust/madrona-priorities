@@ -38,6 +38,7 @@
             {% if show_aux %}
                 <li><a href="#aux" data-toggle="tab"><span>{% flatblock 'show-aux' 3600 %}</span></a></li>
             {% endif %}
+            <li><a href="#surrogate" data-toggle="tab"><span>{% flatblock 'show-surrogate' 3600 %}</span></a></li>
         {% endif %}
     </ul>
 
@@ -177,6 +178,52 @@
             </div>
         </div>
         {% endif %}
+
+        <div id="surrogate" class="tab-pane">
+            <div>
+                {% if results.surrogate %}
+
+                <h4> {% flatblock 'show-surrogate' 3600 %} Metrics </h4>
+                <br>
+                <div class="alert alert-info">
+                    {% flatblock 'surrogate-species-description' 36000 %}
+                </div>
+                <table class="table">
+                    <tbody>
+                        <tr>
+                            <th> Average Target Level</th>
+                            <td> {{results.surrogate.avg_target}} </td>
+                        </tr>
+                        <tr>
+                            <th> Number of species targeted </th>
+                            <td> {{results.surrogate.species_targeted}} </td>
+                        </tr>
+                        <tr>
+                            <th> Number of non-targeted species missing </th>
+                            <td> {{results.surrogate.species_missed}} </td>
+                        </tr>
+                        <tr>
+                            <th> Number of non-targeted species under-represented (<em>below average target</em>)</th>
+                            <td> {{results.surrogate.species_under_represented}} </td>
+                        </tr>
+                        <tr>
+                            <th> Number of non-targeted species adequately represented (<em>at or above average target</em>)</th>
+                            <td> {{results.surrogate.species_represented}} </td>
+                        </tr>
+                        <tr>
+                            <th> Objective function score* (<em>lower is better</em>)</th>
+                            <td> {{results.surrogate.objective_score|floatformat:2}} </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div>
+                    <strong>*</strong> {% flatblock 'surrogate-objective-description' 3600 %}
+                </div>
+
+                {% endif %}
+            </div>
+        </div>
 
         <div id="species" class="tab-pane">
             <div>

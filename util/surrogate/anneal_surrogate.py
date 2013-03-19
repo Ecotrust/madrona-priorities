@@ -8,7 +8,6 @@ setup_environ(settings)
 from seak.models import Scenario, ConservationFeature, PlanningUnit, Cost
 from django.contrib.auth.models import User
 from django.utils import simplejson as json
-from django.conf import settings
 import time
 import random
 from anneal import Annealer
@@ -19,25 +18,29 @@ from datetime import datetime
 #-------------- Configuration ------------------#
 #-----------------------------------------------#
 username = 'surrogate'
-settings.MARXAN_NUMREPS = 3
-settings.MARXAN_NUMITNS = 550000
+# set these in settings_local.py and `sudo service celeryd_usfw2 restart`
+#settings.MARXAN_NUMREPS = 3
+#settings.MARXAN_NUMITNS = 1000000
 
-NUMREPS = 50
-NUMITER = 20
-MAX_START_ENERGY = 55
+NUMREPS = 2
+NUMITER = 5
+
+MAX_START_ENERGY = 90  # don't accept a random start until we're below this
 SCHEDULE = {'tmin': 1, 'tmax': 10, 'steps': NUMITER}
 #-----------------------------------------------#
 
 user, created = User.objects.get_or_create(username=username)
 wp = Scenario.objects.filter(user__username=username)
-#wp.delete()
+wp.delete()
 
 geography_list = [x.fid for x in PlanningUnit.objects.all()]
 
 costs_dict = {} 
 for a in [c.slug for c in Cost.objects.all()]:
-    costs_dict[a] = 1
-
+    if a in ['watershed-condition-no-ais', ' invasives', ' climate']:
+        costs_dict[a] = 1
+    else:
+        costs_dict[a] = 0
 
 cfs =  ConservationFeature.objects.all()
 cfkeys = []

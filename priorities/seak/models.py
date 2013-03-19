@@ -636,14 +636,17 @@ class Scenario(Analysis):
             'species_under_represented': 0, 
         }
         score = 0
-        implied_target = 1.0
+
+        tp = [s['target_prop'] for s in species if s['target_prop'] > 0]
+        avg_target = sum(tp) / float(len(tp))
+        surrogate['avg_target'] = avg_target
      
         for s in species:
             if s['target'] > 0 and s['target_prop'] > 0:
                 surrogate['species_targeted'] += 1
                 score += 2
             else:
-                if s['pcttotal'] >= implied_target:
+                if s['pcttotal'] >= avg_target:
                     surrogate['species_represented'] += 1
                     score += 0 
                 elif s['pcttotal'] < 0.00001:
@@ -651,9 +654,9 @@ class Scenario(Analysis):
                     score += 2
                 else:
                     surrogate['species_under_represented'] += 1
-                    score += (implied_target - s['pcttotal']) / implied_target
+                    score += (avg_target - s['pcttotal']) / avg_target
 
-        surrogate['objective_score'] = surrogate['species_targeted'] + score
+        surrogate['objective_score'] = score
 
         res = {
             'costs': costs, #cost_weights

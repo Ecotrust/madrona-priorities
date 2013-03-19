@@ -40,6 +40,7 @@ def create_wp(target_dict, penalties_dict, costs_dict, geography_list, sf):
 
 
 if __name__ == "__main__":
+    print "deleting scenarios for %s"  % user.username
     wp = Scenario.objects.filter(user__username=user.username)
     wp.delete()
 
@@ -71,6 +72,8 @@ if __name__ == "__main__":
             costs_dict[a] = 1
 
         scalefactor = 5
+        print i 
+        continue
         wp = create_wp(target_dict, penalty_dict, costs_dict, geography_list, scalefactor)
         wp.save()
 

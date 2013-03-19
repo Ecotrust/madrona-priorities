@@ -496,7 +496,7 @@ class Scenario(Analysis):
         return json.dumps(serializable)
 
     @property
-    #@cachemethod("seak_scenario_%(id)s_results")
+    @cachemethod("seak_scenario_%(id)s_results")
     def results(self):
         targets = json.loads(self.input_targets)
         penalties = json.loads(self.input_penalties)

@@ -190,10 +190,7 @@
                 </div>
                 <table class="table">
                     <tbody>
-                        <tr>
-                            <th> Average Target Level</th>
-                            <td> {{results.surrogate.avg_target}} </td>
-                        </tr>
+                         
                         <tr>
                             <th> Number of species targeted </th>
                             <td> {{results.surrogate.species_targeted}} </td>
@@ -203,11 +200,11 @@
                             <td> {{results.surrogate.species_missed}} </td>
                         </tr>
                         <tr>
-                            <th> Number of non-targeted species under-represented (<em>below average target</em>)</th>
+                            <th> Number of non-targeted species under-represented (<em>below target of {{results.surrogate.avg_target|percentage}}</em>)</th>
                             <td> {{results.surrogate.species_under_represented}} </td>
                         </tr>
                         <tr>
-                            <th> Number of non-targeted species adequately represented (<em>at or above average target</em>)</th>
+                            <th> Number of non-targeted species adequately represented (<em>at or above target of {{results.surrogate.avg_target|percentage}}</em>)</th>
                             <td> {{results.surrogate.species_represented}} </td>
                         </tr>
                         <tr>
@@ -220,6 +217,9 @@
                 <div>
                     <strong>*</strong> {% flatblock 'surrogate-objective-description' 3600 %}
                 </div>
+
+                <br>
+                <p> For further analysis, visit the <a target="_blank" style="text-decoration:underline;" href="/media/surrogate/graph/index.html">single-species surrogate chart</a>.</p>
 
                 {% endif %}
             </div>

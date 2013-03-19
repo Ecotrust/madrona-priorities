@@ -1,11 +1,12 @@
 from django.core.management import setup_environ
 import os
 import sys
-sys.path.append(os.path.dirname(os.path.join('..', '..', 'priorities', __file__)))
+sys.path.append(os.path.dirname(os.path.abspath(os.path.join('..', '..', 'priorities', __file__))))
 import settings
 setup_environ(settings)
 #==================================#
 from seak.models import Scenario, ConservationFeature, PlanningUnit, Cost
+from madrona.async.ProcessHandler import process_is_complete
 from django.contrib.auth.models import User
 from django.utils import simplejson as json
 import time
@@ -22,11 +23,11 @@ username = 'surrogate'
 #settings.MARXAN_NUMREPS = 3
 #settings.MARXAN_NUMITNS = 1000000
 
-NUMREPS = 2
-NUMITER = 5
+NUMREPS = 3
+NUMITER = 20000
 
-MAX_START_ENERGY = 90  # don't accept a random start until we're below this
-SCHEDULE = {'tmin': 1, 'tmax': 10, 'steps': NUMITER}
+MAX_START_ENERGY = 60  # don't accept a random start until we're below this
+SCHEDULE = {'tmin': 1, 'tmax': 25, 'steps': NUMITER}
 #-----------------------------------------------#
 
 user, created = User.objects.get_or_create(username=username)
@@ -96,7 +97,7 @@ def run(schedule=None):
 
         scalefactor = 5
 
-        name = str(len([k for k,v in target_dict.items() if v > 0])) + ",".join(target_dict.keys())[:100]
+        name = str(len([k for k,v in target_dict.items() if v > 0])) + ": " + " ".join([x.split("---")[1] for x in state])[:100]
 
         wp = Scenario(
             input_targets = json.dumps( 
@@ -115,11 +116,15 @@ def run(schedule=None):
             name= name, 
             user=user
         )
+
         wp.save()
 
-        while not wp.done:
-            time.sleep(0.333333)
+        url = wp.get_absolute_url()
+        time.sleep(3) # assuming it takes at least X secs
+        while not process_is_complete(url):
+            time.sleep(0.2)
 
+        wp.process_results()
         res = wp.results
         energy = res['surrogate']['objective_score']
 
@@ -130,12 +135,25 @@ def run(schedule=None):
         return energy
 
     # init
+    init_species = [  # based on the single species chart, we know these are good starting points
+        'locally-endemic---whitefish-mountain',
+        'locally-endemic---dace-longnose',
+        'widespread-trout---bull-trout',
+    ]
+    print init_species
+
     start_energy = 999999
-    while start_energy > MAX_START_ENERGY:
-        numstart = random.randint(10, 30)
-        state = random.sample(cfkeys, numstart)
+    #while start_energy > MAX_START_ENERGY:
+    while True:
+        #numstart = random.randint(0, 10)
+        #state = random.sample(cfkeys, numstart)
+        state = []
+        for initsp in init_species:
+            if not initsp in state:
+                state.append(initsp)
         start_energy = reserve_energy(state)
-        print "Starting energy is ", start_energy
+
+    print "Starting energy is ", start_energy
 
     annealer = Annealer(reserve_energy, reserve_move)
 
@@ -143,7 +161,7 @@ def run(schedule=None):
             schedule['tmin'], schedule['steps'])
 
     state, e = annealer.anneal(state, schedule['tmax'], schedule['tmin'], 
-                               schedule['steps'], updates=int(schedule['steps']/3.))
+                               schedule['steps'], updates=int(schedule['steps']/2.))
 
     print "Reserve cost = %r" % reserve_energy(state)
     state.sort()

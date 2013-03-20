@@ -296,3 +296,9 @@ input.input-micro {
 .accordion-heading {
     background-color: whiteSmoke;
 }
+.collapse.in {
+    overflow: visible !important;
+}
+.navbar-fixed-top, .navbar-fixed-bottom {
+    z-index: 1090;
+}

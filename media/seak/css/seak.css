@@ -297,7 +297,6 @@ input.input-micro {
     background-color: whiteSmoke;
 }
 
-
 /* Scrolling tables */
 
 tbody.pu-show {
@@ -331,4 +330,10 @@ tbody.pu-show {
 
 .old_ie_wrapper tbody { 
     height: auto; 
+
+.collapse.in {
+    overflow: visible !important;
+}
+.navbar-fixed-top, .navbar-fixed-bottom {
+    z-index: 1090;
 }

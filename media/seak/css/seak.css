@@ -302,3 +302,6 @@ input.input-micro {
 .navbar-fixed-top, .navbar-fixed-bottom {
     z-index: 1090;
 }
+.layer-manager-legend-item {
+    padding-bottom: 2px;
+}

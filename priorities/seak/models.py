@@ -282,7 +282,10 @@ class Scenario(Analysis):
 
     @property
     def outdir(self):
-        return os.path.realpath(os.path.join(settings.MARXAN_OUTDIR, "%s_" % (self.uid,) ))
+        # make sure we only get 1000 scenarios per subdirectory 
+        # some filesystems (ext2/3) have a 32000 limit on number of directories; this raises it to 32 mil
+        subdir = str(int(self.id / 1000.0))
+        return os.path.realpath(os.path.join(settings.MARXAN_OUTDIR, subdir, "%s_" % (self.uid,) ))
         # This is not asycn-safe! A new modificaiton will clobber the old. 
         # What happens if new and old are both still running - small chance of a corrupted mix of output files? 
 
@@ -927,7 +930,7 @@ def _scenario_delete(sender, instance, **kwargs):
             shutil.rmtree(instance.outdir)
             logger.debug("Deleting %s at %s" % (instance.uid, instance.outdir))
         except OSError:
-            logger.debug("Can't deleting %s; forging ahead anyway..." % (instance.uid,))
+            logger.debug("Can't delete %s; forging ahead anyway..." % (instance.uid,))
 
 @register
 class Folder(FeatureCollection):

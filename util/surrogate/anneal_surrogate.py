@@ -23,25 +23,26 @@ username = 'surrogate'
 #settings.MARXAN_NUMREPS = 3
 #settings.MARXAN_NUMITNS = 1000000
 
-NUMREPS = 3
+NUMREPS = 1
 NUMITER = 20000
 
-MAX_START_ENERGY = 60  # don't accept a random start until we're below this
-SCHEDULE = {'tmin': 1, 'tmax': 25, 'steps': NUMITER}
+SCHEDULE = {'tmin': 0.1, 'tmax': 5, 'steps': NUMITER}
 #-----------------------------------------------#
 
 user, created = User.objects.get_or_create(username=username)
 wp = Scenario.objects.filter(user__username=username)
+print "Deleting old scenarios..."
 wp.delete()
 
 geography_list = [x.fid for x in PlanningUnit.objects.all()]
 
 costs_dict = {} 
 for a in [c.slug for c in Cost.objects.all()]:
-    if a in ['watershed-condition-no-ais', ' invasives', ' climate']:
+    if a in ['watershed-condition-no-ais', 'invasives', 'climate']:
         costs_dict[a] = 1
     else:
         costs_dict[a] = 0
+print costs_dict
 
 cfs =  ConservationFeature.objects.all()
 cfkeys = []
@@ -135,24 +136,27 @@ def run(schedule=None):
         return energy
 
     # init
-    init_species = [  # based on the single species chart, we know these are good starting points
-        'locally-endemic---whitefish-mountain',
-        'locally-endemic---dace-longnose',
-        'widespread-trout---bull-trout',
+    # based on the single species chart and the best run of a previous cycle, 
+    # we know these are good starting points
+    state =[ 
+        u'locally-endemic---chub-borax-lake',
+        u'locally-endemic---whitefish-mountain',
+        u'widespread-salmon---pink-odd-year-esu',
+        u'widespread-salmon---chum-puget-soundstrait-of-georgia-esu',
+        u'widespread-steelhead---steelhead-lower-columbia-river-winter-dps',
+        u'widespread-steelhead---steelhead-oregon-coast-dps',
+        u'locally-endemic---dace-longnose',
+        u'locally-endemic---whitefish-pygmy',
+        u'widespread-salmon---chinook-lower-columbia-river-spring-esu',
+        u'locally-endemic---sculpin-shoshone',
+        u'widespread-salmon---coho-southern-oregonnorthern-california-esu',
+        u'locally-endemic---chub-blue',
+        u'widespread-salmon---coho-southwest-washington-esu',
+        u'widespread-steelhead---steelhead-olympic-peninsula-dps',
+        u'widespread-salmon---sockeye-lake-wenatchee-esu'
     ]
-    print init_species
 
-    start_energy = 999999
-    #while start_energy > MAX_START_ENERGY:
-    while True:
-        #numstart = random.randint(0, 10)
-        #state = random.sample(cfkeys, numstart)
-        state = []
-        for initsp in init_species:
-            if not initsp in state:
-                state.append(initsp)
-        start_energy = reserve_energy(state)
-
+    start_energy = reserve_energy(state)
     print "Starting energy is ", start_energy
 
     annealer = Annealer(reserve_energy, reserve_move)
@@ -161,7 +165,7 @@ def run(schedule=None):
             schedule['tmin'], schedule['steps'])
 
     state, e = annealer.anneal(state, schedule['tmax'], schedule['tmin'], 
-                               schedule['steps'], updates=int(schedule['steps']/2.))
+                               schedule['steps'], updates=int(schedule['steps']/10.))
 
     print "Reserve cost = %r" % reserve_energy(state)
     state.sort()

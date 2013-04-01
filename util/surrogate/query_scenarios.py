@@ -26,7 +26,7 @@ if __name__ == "__main__":
 
     sorted_scenarios = sorted(sdict.items(), key=operator.itemgetter(1))
     print "Best 3 out of %d scenarios" % len(sorted_scenarios)
-    for sid,sscore in sorted_scenarios[:1]:
+    for sid,sscore in sorted_scenarios[:3]:
         scen = Scenario.objects.get(id=sid)
         print
         print "Scenario", sid
@@ -48,9 +48,9 @@ if __name__ == "__main__":
         for m in missing:
             print "\t", m
 
-    print "\n====================\n common targets out of 100 top scenarios"
+    print "\n====================\n common targets out of 500 top scenarios"
     all_targets = {}
-    for sid,sscore in sorted_scenarios[:100]:
+    for sid,sscore in sorted_scenarios[:500]:
         scen = Scenario.objects.get(id=sid)
         targets = [x['label'] for x in scen.results['targets_penalties'].values() if x['target'] > 0]
         for target in targets:
@@ -61,7 +61,7 @@ if __name__ == "__main__":
 
     all_targets = sorted(all_targets.items(), key=operator.itemgetter(1))
     for target, count in all_targets:
-        print count, target
+        print "%s,%s" % (count, target)
         
 
 

@@ -9,3 +9,4 @@ celery<=2.5.5
 django-redis
 redis
 fabric
+django<1.5

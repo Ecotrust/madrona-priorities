@@ -1,7 +1,7 @@
 # Django settings for omm project.
 from madrona.common.default_settings import *
 
-APP_NAME = "Madrona Priorities Tool"
+APP_NAME = "Oregon Juniper Management Tool"
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 DATABASES = {
@@ -76,10 +76,14 @@ HELP_EMAIL = 'ksdev@ecotrust.org'
 
 CACHES = {
     'default': {
-        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
-        'LOCATION': 'juniper-cache', 
-    }
+        'BACKEND': 'redis_cache.RedisCache',
+        'LOCATION': 'localhost:6379',
+        'OPTIONS': {
+            'DB': 2,
+        },
+    },
 }
+
 
 # Use redis_sessions if available
 try:
@@ -87,7 +91,7 @@ try:
     SESSION_ENGINE = 'redis_sessions.session'
     SESSION_REDIS_HOST = 'localhost'
     SESSION_REDIS_PORT = 6379
-    SESSION_REDIS_DB = 0
+    SESSION_REDIS_DB = 2
     SESSION_REDIS_PREFIX = 'juniper-session'
 except ImportError:
     pass
@@ -111,7 +115,7 @@ JS_OPTS = {
     'num_levels': 7,  
     'center': {'lon': -120.2, 'lat': 45.5},
     'extent': [-126.1, 40.9, -116.0, 49.6],
-    'name_field': 'WATERSHED_',
+    'name_field': 'WATERSHED',
     'sigfigs': 3,
     'zoom_on_select': False,
 }

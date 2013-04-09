@@ -80,13 +80,6 @@ function init_map() {
 
     markers = new OpenLayers.Layer.Markers( "Markers", {displayInLayerSwitcher: false});
 
-<<<<<<< HEAD
-    var terrain = new OpenLayers.Layer.XYZ( "National Geographic Base Map",
-        "http://server.arcgisonline.com/ArcGIS/rest/services/NatGeo_World_Map/MapServer/tile/${z}/${y}/${x}",
-        {sphericalMercator: true, 
-         opacity: 0.35,
-         attribution: "National Geographic, Esri, DeLorme, NAVTEQ, UNEP-WCMC, USGS, NASA, ESA, METI, NRCAN, GEBCO, NOAA, iPC" } 
-=======
     var terrain = new OpenLayers.Layer.XYZ( "Terrain Base Map",
         //"http://d.tiles.mapbox.com/v3/examples.map-4l7djmvo/${z}/${x}/${y}.png",
         //"http://server.arcgisonline.com/ArcGIS/rest/services/NatGeo_World_Map/MapServer/tile/${z}/${y}/${x}",
@@ -94,7 +87,6 @@ function init_map() {
         {sphericalMercator: true, 
          opacity: 1.0,
          attribution: "ESRI" } 
->>>>>>> watershed well and basemap
     );
 
     var pu_utfgrid = new OpenLayers.Layer.UTFGrid({

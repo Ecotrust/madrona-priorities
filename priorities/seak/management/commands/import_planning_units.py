@@ -401,7 +401,7 @@ class Command(BaseCommand):
 
         print 
         print "Populating theme and layers for the layer manager"
-        Theme.objects.filter(url__startswith="/tiles/").delete()
+        Layer.objects.filter(url__startswith="/tiles/").delete()
         call_command('loaddata','project_base_layers')
 
         for cf in cfs_with_fields:

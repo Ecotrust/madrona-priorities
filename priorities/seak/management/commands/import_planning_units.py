@@ -437,19 +437,18 @@ class Command(BaseCommand):
             lyr.delete()
         except Layer.DoesNotExist:
             pass
-        print " ",url
+        print " ", url
         theme_name = "Base"
-        try:
-            theme = Theme.objects.get(display_name=theme_name)
-        except Theme.DoesNotExist:
-            theme = Theme.objects.create(name="auto_%s" % theme_name, display_name=theme_name)
+        theme, created = Theme.objects.get_or_create(name="auto_%s" % theme_name, display_name=theme_name)
         desc = "Planning unit boundaries"
-        lyr = Layer.objects.create(name=name, layer_type="XYZ", url=url, default_on=True,
-                opacity=1.0, description=desc, legend=legend, legend_title=name)
+        lyr = Layer.objects.create(
+            name=name, layer_type="XYZ", url=url, default_on=True,
+            opacity=1.0, description=desc, legend=legend, legend_title=name
+        )
         lyr.themes.add(theme)
         lyr.save()
 
-        print 
+        print ""
         print "Loading costs, conservation features and auxillary data associated with each planning unit"
         for feature in layer:
             pu = pus.get(fid=feature.get(mapping['fid']))

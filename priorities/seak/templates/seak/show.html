@@ -30,9 +30,9 @@
     <ul class="nav nav-tabs" style="margin-bottom:0px;">
         <li class="active"><a href="#Inputs" class="report-tab" id="tab-report-inputs" data-toggle="tab"><span>{% flatblock 'show-inputs' 3600 %}</span></a></li>
         {% if instance.done %}
-        <li><a href="#species" data-toggle="tab"><span>{% flatblock 'show-conservation-features' 3600 %}</span></a></li>
-        <li><a href="#watersheds" data-toggle="tab"><span>{% flatblock 'show-planning-units' 3600 %}</span></a></li>
-        <li><a href="#costs" data-toggle="tab"><span>{% flatblock 'show-total-costs' 3600 %}</span></a></li>
+        <li><a href="#species" class="report-tab" id="tab-report-species" data-toggle="tab"><span>{% flatblock 'show-conservation-features' 3600 %}</span></a></li>
+        <li><a href="#watersheds" class="report-tab" id="tab-report-pus" data-toggle="tab"><span>{% flatblock 'show-planning-units' 3600 %}</span></a></li>
+        <li><a href="#costs" class="report-tab" id="tab-report-totalcosts" data-toggle="tab"><span>{% flatblock 'show-total-costs' 3600 %}</span></a></li>
         {% endif %}
     </ul>
 
@@ -91,10 +91,10 @@
              {%endfor%}
              </table>
              
-             <div class="debug-only">
+            <div class="debug-only">
                 <h4>Scaling Factor</h4>
                 <span>{{instance.input_scalefactor}}</span>
-             </div>
+            </div>
 
             </div>
         </div>
@@ -143,12 +143,7 @@
         </div>
 
         <div id="costs" class="tab-pane">
-<<<<<<< HEAD
-            <div>
-                <h5>  Total Costs </h5>
-=======
             <div class="box">
->>>>>>> bring back total tab; styling
                 <dl>
                     {% for k,v in results.total_costs.items %}
                     <dt>{{k|deslug}}</dt><dd>{{v|floatformat:0|intcomma}}</dd>
@@ -294,10 +289,11 @@
             // Have to explicitly draw tables that were hidden when dataTable was created.
             $('a[data-toggle="tab"].report-tab').on('shown', function (e) {
                 e.preventDefault();
+                console.log(e.target.id);
                 // The newly selected tab 
                 switch (e.target.id) {
                     case "tab-report-pus":
-                        //app.interactiveTables.puTable.fnAdjustColumnSizing();
+                        app.interactiveTables.puTable.fnAdjustColumnSizing();
                         app.interactiveTables.puTable.fnDraw();
                         break;
                     case "tab-report-species":

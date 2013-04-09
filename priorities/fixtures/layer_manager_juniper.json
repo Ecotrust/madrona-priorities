@@ -2811,7 +2811,7 @@
       "themes": [
         87
       ], 
-      "default_on": false, 
+      "default_on": true, 
       "map_tiles": "", 
       "compress_display": false, 
       "legend_subtitle": "", 
@@ -2845,7 +2845,7 @@
       "data_source": "", 
       "data_notes": "", 
       "name": "Utilization Centers", 
-      "url": "http://juniper.labs.ecotrust.org/media/geojson/utilization_centers.geojson", 
+      "url": "/media/geojson/utilization_centers.geojson", 
       "arcgis_layers": "", 
       "subdomains": "", 
       "legend_title": "", 

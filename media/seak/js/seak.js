@@ -282,6 +282,7 @@ function init_map() {
             if (info && info.data && info.data[js_opts.name_field]) {
                 $("#watershed-name").html(info.data[js_opts.name_field]);
                 $("#watershed-name").show();
+                $(".watershed-well").show();
             }
         });
     };

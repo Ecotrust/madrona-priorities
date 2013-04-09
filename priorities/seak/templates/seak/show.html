@@ -320,7 +320,6 @@
             // Have to explicitly draw tables that were hidden when dataTable was created.
             $('a[data-toggle="tab"].report-tab').on('shown', function (e) {
                 e.preventDefault();
-                console.log(e.target.id);
                 // The newly selected tab 
                 switch (e.target.id) {
                     case "tab-report-pus":

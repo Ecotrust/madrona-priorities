@@ -112,8 +112,8 @@ JS_OPTS = {
     'num_levels': 7,  
     'center': {'lon': -120.2, 'lat': 45.5},
     'extent': [-126.1, 40.9, -116.0, 49.6],
-    'name_field': 'WATERSHED',
-    'sigfigs': 3,
+    'name_field': 'WTRSHD_NM',
+    'sigfigs': 2,
     'zoom_on_select': False,
 }
 

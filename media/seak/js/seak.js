@@ -10,6 +10,17 @@ var costFields = [];
 var cfFields = [];
 var cfTotals = {};
 
+Math.sigfig = function (num, sig) {
+    if (num == 0)
+        return 0;
+    if (Math.round(num) == num)
+        return num;
+    var digits = Math.round((-Math.log(Math.abs(num)) / Math.LN10) + (sig || 2));
+    if (digits < 1)
+        digits = 1;
+    return num.toFixed(digits-1);
+}
+
 function getGeographyFieldInfo() {
     // Find the conservation features, totals and costs represented in ALL of the selected planning units.
     if (pu_layer.selectedFeatures.length >= 1) {
@@ -50,29 +61,21 @@ function getGeographyFieldInfo() {
 function init_map() {
     var latlon = new OpenLayers.Projection("EPSG:4326");
     var merc = new OpenLayers.Projection("EPSG:900913");
-    var extent = new OpenLayers.Bounds(-125.04, 41.5, -116.0, 46.4);
+    var extent = new OpenLayers.Bounds(js_opts.extent);
     extent.transform(latlon, merc);
 
     map = new OpenLayers.Map({
         div: "map",
-        //div: null,
         projection: "EPSG:900913",
         displayProjection: "EPSG:4326",
         controls: [
             new OpenLayers.Control.Navigation(),
             new OpenLayers.Control.Zoom(),
             new OpenLayers.Control.Attribution()
-            /*
-            new OpenLayers.Control.LayerSwitcher({
-                'div': OpenLayers.Util.getElement('layerswitcher')
-            })
-            */
         ],
-        //zoom: 6,
-        minZoomLevel: 6,
-        restrictedExtent: extent, //new OpenLayers.Bounds(-19140016, 2626698, -10262137, 11307047),
-        //maxExtent: extent, //new OpenLayers.Bounds(-19140016, 2626698, -10262137, 11307047),
-        numZoomLevels: 7
+        minZoomLevel: js_opts.start_zoom,
+        restrictedExtent: extent,
+        numZoomLevels: js_opts.num_levels 
     });
 
     markers = new OpenLayers.Layer.Markers( "Markers", {displayInLayerSwitcher: false});
@@ -240,14 +243,17 @@ function init_map() {
         var puname = "Watershed Info"; 
         $("#info").hide();
         var fnc = function(idx, val) {
-            if (val >= 0) { // Assume negative is null
-                try {
-                    msg += "<tr><td width=\"75%\">"+ idx + "</td><td>" + val.toPrecision(6) + "</td></tr>";
-                } catch (err) {
-                    msg += "<tr><td width=\"75%\">"+ idx + "</td><td>" + val + "</td></tr>";
+            if (val >= 0) { // Assume negative is null 
+                if (val > 0 || js_opts.show_zeros) {
+                    var sigfigs = js_opts.sigfigs || 3;
+                    try {
+                        msg += "<tr><td width=\"75%\">"+ idx + "</td><td>" + Math.sigfig(val, sigfigs) + "</td></tr>";
+                    } catch (err) {
+                        msg += "<tr><td width=\"75%\">"+ idx + "</td><td>" + val + "</td></tr>";
+                    }
                 }
             } 
-            if(idx.toLowerCase() == "watershed_") { // assume "name" 
+            if(idx == js_opts.name_field) { 
                 puname = val;
             }
         };
@@ -273,8 +279,9 @@ function init_map() {
     var nameCallback = function(infoLookup) {
         $(".watershed-well").hide();
         $.each(infoLookup, function(k, info) {
-            if (info && info.data && info.data.WATERSHED_) {
-                $("#watershed-name").html(info.data.WATERSHED_);
+            if (info && info.data && info.data[js_opts.name_field]) {
+                $("#watershed-name").html(info.data[js_opts.name_field]);
+                $("#watershed-name").show();
                 $(".watershed-well").show();
             }
         });
@@ -285,6 +292,28 @@ function init_map() {
     });
     map.addControl(ctl2);
 
-    map.setCenter(new OpenLayers.LonLat(-15400000, 6700000), 6);
-    //map.zoomToMaxExtent();
+    var pt = new OpenLayers.LonLat(js_opts.center.lon, js_opts.center.lat);
+    pt.transform(latlon, merc);
+    map.setCenter(pt, js_opts.start_zoom);
 }
+
+// dataTables plugin to sort number OR string by hidden title attribute
+jQuery.extend( jQuery.fn.dataTableExt.oSort, {
+    "title-numeric-pre": function ( a ) {
+      try { 
+          var x = a.match(/title="*(-?[0-9\.]+)/)[1];
+          return parseFloat( x );
+      } catch(err) {
+          return a.match(/title="(.*?)"/)[1].toLowerCase();
+      }
+    },
+
+    "title-numeric-asc": function ( a, b ) {
+        return ((a < b) ? -1 : ((a > b) ? 1 : 0));
+    },
+
+    "title-numeric-desc": function ( a, b ) {
+        return ((a < b) ? 1 : ((a > b) ? -1 : 0));
+    }
+} );
+

@@ -35,20 +35,13 @@ def cachemethod(cache_key, timeout=60*60*24*365):
     '''
     def paramed_decorator(func):
         def decorated(self):
-            if not settings.USE_CACHE:
-                res = func(self)
-                return res
-
             key = cache_key % self.__dict__
-            #logger.debug("\nCACHING %s" % key)
             res = cache.get(key)
             if res == None:
-                #logger.debug("   Cache MISS")
                 res = func(self)
                 cache.set(key, res, timeout)
-                #logger.debug("   Cache SET")
-                if cache.get(key) != res:
-                    logger.error("*** Cache GET was NOT successful, %s" % key)
+                #if cache.get(key) != res:
+                #    logger.error("*** Cache GET was NOT successful, %s" % key)
             return res
         return decorated 
     return paramed_decorator
@@ -90,9 +83,6 @@ class ConservationFeature(models.Model):
     name = models.CharField(max_length=99)
     level1 = models.CharField(max_length=99)
     level2 = models.CharField(max_length=99, null=True, blank=True)
-    level3 = models.CharField(max_length=99, null=True, blank=True)
-    level4 = models.CharField(max_length=99, null=True, blank=True)
-    level5 = models.CharField(max_length=99, null=True, blank=True)
     dbf_fieldname = models.CharField(max_length=15, null=True, blank=True)
     units = models.CharField(max_length=90, null=True, blank=True)
     desc = models.TextField(null=True, blank=True)
@@ -101,17 +91,28 @@ class ConservationFeature(models.Model):
     @property
     def level_string(self):
         """ All levels concatenated with --- delim """
-        levels = [self.level1, self.level2, self.level3, self.level4, self.level5]
+        levels = [self.level1, self.level2] #, self.level3, self.level4, self.level5]
         return '---'.join([slugify(x.lower()) for x in levels])
 
     @property
     def id_string(self):
         """ Relevant levels concatenated with --- delim """
-        levels = [self.level1, self.level2, self.level3, self.level4, self.level5]
+        levels = [self.level1, self.level2] #, self.level3, self.level4, self.level5]
         return '---'.join([slugify(x.lower()) for x in levels if x not in ['', None]])
 
     def __unicode__(self):
         return u'%s' % self.name
+
+class Aux(models.Model):
+    '''
+    Django model representing Auxillary data (typically planning unit metrics to be used in reports
+    but *not* in the prioritization as costs or targets)
+    '''
+    name = models.CharField(max_length=99)
+    uid = models.IntegerField(primary_key=True)
+    dbf_fieldname = models.CharField(max_length=15, null=True, blank=True)
+    units = models.CharField(max_length=16, null=True, blank=True)
+    desc = models.TextField()
 
 class Cost(models.Model):
     '''
@@ -122,7 +123,7 @@ class Cost(models.Model):
     uid = models.IntegerField(primary_key=True)
     dbf_fieldname = models.CharField(max_length=15, null=True, blank=True)
     units = models.CharField(max_length=16, null=True, blank=True)
-    desc = models.TextField()
+    desc = models.TextField(null=True, blank=True)
 
     @property
     def slug(self):
@@ -144,7 +145,7 @@ class PlanningUnit(models.Model):
     date_modified = models.DateTimeField(auto_now=True)
 
     @property
-    #@cachemethod("PlanningUnit_%(fid)s_area")
+    @cachemethod("PlanningUnit_%(fid)s_area")
     def area(self):
         if self.calculated_area:
             area = self.calculated_area
@@ -211,6 +212,26 @@ class PuVsCost(models.Model):
     amount = models.FloatField(null=True, blank=True)
     class Meta:
         unique_together = ("pu", "cost")
+
+class PuVsAux(models.Model):
+    '''
+    Auxillary data values per planning unit
+    i.e. data associated with planning units 
+         useful for reports, data not used as a cost or a target.
+    '''
+    pu = models.ForeignKey(PlanningUnit)
+    aux = models.ForeignKey(Aux)
+    value = models.TextField(null=True, blank=True)
+    class Meta:
+        unique_together = ("pu", "aux")
+
+    @property
+    def amount(self):
+        try:
+            amt = float(self.value)
+        except:
+            amt = None
+        return amt
 
 def scale_list(vals, floor=None):
     """
@@ -544,9 +565,12 @@ class Scenario(Analysis):
                     theclass = 'med' 
                 costs[cname] = {'raw': raw_costs[cname],'scaled': thecost, 'class': theclass}
 
+            auxs = dict([(x.aux.name, x.value) for x in pu.puvsaux_set.all()])
+
             best.append({'name': pu.name, 
                          'fid': pu.fid, 
                          'costs': costs,
+                         'auxs': auxs,
                          'centroidx': centroid[0],
                          'centroidy': centroid[1]})
 
@@ -579,11 +603,10 @@ class Scenario(Analysis):
             except KeyError:
                 continue
             sheld = float(line[3])
+            stotal = sum([x.amount for x in consfeat.puvscf_set.filter(pu__in=potentialpus) if x.amount])
             try:
-                stotal = float(starget/starget_prop)
                 spcttotal = sheld/stotal 
             except ZeroDivisionError:
-                stotal = 0
                 spcttotal = 0
             smpm = float(line[9])
             if starget == 0:
@@ -841,6 +864,7 @@ class Scenario(Analysis):
             'slider_mode': settings.SLIDER_MODE,
             'slider_show_raw': settings.SLIDER_SHOW_RAW,
             'slider_show_proportion': settings.SLIDER_SHOW_PROPORTION,
+            'slider_start_collapsed': settings.SLIDER_START_COLLAPSED,
             'variable_geography': settings.VARIABLE_GEOGRAPHY,
         }
         show_context = {
@@ -848,6 +872,8 @@ class Scenario(Analysis):
             'slider_show_raw': settings.SLIDER_SHOW_RAW,
             'slider_show_proportion': settings.SLIDER_SHOW_PROPORTION,
             'show_raw_costs': settings.SHOW_RAW_COSTS,
+            'show_aux': settings.SHOW_AUX,
+            'show_goal_met': settings.SHOW_GOAL_MET,
         }
         icon_url = 'common/images/watershed.png'
         links = (

@@ -165,36 +165,34 @@
             {% for category in category_list %}
             <div class="accordion-group accordion-group-objective">
                 <div class="accordion-heading">
-                    <table style="width:100%;">
-                    <tr>
-                    <th style="text-align:left;">
-                       <a class="accordion-toggle" data-toggle="collapse" 
-                           href="#collapse-{{category.grouper|slugify}}"> <i class="category-icon icon-minus"></i> {{category.grouper}} </a>
-                    </th>
-                    <td>
-                        <div class="slider-collapse aggregate hide" id="#slider-collapse-{{category.grouper|slugify}}">
-                            <span class="text-success slider-label slider-label-left"><small>{% flatblock 'target-low' 3600 %}</small></span>
-                            <div class="slider-range slider-range-single" id="singlerange---CATEGORY-{{category.grouper|slugify}}"></div> 
-                            <span class="text-success slider-label slider-label-right"><small>{% flatblock 'target-high' 3600 %}</small></span>
-                            <a class="pull-right btn btn-mini apply">Apply to all {{category.grouper}}</a>
+                    <div class="row-fluid">
+                        <div class="span4" style="text-align:left;">
+                            <a class="accordion-toggle" data-toggle="collapse" 
+                            href="#collapse-{{category.grouper|slugify}}"> <i class="category-icon icon-minus"></i> {{category.grouper}} </a>
                         </div>
-                    </td>
-                    <td class="debug-only">
-                        <input type="text" class="targetvalue input-micro" 
-                               id="target---CATEGORY-{{category.grouper|slugify}}" value="0.0"/>
-                    </td>
-                    <td class="debug-only">
-                        <input type="text" class="penaltyvalue input-micro" 
-                               id="penalty---CATEGORY-{{category.grouper|slugify}}" value="0.0"/>
-                    </td>
-                    </tr>
-                    </table>
+                        <div class="span8" style="padding:12px;">
+                            <div class="slider-collapse aggregate hide" id="#slider-collapse-{{category.grouper|slugify}}">
+                                <span class="text-success slider-label slider-label-left"><small>{% flatblock 'target-low' 3600 %}</small></span>
+                                <div class="slider-range slider-range-single" id="singlerange---CATEGORY-{{category.grouper|slugify}}" style="width:35%"></div> 
+                                <span class="text-success slider-label slider-label-right"><small>{% flatblock 'target-high' 3600 %}</small></span>
+                                <a class="btn btn-mini apply"><small>Apply to all {{category.grouper}}</small></a>
+                            </div>
+                        </div>
+                        <div class="debug-only">
+                            <input type="text" class="targetvalue input-micro" 
+                                id="target---CATEGORY-{{category.grouper|slugify}}" value="0.0"/>
+                        </div>
+                        <div class="debug-only">
+                            <input type="text" class="penaltyvalue input-micro" 
+                                id="penalty---CATEGORY-{{category.grouper|slugify}}" value="0.0"/>
+                        </div>
+                    </div>
                 </div>
-                <div id="collapse-{{category.grouper|slugify}}" class="accordion-body in cf-collapse">
+                <div id="collapse-{{category.grouper|slugify}}" class="accordion-body collapse {% if not slider_start_collapsed %}in {% endif %}cf-collapse">
                 <table class="table table-condensed table-striped table-hover table-bordered" style="width:100%; margin-bottom:0px;">
                 {% for cf in category.list %} 
                     <tr class="cf-row" id="row-{{cf.dbf_fieldname}}">
-                        <td style="width:156px;">{{cf.name}}</td>
+                        <td style="width:33%;">{{cf.name}}</td>
                         <td> 
                             {% if slider_mode == 'single' %}
                             <div class="row-fluid">
@@ -207,19 +205,23 @@
                                     <span class="text-success slider-label slider-label-right"><small>{% flatblock 'target-high' 3600 %}</small></span>
                                 </div>
                                 <div class="span1">
-                                    <div class="input-append">
-                                        <input type="text" class="debug-only penaltyvalue" id="penalty---{{cf.id_string}}" value="0.0"/>
-                                        <input type="text" class="{% if not slider_show_proportion %}debug-only {% endif %}input-mini targetvalue" 
-                                               id="target---{{cf.id_string}}" value="0.0"/>
-                                        {% if slider_show_proportion %}
-                                        <span class="add-on">%</span>
-                                        {% endif %}
+                                    <div class="row-fluid">
+                                        <div class="span10">
+                                            <input type="text" class="debug-only penaltyvalue" id="penalty---{{cf.id_string}}" value="0.0"/>
+                                            <input type="text" class="{% if not slider_show_proportion %}debug-only {% endif %}input-mini targetvalue" 
+                                                id="target---{{cf.id_string}}" value="0.0"/>
+                                        </div>
+                                        <div class="span2">
+                                            {% if slider_show_proportion %}
+                                            <span>%</span>
+                                            {% endif %}
+                                        </div>
                                     </div>
 
                                     {% if slider_show_raw %}
                                     <div class="input-append">
                                         <input type="text" class="input-small rawtargetvalue" id="rawtarget---{{cf.id_string}}" value="0.0"/>
-                                        <span class="add-on"><small>{{cf.units}}</small></span>
+                                        <span><small>{{cf.units}}</small></span>
                                     </div>
                                     {% endif %} 
                                 </div>
@@ -231,24 +233,24 @@
                                 <div class="span2" style="padding-right:13px;">
                                     <p class="text-info" style="width:65px;">{% flatblock 'target' 3600 %}</p>
                                 </div>
-                                <div class="span9" style="vertical-align:middle;">
+                                <div class="span8" style="vertical-align:middle;">
                                     <span class="text-success slider-label slider-label-left"><small>{% flatblock 'target-low' 3600 %}</small></span>
                                     <div class="slider-range slider-range-target" id="targetrange---{{cf.id_string}}"></div> 
                                     <span class="text-success slider-label slider-label-right"><small>{% flatblock 'target-high' 3600 %}</small></span>
                                 </div>
-                                <div class="span1">
-                                    <div class="input-append">
+                                <div class="span2">
+                                    <div>
                                         <input type="text" class="{% if not slider_show_proportion %}debug-only {% endif %}input-micro targetvalue" 
                                             id="target---{{cf.id_string}}" value="0.0"/>
                                         {% if slider_show_proportion %}
-                                        <span class="add-on">%</span>
+                                        <span>%</span>
                                         {% endif %}
                                     </div>
 
                                     {% if slider_show_raw %}
                                     <div class="input-append">
                                         <input type="text" class="input-small rawtargetvalue" id="rawtarget---{{cf.id_string}}" value="0.0"/>
-                                        <span class="add-on"><small>{{cf.units}}</small></span>
+                                        <span><small>{{cf.units}}</small></span>
                                     </div>
                                     {% endif %}
                                 </div>
@@ -258,19 +260,16 @@
                                 <div class="span2" style="padding-right:13px;">
                                     <p class="text-info" style="width:65px;">{% flatblock 'penalty' 3600 %}</p>
                                 </div>
-                                <div class="span9" style="vertical-align:middle;">
+                                <div class="span8" style="vertical-align:middle;">
                                     <span class="text-success slider-label slider-label-left"><small>{% flatblock 'penalty-low' 3600 %}</small></span>
                                     <div class="slider-range slider-range-penalty" id="penaltyrange---{{cf.id_string}}"></div> 
                                     <span class="text-success slider-label slider-label-right"><small>{% flatblock 'penalty-high' 3600 %}</small></span>
                                 </div>
-                                <div class="span1">
+                                <div class="span2">
                                     <!-- penalty sliders don't have a "raw" value -->
-                                    <div class="input-append">
+                                    <div>
                                         <input type="text" class="{% if not slider_show_proportion %}debug-only {% endif %}input-micro penaltyvalue" 
                                             id="penalty---{{cf.id_string}}" value="0.0"/>
-                                        {% if slider_show_proportion %}
-                                        <span class="add-on">%</span>
-                                        {% endif %}
                                     </div>
                                 </div>
                             </div>
@@ -288,6 +287,16 @@
           </div>
         </form>
         <script>
+            $('.targetvalue').change( function(e) { 
+                var targetPrefixes = ['singlerange', 'targetrange'];
+                var len = targetPrefixes.length;
+                for (var i=0; i<len; ++i) {
+                    var pre = targetPrefixes[i];
+                    sliderTargetId = $(this).attr('id').replace("target",pre) 
+                    sliderTarget = $("#" + sliderTargetId)
+                    sliderTarget.slider( "option", "value", $(this).val() );
+                }
+            });
             // Make category slider work
             $('a.apply').click(function(e) {
                 e.preventDefault();
@@ -311,6 +320,12 @@
                 $(this).parent().find(".category-icon").addClass("icon-minus"); 
                 $(this).parent().find('.slider-collapse').hide();
             });
+
+            {% if slider_start_collapsed %}
+            $('.cf-collapse').parent().find(".category-icon").removeClass("icon-minus"); 
+            $('.cf-collapse').parent().find(".category-icon").addClass("icon-plus"); 
+            $('.cf-collapse').parent().find('.slider-collapse').show();
+            {% endif %}
         </script>
     </div> <!-- End species tab -->
 
@@ -323,7 +338,7 @@
             {% for cost in costs %}
             <tr class="cost-row" id="row-{{cost.dbf_fieldname}}">
                 <td><input type="checkbox" class="costvalue" id="cost---{{cost.slug}}" checked="1"/></td>
-                <td><label for="cost---{{cost.slug}}">{{cost.name}} (<em>{{cost.desc}}</em>)</label></td>
+                <td><label for="cost---{{cost.slug}}">{{cost.name}} {% if cost.desc %}(<em>{{cost.desc}}</em>){% endif %}</label></td>
             </tr>
             {% endfor %}
           </table>

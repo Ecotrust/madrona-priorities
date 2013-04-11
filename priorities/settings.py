@@ -1,7 +1,7 @@
 # Django settings for omm project.
 from madrona.common.default_settings import *
 
-APP_NAME = "BLM Juniper Management Priorities Tool"
+APP_NAME = "Oregon Juniper Management Tool"
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 DATABASES = {
@@ -55,7 +55,7 @@ STATICMAP_HEIGHT_BUFFER = None
 
 CELERY_IMPORT = ('seak.tasks',)
 
-MARXAN_BIN =  '/usr/local/marxan243/MarOpt_v243_Linux32' # or 64 bit?
+MARXAN_BIN =  os.path.realpath(os.path.join(os.path.dirname(__file__), '..', 'marxan_bin', 'MarOpt_v243_Linux32')) # or 64 bit?
 MARXAN_OUTDIR =  os.path.realpath(os.path.join(os.path.dirname(__file__), '..', 'marxan_output'))
 MARXAN_TEMPLATEDIR = os.path.join(MARXAN_OUTDIR, 'template')
 MARXAN_NUMREPS = 20
@@ -76,11 +76,11 @@ HELP_EMAIL = 'ksdev@ecotrust.org'
 
 CACHES = {
     'default': {
-        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
-        'LOCATION': 'juniper-cache', 
-    }
+        'BACKEND': 'redis_cache.cache.RedisCache',
+        'LOCATION': 'localhost:6379:2',
+    },
 }
-USE_CACHE = False
+
 
 # Use redis_sessions if available
 try:
@@ -88,7 +88,7 @@ try:
     SESSION_ENGINE = 'redis_sessions.session'
     SESSION_REDIS_HOST = 'localhost'
     SESSION_REDIS_PORT = 6379
-    SESSION_REDIS_DB = 0
+    SESSION_REDIS_DB = 2
     SESSION_REDIS_PREFIX = 'juniper-session'
 except ImportError:
     pass
@@ -99,12 +99,27 @@ dblogger = logging.getLogger('django.db.backends')
 dblogger.setLevel(logging.INFO)
 
 SLIDER_MODE = "single" # 'dual' OR 'single'
-SLIDER_SHOW_RAW = True 
+SLIDER_SHOW_RAW = True
 SLIDER_SHOW_PROPORTION = False
+SLIDER_START_COLLAPSED = False
 VARIABLE_GEOGRAPHY = True # do we allow variable geographies (True) or just use all planning units (False)?
 SHOW_RAW_COSTS = False # in report
+SHOW_AUX = True # in report
+SHOW_GOAL_MET = True # in report
 
-ADD_SCALEFACTOR_CONSTANT = 7 # 0==moderately weight costs, 5==meet targets at (almost) any cost
+JS_OPTS = {
+    'start_zoom': 6,  
+    'num_levels': 7,  
+    'center': {'lon': -120.2, 'lat': 45.5},
+    'extent': [-126.1, 40.9, -116.0, 49.6],
+    'name_field': 'WTRSHD_NM',
+    'sigfigs': 2,
+    'zoom_on_select': False,
+}
+
+ADD_SCALEFACTOR_CONSTANT = 3 # 0==moderately weight costs, 5==meet targets at (almost) any cost
+
+CACHE_TIMEOUT = 60 * 60 * 24 * 365
 
 #############################################################
 try:
@@ -140,4 +155,3 @@ if DEBUG:
         INSTALLED_APPS += ('gunicorn',)
     except ImportError:
         pass
-

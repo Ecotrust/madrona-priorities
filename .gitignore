@@ -1,4 +1,5 @@
 *.pyc
+.vagrant
 marinemap.egg-info*
 marinemap.r*.css
 marinemap.r*.js
@@ -32,9 +33,11 @@ anneal/backup/*
 *.prof
 *.working
 data/local/*
-tile_config/*
+tile_config/*.cfg
+tile_config/*.xml
 wsgi.py
-env/*
+env*
 marxan_bin/*
 logs/*
 local_import.sh
+local_data.py

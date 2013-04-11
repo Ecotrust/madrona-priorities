@@ -122,7 +122,7 @@ tr.not-targeted {
     display: none;
 }
 div.tab-content-show {
-    height: 430px;
+    /* height: 430px; */
 }
 
 #layerswitcher {
@@ -173,7 +173,7 @@ div.tab-content-show {
     float:right;
     text-align:left;
     font-size: 85%;
-    width: 294px;
+    width: 404px;
     margin: 6px;
 }
 div.dataLbl, div.baseLbl {
@@ -251,7 +251,7 @@ select#layer-select {
     line-height: 22px;
 }
 .highlighted-planningunit {
-    background-color: #c9c9c9;
+    font-weight: bold;
 }
 .table-category-header {
     background-color: #e9e9e9;
@@ -296,6 +296,41 @@ input.input-micro {
 .accordion-heading {
     background-color: whiteSmoke;
 }
+
+/* Scrolling tables */
+
+tbody.pu-show {
+    table-layout: fixed;
+}
+
+td.pu-show:nth-child(1), th.pu-show:nth-child(1) { width: 250px; }
+
+td.pu-show, th.pu-show { 
+    width: 150px; 
+}
+
+thead.pu-show {
+    position: relative;
+    display: block;
+    border-bottom: 2px solid lightGrey;
+}
+
+tbody.pu-show {
+    display: block;
+    height: 300px;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+.old_ie_wrapper {
+    height: 300px;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+.old_ie_wrapper tbody { 
+    height: auto; 
+
 .collapse.in {
     overflow: visible !important;
 }

@@ -1,14 +1,5 @@
 [
   {
-    "pk": 19, 
-    "model": "flatblocks.flatblock", 
-    "fields": {
-      "content": "For each conservation objective, the chart below shows how much of the total potentially available convservation value is represented by this solution.", 
-      "header": "", 
-      "slug": "show-targets-explanation"
-    }
-  }, 
-  {
     "pk": 28, 
     "model": "flatblocks.flatblock", 
     "fields": {
@@ -171,15 +162,6 @@
     }
   }, 
   {
-    "pk": 20, 
-    "model": "flatblocks.flatblock", 
-    "fields": {
-      "content": "Total Habitat Captured", 
-      "header": "", 
-      "slug": "show-percent-met"
-    }
-  }, 
-  {
     "pk": 12, 
     "model": "flatblocks.flatblock", 
     "fields": {
@@ -207,48 +189,12 @@
     }
   }, 
   {
-    "pk": 11, 
-    "model": "flatblocks.flatblock", 
-    "fields": {
-      "content": "Watersheds", 
-      "header": "", 
-      "slug": "show-planning-units"
-    }
-  }, 
-  {
-    "pk": 41, 
-    "model": "flatblocks.flatblock", 
-    "fields": {
-      "content": "Total Costs", 
-      "header": "", 
-      "slug": "show-total-costs"
-    }
-  }, 
-  {
     "pk": 42, 
     "model": "flatblocks.flatblock", 
     "fields": {
       "content": "Or, if you need to fine-tune the geography, you can use the map draw a box around additional watersheds. To navigate, use the keyboard controls (+/- to zoom, arrow keys to pan). If you need to undo the selection, click on the map away from the study region.", 
       "header": "", 
       "slug": "geography-fine-tune"
-    }
-  }, 
-  {
-    "pk": 15, 
-    "model": "flatblocks.flatblock", 
-    "fields": {
-      "content": "Select costs to minimize while prioritizing watersheds.", 
-      "header": "", 
-      "slug": "form-costs-description"
-    }
-  }, 
-  {
-    "pk": 14, 
-    "model": "flatblocks.flatblock", 
-    "fields": {
-      "content": "Set prioritization costs", 
-      "header": "", 
-      "slug": "form-costs-header"
     }
   }, 
   {
@@ -279,10 +225,64 @@
     }
   }, 
   {
+    "pk": 14, 
+    "model": "flatblocks.flatblock", 
+    "fields": {
+      "content": "Set prioritization costs", 
+      "header": "", 
+      "slug": "form-costs-header"
+    }
+  }, 
+  {
+    "pk": 20, 
+    "model": "flatblocks.flatblock", 
+    "fields": {
+      "content": "Total Acres Captured", 
+      "header": "", 
+      "slug": "show-percent-met"
+    }
+  }, 
+  {
+    "pk": 41, 
+    "model": "flatblocks.flatblock", 
+    "fields": {
+      "content": "Report", 
+      "header": "", 
+      "slug": "show-total-costs"
+    }
+  }, 
+  {
+    "pk": 11, 
+    "model": "flatblocks.flatblock", 
+    "fields": {
+      "content": "Planning Units", 
+      "header": "", 
+      "slug": "show-planning-units"
+    }
+  }, 
+  {
+    "pk": 19, 
+    "model": "flatblocks.flatblock", 
+    "fields": {
+      "content": "For each management objective, the chart below shows the target acreage, and percentage, captured within the selected planning units. ", 
+      "header": "", 
+      "slug": "show-targets-explanation"
+    }
+  }, 
+  {
+    "pk": 15, 
+    "model": "flatblocks.flatblock", 
+    "fields": {
+      "content": "In addition to the areas you targeted earlier, select areas that are to be avoided in the new prioritization scenario.", 
+      "header": "", 
+      "slug": "form-costs-description"
+    }
+  }, 
+  {
     "pk": 6, 
     "model": "flatblocks.flatblock", 
     "fields": {
-      "content": "<p>\r\nPlease read the detailed <a href=\"/docs.html\">documentation</a> to gain an understanding of the purpose, limitations and products associated with this tool.  All users are able to view priorities, pan and zoom using the map tool and explore input data sets pertaining to aquatic species as well as inputs into the climate change, watershed condition and aquatic invasives analyses.  Registered users sign in by clicking on the \u201csign in\u201d menu in the upper right hand corner.\r\n</p>\r\n\r\n<h3>Review Regional Aquatic Priorities</h3>\r\n<p>\r\nThe map to the right represents regional aquatic priorities identified by USFWS using this decision support tool.  On this map, the darker areas represent those areas that are considered high priority. For additional information on how these priorities were created the detailed <a href=\"/docs.html\">documentation</a>.\r\n</p>\r\n\r\n<p>\r\nClick the \u201cdata and priorities\u201d tab at the top of this page and there you will see the priorities layer at the top of the tree view under the \u201cRegional Priorities\u201d heading. You can click on each sub-basin in the map for additional information specific to the level of importance, sub-basin name and area and prioritization constraints such as vulnerability to climate change, watershed condition and vulnerability to aquatic invasives.\r\n</p>\r\n\r\n<h3>Explore data inputs</h3>\r\n<p>\r\nAlso available to explore are data used to generate the priorities including species specific information and watershed factors related to climate change, watershed condition and aquatic invasives.  These data are under the heading \u201cPriorities input data\u201d.  To explore these layers, click on the arrow next to the heading and a tree view will expand exposing the layers.  Click on the check box next to the desired layer and you will see it appear on the map.  Many of these data are imbedded in subsequent sub-folders.  For additional information on any of these data layers, please see the <a href=\"/home/data_dictionary.pdf\">data dictionary</a>.\r\n\r\n</p>\r\n", 
+      "content": "<p>\r\nPlease read the detailed <a href=\"/docs.html\">documentation</a> to gain a better understanding of the purpose, limitations and products associated with this tool. All users are able to design the map by selecting what data layers to show, explore the map using pan and zoom functionality, and investigate data sets pertaining to juniper as well as wildlife species, protected lands and management. Registered users sign in by clicking on the \u201csign in\u201d menu in the upper right hand corner.\r\n\r\n<h3>Build a Map</h3>\r\n<p>\r\nTo begin exploring the Juniper Management Tool, click the \u201cSelect Data to Map\u201d tab at the top of the map page.  You will see six data themes that organize the spatial data into logical groupings. The <B>Base Map</B> heading layer at the top of the tree view will have different third-party base maps to choose from such as aerial imagery, topography or terrain. Under the <B>Base Layers</B> heading you can select data that will help orient you in the map, such as cities, highways and hydrology.  The map will initially have the following layers selected as a base map for you: planning units, juniper utilization centers, roads, cities and basic terrain.  To see a specific watershed name simply hover your mouse over the watershed.  You can click on each watershed in the map for additional summarized information such the acreage of juniper phases, protected lands, sage grouse and pygmy rabbit habitat.\r\n</p>\r\n\r\n<h3>Explore Data Layers and Watershed Summarized Information</h3>\r\n<p>\r\nThere are a number of data themes that organize pertinent data for juniper management, such as wildlife species and juniper phases. Other data sets available for viewing are data used to generate the priorities including species specific information and cost factors related to different treatment types and geographic variables.  These data are under the heading \u201cSummarized Data\u201d. To explore these layers, click on the arrow next to the heading and a tree view will expand exposing the layers. Click on the check box next to the desired layer and you will see it appear on the map. Many of these data are imbedded in subsequent sub-folders. For additional information on any of these data layers, please see the <a href=\"/home/data_dictionary.pdf\">data dictionary</a>. \r\n\r\n</p>\r\n\r\n<h3>Create a New Juniper Management Prioritization Scenario</h3>\r\n<p>\r\nAdd descriptive text here\r\n</p>", 
       "header": "", 
       "slug": "about-content"
     }
@@ -291,7 +291,7 @@
     "pk": 16, 
     "model": "flatblocks.flatblock", 
     "fields": {
-      "content": "watersheds", 
+      "content": "Watersheds", 
       "header": "", 
       "slug": "planning-units"
     }
@@ -300,7 +300,7 @@
     "pk": 17, 
     "model": "flatblocks.flatblock", 
     "fields": {
-      "content": "Select the watersheds that define your geographic region of interest.", 
+      "content": "Select the planning units that best define areas of your management interest.", 
       "header": "", 
       "slug": "form-geography-header"
     }
@@ -321,15 +321,6 @@
       "content": "Results Summary", 
       "header": "", 
       "slug": "show-results-summary"
-    }
-  }, 
-  {
-    "pk": 23, 
-    "model": "flatblocks.flatblock", 
-    "fields": {
-      "content": "Geography", 
-      "header": "", 
-      "slug": "geography"
     }
   }, 
   {
@@ -357,6 +348,15 @@
       "content": "You haven't created any prioritization scenarios yet.\r\n<br/><br/>\r\nYou can create customized prioritization scenarios, view the results on the map, study the output reports, export to various format, save them for future use, edit them and share them with colleagues. ", 
       "header": "", 
       "slug": "new-manage-scenario"
+    }
+  }, 
+  {
+    "pk": 23, 
+    "model": "flatblocks.flatblock", 
+    "fields": {
+      "content": "Select target", 
+      "header": "", 
+      "slug": "geography"
     }
   }, 
   {

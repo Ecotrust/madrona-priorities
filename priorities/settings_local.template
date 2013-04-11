@@ -5,20 +5,15 @@ WSGI_USER = 'mperry'
 SITE_ID = 1
 LOGIN_REDIRECT_URL = '/'
 DEBUG = True
-USE_CACHE = True
 
 MARXAN_BIN =  '/usr/local/marxan243/MarOpt_v243_Linux32'
 
 CACHES = {
     'default': {
-        'BACKEND': 'redis_cache.RedisCache',
-        'LOCATION': 'localhost:6379',
-        'OPTIONS': { 
-            'DB': 2,
-        },
+        'BACKEND': 'redis_cache.cache.RedisCache',
+        'LOCATION': 'localhost:6379:5',
     },
 }
 
-USE_CACHE = True
-
+# If you don't want caching, set up dummy cache backend
 # CACHES = { 'default': { 'BACKEND': 'django.core.cache.backends.dummy.DummyCache', } }

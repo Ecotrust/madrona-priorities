@@ -1,6 +1,6 @@
 import os
 from django.core.management.base import BaseCommand, CommandError
-from seak.models import ConservationFeature, PlanningUnit, Cost, PuVsCf, PuVsCost, DefinedGeography
+from seak.models import ConservationFeature, PlanningUnit, Cost, Aux, PuVsCf, PuVsCost, PuVsAux, DefinedGeography
 from django.contrib.gis.utils import LayerMapping
 from django.contrib.gis.gdal import DataSource
 from django.template.defaultfilters import slugify
@@ -33,6 +33,8 @@ class Command(BaseCommand):
             xls = args[1]
             assert os.path.exists(shp)
             assert os.path.exists(xls)
+            print "Using %s as the data layer" % shp
+            print "Using %s as the xls metadata" % xls
         except (AssertionError, IndexError):
             raise CommandError("Specify shp and xls file\n \
                     python manage.py import_planning_units test.shp test.xls <optional: full res shp>")
@@ -40,8 +42,8 @@ class Command(BaseCommand):
         try:
             fullres_shp = args[2]
             assert os.path.exists(fullres_shp)
+            print "Using %s as the full-res display layer" % fullres_shp
         except (AssertionError, IndexError):
-            print
             print "Using %s as the full-res display layer" % shp
             fullres_shp = shp
 
@@ -49,7 +51,7 @@ class Command(BaseCommand):
         import_shp = True
         app = 'seak'
 
-        modls = ['ConservationFeature',  'Cost', 'PuVsCf', 'PuVsCost']
+        modls = ['ConservationFeature',  'Cost', 'Aux', 'PuVsCf', 'PuVsCost', 'PuVsAux']
         if import_shp:
             modls.append('PlanningUnit')
 
@@ -71,7 +73,7 @@ class Command(BaseCommand):
         # Clear them out
         print
         print "Cleaning out old tables"
-        ms = [ConservationFeature, Cost, PuVsCf, PuVsCost, DefinedGeography]
+        ms = [ConservationFeature, Cost, Aux, PuVsCf, PuVsCost, PuVsAux,DefinedGeography]
         if import_shp:
             ms.append(PlanningUnit)
         for m in ms: 
@@ -91,14 +93,18 @@ class Command(BaseCommand):
         sheet = book.sheet_by_name("ConservationFeatures")
         headers = [str(x).strip() for x in sheet.row_values(0)] #returns all the CELLS of row 0,
 
-        fieldnames = ['name', 'uid', 'level1', 'level2', 'level3', 
-                      'level4', 'level5', 'dbf_fieldname', 'units','desc']
+        fieldnames = ['name', 'uid', 'level1', 'level2', 'dbf_fieldname', 'units','desc']
 
-        if len(headers) != len(fieldnames):
+        if len(headers) < len(fieldnames):
             raise Exception("The ConservationFeatures sheet has errors: expecting these headers\n  %s\nBut found\n  %s" % (fieldnames, headers))
-        for h in range(len(headers)): 
-            if headers[h] != fieldnames[h]:
-                print "WARNING: field %s is '%s' in the xls file but model is expecting '%s' ... OK?" % (h, headers[h], fieldnames[h])
+
+        for h in range(len(fieldnames)): 
+            if headers[h].lower() != fieldnames[h].lower():
+                raise Exception("field %s is '%s' in the xls file but model is expecting '%s'." % (h, headers[h], fieldnames[h]))
+
+        extra_fields = headers[len(fieldnames):] 
+        if len(extra_fields) > 0:
+            print "WARNING: extra fields in ConservationFeatures sheet not being used\n    ", extra_fields
 
         uids = []
         for i in xrange(1, sheet.nrows):
@@ -146,12 +152,16 @@ class Command(BaseCommand):
 
         fieldnames = ['name', 'uid', 'dbf_fieldname', 'units', 'desc']
 
-        if len(headers) != len(fieldnames):
+        if len(headers) < len(fieldnames):
             raise Exception("The Costs sheet has errors: expecting these headers\n  %s\nBut found\n  %s" % (fieldnames, headers))
-        for h in range(len(headers)): 
-            if headers[h] != fieldnames[h]:
-                print "WARNING: field %s is '%s' in the xls file but model is expecting '%s' ... OK?" % (h, 
-                        headers[h], fieldnames[h])
+
+        for h in range(len(fieldnames)): 
+            if headers[h].lower() != fieldnames[h].lower():
+                raise Exception("field %s is '%s' in the xls file but model is expecting '%s'." % (h, headers[h], fieldnames[h]))
+
+        extra_fields = headers[len(fieldnames):] 
+        if len(extra_fields) > 0:
+            print "WARNING: extra fields in Cost sheet not being used\n    ", extra_fields
 
         for i in xrange(1, sheet.nrows):
             vals = sheet.row_values(i)
@@ -172,10 +182,47 @@ class Command(BaseCommand):
                 raise Exception("DBF has no field named %s (it IS case sensitive).\n\n %s" % (fname, 
                     layer.fields))
 
+        # Load Aux from xls
+        print
+        print "Loading Auxillary Data fields"
+        sheet = book.sheet_by_name("Other Fields")
+        headers = [str(x).strip() for x in sheet.row_values(0)] #returns all the CELLS of row 0,
+
+        fieldnames = ['name', 'uid', 'dbf_fieldname', 'units', 'desc']
+
+        if len(headers) < len(fieldnames):
+            raise Exception("The Other Fields sheet has errors: expecting these headers\n  %s\nBut found\n  %s" % (fieldnames, headers))
+
+        for h in range(len(fieldnames)): 
+            if headers[h].lower() != fieldnames[h].lower():
+                raise Exception("field %s is '%s' in the xls file but model is expecting '%s'." % (h, headers[h], fieldnames[h]))
+
+        extra_fields = headers[len(fieldnames):] 
+        if len(extra_fields) > 0:
+            print "WARNING: extra fields in Other Fields sheet not being used\n    ", extra_fields
+
+        for i in xrange(1, sheet.nrows):
+            vals = sheet.row_values(i)
+            print vals
+            params = dict(zip(fieldnames, vals))
+            aux = Aux(**params)
+            aux.save()
+
+        auxs = Aux.objects.all()
+        assert len(auxs) == sheet.nrows - 1
+
+        for aux in auxs:
+            fname = aux.dbf_fieldname
+            if fname not in layer.fields:
+                if find_possible(fname, layer.fields):
+                    raise Exception("DBF has no field named `%s`.\n Did you mean `%s`" % (fname,
+                        find_possible(fname, layer.fields)))
+                raise Exception("DBF has no field named %s (it IS case sensitive).\n\n %s" % (fname, 
+                    layer.fields))
+
         # Load PU from shpfile
         print
-        print "WARNING It is your responsibility to make sure the shapefile projection below \
-                matches srid %s" % settings.GEOMETRY_DB_SRID
+        print "WARNING It is your responsibility to make sure the shapefile projection below matches srid %s" % settings.GEOMETRY_DB_SRID
         print layer.srs
 
         sheet = book.sheet_by_name("PlanningUnits")
@@ -195,9 +242,11 @@ class Command(BaseCommand):
         mapping = {
             'name' : params['name_field'],
             'fid' : params['fid_field'], 
-            'calculated_area': params['area_field'],
             'geometry' : 'MULTIPOLYGON',
         }
+
+        if params['area_field']:
+            mapping['calculated_area'] = params['area_field']
 
         NULL_VALUE = params['null_value']
         FID_FIELD = params['fid_field']
@@ -299,25 +348,41 @@ class Command(BaseCommand):
             vals = [x for x in vals if x >= 0 ]
             breaks = sorted(get_jenks_breaks(vals, 4))
             breaks = [0.000001 if x == 0.0 else x for x in breaks]
-            #print fieldname, breaks, min(vals), max(vals)
+
+            colors = {
+                'c1': '#CC4C02', # high 
+                'c2': '#FE9929', 
+                'c3': '#FED98E', 
+                'c4': '#FFFFD4', # low
+                'c5': '#FFFFFF', # zero
+            }
+
+            tdict = {"fieldname": fieldname, 'b1': breaks[1], 'b2': breaks[2], 'b3': breaks[3]}
+            tdict.update(colors)
+ 
             extra_rules = """
                 <Rule>
                     <Filter>([%(fieldname)s] &gt;= %(b3)f)</Filter>
-                    <PolygonSymbolizer fill="#CC4C02" fill-opacity="1.0" />
+                    <PolygonSymbolizer fill="%(c1)s" fill-opacity="1.0" />
                 </Rule>
                 <Rule>
                     <Filter>([%(fieldname)s] &gt;= %(b2)f)</Filter>
-                    <PolygonSymbolizer fill="#FE9929" fill-opacity="1.0" />
+                    <PolygonSymbolizer fill="%(c2)s" fill-opacity="1.0" />
                 </Rule>
                 <Rule>
                     <Filter>([%(fieldname)s] &gt;= %(b1)f)</Filter>
-                    <PolygonSymbolizer fill="#FED98E" fill-opacity="1.0" />
+                    <PolygonSymbolizer fill="%(c3)s" fill-opacity="1.0" />
                 </Rule>
                 <Rule>
-                    <Filter>([%(fieldname)s] &gt;= 0)</Filter>
-                    <PolygonSymbolizer fill="#FFFFD4" fill-opacity="1.0" />
+                    <Filter>([%(fieldname)s] &gt; 0)</Filter>
+                    <PolygonSymbolizer fill="%(c4)s" fill-opacity="1.0" />
                 </Rule>
-            """ % {"fieldname": fieldname, 'b1': breaks[1], 'b2': breaks[2], 'b3': breaks[3]}
+                <Rule>
+                    <Filter>([%(fieldname)s] = 0)</Filter>
+                    <PolygonSymbolizer fill="%(c5)s" fill-opacity="1.0" />
+                </Rule>
+            """ % tdict 
+
             xml = xml_template % {'shppath': os.path.abspath(fullres_shp), 'extra_rules': extra_rules} 
             with open(os.path.join(settings.TILE_CONFIG_DIR, fieldname + '.xml'), 'w') as fh:
                 print "  writing %s.xml" % fieldname
@@ -336,7 +401,7 @@ class Command(BaseCommand):
 
         print 
         print "Populating theme and layers for the layer manager"
-        Theme.objects.filter(url__startswith="/tiles/").delete()
+        Layer.objects.filter(url__startswith="/tiles/").delete()
         call_command('loaddata','project_base_layers')
 
         for cf in cfs_with_fields:
@@ -372,22 +437,29 @@ class Command(BaseCommand):
             lyr.delete()
         except Layer.DoesNotExist:
             pass
-        print " ",url
+        print " ", url
         theme_name = "Base"
-        try:
-            theme = Theme.objects.get(display_name=theme_name)
-        except Theme.DoesNotExist:
-            theme = Theme.objects.create(name="auto_%s" % theme_name, display_name=theme_name)
+        theme, created = Theme.objects.get_or_create(name="auto_%s" % theme_name, display_name=theme_name)
         desc = "Planning unit boundaries"
-        lyr = Layer.objects.create(name=name, layer_type="XYZ", url=url, default_on=True,
-                opacity=1.0, description=desc, legend=legend, legend_title=name)
+        lyr = Layer.objects.create(
+            name=name, layer_type="XYZ", url=url, default_on=True,
+            opacity=1.0, description=desc, legend=legend, legend_title=name
+        )
         lyr.themes.add(theme)
         lyr.save()
 
-        print 
-        print "Loading costs and conservation features associated with each planning unit"
+        print ""
+        print "Loading costs, conservation features and auxillary data associated with each planning unit"
         for feature in layer:
             pu = pus.get(fid=feature.get(mapping['fid']))
+
+            for aux in auxs:
+                amt = feature.get(aux.dbf_fieldname)
+                if amt == NULL_VALUE:
+                    amt = None
+                obj = PuVsAux(pu=pu, aux=aux, value=amt)
+                obj.save()
+
             for cf in cfs_with_fields:
                 amt = feature.get(cf.dbf_fieldname)
                 if amt == NULL_VALUE:
@@ -410,6 +482,7 @@ class Command(BaseCommand):
 
         assert len(PuVsCf.objects.all()) == len(pus) * len(cfs_with_fields)
         assert len(PuVsCost.objects.all()) == len(pus) * len(cs)
+        assert len(PuVsAux.objects.all()) == len(pus) * len(auxs)
 
         # Load Geographies from xls
         print

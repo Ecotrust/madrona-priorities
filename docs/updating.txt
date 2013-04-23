@@ -20,8 +20,8 @@ python manage.py clear_cache
 # TODO confirm appname
 rm -rf /tmp/oregon-juniper-management-tool-stache
 python manage.py precache
-chmod 775 /tmp/oregon-juniper-management-tool-stache
-chown mperry:www-data /tmp/oregon-juniper-management-tool-stache
+chmod -R 775 /tmp/oregon-juniper-management-tool-stache
+chown -R mperry:www-data /tmp/oregon-juniper-management-tool-stache/
 touch ../deploy/wsgi.py
-sudo service celeryd_juniper restart
+sudo service celeryd_juniper-blm restart
 rm ../MAINTENANCE_MODE

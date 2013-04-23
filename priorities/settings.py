@@ -117,7 +117,7 @@ JS_OPTS = {
     'zoom_on_select': False,
 }
 
-ADD_SCALEFACTOR_CONSTANT = 3 # 0==moderately weight costs, 5==meet targets at (almost) any cost
+ADD_SCALEFACTOR_CONSTANT = 7 # 0==moderately weight costs, 5==meet targets at (almost) any cost
 
 CACHE_TIMEOUT = 60 * 60 * 24 * 365
 

@@ -558,11 +558,11 @@ class Scenario(Analysis):
                 breaks = scaled_breaks[cname]
                 # classify the costs into categories
                 if thecost <=  breaks[1]:
-                    theclass = 'low'
+                    theclass = 'low cover'
                 elif thecost > breaks[2]: 
-                    theclass = 'high'
+                    theclass = 'high cover'
                 else:
-                    theclass = 'med' 
+                    theclass = 'med cover' 
                 costs[cname] = {'raw': raw_costs[cname],'scaled': thecost, 'class': theclass}
 
             auxs = dict([(x.aux.name, x.value) for x in pu.puvsaux_set.all()])

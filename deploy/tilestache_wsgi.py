@@ -2,8 +2,8 @@ import sys
 import site
 import os
 
-project = '/usr/local/apps/aquatics-blm/priorities'
-ve = '/usr/local/apps/aquatics-blm/env'
+project = '/usr/local/apps/juniper-blm/priorities'
+ve = '/usr/local/apps/juniper-blm/env'
 vepath = os.path.join(ve, 'lib/python2.6/site-packages')
 
 prev_sys_path = list(sys.path)
@@ -20,4 +20,4 @@ for item in new_sys_path:
 sys.path[:0] = new_sys_path
 
 import TileStache
-application = TileStache.WSGITileServer('/usr/local/apps/aquatics-blm/tile_config/tiles.cfg')
+application = TileStache.WSGITileServer('/usr/local/apps/juniper-blm/tile_config/tiles.cfg')

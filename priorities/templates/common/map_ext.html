@@ -304,7 +304,7 @@
                     <img alt="loading" src="/media/img/ajax-loader.gif"/> 
                 </div>
                 <div class="watershed-well well hide">
-                    <h4> Watershed </h4>
+                    <h4> {% flatblock 'planning-unit-popup-header' 3600 %} </h4>
                     <p id="watershed-name"></p>
                 </div>
                 <div id="vector-attributes" class="well" data-bind="visible: app.viewModel.layers.attributeData().length">

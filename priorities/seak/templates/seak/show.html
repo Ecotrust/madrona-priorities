@@ -126,7 +126,7 @@
                         {% for k,v in w.costs.items %}
                         <td>
                             <span class="hide" title="{{v.scaled}}"></span>
-                            <span class="badge {% if v.class == 'low' %}badge-success{% elif v.class == 'med' %}badge-warning{% elif v.class == 'high' %}badge-important{% endif %}">
+                            <span class="badge {% if 'low' in v.class %}badge-success{% elif 'med' in v.class %}badge-warning{% elif 'high' in v.class %}badge-important{% endif %}">
                                 {{v.class}}
                                 {% if show_raw_costs %}
                                 : {{v.raw|floatformat:0|intcomma}}

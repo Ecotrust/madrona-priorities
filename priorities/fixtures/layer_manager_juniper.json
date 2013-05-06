@@ -2418,7 +2418,7 @@
       "data_source": "", 
       "data_notes": "", 
       "name": "Utilization Centers", 
-      "url": "http://juniper.labs.ecotrust.org/media/geojson/utilization_centers.geojson", 
+      "url": "http://juniper.apps.ecotrust.org/media/geojson/utilization_centers.geojson", 
       "arcgis_layers": "", 
       "subdomains": "", 
       "legend_title": "", 

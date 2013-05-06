@@ -49,8 +49,8 @@
         <div class="container-fluid">
           <a class="brand" href="/">{% flatblock "title" 3600 %}</a>
           <ul class="nav">
-                <li><a href="/news/about/">Learn More</a></li>
-                <li><a href="/help/">Get Help</a></li>
+                <li><a href="/news/about/">{% flatblock "learn-more-title" 3600 %}</a></li>
+                <li><a href="/help/">{% flatblock "get-help-title" 3600 %}</a></li>
           </ul>
           <ul class="nav pull-right">
               {% if user.is_authenticated %}

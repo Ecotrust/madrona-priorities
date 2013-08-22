@@ -14,10 +14,24 @@
         {% endif %}
     </script>
 
-    <link href="{{MEDIA_URL}}bootstrap/css/bootstrap.custom.css" rel="stylesheet">
+    <!-- <link href="{{MEDIA_URL}}bootstrap/css/bootstrap.custom.css" rel="stylesheet"> -->
+    <!--<link href="http://netdna.bootstrapcdn.com/bootswatch/2.3.1/flatly/bootstrap.min.css" rel="stylesheet"> -->
+    <link href="http://aquatics-blm.labs.ecotrust.org/media/bootstrap/css/bootstrap.spacelab.css" rel="stylesheet">
+
     {% load compressed %}{% compressed_css 'application' %}
+
     <link href="{{MEDIA_URL}}bootstrap/css/bootstrap-responsive.css" rel="stylesheet"> 
     <link href="http://ajax.aspnetcdn.com/ajax/jquery.dataTables/1.9.4/css/jquery.dataTables.css" rel="stylesheet">
+    <style>
+        .btn-group {
+            position: relative;
+            font-size: 0;
+            vertical-align: middle;
+            white-space: nowrap;
+            color: #444;
+            display: block;
+        }
+    </style>
 
     <script type="text/javascript" src="{{MEDIA_URL}}common/js/sugar-1.3.6.min.js"></script>
     <script type="text/javascript" src="{{MEDIA_URL}}common/js/jquery.min.js"></script>

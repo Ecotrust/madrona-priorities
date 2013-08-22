@@ -552,13 +552,19 @@ class Scenario(Analysis):
             scaled_costs[costslug] = pucosts
             scaled_breaks[costslug] = get_jenks_breaks(scaled_values, 3)
 
+        sorted_cost_keys = [x.slug for x in Cost.objects.all().order_by('uid') if x.slug in scaled_costs.keys()]
+        
+        summed_costs = {}
         for pu in bestpus:
             centroid = pu.centroid 
-            costs = {}
+            costs = []
             raw_costs = dict([(x.cost.slug, x.amount) for x in pu.puvscost_set.all()])
-            for cname, pucosts in scaled_costs.iteritems():
+
+            for cname in sorted_cost_keys:
+                pucosts = scaled_costs[cname]
                 thecost = pucosts[pu.fid]
                 breaks = scaled_breaks[cname]
+
                 # classify the costs into categories
                 if thecost <=  breaks[1]:
                     theclass = 'low'
@@ -566,7 +572,12 @@ class Scenario(Analysis):
                     theclass = 'high'
                 else:
                     theclass = 'med' 
-                costs[cname] = {'raw': raw_costs[cname],'scaled': thecost, 'class': theclass}
+                costs.append({'name': cname, 'raw': raw_costs[cname],'scaled': thecost, 'class': theclass})
+
+                if summed_costs.has_key(cname):
+                    summed_costs[cname] += raw_costs[cname]
+                else: 
+                    summed_costs[cname] = raw_costs[cname]
 
             auxs = dict([(x.aux.name, x.value) for x in pu.puvsaux_set.all()])
 
@@ -578,9 +589,6 @@ class Scenario(Analysis):
                          'centroidy': centroid[1]})
 
         sum_area = sum([x.area for x in bestpus])
-        summed_costs = {}
-        for c in scaled_costs.keys(): # just use to get the keys
-            summed_costs[c] = sum(x['costs'][c]['raw'] for x in best)
 
         # Parse mvbest
         fh = open(os.path.join(self.outdir, "output", "seak_mvbest.csv"), 'r')
@@ -633,7 +641,7 @@ class Scenario(Analysis):
             costs[name] = v
 
         surrogate = {
-            'species_targeted': 0,  # cost = this
+            'species_targeted': 0,
             'species_represented': 0, 
             'species_missed': 0, 
             'species_under_represented': 0, 
@@ -893,7 +901,7 @@ class Scenario(Analysis):
         form_context = {
             'cfs': ConservationFeature.objects.all().order_by('level1', 'name'),
             'defined_geographies': DefinedGeography.objects.all(),
-            'costs': Cost.objects.all().order_by('name'),
+            'costs': Cost.objects.all().order_by('uid'),
             'slider_mode': settings.SLIDER_MODE,
             'slider_show_raw': settings.SLIDER_SHOW_RAW,
             'slider_show_proportion': settings.SLIDER_SHOW_PROPORTION,

@@ -115,8 +115,8 @@
                 <thead>
                     <tr>
                         <th> {% flatblock 'show-planning-units' 3600 %} </th> 
-                        {%for k,v in results.units.1.costs.items %}
-                            {% if v > 0 %}<th>{{k|deslug}}</th> {% endif %}
+                        {%for cost in results.units.1.costs %}
+                            <th>{{cost.name|deslug}}</th>
                         {%endfor%}
                     </tr>
                 </thead>
@@ -129,10 +129,10 @@
                             <span class="hide centroid-x" data-coord="{{w.centroidx}}"></span>
                             <span class="hide centroid-y" data-coord="{{w.centroidy}}"></span>
                         </td>
-                        {% for k,v in w.costs.items %}
+                        {% for v in w.costs %}
                         <td>
                             <span class="hide" title="{{v.scaled}}"></span>
-                            <span class="badge {% if v.class == 'low' %}badge-success{% elif v.class == 'med' %}badge-warning{% elif v.class == 'high' %}badge-important{% endif %}">
+                            <span class="badge {% if v.class == 'low' %}badge{% elif v.class == 'med' %}badge-warning{% elif v.class == 'high' %}badge-success{% endif %}">
                                 {{v.class}}
                                 {% if show_raw_costs %}
                                 : {{v.raw|floatformat:0|intcomma}}

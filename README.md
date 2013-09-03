@@ -8,6 +8,9 @@ The priorities tool is based on Madrona and Marxan.
 
 It is designed so that the code could be easily repurposed for other projects...
 
+## Updating the dataset for an existing priorties tool
+
+See [Process for loading new dataset](https://github.com/Ecotrust/madrona-priorities/wiki/Process-for-loading-new-dataset)
 ## To launch a new priorities tool.
 
 * **Spatial data prep**. Decide on polygon planning units and summarize targets and costs to the planning units. See `docs/data_prep.md`

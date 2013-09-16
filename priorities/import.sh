@@ -1,6 +1,6 @@
-DATA_DIR=~/projects/BLM_Aquatics/data_20121210
+DATA_DIR=./data/data_20130820
 python manage.py import_planning_units \
-    $DATA_DIR/HUC10_BLM_20121210_simple.shp \
-    $DATA_DIR/BLM_metrics20121210.xls \
-    $DATA_DIR/HUC10_BLM_20121210.shp
+    $DATA_DIR/HUC10_BLM_20130812_simple.shp \
+    $DATA_DIR/BLM_metrics20130812.xls \
+    $DATA_DIR/HUC10_BLM_20130812_WGS.shp
 

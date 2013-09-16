@@ -115,7 +115,7 @@
                     <tr>
                         <th> {% flatblock 'show-planning-units' 3600 %} </th> 
                         <th class="pu-show"> BLM Land (%) </th>
-                        <th class="pu-show"> Density of Fish Bearing Streams on BLM land (km/km<sup>2</sup>)</th>
+                        <th class="pu-show"> Fish Bearing Streams on BLM land (%)</th>
                         {%for k,v in results.units.1.costs.items %}
                         {% if v > 0 %}
                             <th>
@@ -136,15 +136,15 @@
 
                         <td>
                             {% for k,v in w.auxs.items %}
-                            {% if k == 'Proportion of BLM land' %}
-                            {{v|percentage:2}}
+                            {% if k == 'Percent BLM land' %}
+                            {{v|floatformat:2}} %
                             {% endif %}
                             {% endfor %}
                         </td>
                         <td>
                             {% for k,v in w.auxs.items %}
-                            {% if k == 'Density of Fish Bearing Streams on BLM land' %}
-                            {% if v %}{{v|floatformat:5}}{% else %}--{% endif %}
+                            {% if k == 'Percent of Fish Bearing Streams on BLM land' %}
+                            {% if v %}{{v|floatformat:2}} %{% else %}--{% endif %}
                             {% endif %}
                             {% endfor %}
                         </td>

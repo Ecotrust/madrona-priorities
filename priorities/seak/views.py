@@ -44,7 +44,7 @@ def watershed_shapefile(request, instances):
         if p.geom_type == 'Polygon':
             p = MultiPolygon(p)
         auxs = dict([(x.aux.dbf_fieldname, x.value) for x in w.puvsaux_set.all()])
-        blm_pct = 100 * float(auxs['BLMratio']) # for some reason shp_responder rounds floats to ints
+        blm_pct = float(auxs['BLMlandpct']) # dbffieldname, WARNING shp_responder rounds floats to ints
         results[fid] = {'pu': w, 'geometry': p, 'name': w.name, 'hits': 0, 'bests': 0, 'blmratio': blm_pct} 
 
     stamp = int(time.time() * 1000.0)

@@ -338,7 +338,7 @@
             {% for cost in costs %}
             <tr class="cost-row" id="row-{{cost.dbf_fieldname}}">
                 <td><input type="checkbox" class="costvalue" id="cost---{{cost.slug}}" checked="1"/></td>
-                <td><label for="cost---{{cost.slug}}">{{cost.name}} {% if cost.desc %}(<em>{{cost.desc}}</em>){% endif %}</label></td>
+                <td><label for="cost---{{cost.slug}}">{{cost.name}} <!-- {% if cost.desc %}(<em>{{cost.desc}}</em>){% endif %} --></label></td>
             </tr>
             {% endfor %}
           </table>

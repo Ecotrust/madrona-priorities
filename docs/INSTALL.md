@@ -28,9 +28,11 @@ pip install --upgrade --force-reinstall -r requirements.txt
 ```
 cd priorities
 dropdb <PROJECT_NAME> -U postgres
+# or switch users to postgres
 createdb <PROJECT_NAME> -U postgres
 # set up settings_local.py for DB and redis
 python manage.py syncdb
+# if you get a GeoDjango EOSException error, check the answer here: http://stackoverflow.com/questions/18643998/geodjango-eosexception-error
 python manage.py migrate
 python manage.py site <FULL_HOST_NAME>
 python manage.py enable_sharing --all
@@ -55,3 +57,22 @@ sudo /etc/init.d/apache2 reload
 # Next steps
 
 See `docs/updating.txt`
+
+# Deploy on local VM
+
+* `vagrant up`
+* `vagrant ssh`
+* `source go`
+* checkout djmapnik into /usr/local/venv/src/
+* python setup.py install
+* checkout madrona into /usr/local/venv/src/
+* vim requirements.txt
+*   django>=1.4,<1.6
+*   commend out djmapnik
+* `pip install -r requirements.txt`
+* `python setup.py install`
+* `exit`
+* `fab dev init`
+* `vagrant ssh`
+* `source go`
+* `python manage.py runserver 0.0.0.0:8000`

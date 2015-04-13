@@ -1,3 +1,4 @@
+django >= 1.4, <1.6
 xlrd>=0.7.8
 django-redis-sessions
 python-memcached
@@ -8,6 +9,5 @@ django-redis
 redis
 fabric
 kombu
--e git+https://github.com/Ecotrust/madrona.git@master#egg=madrona
--e git+git://github.com/migurski/TileStache.git@master#egg=TileStache
-
+tilestache
+#-e git+https://github.com/Ecotrust/madrona.git@master#egg=madrona

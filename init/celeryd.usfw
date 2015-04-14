@@ -90,14 +90,14 @@ if test -f /etc/default/celeryd; then
     . /etc/default/celeryd
 fi
 ############################
-VIRTUALENV="/usr/local/apps/usfw/env"
-CELERYD_CHDIR="/usr/local/apps/usfw/watershed-priorities/wp"
+VIRTUALENV="/usr/local/venv/priorities"
+CELERYD_CHDIR="/usr/local/apps/usfw2/priorities"
 export DJANGO_SETTINGS_MODULE="settings"
-PYTHON="$VIRTUALENV/bin/python"
+PYTHON="$VIRTUALENV/bin/python2.7"
 CELERYD="$PYTHON $CELERYD_CHDIR/manage.py celeryd"
 export PATH="$VIRTUALENV/bin:$PATH"
 CELERYD_OPTS="-v 2 -B -s celery -E"
-CELERYD_LOG_FILE="$VIRTUALENV/../log/celery.log"
+CELERYD_LOG_FILE="$VIRTUALENV/../logs/celery.log"
 CELERYD_USER="www-data"
 CELERYD_GROUP="www-data"
 ###########################

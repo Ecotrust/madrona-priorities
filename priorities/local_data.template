@@ -6,3 +6,5 @@ local_data_dir = os.path.join('/home/mperry/projects/BLM_Aquatics/', dirname)
 pu_simple = 'HUC10_BLM_20121210_simple.shp'
 xls = 'BLM_metrics20121210.xls'
 pu = 'HUC10_BLM_20121210.shp'
+stage_server = ''
+prod_server = ''

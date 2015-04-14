@@ -7,11 +7,42 @@ import posixpath
 APP = 'usfw2'
 BRANCH = APP
 STACHE_DIR = "/tmp/usfw2-stache" 
-ME = 'mperry'
+ME = 'rhodges'
 env.directory = '/usr/local/apps/%s' % APP
-env.hosts = ['ninkasi.ecotrust.org']
-env.activate = 'source %s' % posixpath.join(env.directory, 'env-%s' % APP,'bin','activate')
+env.venv = '/usr/local/venv/priorities'
+# env.hosts = ['ninkasi.ecotrust.org']
 env.deploy_user = 'www-data'
+
+
+def dev():
+    """ Use development server settings """
+    servers = ['vagrant@127.0.0.1:2222']
+    env.activate = 'source %s' % posixpath.join(env.venv, 'bin', 'activate')
+    env.hosts = servers
+    return servers
+
+
+def test():
+    """ Use test server settings """
+    env.activate = 'source %s' % posixpath.join(env.directory, 'env-%s' % APP,'bin','activate')
+    servers = [stage_server]
+    env.hosts = servers
+    return servers
+
+
+def prod():
+    """ Use production server settings """
+    env.activate = 'source %s' % posixpath.join(env.directory, 'env-%s' % APP,'bin','activate')
+    servers = [prod_server]
+    env.hosts = servers
+    return servers
+
+
+def all():
+    """ Use all servers """
+    env.hosts = dev() + prod() + test()
+
+
 
 
 def virtualenv(command, user=None):
@@ -40,6 +71,7 @@ def fix_permissions():
     Make sure all directories have appropriate permissions
     """
     with cd(env.directory):
+        run("mkdir -p marxan_output")
         run("mkdir -p marxan_output/template")
         sudo("chgrp www-data -R marxan_output")
         sudo("chmod 775 -R marxan_output")
@@ -96,6 +128,8 @@ def import_dataset():
         sudo("rm -rf %s" % STACHE_DIR)
 
         # make sure postgres user can write out
+        run("mkdir -p marxan_output")
+        run("mkdir -p marxan_output/template")
         sudo("chmod 777 marxan_output/template") # TODO probably a better way to handle this
         sudo("chgrp www-data marxan_output")
         sudo("chmod 775 marxan_output")
@@ -107,6 +141,7 @@ def import_dataset():
                 %(data)s/%(pu)s" % {'data': 'priorities/data/' + dirname, 'pu_simple': pu_simple, 'xls': xls, 'pu': pu })
 
         # precache
+        run("mkdir -p %s" % STACHE_DIR)
         sudo("chmod 777 -R %s" % STACHE_DIR)
         virtualenv("python priorities/manage.py precache")
 

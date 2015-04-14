@@ -23,7 +23,7 @@ class Command(BaseCommand):
             a = scenario.results
 
         print "Caching some tiles..."
-        sz = settings.JS_OPTS['start_zoom']
+        sz = settings.JS_OPTS['start_zoom']-2
         nz = settings.JS_OPTS['num_levels']
 
         zooms = [str(x) for x in range(sz,sz+nz)]

@@ -73,7 +73,7 @@ function init_map() {
             new OpenLayers.Control.Zoom(),
             new OpenLayers.Control.Attribution()
         ],
-        minZoomLevel: js_opts.start_zoom,
+        minZoomLevel: js_opts.start_zoom-2,
         restrictedExtent: extent,
         numZoomLevels: js_opts.num_levels 
     });

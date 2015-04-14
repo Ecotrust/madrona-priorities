@@ -107,7 +107,7 @@ SHOW_AUX = False # in report
 SHOW_GOAL_MET = True # in report
 
 JS_OPTS = {
-    'start_zoom': 6,  
+    'start_zoom': 6,
     'num_levels': 8,  
     'center': {'lon': -118.2, 'lat': 45.5},
     'extent': [-127.1, 40.0, -106.0, 51.0],

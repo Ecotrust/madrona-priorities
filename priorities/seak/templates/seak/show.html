@@ -38,7 +38,11 @@
             {% if show_aux %}
                 <li><a href="#aux" data-toggle="tab"><span>{% flatblock 'show-aux' 3600 %}</span></a></li>
             {% endif %}
+            {% for group in user.groups.all %}
+            {% ifequal group.name "Surrogates" %}
             <li><a href="#surrogate" data-toggle="tab"><span>{% flatblock 'show-surrogate' 3600 %}</span></a></li>
+            {% endifequal %}
+            {% endfor %}
         {% endif %}
     </ul>
 

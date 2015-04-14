@@ -70,7 +70,7 @@ def watershed_shapefile(request, instances):
                 results[fid]['bests'] += 1
 
     readme = """Prioritization Scenario Array
-contact: mperry@ecotrust.org
+contact: rhodges@ecotrust.org
 
 Includes scenarios:
     %s

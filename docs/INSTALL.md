@@ -76,3 +76,9 @@ See `docs/updating.txt`
 * `vagrant ssh`
 * `source go`
 * `python manage.py runserver 0.0.0.0:8000`
+
+# If Celery Problems
+
+You can run it with manage.py:
+`manage.py celeryd --time-limit=300 -f /var/log/celeryd.log -l INFO`
+from http://ask.github.io/celery/cookbook/daemonizing.html#troubleshooting

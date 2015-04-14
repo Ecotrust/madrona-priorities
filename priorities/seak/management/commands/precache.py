@@ -24,7 +24,7 @@ class Command(BaseCommand):
 
         print "Caching some tiles..."
         sz = settings.JS_OPTS['start_zoom']-2
-        nz = settings.JS_OPTS['num_levels']
+        nz = settings.JS_OPTS['num_levels']+2
 
         zooms = [str(x) for x in range(sz,sz+nz)]
 

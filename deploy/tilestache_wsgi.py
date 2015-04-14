@@ -3,8 +3,8 @@ import site
 import os
 
 project = '/usr/local/apps/usfw2/priorities'
-ve = '/usr/local/apps/usfw2/env-usfw2'
-vepath = os.path.join(ve, 'lib/python2.6/site-packages')
+ve = '/usr/local/venv/priorities'
+vepath = os.path.join(ve, 'lib/python2.7/site-packages')
 
 prev_sys_path = list(sys.path)
 # add the site-packages of our virtualenv as a site dir

@@ -306,3 +306,7 @@ tbody.pu-show {
 .old_ie_wrapper tbody { 
     height: auto; 
 }
+
+#scenario-html {
+    overflow-y: auto;
+}

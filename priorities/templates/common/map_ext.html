@@ -401,6 +401,9 @@
                 $('#info').hide();
             });
             $(".interactive-table").dataTable();
+
+            max = $(document).height() - $('#scenario-html').offset().top;
+            $('#scenario-html').css('max-height',max);
         });
         OpenLayers.IMAGE_RELOAD_ATTEMPTS = 3; 
     </script>

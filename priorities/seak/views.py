@@ -1,6 +1,6 @@
 from madrona.common.utils import get_logger
 from madrona.shapes.views import ShpResponder
-#from madrona.features.views import get_object_for_viewing
+# from madrona.features.views import get_object_for_viewing
 from django.http import HttpResponse
 from django.template.defaultfilters import slugify
 from django.contrib.gis.geos import MultiPolygon
@@ -9,7 +9,7 @@ from django.views.decorators.cache import cache_page, cache_control
 from django.conf import settings
 from django.template import RequestContext
 from seak.models import PlanningUnit
-import TileStache 
+import TileStache
 import os
 import json
 import time
@@ -17,21 +17,41 @@ import tempfile
 
 logger = get_logger()
 
+
+def home(
+    request,
+    template_name='seak/home.html',
+    extra_context=None
+):
+    """
+    Landing Page
+    """
+    if not extra_context:
+        extra_context = {}
+
+    context = RequestContext(request, {
+        'session_key': request.session.session_key,
+    })
+    context.update(extra_context)
+    return render_to_response(template_name, context)
+
+
 def map(request, template_name='common/map_ext.html', extra_context=None):
     """
     Main application window
     """
     if not extra_context:
         extra_context = {}
-        
+
     extra_context['js_opts_json'] = json.dumps(settings.JS_OPTS)
 
     context = RequestContext(request, {
-        'api_key': settings.GOOGLE_API_KEY, 
+        'api_key': settings.GOOGLE_API_KEY,
         'session_key': request.session.session_key,
     })
     context.update(extra_context)
     return render_to_response(template_name, context)
+
 
 def watershed_shapefile(request, instances):
     from seak.models import PlanningUnitShapes, Scenario
@@ -43,7 +63,13 @@ def watershed_shapefile(request, instances):
         p = w.geometry
         if p.geom_type == 'Polygon':
             p = MultiPolygon(p)
-        results[fid] = {'pu': w, 'geometry': p, 'name': w.name, 'hits': 0, 'bests': 0} 
+        results[fid] = {
+            'pu': w,
+            'geometry': p,
+            'name': w.name,
+            'hits': 0,
+            'bests': 0
+        }
 
     stamp = int(time.time() * 1000.0)
 
@@ -52,7 +78,10 @@ def watershed_shapefile(request, instances):
         if not viewable:
             return response
         if not isinstance(instance, Scenario):
-            return HttpResponse("Shapefile export for prioritization scenarios only", status=500)
+            return HttpResponse(
+                "Shapefile export for prioritization scenarios only",
+                status=500
+            )
 
         ob = json.loads(instance.output_best)
         wids = [int(x.strip()) for x in ob['best']]
@@ -61,7 +90,7 @@ def watershed_shapefile(request, instances):
         for fid in wshd_fids:
             # Calculate hits and best
             try:
-                hits = puc[str(fid)] 
+                hits = puc[str(fid)]
             except KeyError:
                 hits = 0
             best = fid in wids

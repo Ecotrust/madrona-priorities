@@ -1,13 +1,36 @@
+
+.home {
+    margin: auto 10%;
+    padding: 10px;
+    border-top: solid 3px #78a22f;
+    border-left: solid 4px #78a22f;
+}
+
+.home a {
+    text-decoration: none;
+}
+
+.home-app-link {
+    text-align:center;
+    padding: 25px;
+    box-shadow: 5px 5px 5px #bdc;
+    border-radius: 6px;
+    border: 1px #9c9 solid;
+    background-color: #efe;
+}
+
 .table tr.active {
     background: white;
 }
 .outermap {
    padding: 3px !important;
 }
+
 /* Removes Firefox imposed outline */
 .nav-tabs > .active > a, .nav-tabs > .active > a:hover {
   outline:none;
 }
+
 .tab-content {
     padding: 14px; 
     padding-top: 21px;

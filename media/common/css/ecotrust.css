@@ -1,0 +1,807 @@
+/***** Global Settings *****/
+
+html {
+    margin:0;
+    padding:0;
+    }
+
+body {
+    align:center;
+    padding:0;
+    font-family:Verdana, Arial, Helvetica, sans-serif;
+    font-size: 76%;
+    color: #333;
+    background-color: #fff;
+    text-align:center;
+    margin:0 auto;
+}
+
+
+/***** Common Formatting *****/
+
+p {  font-size: 0.9em; line-height: 1.6em; margin: 0 0 1.6em 0; }
+td { font-size: 0.85em;}
+abbr, acronym { color: #78a22f; border-bottom: thin dotted #78a22f; cursor:help; }
+
+.caption { font-size: 0.85em; }
+.breadcrumb { font-size: 0.85em; color: #666; margin:1em 0; }
+.headertagline { font-size: 1.2em; text-align:right; color: #fff; z-index:100;}
+.iconsubhead { text-align:center; margin: 0;}
+.small { font-size: .8em; }
+.big { font-size: 1.1em; }
+.subhead { font-size: 1em; margin: 0; color: #666; }
+.filesize { font-size: .85em; color: #666; }
+
+.byline { font-size: 0.85em; margin: 0 0 1.3em 0; color: #666; }
+
+.proj { display:block; width:auto; font-size: 1em; text-align:left; text-decoration:none; line-height: 1em; margin-top:2px; padding:4px; background:#eee; color:#333; border: 1px solid #333; -moz-border-radius: 8px 0 0 0; -webkit-border-radius: 8px 0 0 0; }
+
+ol.default, ul.default {
+    line-height: 1.6em;
+    }
+    
+ol.default li, ul.default li {
+    font-size:0.9em;
+    margin-bottom: 1em; 
+    }
+    
+ol.tight, ul.tight {
+    line-height: 1.2em;
+    }
+    
+ol.tight li, ul.tight li {
+    font-size:0.9em;
+    margin-bottom: .5em; 
+    }
+
+h1, h2, h3, h4, h5, h6 { font-weight: normal; margin:0; color:#999; }
+
+h1 { font-size: 1.8em; margin:0; }
+h2 { font-size: 1.6em; margin: 1.0em 0 0 0; }
+h3 { font-size: 1.4em; margin: 1.0em 0 0 0; }
+h4 { font-size: 1.2em; margin: 1.0em 0 0 0; }
+h5 { font-size: 1.0em; }
+h6 { font-size: 0.85em; }
+
+
+
+/***** Global Classes *****/
+
+.float-left { float:left;}
+.float-left-pad { float:left; margin-right: 8px;}
+.float-right { float:right;}
+.float-right-pad { float:right; margin-left: 8px;}
+
+.clearboth { clear: both; }
+
+.img-left { float: left; margin: 4px 10px 4px 0; }
+.img-right { float: right; margin: 4px 0 4px 10px; }
+img { border:0; }
+
+
+/***** Links *****/
+
+a:link { color: #78a22f; text-decoration: none; }
+a:visited { color: #78a22f; text-decoration: none; }
+a:active { color: #666; text-decoration: none; }
+a:hover { color: #666; text-decoration: none; }
+
+a.donatebox:link, a.donatebox:visited { -moz-box-shadow: inset 3px 3px 6px 0 #e5e5e5; -webkit-box-shadow: inset 3px 3px 6px 0 #e5e5e5; background:#f5f5f5; color:#78a22f; font-size:1.4em; border:1px solid #78a22f; -moz-border-radius:8px; -webkit-border-radius:8px; padding:8px; }
+a.donatebox:active, a.donatebox:hover { background:#78a22f; color:#fff; border:1px solid #ccc; -moz-border-radius:8px; -webkit-border-radius:8px; padding:8px; }
+
+a.donatebox2:link, a.donatebox2:visited {
+    background:#d18316;
+    color:#fff;
+    font-size:1.4em;
+    text-shadow: 1px 1px 3px #333;
+    padding:20px 8px;
+    border: 1px solid #ccc;
+    -moz-box-shadow: inset 4px 4px 8px 0 #fc6, inset -4px -4px 8px #960;
+    -webkit-box-shadow: inset 4px 4px 8px #fc6, inset -4px -4px 8px #960;
+    box-shadow: inset 4px 4px 8px #fc6, inset -4px -4px 8px #960;
+    -moz-border-radius:8px;
+    -webkit-border-radius:8px;
+    }
+    
+a.donatebox2:active, a.donatebox2:hover {
+    background:#78a22f;
+    color:#fff;
+    padding:20px 8px;
+    text-shadow: -1px -1px 3px #333;
+    -moz-border-radius:8px;
+    -webkit-border-radius:8px;
+    -moz-box-shadow: inset 4px 4px 8px #360, inset -4px -4px 8px #9c3;
+    -webkit-box-shadow: inset 4px 4px 8px #360, inset -4px -4px 8px #9c3;
+    box-shadow: inset 4px 4px 8px #360, inset -4px -4px 8px #9c3;
+    }
+
+.frontbox3 { display:block; float:left; width:166px; background:#f5f5f5; text-align:center; padding: 4px; margin: 0 8px 0 0; -moz-border-radius:8px; -webkit-border-radius:8px; }
+.frontbox3 p { font-size:0.85em; margin: 0.5em 0em; line-height:1.2em; }
+.frontbox3 h3 { font-size: 1em; line-height:1.4em; text-align:center; }
+
+a.frontbug:link, a.frontbug:visited { -moz-box-shadow: inset 4px 4px 8px 0 #e5e5e5; -webkit-box-shadow: inset 4px 4px 8px 0 #e5e5e5; width:143px; height:90px; float:left; margin-right:5px; background:#f5f5f5; color:#78a22f; font-size:1.5em; border:1px solid #ccc; -moz-border-radius:8px; -webkit-border-radius:8px; }
+
+a.frontbug:active, a.frontbug:hover { width:143px; height:90px; float:left; margin-right:5px; background:#78a22f; color:#fff; border:1px solid #78a22f; -moz-border-radius:8px; -webkit-border-radius:8px; }
+
+/* a.frontbug:link, a.frontbug:visited { -moz-box-shadow: inset 3px 3px 6px 0 #e5e5e5; -webkit-box-shadow: inset 3px 3px 6px 0 #e5e5e5; width:143px; height:130px; float:left; margin-right:5px; background:#fff; color:#78a22f; font-size:1.6em; border:1px solid #ccc; -moz-border-radius:8px; -webkit-border-radius:8px; }
+
+a.frontbug:active, a.frontbug:hover { width:143px; height:130px; float:left; margin-right:5px; background:#fff; color:#666; border:1px solid #78a22f; -moz-border-radius:8px; -webkit-border-radius:8px; } */
+
+a.proj, a.proj:link, a.proj:visited {
+    display:block;
+    width:auto;
+    text-align:left;
+    text-decoration:none;
+    line-height: 1em;
+    margin-top:2px;
+    padding:4px;
+    color:#78a22f;
+    background:#fff;
+    border: 1px solid #999;
+    -moz-border-radius: 0 8px 0 0;
+    -webkit-border-radius: 0 8px 0 0;
+    -moz-box-shadow: inset -3px -3px 3px #e5e5e5;
+    -webkit-box-shadow: inset -3px -3px 3px #e5e5e5;
+    box-shadow: inset -3px -3px 3px #e5e5e5;
+    }
+
+a.proj:hover {
+    color:#fff; background:#78a22f;
+    text-shadow: 1px 1px 3px #333;
+    -moz-box-shadow: inset 3px 3px 3px #336600;
+    -webkit-box-shadow: inset 3px 3px 3px #336600;
+    box-shadow: inset 3px 3px 3px #336600;
+    }
+
+a.tooltip { position:relative; z-index:24; }
+a.tooltip:hover { z-index:25; }
+a.tooltip span { display: none; }
+a.tooltip:hover span {
+   /*display just on :hover state*/
+   display:block;
+   /*this positions it relative to the link*/
+   position:absolute; top:1.2em; left:1em;
+   /*you can adjust anything under here*/
+   width:200px; padding:4px;
+   color:#333;
+   text-decoration:none;
+   border:1px solid #666666;
+   background-color:#F5F5F5;
+   }
+
+.more {
+    display: none;
+    border-top: 1px solid #ccc;
+    border-bottom: 1px solid #ccc; }
+a.showLink, a.hideLink {
+    text-decoration: none;
+    color: #78a22f;
+    padding-left: 8px;
+    background: transparent url('down.gif') no-repeat left; }
+a.hideLink {
+    background: transparent url('up.gif') no-repeat left; }
+a.showLink:hover, a.hideLink:hover {
+    border-bottom: 1px dotted #78a22f; }
+
+
+
+/* CSS3 attributes that automatically add external link icon and PDF icon. This works in Firefox, IE7 and Opera. */
+
+/*
+a[href*="://"]:not([href*="ecotrust.org"]) {
+    background-image: url(/images/icon_external.gif);
+    background-position:center right;
+    background-repeat:no-repeat;
+    padding-right: 16px;
+    target-new: tab !important;
+    target-position: front;
+    }
+    
+a[href*="://"]:not([href*="ecotrust.org"]):hover {
+    background-image: url(/images/icon_external_hover.gif);
+    background-position:center right;
+    background-repeat:no-repeat;
+    padding-right: 16px;
+    target-new: tab !important;
+    target-position: front;
+    }
+    */
+    
+a[href $='.pdf'] { 
+    background-image: url(/media/common/images/icon_pdf.gif);
+    background-position:center right;
+    background-repeat:no-repeat;
+    padding-right: 16px;
+    }
+
+a[href $='.doc'] { 
+    background-image: url(/images/icon_doc.gif);
+    background-position:center right;
+    background-repeat:no-repeat;
+    padding-right: 16px;
+    }
+    
+a[href $='.xls'] { 
+    background-image: url(/images/icon_xls.png);
+    background-position:center right;
+    background-repeat:no-repeat;
+    padding-right: 16px;
+    }
+    
+a[href $='.ics'] { 
+    background-image: url(/images/icon_ical.png);
+    background-position:center right;
+    background-repeat:no-repeat;
+    padding-right: 14px;
+    }
+
+
+/***** Forms *****/
+
+/* form { margin:0; padding:0; display:inline; } before formatted forms */
+
+form { position:relative; }
+form.foot { margin:0; padding:0; display:inline; } /* for forms that need unaligned class */
+label { display:block; float: left; width: 10em; margin-right: .5em; text-align:right; }
+label input { position:absolute; left:11em; }
+
+fieldset { background:#f5f5f5; border: 1px solid #78a22f; padding: 4px; width:75%; }
+fieldset.sidebar { background:#f5f5f5; border: 1px solid #78a22f; padding: 4px; width:95%; }
+legend { color: #fff; background: #78a22f; padding: 2px 6px; font-weight:bold; font-size: .9em; margin-top: 1em; }
+ 
+input { font-size:1em; }
+
+input.button {
+    font-weight:bold;
+    color:#78a22f;
+    background-color:#f7f7f7;
+    -moz-border-radius:8px;
+    border-radius:8px;
+    -moz-box-shadow: inset -3px -3px 3px #ccc;
+    -webkit-box-shadow: inset -3px -3px 3px #ccc;
+    box-shadow: inset -3px -3px 3px #ccc;
+    }
+   
+input.button:hover, input.button:focus {
+    font-weight:bold;
+    color:#fff;
+    text-shadow: 1px 1px 3px #333;
+    background-color:#78a22f;
+    -moz-border-radius:8px;
+    border-radius:8px;
+    -moz-box-shadow: inset 3px 3px 3px #61891a;
+    -webkit-box-shadow: inset 3px 3px 3px #61891a;
+    box-shadow: inset 3px 3px 3px #61891a;
+    }
+
+input, text, textfield, textarea, password, checkbox {
+    background-color:#fff;
+    border: 1px solid #78a22f;
+    }
+
+input:focus, text:focus, textarea:focus, textfield:focus, password:focus, checkbox:focus {
+    background-color:#ececec;
+    border: 1px solid #78a22f;
+    }
+
+
+
+/***** Tables *****/
+ 
+table { border:1px #ccc solid; margin:0 0 18px 0; padding:0; }
+table tr td { border:1px #ccc solid; padding:2px; }
+  
+  
+/***** Layout Structure *****/
+
+#wrapper {
+    position:relative;
+    width: 900px; /* Width of main container */
+    margin: 0 auto; /* Center container on page */
+    /* background: #fff; */
+    }
+
+#masthead {
+    height: 50px;
+    background: #fff;
+    padding-top:15px;
+    }
+    
+#topnavsub {
+    height: 1.8em;
+    background: #fff;
+    text-align:right;
+    font-size:.8em;
+    padding: 5px 0;
+    margin-bottom:15px;
+    }
+    
+#photohead { 
+    height: 100px;
+    padding: 10px;
+    background-image:url(../images/river_roots.jpg);
+    background-repeat:no-repeat;
+    }
+    
+#photodiv { /* container for masthead photo rotation, needs this name and external photoshuffler.js file */
+    height: 150px;
+    width: 900px;
+    background-image:url(../images/mastheads/Gardner_Canal_BC.jpg); /* A static image if photo rotation is turned off with no javascript */
+    background-repeat: no-repeat;
+    clear:both;
+    }
+
+#topnav {
+    padding:0;
+    vertical-align:bottom;
+    background-color:#fff;
+    clear:both;
+    }
+
+
+#content {
+    /*float:left;
+    display: inline; /* seems necessary for IE 6 & 7 */
+    text-align:left;
+    margin-left: auto;/* 120px;  match width of leftbar */
+    margin-right: auto; /* match width of leftbar */
+    padding: 15px 10px 10px 10px;
+    overflow:visible;
+    width:67%;
+    }
+    
+#content2 {
+    float:left;
+    display: inline;
+    margin-left:120px; /* match width of leftbar */
+    padding: 15px 10px 10px 10px;
+    overflow:auto;
+    width:758px; /* minus 2px for vert line borders */
+    background: #fff;
+    border-left:1px solid #ccc;
+    border-right:1px solid #ccc;
+    min-height:540px;
+    height:auto !important;
+    }
+
+#content3 { /* for imagearchive & other plain pages */
+    float:left;
+    display: inline;
+    margin-left: 0;
+    padding: 15px 10px 10px 10px;
+    overflow:auto;
+    width:760px;
+    background: #fff;
+    min-height:540px;
+    height:auto !important;
+    }
+    
+#leftbar {
+    float:left;
+    width: 120px;
+    padding: 15px 0 0 0;
+    margin-left:-900px;
+    background:#fff;
+    font-size: 0.85em;
+    -moz-border-radius: 0 0 8px 0;
+    -webkit-border-radius: 0 0 8px 0;
+    }
+    
+#leftbar p {
+    line-height:1.2em;
+    margin:0.75em 0 0 0;
+    padding: 0 4px 0 4px;
+    }
+    
+#leftbar p.intro {
+    line-height:1.6em;
+    margin:0.75em 0 0 0;
+    padding: 0 4px 0 4px;
+    }
+    
+#leftbar p.big {
+    font-size:1.1em;
+    line-height:1.6em;
+    margin:0.75em 0 0 0;
+    padding: 0 4px 0 4px;
+    }
+    
+#leftbar h4 {
+    line-height:1em;
+    margin:0.75em 0 0 0;
+    padding: 0 4px 0 4px;
+    }
+    
+#rightbar {
+    float:left;
+    width: 180px;
+    padding: 15px 10px 10px 10px;
+    background:#fff;
+    font-size: 0.9em;
+    -moz-border-radius: 0 0 0 8px;
+    -webkit-border-radius: 0 0 0 8px;
+    }
+    
+#rightbar p {
+    line-height:1.1em;
+    margin:0.75em 0 0 0;
+    }
+    
+#rightbar p.intro {
+    line-height:1.5em;
+    margin:0.75em 0 0 0;
+    }
+    
+#rightbar h2 {
+    line-height:1.1em;
+    margin:0;
+    }
+    
+#rightbar ul.tightlist, li.tightlist {
+    line-height:1.1em;
+    margin: .5em 0 0 0;
+    padding:0;
+    font-size: 0.9em;
+    list-style:none;
+    }
+    
+#rightbar ul.tightlist li, li.tightlist li {
+    margin-bottom: 1em;
+    }
+    
+#footersocial {
+    clear: both;
+    margin: 0 0 0 120px;
+    padding: 0 10px;
+    width: 558px;
+    /* border-top:1px dotted #ccc; */
+    border-right:1px solid #ccc;
+    border-left:1px solid #ccc;
+    border-right:1px solid #ccc;
+    background-color:#f5f5f5;
+    overflow:auto;
+    }
+    
+#footersocial2 {
+    clear: both;
+    margin: 0 0 0 120px;
+    padding: 0 10px;
+    width: 758px;
+    /* border-top:1px dotted #ccc; */
+    border-right:1px solid #ccc;
+    border-left:1px solid #ccc;
+    border-right:1px solid #ccc;
+    background-color:#f5f5f5;
+    overflow:auto;
+    }
+
+#footerbreadcrumb {
+    clear: both;
+    margin: 0 0 0 120px;
+    padding: 0 10px;
+    width: 558px;
+    /* border-top:1px dashed #e5e5e5; */
+    border-right:1px solid #ccc;
+    border-left:1px solid #ccc;
+    border-right:1px solid #ccc;
+    background: #fff;
+    overflow:auto;
+    }
+    
+#footerbreadcrumb2 {
+    clear: both;
+    margin: 0 0 0 120px;
+    padding: 0 10px;
+    width: 758px;
+    /* border-top:1px solid #ccc; */
+    border-right:1px solid #ccc;
+    border-left:1px solid #ccc;
+    border-right:1px solid #ccc;
+    background: #fff;
+    overflow:auto;
+    }
+
+#footer {
+    clear: both;
+    text-align: center;
+    padding: 4px 0;
+    font-size:0.8em;
+    background-color:#f5f5f5;
+    }
+    
+#footer_new {
+    clear: both;
+    padding:10px 0;
+    font-size:0.85em;
+    line-height:1.8em;
+    height:96px; /* seems necessary to spread gradient */
+    border-top:1px solid #ccc;
+    background-color:#f5f5f5; /* for non-css3 browsers */
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#f1f1f1', endColorstr='#ffffff'); /* for IE */
+    background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#f1f1f1), to(#ffffff)); /* for webkit browsers */
+    background: -moz-linear-gradient(top, #f1f1f1 0%, #ffffff 100%); /* for firefox 3.6+ */ 
+    background: -o-gradient(#f1f1f1, #ffffff); /* for opera */ 
+    }
+
+#footersub_new {
+    clear:both;
+    padding:4px 0;
+    font-size:0.8em;
+    color:#666;
+    background-color:#e5e5e5;
+    border-top:3px solid #fff;
+    }
+
+.thumbnail-pubs {
+    float: left;
+    width: 255px;
+    height: 140px;
+    border: 1px solid #666;
+    background-color:#f5f5f5;
+    margin-right: 10px;
+    padding: 5px;
+    font-size:0.85em;
+    line-height:1em;
+}
+
+.thumbnail-sites {
+    float: left;
+    width: 160px;
+    border: 1px solid #666;
+    background-color:#f5f5f5;
+    margin: 0 10px 10px 0;
+    padding: 5px;
+    font-size:0.85em;
+    line-height:1em;
+}
+
+.thumbnail-caterers {
+    float: left;
+    width: 160px;
+    height: 150px;
+    border: 1px solid #666;
+    background-color:#f5f5f5;
+    margin: 0 10px 10px 0;
+    padding: 5px;
+    font-size:0.85em;
+    line-height:1em;
+}
+
+.thumbnail-legacy {
+    float: left;
+    width: 160px;
+    height: 80px;
+    border: 1px solid #ccc;
+    background-color:#f5f5f5;
+    margin: 0 10px 10px 0;
+    padding: 5px;
+    text-align:center;
+    -moz-border-radius: 8px;
+    -webkit-border-radius: 8px;
+    -moz-box-shadow: inset -3px -3px 3px #e5e5e5;
+    -webkit-box-shadow: inset -3px -3px 3px #e5e5e5;
+    box-shadow: inset -3px -3px 3px #e5e5e5;
+    }
+
+.thumbnail-principles {
+    float: left;
+    width: 120px;
+    height: 180px;
+    border: 1px solid #666;
+    background-color:#f5f5f5;
+    margin: 0 10px 10px 0;
+    padding: 5px;
+    font-size:0.85em;
+    line-height:1em;
+}
+
+.thumbnail-staff {
+    float: left;
+    width: 150px;
+    height: 260px;
+    border: 1px solid #666;
+    background-color:#f5f5f5;
+    margin: 0 10px 10px 0;
+    padding: 5px;
+    font-size:0.9em;
+    line-height:1em;
+    text-align:center;
+}
+
+.thumbnail {
+    float: left;
+    border: 1px solid #666;
+    background-color:#f5f5f5;
+    margin: 0 10px 10px 0;
+    padding: 5px;
+    font-size:0.85em;
+    line-height:1em;
+}
+
+/*begin menu style*/
+/* HORIZONTAL FREESTYLE MENU LAYOUT */
+
+/* All <ul> tags in the menu including the first level */
+.menulist, .menulist  ul {
+ margin: 0;
+ padding: 0;
+ list-style: none;
+}
+
+/* Submenus (<ul> tags) are hidden and absolutely positioned downwards from their parent */
+.menulist ul {
+ display: none;
+ position: absolute;
+ top: 1em; margin-top: 8px; /* I'm using ems and px to allow people to zoom their font */
+ left: -1px;
+ width: 178px;
+}
+
+/* Second and third etc. level submenus - position across from parent instead */
+.menulist ul ul {
+ top: -1px; margin-top: 0;
+ left: 178px;
+}
+
+/*
+ All menu items (<li>tags). 'float: left' lines them up horizontally, and they are
+ positioned relatively to correctly offset submenus. Also, they have overlapping borders.
+*/
+.menulist li {
+ float: left;
+ display: block;
+ position: relative;
+ text-align:center;
+ background: #f5f5f5;
+ width: 178px;
+ border: 1px solid #fff;
+}
+
+/* Items in submenus - override float/border/margin from above, restoring default vertical style */
+.menulist ul li {
+ float: none;
+ margin: 0;
+ margin-bottom: -1px;
+ border: 1px solid #fff;
+}
+.menulist ul>li:last-child {
+ margin-bottom: 1px; /* Mozilla fix */
+}
+
+/* Links inside the menu */
+.menulist a {
+ display: block;
+ padding: 4px 0px ;
+ font: .9em Verdana, Arial, Helvetica, sans-serif;
+ color: #78a22f;
+ text-decoration: none;
+}
+
+/* Lit  items: 'hover' is mouseover, 'highlighted' are parent items to visible menus */
+.menulist a:hover, .menulist a.highlighted:hover, .menulist a:focus {
+ color: #666;
+ background-color: #eee;
+ text-decoration: none;
+ /* -moz-border-radius: 8px 8px 0 0;
+ -webkit-border-radius: 8px 8px 0 0; */
+}
+.menulist a.highlighted {
+ color: #666;
+ background-color: #eee;
+ text-decoration: none;
+ /* -moz-border-radius: 8px 8px 0 0;
+ -webkit-border-radius: 8px 8px 0 0; */
+}
+
+/*
+ If you want per-item background images in your menu items, here's how to do it.
+ 1) Assign a unique ID tag to each link in your menu, like so: <a id="xyz" href="#">
+ 2) Copy and paste these next lines for each link you want to have an image:
+    .menulist a#xyz {
+      background-image: url(out.gif);
+    }
+    .menulist a#xyz:hover, .menulist a.highlighted#xyz, .menulist a:focus {
+     background-image: url(over.gif);
+    }
+*/
+
+/* Only style submenu indicators within submenus. */
+.menulist a .subind {
+ display: none;
+}
+.menulist ul a .subind {
+ display: block;
+ float: right;
+}
+
+
+/* 'Escaped Comment' hack for horizontal menubar width in IE5/Mac */
+.menulist a {
+ float: left;
+}
+.menulist ul a {
+ float: none;
+}
+/* \*/
+.menulist a {
+ float: none;
+}
+/* */
+
+
+
+/*
+ HACKS: IE/Win:
+ A small height on <li>and <a> tags and floating prevents gaps in menu.
+ * html affects <=IE6 and *:first-child+html affects IE7.
+ You may want to move these to browser-specific style sheets.
+*/
+*:first-child+html .menulist ul li {
+ float: left;
+ width: 100%;
+}
+
+* html .menulist ul li {
+ float: left;
+ height: 1%;
+}
+* html .menulist ul a {
+ height: 1%;
+}
+/* End Hacks */
+
+
+/*end menu style*/
+
+/* begin css tabs */
+
+ul#tabnav { /* general settings */
+text-align: left; /* set to left, right or center */
+margin: 1em 0 1em 0; /* set margins as desired */
+font: bold 11px verdana, arial, sans-serif; /* set font as desired */
+border-bottom: 1px solid #6c6; /* set border COLOR as desired */
+list-style-type: none;
+padding: 3px 10px 3px 10px; /* THIRD number must change with respect to padding-top (X) below */
+}
+
+ul#tabnav li { /* do not change */
+display: inline;
+}
+
+body#tab1 li.tab1, body#tab2 li.tab2, body#tab3 li.tab3, body#tab4 li.tab4 { /* settings for selected tab */
+border-bottom: 1px solid #fff; /* set border color to page background color */
+background-color: #fff; /* set background color to match above border color */
+}
+
+body#tab1 li.tab1 a, body#tab2 li.tab2 a, body#tab3 li.tab3 a, body#tab4 li.tab4 a { /* settings for selected tab link */
+background-color: #fff; /* set selected tab background color as desired */
+color: #000; /* set selected tab link color as desired */
+position: relative;
+top: 1px;
+padding-top: 4px; /* must change with respect to padding (X) above and below */
+}
+
+ul#tabnav li a { /* settings for all tab links */
+padding: 3px 4px; /* set padding (tab size) as desired; FIRST number must change with respect to padding-top (X) above */
+border: 1px solid #ccc; /* set border COLOR as desired; usually matches border color specified in #tabnav */
+/*background-color: #78a22f; /* set unselected tab background color as desired */
+/*color: #fff; /* set unselected tab link color as desired */
+background: #fff; /* set desired hover color */
+color: #999; /* set selected tab link color as desired */
+margin-right: 0px; /* set additional spacing between tabs as desired */
+text-decoration: none;
+border-bottom: none;
+}
+
+ul#tabnav a:hover { /* settings for hover effect */
+background-color: #78a22f; /* set unselected tab background color as desired */
+color: #fff; /* set unselected tab link color as desired */
+}
+
+ul#tabnav li a.selected { /* settings for hover effect */
+/*background: #fff; /* set desired hover color */
+/*color: #185926; /* set selected tab link color as desired */
+background-color: #78a22f; /* set unselected tab background color as desired */
+color: #fff; /* set unselected tab link color as desired */
+}
+/* end css tabs */

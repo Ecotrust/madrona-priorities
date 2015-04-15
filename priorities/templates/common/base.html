@@ -33,6 +33,8 @@
         }
     </style>
 
+    {% block styles %}{% endblock styles %}
+
     <script type="text/javascript" src="{{MEDIA_URL}}common/js/sugar-1.3.6.min.js"></script>
     <script type="text/javascript" src="{{MEDIA_URL}}common/js/jquery.min.js"></script>
     <script type="text/javascript" src="{{MEDIA_URL}}common/js/jquery-ui.min.js"></script>
@@ -63,8 +65,9 @@
         <div class="container-fluid">
           <a class="brand" href="/">{% flatblock "title" 3600 %}</a>
           <ul class="nav">
-                <li><a href="/news/about/">Learn More</a></li>
-                <li><a href="/help/">Get Help</a></li>
+                <li><a href="/news/about/">Data and Methods</a></li>
+                <li><a href="/news/description/">Tool Description</a></li>
+                <li><a href="/help/">More Information</a></li>
           </ul>
           <ul class="nav pull-right">
               {% if user.is_authenticated %}
@@ -82,6 +85,12 @@
     <div class="container-fluid">
       {% block content %}{% endblock content %}
     </div>
+
+    <script type="text/javascript">
+      $(document).ready(function () {
+        $(".home").css("margin-top", $(".navbar-fixed-top").height() + 45);
+      });
+    </script>
 
   </body>
 </html>

@@ -3,17 +3,21 @@ from django.contrib import admin
 from django.conf import settings
 admin.autodiscover()
 
-urlpatterns = patterns( 'seak.views',
-    url(r'^$', 'map', name='map'),
+urlpatterns = patterns(
+    'seak.views',
+    url(r'^$', 'home'),
+    url(r'^map', 'map', name='map'),
 )
 
-urlpatterns += patterns('',
+urlpatterns += patterns(
+    '',
     (r'^seak/', include('seak.urls')),
     (r'^analysistools/', include('madrona.analysistools.urls')),
     url(r'^tiles/', 'seak.views.tiles', name="tiles"),
 )
 
-urlpatterns += patterns('madrona',
+urlpatterns += patterns(
+    'madrona',
     (r'^accounts/', include('madrona.openid.urls')),
     (r'^accounts/profile/', include('madrona.user_profile.urls')),
     (r'^faq/', include('madrona.simplefaq.urls')),
@@ -31,12 +35,17 @@ urlpatterns += patterns('madrona',
     (r'^bookmark/', include('madrona.bookmarks.urls')),
 )
 
-urlpatterns += patterns('',
+urlpatterns += patterns(
+    '',
     (r'^admin/', include(admin.site.urls)),
 )
 
 # Useful for serving files when using the django dev server
-urlpatterns += patterns('',
+urlpatterns += patterns(
+    '',
     (r'^media(.*)/upload/', 'madrona.common.views.forbidden'),
-    (r'^media/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.MEDIA_ROOT, 'show_indexes': True }),
+    (r'^media/(?P<path>.*)$', 'django.views.static.serve', {
+        'document_root': settings.MEDIA_ROOT,
+        'show_indexes': True
+    }),
 )

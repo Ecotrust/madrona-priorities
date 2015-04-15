@@ -508,7 +508,7 @@ class Command(BaseCommand):
 
             fids = []
             for feature in layer:
-                if feature.get(params['dbf_fieldname']) != NULL_VALUE:
+                if feature.get(params['dbf_fieldname']) != NULL_VALUE and not feature.get(params['dbf_fieldname']) < 0:
                     fids.append(feature.get(FID_FIELD))
 
             pus = PlanningUnit.objects.filter(fid__in=fids)

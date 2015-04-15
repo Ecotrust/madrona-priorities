@@ -1,0 +1,15 @@
+{% extends 'common/base.html' %}
+{% load flatblocks %}
+{% block content %}
+<div class="about">
+    <h2>{% flatblock "description-header" 3600 %}</h2>
+<p>
+{% flatblock "description-intro" 3600 %}
+</p>
+<hr/>
+
+{% flatblock "description-content" 3600 %}
+
+</div>
+
+{% endblock content %}

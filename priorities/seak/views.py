@@ -53,6 +53,24 @@ def map(request, template_name='common/map_ext.html', extra_context=None):
     return render_to_response(template_name, context)
 
 
+def description(
+    request,
+    template_name='news/description.html',
+    extra_context=None
+):
+    """
+    Landing Page
+    """
+    if not extra_context:
+        extra_context = {}
+
+    context = RequestContext(request, {
+        'session_key': request.session.session_key,
+    })
+    context.update(extra_context)
+    return render_to_response(template_name, context)
+
+
 def watershed_shapefile(request, instances):
     from seak.models import PlanningUnitShapes, Scenario
     wshds = PlanningUnit.objects.all()

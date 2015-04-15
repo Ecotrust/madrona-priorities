@@ -7,13 +7,14 @@ urlpatterns = patterns(
     'seak.views',
     url(r'^$', 'home'),
     url(r'^map', 'map', name='map'),
+    url(r'^news/description', 'description', name="description"),
+    url(r'^tiles/', 'tiles', name="tiles"),
 )
 
 urlpatterns += patterns(
     '',
     (r'^seak/', include('seak.urls')),
     (r'^analysistools/', include('madrona.analysistools.urls')),
-    url(r'^tiles/', 'seak.views.tiles', name="tiles"),
 )
 
 urlpatterns += patterns(

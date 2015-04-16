@@ -1,0 +1,452 @@
+[
+  {
+    "pk": 19,
+    "model": "flatblocks.flatblock",
+    "fields": {
+      "content": "For each conservation objective, the chart below shows how much of the total potentially available value is represented by this solution. (<em>Species in italics were not explicitly targeted but may exist in the same subbasin as our target species</em>)",
+      "header": "",
+      "slug": "show-targets-explanation"
+    }
+  },
+  {
+    "pk": 6,
+    "model": "flatblocks.flatblock",
+    "fields": {
+      "content": "",
+      "header": "",
+      "slug": "about-content"
+    }
+  },
+  {
+    "pk": 15,
+    "model": "flatblocks.flatblock",
+    "fields": {
+      "content": "Setting prioritization constraints helps by avoiding costly or high-risk regions. By selecting a constraint below, you are instructing the tool to avoid those areas of high vulnerability or poor quality. ",
+      "header": "",
+      "slug": "form-costs-description"
+    }
+  },
+  {
+    "pk": 47,
+    "model": "flatblocks.flatblock",
+    "fields": {
+      "content": "Surrogate Species",
+      "header": "",
+      "slug": "show-surrogate"
+    }
+  },
+  {
+    "pk": 49,
+    "model": "flatblocks.flatblock",
+    "fields": {
+      "content": "The objective function score attempts to quantify the effectiveness of this scenario with regards to surrogate species. <br>\r\n\r\n<ul>\r\n <li> Targeted species: +2 penalty </li>\r\n <li> Missed species: +2 penalty </li>\r\n <li> Under-represented species: +0 to +1 penalty (depending on how far off target)</li>\r\n <li> Adequately represented species: NO penalty </li>\r\n</ul>\r\n\r\nThe ultimate goal would be to adequately represent the highest number of species without explicitly targeting their habitat.",
+      "header": "",
+      "slug": "surrogate-objective-description"
+    }
+  },
+  {
+    "pk": 50,
+    "model": "flatblocks.flatblock",
+    "fields": {
+      "content": "        <div class=\"content\">\r\n            \r\n\r\n            <h4>USFWS Regional Aquatic Prioritization \u2013 Data and Methods</h4>\r\n            <br/>\r\n\r\n            <p>\r\n            The regional priorities and mapping tool presented here is a result of a multi-year process that included an extensive data collection, manipulation, and analysis process as well development of the tool itself.  The inputs into the tool and the prioritization modeling process include: Compilation of existing data specific to aquatic species of interest;  review of existing climate change research pertaining to effects to aquatic species and determination of vulnerability to climate change at the 4th field sub-basin scale; review of watershed condition mapping approaches and analysis of watershed condition at the 4th field scale; compilation of aquatic invasive species and development of methods pertaining to mapping invasibility at the 4th field scale, and; implementation of a decision support model, coupled with the development of the online tool.  Each of these processes is briefly described below with links to more detailed documentation describing step by step methodologies.  \r\n            </p>\r\n            <p>\r\n Please see the <a href=\"http://aquatic-priorities.apps.ecotrust.org/home/data_dictionary.pdf\">data dictionary</a> for a detailed list of data sources used in the prioritization process.  \r\n            </p>\r\n\r\n            <h5>Focal fish species data development</h5>\r\n             <p>\r\n             Core to the prioritization process is the set of fish species for which we are prioritizing.  As such, we included a wide variety of fish species distribution data in the tool, from wide-ranging, iconic northwest species to locally endemic fishes found in a single sub-basin.   These data were collected from a variety of sources, at varying scales and units of analyses. See the detailed documentation on <a href=\"http://aquatic-priorities.apps.ecotrust.org/home/focal_fish.pdf\">focal fish species</a> for additional information.\r\n            </p>\r\n\r\n\r\n             <h5>Mapping of watershed condition</h5>\r\n             <p>\r\n             Healthy, functioning watersheds are essential for sustaining fish populations as well as fundamental ecosystem services.  We relied on common indicators of watershed condition, including water quality and human disturbance, to classify the relative ecological condition of each sub-basin.  The subsequent relative watershed condition scores, if selected by the user in the prioritization process, will drive priorities toward less impaired sub-basins.  We developed our watershed condition index based on an amalgamation of well vetted existing approaches.  Please see the detailed documentation for a description of our approach to <a href=\"http://aquatic-priorities.apps.ecotrust.org/home/watershed_condition.pdf\">watershed condition</a> mapping.\r\n            </p>\r\n\r\n\r\n\r\n            <h5>Climate change vulnerability analysis</h5>\r\n             <p>\r\n             Climate change has the potential to alter freshwater habitat in complex ways that we have yet to fully understand. These changes will greatly affect the health and distribution of fish species, particularly those adapted to cold water.  To address these potential effects, we identified vulnerability to climate change based on projected changes in air temperature, stream flow regime, and wildfire risk .  Areas that are relatively more vulnerable to climate change then are avoided (if possible) in the prioritization process (when climate change vulnerability is considered).  We have also provided several additional climate-related data layers for users to view separately from the prioritization process. See the detailed documentation on <a href=\"http://aquatic-priorities.apps.ecotrust.org/home/climate_change.pdf\">climate change vulnerability</a> for additional information.\r\n            </p>\r\n\r\n\r\n\r\n             <h5>Aquatic invasibility analysis</h5>\r\n             <p>\r\n             The introduction of non-native species is a major threat to the biodiversity of aquatic ecosystems, second only to habitat loss from development.  An understanding of current and potential invasion is essential for conservation planning efforts. In this tool, we modeled vulnerability to aquatic species invasion using current non-native species distribution, water quality, and the distribution of common sources of invasion.  Please see the detailed description of our <a href=\"http://aquatic-priorities.apps.ecotrust.org/home/aquatic_invasives.pdf\">aquatic invasibility analysis</a> for additional information.\r\n            </p>\r\n\r\n\r\n             <h5>Prioritization process</h5>\r\n             <p>\r\n             We used a multi-objective decision support model based on computational heuristics to identify regional priorities at the 4th field, sub-basin scale.  The heuristic draws on a simulated annealing algorithm to approximate an optimal configuration (or prioritization schematic) given a mathematically defined set of objectives (referred to as an objective function).  This target-based approach allows for the selection of a set of priority sub-basins based on avoiding those areas that have poor watershed condition, or are highly vulnerable to climate change effects or aquatic invasives, subject to the condition that targets for all species included in the analysis are met.  Please see the detailed description of the <a href=\"http://aquatic-priorities.apps.ecotrust.org/home/priorities_approach.pdf\">prioritization process</a> for additional information.\r\n             </p>\r\n\r\n\r\n             <h5>Regional aquatic priorities</h5>\r\n             <p>\r\n             Once inputs and the prioritization model were incorporated into the tool, Ecotrust and USFWS developed the set of regional priorities.  Using the tool, an array of priority scenarios were developed using varying levels of proportional goals for all species (please see detailed documentation on the <a href=\"http://aquatic-priorities.apps.ecotrust.org/home/priorities_approach.pdf\">prioritization process</a> for a description of setting goal proportions and importance weighting).  These goals were set equally for all species and were modified after each scenario was developed (starting with a goal proportion of 10% and incrementally increasing the goal to 100%). Because of the stochastic nature of the analytical process, multiple runs for each scenario are conducted.  Watersheds that are selected in all runs are considered highly important for meeting the specified goals for each species.  Watersheds selected in less runs are less important.  Sub-basins with poor relative watershed condition, high relative climate change vulnerability, and high relative invasibility were all considered as constraints (i.e. these sub-basins were avoided if possible).  After all scenarios were created, each resulting data layer was merged and an aggregate score representing the sum of the number of times any given sub-basin was selected for all model runs was used to create categories of the degree of relative prioritization.  The following table represents the number of times any given sub-basin was selected and the respective priority category:\r\n             </p>\r\n\r\n            <p>\r\n           \r\n<table border=\"1\" style=\"width:400px\">\r\n  <thead>\r\n    <tr>\r\n      <th>Number of times </br>sub-basin was selected</th>\r\n      <th>Relative importance</th>\r\n    </tr>\r\n  </thead>\r\n  <tbody>\r\n                <tr><td><center>0 - 26</center></td><td><center>low priority</center></td></tr>\r\n                <tr><td><center>27 - 43</center></td><td><center>medium low</center></td></tr>\r\n                <tr><td><center>44 - 59</center></td><td><center>medium</center></td></tr>\r\n                <tr><td><center>60 - 79</center></td><td><center>medium high</center></td></tr>\r\n                <tr><td><center>80 - 100</center></td><td><center>high priority</center></td></tr>\r\n\r\n  </tbody>\r\n</table>\r\n            </p>\r\n\r\n\r\n\r\n            <p>\r\n             These regional priorities are automatically loaded into the map viewer when the tool is launched, and can also be found on the \"Data\" tab under \"Sub-basin priorities.\" You can click on each sub-basin in the map for additional information specific to the level of importance, sub-basin name and area and prioritization constraints such as watershed condition, vulnerability to climate change, and vulnerability to aquatic invasive species. The \"Legend\" tab shows the priority level associated with each sub-basin color.\r\n             </p>\r\n\r\n\r\n            \r\n        </div>",
+      "header": "Data and Methods",
+      "slug": "data-and-methods"
+    }
+  },
+  {
+    "pk": 5,
+    "model": "flatblocks.flatblock",
+    "fields": {
+      "content": "<p>\r\nThe Regional Aquatic Prioritization and Mapping Tool is an aquatic priorities decision support system for Oregon, Washington, and Idaho developed by Ecotrust and the U.S. Fish and Wildlife Service (USFWS).\r\n</p>\r\n\r\n<p>\r\nStarting in July of 2010, Ecotrust partnered with the USFWS Pacific Regional Office to develop this regional aquatic priorities decision-support tool for Oregon, Washington, and Idaho. The decision support system was developed to prioritize sub-basins to focus conservation and restoration of freshwater habitats to ensure the long-term sustainability of the region's aquatic and fisheries resources while considering how factors such as watershed condition, climate change and aquatic invasive species affect regional priorities. Using this tool Ecotrust and USFWS evaluated a wide variety of watershed priorities at the 4th field sub-basin scale.\r\n</p>\r\n\r\n<p>\r\nIn developing this tool, Ecotrust and USFWS collaborated with partners already involved with strategic, regional-scale aquatic habitat restoration, including USDA Forest Service, NOAA Fisheries, U.S. Geological Survey, and Trout Unlimited, among others. Rather than duplicating work that has already been conducted, this work has built on existing efforts and supplements gaps in previous work while incorporating aspects of climate change impacts and the spread of aquatic invasive species. The result is an automated analytical tool that is used to evaluate a wide array of watershed priorities given different species of concern and optional priority constraints such as watershed condition, climate change, and aquatic invasive species.\r\n</p>\r\n\r\n<p>\r\nWhile you must be a registered user to use the tool to create priority scenarios, a public facing version of the tool was created to allow interested individuals, organizations, or agencies to map and explore the priorities identified by Ecotrust and USFWS, as well as visualize the many datasets that support the analysis. The tool itself is an open source, online mapping application that allows users to zoom in, pan and query a wide variety of mapped data.\r\n</p>\r\n</br>\r\n</br>\r\n</br>\r\n<p>\r\n<b><big>To launch the tool, click on the image below.</big></b> <font color=\"red\">Link to tool forthcoming.</font>\r\n</p>\r\n",
+      "header": "",
+      "slug": "about-intro"
+    }
+  },
+  {
+    "pk": 16,
+    "model": "flatblocks.flatblock",
+    "fields": {
+      "content": "watersheds",
+      "header": "",
+      "slug": "planning-units"
+    }
+  },
+  {
+    "pk": 17,
+    "model": "flatblocks.flatblock",
+    "fields": {
+      "content": "Select the watersheds that define your geographic region of interest.",
+      "header": "",
+      "slug": "form-geography-header"
+    }
+  },
+  {
+    "pk": 8,
+    "model": "flatblocks.flatblock",
+    "fields": {
+      "content": "Inputs",
+      "header": "",
+      "slug": "show-inputs"
+    }
+  },
+  {
+    "pk": 9,
+    "model": "flatblocks.flatblock",
+    "fields": {
+      "content": "Results Summary",
+      "header": "",
+      "slug": "show-results-summary"
+    }
+  },
+  {
+    "pk": 23,
+    "model": "flatblocks.flatblock",
+    "fields": {
+      "content": "Geography",
+      "header": "",
+      "slug": "geography"
+    }
+  },
+  {
+    "pk": 25,
+    "model": "flatblocks.flatblock",
+    "fields": {
+      "content": "There are currently no shared scenarios available.\r\n<br/><br/>\r\nYour colleagues can share their prioritization scenarios allowing you to view results and copy them to your own work space for further modification.",
+      "header": "",
+      "slug": "new-share-scenario"
+    }
+  },
+  {
+    "pk": 26,
+    "model": "flatblocks.flatblock",
+    "fields": {
+      "content": "Manage",
+      "header": "",
+      "slug": "manage"
+    }
+  },
+  {
+    "pk": 27,
+    "model": "flatblocks.flatblock",
+    "fields": {
+      "content": "Collaborate",
+      "header": "",
+      "slug": "shared"
+    }
+  },
+  {
+    "pk": 21,
+    "model": "flatblocks.flatblock",
+    "fields": {
+      "content": "Objectives",
+      "header": "",
+      "slug": "targets"
+    }
+  },
+  {
+    "pk": 22,
+    "model": "flatblocks.flatblock",
+    "fields": {
+      "content": "Constraints",
+      "header": "",
+      "slug": "constraints"
+    }
+  },
+  {
+    "pk": 3,
+    "model": "flatblocks.flatblock",
+    "fields": {
+      "content": "You haven't created any prioritization scenarios yet.\r\n<br/><br/>\r\nYou can create customized prioritization scenarios, view the results on the map, study the output reports, export to various format, save them for future use, edit them and share them with colleagues. ",
+      "header": "",
+      "slug": "new-manage-scenario"
+    }
+  },
+  {
+    "pk": 18,
+    "model": "flatblocks.flatblock",
+    "fields": {
+      "content": "<h3>Scenario should be rerun</h3> New data has been loaded into the prioritization tool since this scenario was created. It is <em>highly</em> recommended that you Edit and rerun the scenario to make sure the results are still valid with the current data.",
+      "header": "",
+      "slug": "scenario-expired-message"
+    }
+  },
+  {
+    "pk": 14,
+    "model": "flatblocks.flatblock",
+    "fields": {
+      "content": "In addition to focal species, prioritize watersheds based the following factors.",
+      "header": "",
+      "slug": "form-costs-header"
+    }
+  },
+  {
+    "pk": 28,
+    "model": "flatblocks.flatblock",
+    "fields": {
+      "content": "Included in current scenario",
+      "header": "",
+      "slug": "legend-included"
+    }
+  },
+  {
+    "pk": 31,
+    "model": "flatblocks.flatblock",
+    "fields": {
+      "content": "Relative Value",
+      "header": "",
+      "slug": "legend-relative-value"
+    }
+  },
+  {
+    "pk": 29,
+    "model": "flatblocks.flatblock",
+    "fields": {
+      "content": "Priority geography",
+      "header": "",
+      "slug": "legend-potential"
+    }
+  },
+  {
+    "pk": 32,
+    "model": "flatblocks.flatblock",
+    "fields": {
+      "content": "<em>* Note: some datasets are not available for your selected geography and were excluded from this analysis.</em>",
+      "header": "",
+      "slug": "form-geography-note"
+    }
+  },
+  {
+    "pk": 4,
+    "model": "flatblocks.flatblock",
+    "fields": {
+      "content": "Welcome to the Aquatic Priorities Tool",
+      "header": "",
+      "slug": "about-header"
+    }
+  },
+  {
+    "pk": 41,
+    "model": "flatblocks.flatblock",
+    "fields": {
+      "content": "Constraints",
+      "header": "",
+      "slug": "show-total-costs"
+    }
+  },
+  {
+    "pk": 2,
+    "model": "flatblocks.flatblock",
+    "fields": {
+      "content": "Ecotrust and the USFW have partnered to develop a conservation decision support system for aquatic habitat management.",
+      "header": "",
+      "slug": "home_text"
+    }
+  },
+  {
+    "pk": 30,
+    "model": "flatblocks.flatblock",
+    "fields": {
+      "content": "All planning units",
+      "header": "",
+      "slug": "legend-allpus"
+    }
+  },
+  {
+    "pk": 7,
+    "model": "flatblocks.flatblock",
+    "fields": {
+      "content": ".spruce",
+      "header": "",
+      "slug": "theme"
+    }
+  },
+  {
+    "pk": 13,
+    "model": "flatblocks.flatblock",
+    "fields": {
+      "content": "For each focal species, specify the target proportion of habitat ",
+      "header": "",
+      "slug": "form-conservationfeature-description"
+    }
+  },
+  {
+    "pk": 33,
+    "model": "flatblocks.flatblock",
+    "fields": {
+      "content": "Target",
+      "header": "",
+      "slug": "target"
+    }
+  },
+  {
+    "pk": 34,
+    "model": "flatblocks.flatblock",
+    "fields": {
+      "content": "Penalty",
+      "header": "",
+      "slug": "penalty"
+    }
+  },
+  {
+    "pk": 35,
+    "model": "flatblocks.flatblock",
+    "fields": {
+      "content": "low",
+      "header": "",
+      "slug": "target-low"
+    }
+  },
+  {
+    "pk": 36,
+    "model": "flatblocks.flatblock",
+    "fields": {
+      "content": "high",
+      "header": "",
+      "slug": "target-high"
+    }
+  },
+  {
+    "pk": 37,
+    "model": "flatblocks.flatblock",
+    "fields": {
+      "content": "low",
+      "header": "",
+      "slug": "penalty-low"
+    }
+  },
+  {
+    "pk": 38,
+    "model": "flatblocks.flatblock",
+    "fields": {
+      "content": "high",
+      "header": "",
+      "slug": "penalty-high"
+    }
+  },
+  {
+    "pk": 20,
+    "model": "flatblocks.flatblock",
+    "fields": {
+      "content": "Total Habitat Captured",
+      "header": "",
+      "slug": "show-percent-met"
+    }
+  },
+  {
+    "pk": 12,
+    "model": "flatblocks.flatblock",
+    "fields": {
+      "content": "Set Targets",
+      "header": "",
+      "slug": "form-conservationfeature-header"
+    }
+  },
+  {
+    "pk": 39,
+    "model": "flatblocks.flatblock",
+    "fields": {
+      "content": "acres",
+      "header": "",
+      "slug": "area-units"
+    }
+  },
+  {
+    "pk": 40,
+    "model": "flatblocks.flatblock",
+    "fields": {
+      "content": "The optimal prioritization scenario",
+      "header": "",
+      "slug": "optimal-prioritization-scenario"
+    }
+  },
+  {
+    "pk": 11,
+    "model": "flatblocks.flatblock",
+    "fields": {
+      "content": "Watersheds",
+      "header": "",
+      "slug": "show-planning-units"
+    }
+  },
+  {
+    "pk": 42,
+    "model": "flatblocks.flatblock",
+    "fields": {
+      "content": "Or, if you need to fine-tune the geography, you can use the map draw a box around additional watersheds. To navigate, use the keyboard controls (+/- to zoom, arrow keys to pan). If you need to undo the selection, click on the map away from the study region.",
+      "header": "",
+      "slug": "geography-fine-tune"
+    }
+  },
+  {
+    "pk": 43,
+    "model": "flatblocks.flatblock",
+    "fields": {
+      "content": "Other Data",
+      "header": "",
+      "slug": "show-aux"
+    }
+  },
+  {
+    "pk": 44,
+    "model": "flatblocks.flatblock",
+    "fields": {
+      "content": "<h1>Help</h1>",
+      "header": "",
+      "slug": "help"
+    }
+  },
+  {
+    "pk": 45,
+    "model": "flatblocks.flatblock",
+    "fields": {
+      "content": "Watersheds",
+      "header": "",
+      "slug": "show-planning-units-tab"
+    }
+  },
+  {
+    "pk": 10,
+    "model": "flatblocks.flatblock",
+    "fields": {
+      "content": "Focal Species",
+      "header": "",
+      "slug": "show-conservation-features"
+    }
+  },
+  {
+    "pk": 1,
+    "model": "flatblocks.flatblock",
+    "fields": {
+      "content": "Regional Aquatic Prioritization and Mapping Tool",
+      "header": "",
+      "slug": "title"
+    }
+  },
+  {
+    "pk": 46,
+    "model": "flatblocks.flatblock",
+    "fields": {
+      "content": "Constraints for each watershed are listed in the table below; <em>High</em> indicates greater constraints or greater cost associated with that watershed.  ",
+      "header": "",
+      "slug": "show-explain-constraints"
+    }
+  },
+  {
+    "pk": 24,
+    "model": "flatblocks.flatblock",
+    "fields": {
+      "content": "Target Proportion",
+      "header": "",
+      "slug": "relative-importance"
+    }
+  },
+  {
+    "pk": 48,
+    "model": "flatblocks.flatblock",
+    "fields": {
+      "content": "<p>Conserving landscape-scale habitats on a species-by-species basis is impractical. Instead we can target conservation of a select group of \"surrogate species\" while still supporting habitat for a wide range of species.\r\n</p>\r\n<p>\r\n<em>Note: surrogate species metrics are calculated relative to the entire region regardless of the geography selected.</em>\r\n</p>",
+      "header": "",
+      "slug": "surrogate-species-description"
+    }
+  }
+]

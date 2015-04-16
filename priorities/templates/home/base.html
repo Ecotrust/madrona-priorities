@@ -1,0 +1,29 @@
+{% extends 'common/base.html' %}
+{% load flatblocks %}
+{% block title %}Regional Aquatic Prioritization and Mapping Tool{% endblock title %}
+
+{% block styles %}
+<link href="{{MEDIA_URL}}common/css/ecotrust.css" rel="stylesheet">
+{% endblock styles %}
+
+{% block js %}
+
+{% endblock js %}
+
+{% block content %}
+    <div class="home">
+    {% block home-content %}{% endblock home-content %}
+        <div class="row-fluid">
+            <div class="span12">
+                <div class="footer">
+                    <span style="float:right;">
+                        <img src="http://www.ecotrust.org/app/themes/ecotrust/assets/img/logo-ecotrust.png" style="margin-right: 15px;"/>
+                        <img src="http://www.fws.gov/home/graphics/logo2005.gif"/>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock content %}
+

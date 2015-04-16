@@ -1,15 +1,17 @@
-{% extends 'common/base.html' %}
+{% extends 'home/base.html' %}
 {% load flatblocks %}
-{% block content %}
-<div class="about">
-    <h2>{% flatblock "about-header" 3600 %}</h2>
-<p>
-{% flatblock "about-intro" 3600 %}
-</p>
-<hr/>
+{% block home-content %}
 
-{% flatblock "about-content" 3600 %}
-
+<div class="row-fluid about">
+    <div class="span12">
+        <h1>{% flatblock "about-header" 3600 %}</h1>
+        {% flatblock "about-intro" 3600 %}  
+    </div>
+</div>
+<div class="row-fluid">
+    <div class="span12">
+        {% flatblock "about-content" 3600 %}
+    </div>
 </div>
 
-{% endblock content %}
+{% endblock home-content %}

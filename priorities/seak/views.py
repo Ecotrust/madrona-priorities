@@ -53,14 +53,16 @@ def map(request, template_name='common/map_ext.html', extra_context=None):
     return render_to_response(template_name, context)
 
 
-def description(
+def news(
     request,
-    template_name='news/description.html',
+    name="about",
     extra_context=None
 ):
     """
-    Landing Page
+    Home Content Pages
     """
+    template_file = 'news/%s.html' % name,
+
     if not extra_context:
         extra_context = {}
 
@@ -68,7 +70,7 @@ def description(
         'session_key': request.session.session_key,
     })
     context.update(extra_context)
-    return render_to_response(template_name, context)
+    return render_to_response(template_file, context)
 
 
 def watershed_shapefile(request, instances):

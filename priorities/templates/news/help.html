@@ -1,0 +1,6 @@
+{% extends 'home/base.html' %}
+{% load flatblocks %}
+{% block home-content %}
+<h1>{% flatblock 'help-title' 3600 %}</h1>
+{% flatblock 'help' 3600 %}
+{% endblock home-content %}

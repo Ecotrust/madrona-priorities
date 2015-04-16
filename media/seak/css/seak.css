@@ -1,4 +1,3 @@
-
 .home {
     margin: auto 10%;
     padding: 10px;
@@ -10,6 +9,10 @@
     text-decoration: none;
 }
 
+.home p {
+    text-align: left;
+}
+
 .home-app-link {
     text-align:center;
     padding: 25px;
@@ -17,6 +20,23 @@
     border-radius: 6px;
     border: 1px #9c9 solid;
     background-color: #efe;
+}
+
+.home-app-link:hover {
+    background-color: #9c9;
+}
+
+.home-app-link:hover h3 {
+    color: #FFF;
+}
+
+.home a[href $='.pdf']{
+    padding-right: 12px;
+    margin-right: 5px;
+}
+
+.box h3 {
+    margin: 0 0 1.0em 0;
 }
 
 .table tr.active {

@@ -1,0 +1,10 @@
+[
+  {
+    "pk": 3,
+    "model": "auth.group",
+    "fields": {
+      "name": "Surrogates",
+      "permissions": []
+    }
+  }
+]

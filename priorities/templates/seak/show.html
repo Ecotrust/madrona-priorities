@@ -211,18 +211,20 @@
                             <th> Number of non-targeted species adequately represented (<em>at or above target of {{results.surrogate.avg_target|percentage}}</em>)</th>
                             <td> {{results.surrogate.species_represented}} </td>
                         </tr>
+                        <!-- 
                         <tr>
                             <th> Objective function score* (<em>lower is better</em>)</th>
                             <td> {{results.surrogate.objective_score|floatformat:2}} </td>
                         </tr>
+                         -->
                     </tbody>
                 </table>
-
+                <!-- 
                 <div>
                     <strong>*</strong> {% flatblock 'surrogate-objective-description' 3600 %}
                 </div>
-
                 <br>
+                -->
                 <p> For further analysis, visit the <a target="_blank" style="text-decoration:underline;" href="/media/surrogate/graph/index.html">single-species surrogate chart</a>.</p>
 
                 {% endif %}

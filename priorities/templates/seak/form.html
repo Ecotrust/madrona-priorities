@@ -168,14 +168,14 @@
                     <div class="row-fluid">
                         <div class="span4" style="text-align:left;">
                             <a class="accordion-toggle" data-toggle="collapse" 
-                            href="#collapse-{{category.grouper|slugify}}"> <i class="category-icon icon-minus"></i> {{category.grouper}} </a>
+                            href="#collapse-{{category.grouper|slugify}}"> <i class="category-icon icon-minus"></i> Species, {{category.grouper}} </a>
                         </div>
                         <div class="span8" style="padding:12px;">
                             <div class="slider-collapse aggregate hide" id="#slider-collapse-{{category.grouper|slugify}}">
                                 <span class="text-success slider-label slider-label-left"><small>{% flatblock 'target-low' 3600 %}</small></span>
                                 <div class="slider-range slider-range-single" id="singlerange---CATEGORY-{{category.grouper|slugify}}" style="width:35%"></div> 
                                 <span class="text-success slider-label slider-label-right"><small>{% flatblock 'target-high' 3600 %}</small></span>
-                                <a class="btn btn-mini apply"><small>Apply to all {{category.grouper}}</small></a>
+                                <a class="btn btn-mini apply"><small>Apply to all Species, {{category.grouper}}</small></a>
                             </div>
                         </div>
                         <div class="debug-only">

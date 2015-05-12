@@ -212,7 +212,7 @@
                                     <!-- /////////// User not authenticated ///////////////// -->
                                     <div> 
                                             {% flatblock "home_text" 3600 %}
-                                            <p><em>You currently not logged in to {% flatblock "title" 3600 %}.</em></p>
+                                            <p><em>You are not currently logged in to {% flatblock "title" 3600 %}.</em></p>
                                             <p><a class="btn btn-mini" href="{% url registration_register %}" id="register">Register</a> for an account</p>
                                             <p><a class="btn btn-mini" href="{% url user_signin %}" id="signin">Sign In</a> to begin creating scenarios</p>
                                     </div>
